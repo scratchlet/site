@@ -213,7 +213,6 @@ textarea{
 </div>
 
 <script>
-// background animation
 const bg = document.querySelector(".background");
 
 for(let i = 0; i < 50; i++){
@@ -234,24 +233,13 @@ for(let i = 0; i < 50; i++){
 }
 </script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, setDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
-  authDomain: "scratchlet-ss.firebaseapp.com",
-  projectId: "scratchlet-ss",
-  storageBucket: "scratchlet-ss.firebasestorage.app",
-  messagingSenderId: "265174756634",
-  appId: "1:265174756634:web:a4c40ae00434f077e090a3",
-  measurementId: "G-7B7B6VXYJX"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+<script>
+// Initialize Supabase Client with your real credentials
+const supabaseUrl = 'https://gufsrlpnlajyryojqdva.supabase.co';
+const supabaseKey = 'sb_publishable_e43NsuHlIS-a4nWfqXDiyg_8uUQLDfY'; 
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 const form = document.getElementById("registerForm");
 const btn = document.getElementById("btn");
@@ -268,28 +256,32 @@ form.addEventListener("submit", async (e) => {
     btn.innerText = "Creating account...";
 
     try {
-        // 1. Check if the username already exists in Firestore
-        const q = query(collection(db, "users"), where("username", "==", username));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            throw new Error("This username is already taken. Please choose another.");
-        }
-
-        // 2. Proceed with authentication if username is unique
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        const user = cred.user;
-
-        // 3. Save user data
-        await setDoc(doc(db, "users", user.uid), {
-            uid: user.uid,
-            username,
-            email,
-            reason,
-            createdAt: Date.now()
+        // 1. Sign up the user inside Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
         });
 
-        alert("Account created!");
+        if (authError) throw authError;
+
+        // 2. Insert the extra profile information into your custom table
+        if (authData.user) {
+            const { error: profileError } = await supabase
+                .from('profiles') // Make sure this matches your Supabase table name
+                .insert([
+                    { 
+                        id: authData.user.id, 
+                        username: username, 
+                        reason: reason 
+                    }
+                ]);
+
+            if (profileError) {
+                throw new Error("Registration failed during profile setup: " + profileError.message);
+            }
+        }
+
+        alert("Account created successfully! Check your email for confirmation if required.");
         window.location.href = "login.html";
 
     } catch (err) {
