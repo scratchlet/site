@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scratchlet | Login</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+
+    background: linear-gradient(
+        160deg,
+        #fff4d6 0%,
+        #ffc76a 25%,
+        #ff9b2f 50%,
+        #ff7f11 75%,
+        #8f3200 100%
+    );
+}
+
+/* BACKGROUND */
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.square{
+    position:absolute;
+    border:2px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.12);
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    from{ transform:translateY(-120px) rotate(0deg); }
+    to{ transform:translateY(120vh) rotate(360deg); }
+}
+
+/* NAVBAR */
+.navbar{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#ff7f11;
+    box-shadow: inset 0 -6px rgba(0,0,0,.2);
+}
+
+.logo-btn{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
+    text-decoration:none;
+}
+
+/* CONTAINER */
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:60px 20px;
+}
+
+/* CARD */
+.card{
+    width:100%;
+    max-width:500px;
+    background:#ff8c1a;
+    border-radius:16px;
+    padding:30px;
+    box-shadow:
+        inset 0 -8px rgba(0,0,0,.18),
+        0 10px 25px rgba(0,0,0,.2);
+}
+
+.card h1{
+    font-family:"Titan One",cursive;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+/* INPUTS */
+.input-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:15px;
+}
+
+label{
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+input{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    font-family:"Nunito",sans-serif;
+    font-weight:600;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:1rem;
+    background:white;
+    color:#ff7f11;
+    box-shadow:0 6px 0 rgba(0,0,0,.25);
+    transition:0.15s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:translateY(4px);
+    box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+
+.small-text{
+    text-align:center;
+    margin-top:12px;
+    font-weight:700;
+    font-size:0.9rem;
+    opacity:0.9;
+}
+
+.small-text a{
+    color:white;
+    font-weight:900;
+    text-decoration:underline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="logo-btn">Scratchlet</a>
+</nav>
+
+<div class="container">
+
+<div class="card">
+
+    <h1>Login</h1>
+
+    <form id="loginForm">
+
+        <div class="input-group">
+            <label>Email</label>
+            <input id="email" type="email" required placeholder="Enter email">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input id="password" type="password" required placeholder="Enter password">
+        </div>
+
+        <button class="btn" id="btn" type="submit">Login</button>
+
+    </form>
+
+    <div class="small-text">
+        Don’t have an account?
+        <a href="register.html">Register</a>
+    </div>
+
+</div>
+
+</div>
+
+<script>
+// background animation
+const bg = document.querySelector(".background");
+
+for(let i = 0; i < 50; i++){
+    const square = document.createElement("div");
+    square.className = "square";
+
+    square.style.left = Math.random() * 100 + "%";
+
+    const size = Math.random() * 25 + 10;
+    square.style.width = size + "px";
+    square.style.height = size + "px";
+
+    square.style.opacity = Math.random() * 0.6 + 0.25;
+
+    square.style.animationDuration = (Math.random() * 10 + 6) + "s";
+
+    bg.appendChild(square);
+}
+</script>
+
+<!-- FIREBASE LOGIN SYSTEM -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    setPersistence,
+    browserLocalPersistence,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
+  authDomain: "scratchlet-ss.firebaseapp.com",
+  projectId: "scratchlet-ss",
+  storageBucket: "scratchlet-ss.firebasestorage.app",
+  messagingSenderId: "265174756634",
+  appId: "1:265174756634:web:a4c40ae00434f077e090a3",
+  measurementId: "G-7B7B6VXYJX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* SESSION PERSISTENCE */
+setPersistence(auth, browserLocalPersistence);
+
+/* 🔒 AUTO-LOGIN REDIRECT */
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.location.href = "home.html";
+    }
+});
+
+const form = document.getElementById("loginForm");
+const btn = document.getElementById("btn");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    btn.innerText = "Logging in...";
+    btn.disabled = true;
+
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        // 🔥 update Firestore last login
+        await updateDoc(doc(db, "users", user.uid), {
+            lastLogin: Date.now()
+        });
+
+        alert("Login successful!");
+
+        window.location.href = "home.html";
+
+    } catch (err) {
+        alert(err.message);
+    }
+
+    btn.innerText = "Login";
+    btn.disabled = false;
+});
+</script>
+
+</body>
+</html>

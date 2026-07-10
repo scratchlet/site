@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scratchlet | Home</title>
+  <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       GLOBAL STYLES & BACKGROUND
+       ========================================================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Nunito", sans-serif;
+    }
+
+    body {
+      color: white;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #fff4d6, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200);
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .square {
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, .35);
+      background: rgba(255, 255, 255, .12);
+      animation: fall linear infinite;
+      top: -150px;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(0); }
+      to { transform: translateY(130vh) rotate(360deg); }
+    }
+
+    /* ==========================================================================
+       NAVBAR & MINIBAR
+       ========================================================================== */
+    .navbar {
+      height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 30px;
+      background: #ff7f11;
+      box-shadow: inset 0 -6px rgba(0, 0, 0, .2);
+    }
+
+    .logo {
+      font-family: "Titan One", cursive;
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .minibar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #8f3200;
+      padding: 6px 12px;
+      border-radius: 16px;
+      box-shadow: inset 0 -4px rgba(0, 0, 0, .3), 0 4px 10px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ==========================================================================
+       BUTTON SYSTEM
+       ========================================================================== */
+    .btn {
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      letter-spacing: .3px;
+      font-size: 0.85rem;
+      transition: transform .12s ease, box-shadow .12s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .primary {
+      padding: 10px 18px;
+      border-radius: 14px;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, .25);
+      transform: translateY(0);
+      background: white;
+      color: #ff8c1a;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, .25); }
+
+    .minibar-btn {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: rgba(255, 255, 255, 0.85);
+      border-radius: 50%;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .minibar-btn:hover { transform: scale(1.15) !important; color: #fff4d6; }
+    .minibar-btn:active { transform: scale(0.95) !important; }
+    .minibar-btn .material-icons { font-size: 22px; }
+
+    #logoutBtn.minibar-btn { color: #ffc76a; }
+    #logoutBtn.minibar-btn:hover { color: white; }
+
+    /* ==========================================================================
+       TOOLTIPS
+       ========================================================================== */
+    .minibar-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-5px) scale(0.9);
+      background: #fff4d6;
+      color: #8f3200;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      border: 2px solid #ff9b2f;
+    }
+
+    .minibar-btn::before {
+      content: '';
+      position: absolute;
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-5px);
+      border-width: 0 6px 6px 6px;
+      border-style: solid;
+      border-color: transparent transparent #fff4d6 transparent;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+      z-index: 101;
+    }
+
+    .minibar-btn:hover::after, .minibar-btn:hover::before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    /* ==========================================================================
+       LAYOUT & CARDS
+       ========================================================================== */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .card {
+      background: #ff8c1a;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 -8px rgba(0, 0, 0, .18), 0 10px 25px rgba(0, 0, 0, .2);
+    }
+
+    .card h2 {
+      font-family: "Titan One", cursive;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header {
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 15px; 
+      flex-wrap: wrap; 
+      gap: 10px;
+    }
+
+    .card-header h2 {
+      margin-bottom: 0;
+    }
+
+    /* GRID FOR QUICK SHORTCUTS */
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .shortcut-card {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .shortcut-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .shortcut-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .shortcut-card .material-icons {
+      font-size: 40px;
+      color: #fff4d6;
+    }
+
+    /* CHANGELOG CONTAINER */
+    .changelog-container {
+      background: rgba(0, 0, 0, 0.12);
+      padding: 15px;
+      border-radius: 12px;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      color: #fff4d6;
+      font-size: 1rem;
+      line-height: 1.6;
+      min-height: 100px;
+    }
+
+    /* VERSION INFO PILL */
+    .version-tag {
+      background: #8f3200;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: #ffc76a;
+      box-shadow: inset 0 -2px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <nav class="navbar">
+    <div class="logo">Scratchlet</div>
+    <div class="minibar">
+      <a href="home.html" class="btn minibar-btn" data-tooltip="Home"><span class="material-icons">home</span></a>
+      <a href="market.html" class="btn minibar-btn" data-tooltip="Market"><span class="material-icons">store</span></a>
+      <a href="inventory.html" class="btn minibar-btn" data-tooltip="Inventory"><span class="material-icons">inventory_2</span></a>
+      <a href="stats.html" class="btn minibar-btn" data-tooltip="Stats"><span class="material-icons">bar_chart</span></a>
+      <a href="news.html" class="btn minibar-btn" data-tooltip="News"><span class="material-icons">article</span></a>
+      <a href="chat.html" class="btn minibar-btn" data-tooltip="Chat"><span class="material-icons">chat</span></a>
+      <a href="settings.html" class="btn minibar-btn" data-tooltip="Settings"><span class="material-icons">settings</span></a>
+      <a href="trading.html" class="btn minibar-btn" data-tooltip="Trading"><span class="material-icons">swap_horiz</span></a>
+      <button id="logoutBtn" class="btn minibar-btn" data-tooltip="Logout"><span class="material-icons">logout</span></button>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <div class="card">
+      <h2>Quick Shortcuts</h2>
+      <div class="shortcut-grid">
+        <a href="stats.html" class="shortcut-card">
+          <span class="material-icons">bar_chart</span>
+          Stats
+        </a>
+        <a href="market.html" class="shortcut-card">
+          <span class="material-icons">store</span>
+          Market
+        </a>
+        <a href="inventory.html" class="shortcut-card">
+          <span class="material-icons">token</span>
+          Blooks
+        </a>
+        <a href="chat.html" class="shortcut-card">
+          <span class="material-icons">chat</span>
+          Chat
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Changelogs</h2>
+        <span class="version-tag" id="versionTag">v1.0.0-BETA</span>
+      </div>
+      
+      <div class="changelog-container" id="changelogBox"></div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
+      authDomain: "scratchlet-ss.firebaseapp.com",
+      projectId: "scratchlet-ss",
+      storageBucket: "scratchlet-ss.firebasestorage.app",
+      messagingSenderId: "265174756634",
+      appId: "1:265174756634:web:a4c40ae00434f077e090a3",
+      measurementId: "G-7B7B6VXYJX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    /* ==========================================================================
+       EDIT CHANGELOG & VERSION VIA CODE HERE
+       ========================================================================== */
+    const currentVersion = "v1.0.0-Beta";
+    
+    const changelogData = [
+      "Added Quick Shortcuts system for seamless exploration.",
+      "Cleaned UI architecture and separated modules.",
+      "Ongoing live database optimizations and bug troubleshooting."
+    ];
+
+    // Render configuration data directly to the HTML interface elements
+    document.title = `Scratchlet | Home (${currentVersion})`;
+    document.getElementById("versionTag").innerText = currentVersion;
+    document.getElementById("changelogBox").innerHTML = changelogData
+      .map(item => `• ${item}`)
+      .join("<br>");
+
+    /* AUTH PROTECTION */
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        location.href = "login.html";
+      }
+    });
+
+    /* LOGOUT ACTION */
+    document.getElementById("logoutBtn").onclick = async () => {
+      try {
+        await signOut(auth);
+        location.href = "login.html";
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    /* GENERATE FLOATING BACKGROUND SQUARES */
+    requestAnimationFrame(() => {
+      const bg = document.querySelector(".background");
+      const fragment = document.createDocumentFragment();
+      
+      for (let i = 0; i < 60; i++) {
+        const s = document.createElement("div");
+        s.className = "square";
+        s.style.left = Math.random() * 100 + "%";
+        
+        const size = Math.random() * 25 + 10;
+        s.style.width = size + "px";
+        s.style.height = size + "px";
+        s.style.opacity = Math.random() * 0.6 + 0.25;
+        s.style.animationDuration = (Math.random() * 10 + 6) + "s";
+        
+        fragment.appendChild(s);
+      }
+      bg.appendChild(fragment);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratchlet | Market</title>
+    <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=Titan+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Reset and Font Inheritance */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Nunito", sans-serif;
+        }
+        body {
+            color: #fff;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #fff4d6, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200);
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body.lock-scroll {
+            overflow: hidden;
+        }
+
+        .background { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+        .square { position: absolute; border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); animation: fall linear infinite; top: -150px; }
+        @keyframes fall { from { transform: translateY(0); } to { transform: translateY(130vh) rotate(360deg); } }
+        
+        /* NAVBAR MATCHING INVENTORY */
+        .navbar { 
+            height: 70px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 30px; 
+            background: #ff7f11; 
+            box-shadow: inset 0 -6px rgba(0,0,0,.2); 
+            position: sticky;
+            top: 0;
+            z-index: 10; 
+        }
+        .logo { font-family: "Titan One", cursive; font-size: 2.5rem; flex-shrink: 0; }
+        
+        /* DARK CARD MINIBAR WRAPPER */
+        .minibar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #8f3200;
+            padding: 6px 12px;
+            border-radius: 16px;
+            box-shadow: inset 0 -4px rgba(0,0,0,.3), 0 4px 10px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* DYNAMIC COIN DISPLAY MATCHING INVENTORY STYLE */
+        .minibar-coins {
+            font-weight: 900;
+            font-size: 0.95rem;
+            padding-right: 12px;
+            margin-right: 8px;
+            border-right: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff4d6;
+        }
+        
+        /* ACTION ROW BAR (TOP OF PAGE) */
+        .action-bar {
+            max-width: 1280px;
+            margin: 20px auto 0;
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* TOGGLE SWITCH COMPONENT */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            background: rgba(255,255,255,.18);
+            padding: 8px 16px;
+            border-radius: 14px;
+            border: 2px solid rgba(255,255,255,.25);
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: rgba(0,0,0,0.3);
+            transition: .3s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #4CFF4C; }
+        input:checked + .slider:before { transform: translateX(24px); }
+        
+        /* BUTTONS SYSTEM */
+        .btn { font-weight: 900; border: none; cursor: pointer; letter-spacing: .3px; font-size: 0.85rem; transition: transform .12s ease, box-shadow .12s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+        .primary, .secondary { padding: 10px 18px; border-radius: 14px; box-shadow: 0 6px 0 rgba(0,0,0,.25); transform: translateY(0); }
+        .primary { background: white; color: #ff8c1a; }
+        .secondary { background: rgba(255,255,255,.18); color: white; border: 2px solid rgba(255,255,255,.25); }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+        
+        /* TRANSPARENT MINIBAR ICON BUTTONS */
+        .minibar-btn { width: 38px; height: 38px; padding: 0; background: transparent !important; border: none !important; box-shadow: none !important; color: rgba(255, 255, 255, 0.85); border-radius: 50%; transition: transform 0.15s ease, color 0.15s ease; }
+        .minibar-btn:hover { transform: scale(1.15) !important; color: #fff4d6; }
+        .minibar-btn:active { transform: scale(0.95) !important; }
+        .minibar-btn .material-icons { font-size: 22px; }
+        .minibar-btn.active { color: #fff4d6; }
+
+        /* Color accent for the logout button */
+        #logoutBtn.minibar-btn { color: #ffc76a; }
+        #logoutBtn.minibar-btn:hover { color: white; }
+
+        /* INFO BUBBLE TOOLTIPS */
+        .minibar-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 48px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px) scale(0.9);
+            background: #fff4d6;
+            color: #8f3200;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid #ff9b2f;
+        }
+        .minibar-btn::before {
+            content: '';
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            border-width: 0 6px 6px 6px;
+            border-style: solid;
+            border-color: transparent transparent #fff4d6 transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 101;
+        }
+        .minibar-btn:hover::after, .minibar-btn:hover::before { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+
+        /* LAYOUT */
+        .container { max-width: 1280px; margin: auto; padding: 28px; padding-bottom: 80px; position: relative; z-index: 5; }
+        
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px; margin-top: 20px; }
+        
+        /* PACK CARD */
+        .card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(4px);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 127, 17, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .card-body {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .thumb {
+            width: 130px;
+            height: 130px;
+            border-radius: 18px;
+            background: rgba(255,255,255,.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .card:hover .thumb { transform: scale(1.08); }
+        .thumb img { width: 85%; height: 85%; object-fit: contain; }
+        .card h3 { font-family: 'Titan One', sans-serif; font-size: 1.3rem; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); text-align: center; width: 100%; }
+        
+        .card-footer {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 14px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+        }
+        .card-price {
+            font-weight: 900;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+        .card-buttons-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+        .card-buttons-row .btn { flex: 1; }
+        .card .btn { box-shadow: 0 4px 0 rgba(0,0,0,0.2); padding: 8px 12px; }
+        
+        /* MODALS */
+        .modalBg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; }
+        .modal { width: 420px; background: linear-gradient(145deg,#ff9b2f,#ff7f11); border: 3px solid rgba(255,255,255,.3); border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+        .modal h3 { font-family: Titan One; font-size: 1.4rem; margin-bottom: 15px; }
+        .modalBtns { display: flex; gap: 10px; margin-top: 15px; }
+        .modalBtns button { flex: 1 }
+        
+        .mass-input-box {
+            background: rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+        .mass-input-box label { font-weight: 800; font-size: 0.9rem; color: #fff4d6; }
+        .mass-input-box input {
+            width: 100px;
+            padding: 6px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 900;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #8f3200;
+            background: #fff4d6;
+        }
+        
+        /* CUSTOM SCROLLBAR FOR DROPRATES INFOCARD */
+        #rarityBox { max-height: 240px; overflow-y: auto; padding-right: 8px; }
+        #rarityBox::-webkit-scrollbar { width: 8px; }
+        #rarityBox::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+        #rarityBox::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }
+        #rarityBox::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); border-radius: 10px; }
+        
+        /* CINEMATIC UNBOXING OVERLAY */
+        #unboxingOverlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.94); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; perspective: 1000px; }
+        #confettiCanvas { position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%; z-index: 1; }
+        
+        /* PACK SHAKE ANIMATION SCREEN */
+        .unboxing-pack { width: 240px; height: 240px; object-fit: contain; transform: scale(0.2); opacity: 0; z-index: 2; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .unboxing-pack.ready { transform: scale(1); opacity: 1; animation: idleFloat 3s ease-in-out infinite; }
+        .unboxing-pack.shake { animation: intenseShake 0.5s ease-in-out infinite !important; }
+        .unboxing-pack.explode { animation: explodePack 0.4s ease-out forwards !important; }
+
+        /* THE REVEALED BLOOK CARD BASE */
+        .blook-card { width: 320px; height: 320px; background: linear-gradient(145deg, #2c2f33, #23272a); border: 4px solid #fff; border-radius: 24px; padding: 22px; display: none; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 0 50px rgba(255,255,255,0.2); z-index: 2; }
+
+        /* MULTI RESULT SUMMARY SYSTEM VIEW WITH STYLE-MATCHED SCROLLBAR */
+        .results-card { width: 550px; max-height: 85vh; background: linear-gradient(145deg, #2c2f33, #1e2124); border: 4px solid #ff9b2f; border-radius: 28px; padding: 24px; display: none; flex-direction: column; gap: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); z-index: 2; cursor: default; }
+        .results-header-title { font-family: 'Titan One', sans-serif; font-size: 2rem; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.4); text-align: center; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; overflow-y: auto; padding-right: 8px; flex-grow: 1; max-height: 50vh; }
+        
+        .results-grid::-webkit-scrollbar { width: 8px; }
+        .results-grid::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+        .results-grid::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }
+        .results-grid::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); border-radius: 10px; }
+
+        .summary-item-node {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+            position: relative;
+        }
+        .summary-item-node img { width: 55px; height: 55px; object-fit: contain; }
+        .summary-item-name { font-weight: 800; font-size: 0.75rem; line-height: 1.2; word-break: break-word; color: #fff; }
+        .summary-item-count { position: absolute; top: -6px; right: -6px; background: #ff7f11; color: white; font-weight: 900; font-size: 0.75rem; padding: 2px 7px; border-radius: 10px; border: 2px solid #2c2f33; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+
+        /* SURPRISE RARITY ANIMATIONS */
+        .blook-card.reveal-default { display: flex; animation: cardFlipIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards; }
+        .blook-card.reveal-zoom { display: flex; animation: cardZoomIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .blook-card.reveal-spin { display: flex; animation: cardSpinIn 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .blook-card.reveal-rain { display: flex; animation: cardRainIn 0.9s ease-out forwards, cardFloatRain 3s ease-in-out infinite 0.9s; }
+
+        .blook-name { font-family: 'Titan One', sans-serif; font-size: 2.1rem; line-height: 1.1; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .blook-rarity { font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1.5px; }
+        .blook-image-box { width: 135px; height: 135px; background: rgba(255,255,255,0.05); border-radius: 18px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.1); position: relative; }
+        .blook-image-box img { width: 80%; height: 80%; object-fit: contain; }
+        .blook-chance { font-weight: 800; font-size: 0.95rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 5px 14px; border-radius: 20px; }
+        
+        /* NEW TAG SYSTEM */
+        .new-tag { position: absolute; top: -10px; right: -10px; background: #ff3e3e; color: white; font-family: 'Titan One', sans-serif; font-size: 0.8rem; padding: 4px 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(255,0,0,0.4); transform: rotate(12deg); animation: pulseNew 1s ease-in-out infinite alternate; }
+
+        /* ANIMATIONS DEFINITIONS */
+        @keyframes idleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes intenseShake { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 10% { transform: translate(-4px, 3px) rotate(-3deg); } 30% { transform: translate(4px, -2px) rotate(3deg); } 50% { transform: translate(-3px, -3px) rotate(-1deg); } 70% { transform: translate(3px, 2px) rotate(2deg); } 90% { transform: translate(-2px, 1px) rotate(-2deg); } }
+        @keyframes explodePack { 0% { transform: scale(1); filter: brightness(1); opacity: 1; } 50% { filter: brightness(5); } 100% { transform: scale(1.8); filter: brightness(10); opacity: 0; } }
+        @keyframes pulseNew { from { transform: rotate(12deg) scale(1); } to { transform: rotate(12deg) scale(1.1); } }
+
+        /* REVEAL ENTRY GEOMETRY KEYFRAMES */
+        @keyframes cardFlipIn { 0% { transform: scale(0.4) rotateY(90deg); opacity: 0; } 100% { transform: scale(1) rotateY(0deg); opacity: 1; } }
+        @keyframes cardZoomIn { 0% { transform: scale(0.01); opacity: 0; } 70% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes cardSpinIn { 0% { transform: scale(0.3) rotate(0deg) rotateY(0deg); opacity: 0; } 50% { transform: scale(0.7) rotate(360deg) rotateY(180deg); opacity: 0.5; } 100% { transform: scale(1) rotate(720deg) rotateY(360deg); opacity: 1; } }
+        @keyframes cardRainIn { 0% { transform: translateY(-500px) scale(0.85); opacity: 0; } 80% { transform: translateY(20px) scale(1.02); opacity: 1; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes cardFloatRain { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
+    </style>
+</head>
+<body class="">
+
+<div class="background"></div>
+
+<nav class="navbar">    
+    <div class="logo">Scratchlet</div>    
+    <div class="minibar">        
+        <div class="minibar-coins">🪙 <span id="coins">0</span></div>        
+        <a href="home.html" class="btn minibar-btn" data-tooltip="Home"><span class="material-icons">home</span></a>        
+        <a href="market.html" class="btn minibar-btn" data-tooltip="Market"><span class="material-icons">store</span></a>        
+        <a href="inventory.html" class="btn minibar-btn active" data-tooltip="Inventory"><span class="material-icons">inventory_2</span></a>        
+        <a href="stats.html" class="btn minibar-btn" data-tooltip="Stats"><span class="material-icons">bar_chart</span></a>        
+        <a href="news.html" class="btn minibar-btn" data-tooltip="News"><span class="material-icons">article</span></a>        
+        <a href="chat.html" class="btn minibar-btn" data-tooltip="Chat"><span class="material-icons">chat</span></a>        
+        <a href="settings.html" class="btn minibar-btn" data-tooltip="Settings"><span class="material-icons">settings</span></a>        
+        <a href="trading.html" class="btn minibar-btn" data-tooltip="Trading"><span class="material-icons">swap_horiz</span></a>        
+        <button id="logoutBtn" class="btn minibar-btn" data-tooltip="Logout"><span class="material-icons">logout</span></button>    
+    </div>
+</nav>
+
+<div class="action-bar">
+    <button class="btn primary" id="hourlyBtn" disabled=""><span class="material-icons">history</span> Loading Timer...</button>
+    <div class="toggle-container">
+        <span class="material-icons">flash_on</span>
+        <span>Instant Open</span>
+        <label class="switch">
+            <input type="checkbox" id="instantOpenToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="container">
+    <h2 style="margin:10px 0 18px;font-family:Titan One;font-size:2.2rem">Available Packs</h2>
+    <div class="grid" id="grid"></div>
+</div>
+
+<div class="modalBg" id="modalBg" style="display: none;">
+    <div class="modal">
+        <h3 id="modalText">Open Pack?</h3>
+        <div class="modalBtns">
+            <button class="btn primary" id="yesBtn">Yes</button>
+            <button class="btn secondary" id="infoBtn">Info</button>
+            <button class="btn secondary" id="noBtn">No</button>
+        </div>
+    </div>
+</div>
+
+<div class="modalBg" id="massModalBg" style="display: none;">
+    <div class="modal">
+        <h3 id="massModalText">Mass Open</h3>
+        <div class="mass-input-box">
+            <label for="massAmountInput">Amount to Open:</label>
+            <input type="number" id="massAmountInput" min="1" value="10">
+            <div id="massMaxInfo" style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px; font-weight: 700;">Max affordable items: 0</div>
+        </div>
+        <div class="modalBtns">
+            <button class="btn primary" id="massYesBtn">Open</button>
+            <button class="btn secondary" id="massNoBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="modalBg" id="infoBg" style="display: none;">
+    <div class="modal" style="width:520px">
+        <h3>Drop Rates</h3>
+        <div id="rarityBox" style="margin: 15px 0;"></div>
+        <button class="btn primary" id="closeInfoBtn" style="width:100%">Close</button>
+    </div>
+</div>
+
+<div id="unboxingOverlay">
+    <canvas id="confettiCanvas"></canvas>
+    
+    <img id="unboxingPackImg" class="unboxing-pack" src="" alt="Pack Graphic">
+    
+    <div id="blookCard" class="blook-card">
+        <div id="blookName" class="blook-name">Blook Name</div>
+        <div id="blookRarity" class="blook-rarity">Rarity</div>
+        <div class="blook-image-box">
+            <div id="newTag" class="new-tag" style="display: none;">NEW</div>
+            <img id="blookImg" src="" alt="Blook Graphic">
+        </div>
+        <div id="blookChance" class="blook-chance">0% Chance</div>
+    </div>
+
+    <div id="resultsCard" class="results-card">
+        <div class="results-header-title">Unboxing Summary</div>
+        <div id="resultsGrid" class="results-grid"></div>
+        <button class="btn primary" id="closeResultsBtn" style="width: 100%; box-shadow: 0 4px 0 rgba(0,0,0,0.3);">Awesome!</button>
+    </div>
+</div>
+
+<script type="module">
+    /* ================= FIREBASE INITIALIZATION ================= */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
+        authDomain: "scratchlet-ss.firebaseapp.com",
+        projectId: "scratchlet-ss",
+        storageBucket: "scratchlet-ss.firebasestorage.app",
+        messagingSenderId: "265174756634",
+        appId: "1:265174756634:web:a4c40ae00434f077e090a3",
+        measurementId: "G-7B7B6VXYJX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ================= GAME STATES ================= */
+    let coins = 0;
+    let ownedBlocks = [];
+    let currentUser = null;
+    let currentPackKey = "breakfast";
+    let unboxingState = "closed";
+    let activeRolledItem = null;
+    let massOpenedPool = []; 
+    let accountNextClaimTime = 0; // Account-bound tracking variable
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            await loadUserData();
+            renderPacksGrid();
+            startHourlyCooldown();
+        } else {
+            window.location.href = "home.html"; 
+        }
+    });
+
+    async function loadUserData() {
+        try {
+            const docRef = doc(db, "users", currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                coins = data.coins || 0;
+                ownedBlocks = data.ownedBlocks || [];
+                accountNextClaimTime = data.nextClaimTime || 0; // Load cooldown from account data
+            } else {
+                coins = 100;
+                ownedBlocks = [];
+                accountNextClaimTime = 0;
+                await saveUserData();
+            }
+            document.getElementById("coins").innerText = coins;
+        } catch (error) {
+            console.error("Error loading profile:", error);
+        }
+    }
+
+    async function saveUserData() {
+        if (!currentUser) return;
+        try {
+            await setDoc(doc(db, "users", currentUser.uid), {
+                coins: coins,
+                ownedBlocks: ownedBlocks,
+                nextClaimTime: accountNextClaimTime // Save cooldown to account data
+            }, { merge: true });
+        } catch (error) {
+            console.error("Failed to sync profile:", error);
+        }
+    }
+
+    document.getElementById("logoutBtn").onclick = () => {
+        signOut(auth).then(() => {
+            window.location.href = "https://beta-scratchlet.pages.dev/";
+        });
+    };
+
+    const CONFIG = { fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png" };
+
+    /* ================= PACKS DATA ================= */
+    const packs = {
+        breakfast: {     
+            name: "Breakfast Pack",    
+            cost: 15,    
+            image: "https://i.postimg.cc/3rzsdbPz/Breakfast.webp",    
+            blooks: [      
+                {name:"Toast",rarity:"Uncommon",chance:12.5,color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},      
+                {name:"Cereal",rarity:"Uncommon",chance:12.5,color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+                {name:"Tomato Soup",rarity:"Uncommon",chance:12.5,color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},       
+                {name:"Yogurt",rarity:"Uncommon",chance:12.5,color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},      
+                {name:"Breakfast Combo",rarity:"Uncommon",chance:12.5,color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},      
+                {name:"Orange Juice",rarity:"Rare",chance:9,color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},      
+                {name:"Milk",rarity:"Rare",chance:9,color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},      
+                {name:"Waffle",rarity:"Rare",chance:8.5,color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},      
+                {name:"Pancakes",rarity:"Epic",chance:4,color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},      
+                {name:"French Toast",rarity:"Epic",chance:3.5,color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},      
+                {name:"Pizza",rarity:"Legendary",chance:2,color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+                {name:"Strawberry Milk",rarity:"Chroma",chance:1,color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+                {name:"Chocolate Milk",rarity:"Chroma",chance:0.5,color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+            ]  
+        },
+        medieval: {
+            name: "Medieval Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/cLSD4TQQ/Medieval.webp",
+            blooks: [
+                {name:"Elf",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
+                {name:"Witch",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
+                {name:"Wizard",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
+                {name:"Fairy",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/fRNHT5x0/Fairy.webp"},
+                {name:"Slime Monster",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/HkgSs3Qc/Slime-Monster.webp"},
+                {name:"Jester",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/RZBPVGcJ/Jester.webp"},
+                {name:"Dragon",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/sgrnDKpx/Dragon.webp"},
+                {name:"Queen",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/dVYWtn8h/Queen.webp"},
+                {name:"Unicorn",rarity:"Epic",color:"red",chance:5.12,image:"https://i.postimg.cc/52VPNpwj/Unicorn.webp"},
+                {name:"King",rarity:"Legendary",color:"gold",chance:1,image:"https://i.postimg.cc/L8py6vzn/King.webp"},
+                {name:"Master Elf",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/Gp56nwS0/Master-Elf.webp"},
+                {name:"Agent Owl",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/yNb2C4rz/Agent-Owl.webp"},
+                {name:"Wise Owl",rarity:"Celestial",color:"teal",chance:0.025,image:"https://i.postimg.cc/yWqsN84V/Wise-Owl.webp"},
+                {name:"Phantom King",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/QdfkpQvC/Phantom-King.webp"},
+            ]
+        },
+
+        color: {
+            name: "Color Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/WzVn7HKc/Color.webp",
+            blooks: [
+                {name:"Red",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/Hnm2thKG/Red.webp"},
+                {name:"Blue",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/5yJ3mRrh/Blue.webp"},
+                {name:"Green",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/6qK0hmPg/Green.webp"},
+                {name:"Yellow",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/ZnmcLMQX/Yellow.webp"},
+                {name:"Orange",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/D0hgcMNY/Orange.webp"},
+                {name:"Purple",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/kGCcypHp/Purple.webp"},
+                {name:"Pink",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/brPTRB5V/Pink.webp"},
+                {name:"Brown",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/hvnr05Yy/Brown.webp"},
+                {name:"Lime",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/4yG51S0B/Lime.webpp"},
+                {name:"Cyan",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/1XSHKjdM/Cyan.webp"},
+                {name:"White",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/tJb5zMck/White.webp"},
+                {name:"Grey",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/0jvfCB4f/Grey.webp"},
+                {name:"Black",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/hvnr05Y1/Black.webp"},
+                {name:"Copper",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/wMzVkGrc/Copper.webp"},
+                {name:"Silver",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/NFt4xznx/Silver.webp"},
+                {name:"Gold",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/ZnmcLMQP/Gold.webp"},
+                {name:"Rainbow",rarity:"Mystical",color:"purple",chance:0.002,image:"https://i.postimg.cc/G2J4YLyd/Rainbow.webp"},
+            ]
+        },
+
+                wonderland: {
+            name: "Wonderland Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/YSVC9H1k/Wonderland.webp",
+            blooks: [
+                {name:"Two of Spades",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp"},
+                {name:"Eat Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/B6KQPVgs/Eat-Me.webp"},
+                {name:"Drink Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp"},
+                {name:"Alice",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/tTxCnM5H/Alice.webp"},
+                {name:"Queen of Hearts",rarity:"Uncommon",color:"limegreen",chance:14.345,image:"https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp"},
+                {name:"Dromouse",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/xCzTN4Rr/Dormouse.webp"},
+                {name:"White Rabbit",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/wBPjvphx/White-Rabbit.webp"},
+                {name:"Cheshire Cat",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/pTFX56Bw/Cheshire-Cat.webp"},
+                {name:"Mad Hatter",rarity:"Epic",color:"red",chance:3.5,image:"https://i.postimg.cc/nL5hzJvF/Mad-Hatter.webp"},
+                {name:"King of Hearts",rarity:"Legendary",color:"gold",chance:0.7,image:"https://i.postimg.cc/q7YvRT8k/King-of-Hearts.webp"},
+                {name:"Royal Cat",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/yN58dHF7/Royal-Cat.webp"},
+                {name:"King Dog",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
+                {name:"Card of Hearts",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"},
+                
+
+            ]
+        },
+
+            space: {
+            name: "Space Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/C5tgpzKM/Space.webp",
+            blooks: [
+                {name:"Earth",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
+                {name:"Meteor",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
+                {name:"Stars",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
+                {name:"Alien",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
+                {name:"Planet",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
+                {name:"UFO",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
+                {name:"Spaceship",rarity:"Epic",color:"red",chance:4.5,image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
+                {name:"Astronaut",rarity:"Legendary",color:"gold",chance:0.45,image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
+                {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
+                {name:"Red Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
+                {name:"Ornage Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
+                {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
+                {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
+                {name:"Green Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
+                {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
+                {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
+                {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
+                {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
+                {name:"Black Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
+                {name:"Black Hole",rarity:"Chroma",color:"cyan",chance:0.01,image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
+                {name:"Space Monitor",rarity:"Mystical",color:"purple",chance:0.0075,image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
+                {name:"Rainbow Astroanut",rarity:"Mystical",color:"purple",chance:0.0025,image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"},
+
+                
+
+            ]
+        },
+            bot: {
+            name: "Bot Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/W1n9TGPJ/Bot.webp",
+            blooks: [
+                {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
+                {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp"},
+                {name:"Angry Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp"},
+                {name:"Happy Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp"},
+                {name:"Watson",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/jSX8tHrH/Watson.webp"},
+                {name:"Buddy Bot",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp"},
+                {name:"Brainy Bot",rarity:"Epic",color:"red",chance:3.7,image:"https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp"},
+                {name:"Mega Bot",rarity:"Legendary",color:"gold",chance:0.25,image:"https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp"},
+                {name:"Neon Bot",rarity:"Chroma",color:"cyan",chance:0.04,image: ""},
+                {name:"Joyful Bot",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/j21gtvCT/Joyful-Bot.gif"},
+            ]
+        },
+            aquatic: {
+            name: "Aquatic Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/DZC01JmB/Aquatic.webp",
+            blooks: [
+                {name:"Old Boot",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJq6/Old-Boot.webp"},
+                {name:"Jellyfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp"},
+                {name:"Clownfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/63HqC2Tc/Goldfish.webp"},
+                {name:"Frog",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJqP/Frog.webp"},
+                {name:"Crab",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/j582ywC6/Crab.webp"},
+                {name:"Pufferfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/gJMj3XrD/Pufferfish.webp"},
+                {name:"Blobfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/0Qtj7Mrp/Blobfish.webp"},
+                {name:"Octopus",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/50Py8YjC/Octopus.webp"},
+                {name:"Narwhal",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/4d8yp7nH/Narwhal.webp"},
+                {name:"Dolphin",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/W39z0FtJ/Dolphin.webp"},
+                {name:"Baby Shark",rarity: "Legendary",color:"gold",chance:0.497,image:"https://i.postimg.cc/Y9X0QGjG/Baby-Shark.webp"},
+                {name:"Megalodon",rarity: "Legendary",color:"gold",chance:0.199,image:"https://i.postimg.cc/26Hynb33/Megalodon.webp"},
+                {name:"Spring Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/fLWk3jWm/Spring-Frog.webp"},
+                {name:"Lucky Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/qRmq2hgR/Lucky-Frog.webp"},
+                {name:"Lovely Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/k4jGW6DB/Lovely-Frog.webpg"},
+                {name:"Rainbow Narwhal",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/MTZXcbZB/Rainbow-Narwhal.webp"},
+                {name:"Crimson Octopus",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/Tw2hyq2W/Crimson-Octopus.webp"},
+                {name:"Donut Blobfish",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/wvx3tcxm/Donut-Blobfish.webp"},
+                {name:"Rainbow Jellyfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/Y92j4f24/Rainbow-Jellyfish.webp"},
+                {name:"Poison Dart Frog",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp"},
+                {name:"Blizzard Clownfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp"},
+                {name:"Beach",rarity: "Celestial",color:"teal",chance:0.0248,image:"https://i.postimg.cc/sXf1B9fv/Beach.webp"},
+            ]
+        },
+            safari: {
+                name: "Safari Pack",
+                cost: 20,
+                image: "https://i.postimg.cc/g0Ph5FYZ/Safari.webp",
+                blooks: [
+                    {name:"Panda",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/Xvc56HJF/Panda.webp"},
+                    {name:"Sloth",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/pdYjMGTn/Sloth.webp"},
+                    {name:"Tenrec",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/LsBPFCXP/Tenrec.webp"},
+                    {name:"Flamingo",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/43bcRLdH/Flamingo.webp"},
+                    {name:"Zebra",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/ZqhNgtTc/Zebra.webp"},
+                    {name:"Elephant",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/6QNZSJ9h/Elephant.webp"},
+                    {name:"Lemur",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/HLCMKDp9/Lemur.webp"},
+                    {name:"Peacock",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/N0wXVqg8/Peacock.webp"},
+                    {name:"Chameleon",rarity: "Epic",color:"Red",chance:3.48,image:"https://i.postimg.cc/ZqhNgtTF/Chameleon.webp"},
+                    {name:"Lion",rarity: "Legendary",color:"gold",chance:0.46,image:"https://i.postimg.cc/MG8B42W1/Lion.webp"},
+                    {name:"Rainbow Panda",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp"},
+                    {name:"White Peacock",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/xdSm7D0K/White-Peacock.webp"},
+                    {name:"Tiger Zebra",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp"}
+            ]
+        },
+            dino: {
+            name: "Dino Pack",
+            cost: 25,
+            image: "https://i.postimg.cc/15DPH4N9/Dino.webp",
+            blooks: [
+                {name:"Amber",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/bN18Td2q/Ember.webp"},
+                {name:"Dino Egg",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/027xfrJx/Dino-Egg.webp"},
+                {name:"Dino Fossil",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/8PLDHsrG/Dino-Fossil.webp"},
+                {name:"Dino Footprint",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/qBwM63ff/Dino-Footprint.png"},
+                {name:"Stegosaurus",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/GhvrQ9sw/Stegosaurus.webp"},
+                {name:"Velociraptor",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/hPVgrhQk/Velociraptor.webp"},
+                {name:"Brontosaurus",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/8PLDHsf9/Brontosaurus.webp"},
+                {name:"Triceratops",rarity:"Epic",color:"Red",chance:3.7,image:"https://i.postimg.cc/ZK6Zc0vX/Triceratops.webp"},
+                {name:"Tyrannosaurus Rex",rarity:"Legendary",color:"gold",chance:0.3,image:"https://i.postimg.cc/gk3dDrL5/Tyrannosaurusrex.webp"},
+                {name:"Golden Amber",rarity:"Chroma",color:"Cyan",chance:0.07,image:"https://i.postimg.cc/rF5cJzRY/Golden-Ember.webp"}
+            ]
+        },
+            icemonsters: {
+                name: "Ice Monsters Pack",
+                cost: 25,
+                image: "https://i.postimg.cc/XNDKs8vc/Ice-Monsters.png",
+                blooks: [
+                    {name:"Ice Bat",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/63KwJn5M/icebat.png"},
+                    {name:"Ice Bug",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/d0rvx4v7/icebug.png"},
+                    {name:"Ice Elemental",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/jSGtcGV0/iceelemental.png"},
+                    {name:"Rock Monster",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/SxXmWmvf/rockmonster.png"},
+                    {name:"Dink",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/LXVSH5J2/dink.png"},
+                    {name:"Donk",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/BQ7qLjMv/donk.png"},
+                    {name:"Bush Monster",rarity:"Epic",color:"Red",chance:4.5,image:"https://i.postimg.cc/fyBMvysB/bushmonster.png"},
+                    {name:"Yeti",rarity:"Legendary",color:"gold",chance:0.35,image:"https://i.postimg.cc/gk2z2Vy5/yeti.png"},
+                    {name:"Ice Slime",rarity:"Chroma",color:"Cyan",chance:0.08,image:"https://i.postimg.cc/nrHH77yX/iceslime.png"},
+                    {name:"Ice Fossil",rarity:"Chroma",color:"Cyan",chance:0.05,image:"https://i.postimg.cc/sfcfz6W7/frozenfossil.png"},
+                    {name:"Ice Crab",rarity:"Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/RF1SNGDr/icecrab.png"}
+            ]
+        },
+    
+    };
+
+    function renderPacksGrid() {
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+        Object.keys(packs).forEach(key => {
+            const pack = packs[key];
+            grid.innerHTML += `
+            <div class="card">
+                <div class="card-body">
+                    <div class="thumb">
+                        <img src="${pack.image}" class="pack-thumb-img" onerror="this.src='${CONFIG.fallbackPlaceholder}'">
+                    </div>
+                    <h3>${pack.name}</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="card-price">🪙 ${pack.cost}</div>
+                    <div class="card-buttons-row">
+                        <button class="btn primary open-btn" data-key="${key}">Open</button>
+                        <button class="btn secondary mass-btn" data-key="${key}">Mass</button>
+                    </div>
+                </div>
+            </div>`;
+        });
+
+        document.querySelectorAll(".open-btn").forEach(b => {
+            b.onclick = () => { 
+                currentPackKey = b.getAttribute("data-key"); 
+                if (document.getElementById("instantOpenToggle").checked) {
+                    executeInstantOpen(currentPackKey);
+                } else {
+                    openPromptModal(currentPackKey);
+                }
+            };
+        });
+        document.querySelectorAll(".mass-btn").forEach(b => {
+            b.onclick = () => { currentPackKey = b.getAttribute("data-key"); openMassPromptModal(currentPackKey); };
+        });
+    }
+
+    function rollItem(pack) {
+        let rand = Math.random() * 100;
+        let cumulative = 0;
+        for (let i = 0; i < pack.blooks.length; i++) {
+            cumulative += pack.blooks[i].chance;
+            if (rand <= cumulative) return pack.blooks[i];
+        }
+        return pack.blooks[pack.blooks.length - 1];
+    }
+
+    /* ================= OPEN PACK LOGICS ================= */
+    function openPromptModal(key) {
+        const pack = packs[key];
+        document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} coins?`;
+        document.getElementById("modalBg").style.display = "flex";
+        document.getElementById("yesBtn").onclick = () => {
+            closeModal();
+            openPack(key);
+        };
+    }
+
+    function openMassPromptModal(key) {
+        const pack = packs[key];
+        const maxAffordable = Math.floor(coins / pack.cost);
+        document.getElementById("massModalText").innerText = `Mass Open: ${pack.name}`;
+        document.getElementById("massMaxInfo").innerText = `Max affordable items: ${maxAffordable} (${pack.cost} 🪙 each)`;
+        document.getElementById("massAmountInput").max = maxAffordable;
+        document.getElementById("massAmountInput").value = Math.min(10, maxAffordable || 1);
+        document.getElementById("massModalBg").style.display = "flex";
+
+        document.getElementById("massYesBtn").onclick = () => {
+            const count = parseInt(document.getElementById("massAmountInput").value);
+            if (isNaN(count) || count <= 0) {
+                alert("Please enter a valid count!");
+                return;
+            }
+            if (count > maxAffordable) {
+                alert("You cannot afford that many packs!");
+                return;
+            }
+            closeMassModal();
+            executeMassOpen(key, count);
+        };
+    }
+
+    function closeModal(){ document.getElementById("modalBg").style.display="none"; }
+    function closeMassModal() { document.getElementById("massModalBg").style.display = "none"; }
+
+    /* ================= HOURLY REWARD SYSTEM - RANDOM 500-2000 ================= */
+    document.getElementById("hourlyBtn").onclick = claimHourlyCoins;
+
+    async function claimHourlyCoins() {
+        const now = new Date().getTime();
+        if (accountNextClaimTime && now < accountNextClaimTime) {
+            return;
+        }
+        
+        // Generate random reward between 500 and 2000
+        const reward = Math.floor(Math.random() * 1500) + 500; // 500-2000
+        coins += reward;
+        document.getElementById("coins").innerText = coins;
+        
+        // Show the reward amount with a quick animation
+        const hourlyBtn = document.getElementById("hourlyBtn");
+        const originalText = hourlyBtn.innerHTML;
+        hourlyBtn.innerHTML = `<span class="material-icons">celebration</span> +${reward} 🪙!`;
+        hourlyBtn.style.background = "#4CFF4C";
+        hourlyBtn.style.color = "#1a5a1a";
+        setTimeout(() => {
+            hourlyBtn.style.background = "";
+            hourlyBtn.style.color = "";
+        }, 2000);
+        
+        const oneHourFromNow = now + (3600 * 1000);
+        accountNextClaimTime = oneHourFromNow;
+        await saveUserData();
+        startHourlyCooldown();
+    }
+
+    function startHourlyCooldown() {
+        const hourlyBtn = document.getElementById("hourlyBtn");
+        
+        if (window.hourlyIntervalId) {
+            clearInterval(window.hourlyIntervalId);
+        }
+
+        const checkTime = () => {
+            const now = new Date().getTime();
+            
+            if (!accountNextClaimTime || now >= accountNextClaimTime) {
+                if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
+                hourlyBtn.disabled = false;
+                hourlyBtn.innerHTML = `<span class="material-icons">hourglass_empty</span> Claim Hourly Reward (500-2,000 🪙)`;
+            } else {
+                hourlyBtn.disabled = true;
+                const difference = accountNextClaimTime - now;
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                hourlyBtn.innerHTML = `<span class="material-icons">history</span> Wait ${minutes}m ${seconds}s`;
+            }
+        };
+
+        checkTime();
+        window.hourlyIntervalId = setInterval(checkTime, 1000);
+    }
+
+    /* ================= ENGINE UNBOXING CONTROLLER ================= */
+    async function openPack(key){
+        const pack = packs[key];
+        if(coins < pack.cost){
+            alert("Not enough coins!");
+            return;
+        }
+        coins -= pack.cost;
+        document.getElementById("coins").innerText = coins;
+        activeRolledItem = rollItem(pack);
+        const isNewItem = !ownedBlocks.includes(activeRolledItem.name);
+        ownedBlocks.push(activeRolledItem.name);
+        await saveUserData();
+        setupSingleUnboxingUI(pack, isNewItem, false);
+    }
+
+    function setupSingleUnboxingUI(pack, isNewItem, isInstant) {
+        const overlayElement = document.getElementById("unboxingOverlay");
+        const packImg = document.getElementById("unboxingPackImg");
+        const card = document.getElementById("blookCard");
+        const resultsCard = document.getElementById("resultsCard");
+        
+        document.body.classList.add("lock-scroll");
+        resultsCard.style.display = "none";
+        
+        card.className = "blook-card";
+
+        document.getElementById("blookName").innerText = activeRolledItem.name;
+        document.getElementById("blookRarity").innerText = activeRolledItem.rarity;
+        document.getElementById("blookRarity").style.color = activeRolledItem.color;
+        document.getElementById("blookImg").src = activeRolledItem.image;
+        document.getElementById("blookImg").onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+        document.getElementById("blookChance").innerText = `${activeRolledItem.chance}% Chance`;
+        card.style.borderColor = activeRolledItem.color;
+        card.style.boxShadow = `0 0 50px ${activeRolledItem.color}`;
+
+        document.getElementById("newTag").style.display = isNewItem ? "block" : "none";
+        overlayElement.style.display = "flex";
+
+        if (isInstant) {
+            packImg.style.display = "none";
+            card.style.display = "flex";
+            
+            const tier = activeRolledItem.rarity ? activeRolledItem.rarity.toLowerCase() : "uncommon";
+            if (tier === "epic" || tier === "legendary") card.classList.add("reveal-zoom");
+            else if (tier === "chroma" || tier === "mystical") card.classList.add("reveal-spin");
+            else if (tier === "whimsical") card.classList.add("reveal-rain");
+            else card.classList.add("reveal-default");
+            
+            startConfettiRain(activeRolledItem.color);
+            unboxingState = "revealed";
+        } else {
+            packImg.style.display = "block";
+            card.style.display = "none";
+            packImg.src = pack.image;
+            packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+            packImg.className = "unboxing-pack";
+            
+            unboxingState = "ready_to_shake";
+            setTimeout(() => { packImg.classList.add("ready"); }, 50);
+        }
+    }
+
+    async function executeInstantOpen(key) {
+        const pack = packs[key];
+        if (coins < pack.cost) {
+            alert("Not enough coins!");
+            return;
+        }
+        coins -= pack.cost;
+        document.getElementById("coins").innerText = coins;
+        activeRolledItem = rollItem(pack);
+        const isNewItem = !ownedBlocks.includes(activeRolledItem.name);
+        ownedBlocks.push(activeRolledItem.name);
+        await saveUserData();
+        
+        setupSingleUnboxingUI(pack, isNewItem, true);
+    }
+
+    async function executeMassOpen(key, count) {
+        const pack = packs[key];
+        coins -= (pack.cost * count);
+        document.getElementById("coins").innerText = coins;
+
+        massOpenedPool = [];
+        for (let i = 0; i < count; i++) {
+            const rolled = rollItem(pack);
+            massOpenedPool.push(rolled);
+            ownedBlocks.push(rolled.name);
+        }
+        await saveUserData();
+
+        const overlayElement = document.getElementById("unboxingOverlay");
+        const packImg = document.getElementById("unboxingPackImg");
+        const card = document.getElementById("blookCard");
+        const resultsCard = document.getElementById("resultsCard");
+        
+        document.body.classList.add("lock-scroll");
+        card.style.display = "none";
+        resultsCard.style.display = "none";
+        packImg.style.display = "block";
+        packImg.src = pack.image;
+        packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+        packImg.className = "unboxing-pack";
+        
+        overlayElement.style.display = "flex";
+        unboxingState = "mass_ready_to_shake";
+        setTimeout(() => {
+            packImg.classList.add("ready");
+        }, 50);
+    }
+
+    document.getElementById("unboxingOverlay").onclick = handleOverlayClick;
+
+    function handleOverlayClick(e) {
+        if (e.target.closest('#resultsCard') && unboxingState === "mass_summary_revealed") {
+            return;
+        }
+        const packImg = document.getElementById("unboxingPackImg");
+        const card = document.getElementById("blookCard");
+        
+        if (unboxingState === "ready_to_shake") {
+            unboxingState = "shaking";
+            packImg.classList.add("shake");
+            setTimeout(() => {
+                packImg.style.display = "none";
+                packImg.classList.remove("shake");
+                packImg.classList.add("explode");
+                setTimeout(() => {
+                    card.style.display = "flex";
+                    const tier = activeRolledItem.rarity ? activeRolledItem.rarity.toLowerCase() : "uncommon";
+                    if (tier === "epic" || tier === "legendary") {
+                        card.classList.add("reveal-zoom");
+                    } else if (tier === "chroma" || tier === "mystical") {
+                        card.classList.add("reveal-spin");
+                    } else if (tier === "whimsical") {
+                        card.classList.add("reveal-rain");
+                    } else {
+                        card.classList.add("reveal-default");
+                    }
+                    startConfettiRain(activeRolledItem.color);
+                    unboxingState = "revealed";
+                }, 300);
+            }, 1200);
+        } else if (unboxingState === "revealed") {
+            clearAndCloseOverlay();
+        } else if (unboxingState === "mass_ready_to_shake") {
+            unboxingState = "shaking";
+            packImg.classList.add("shake");
+            setTimeout(() => {
+                packImg.style.display = "none";
+                packImg.classList.remove("shake");
+                packImg.classList.add("explode");
+                setTimeout(() => {
+                    showMassResultsSummary();
+                }, 300);
+            }, 1200);
+        }
+    }
+
+    function showMassResultsSummary() {
+        const resultsGrid = document.getElementById("resultsGrid");
+        resultsGrid.innerHTML = "";
+
+        const counts = {};
+        massOpenedPool.forEach(item => {
+            counts[item.name] = (counts[item.name] || 0) + 1;
+        });
+
+        const rendered = [];
+        massOpenedPool.forEach(item => {
+            if (rendered.includes(item.name)) return;
+            rendered.push(item.name);
+
+            const count = counts[item.name];
+            resultsGrid.innerHTML += `
+            <div class="summary-item-node" style="border-color: ${item.color || 'rgba(255,255,255,0.1)'};">
+                <span class="summary-item-count">x${count}</span>
+                <img src="${item.image}" onerror="this.src='${CONFIG.fallbackPlaceholder}'" class="summary-img-item-node">
+                <div class="summary-item-name" style="color: ${item.color || '#fff'}">${item.name}</div>
+            </div>`;
+        });
+
+        document.getElementById("resultsCard").style.display = "flex";
+        unboxingState = "mass_summary_revealed";
+        stopConfettiRain();
+    }
+
+    function clearAndCloseOverlay() {
+        stopConfettiRain();
+        document.getElementById("unboxingOverlay").style.display = "none";
+        document.getElementById("unboxingPackImg").style.display = "block";
+        document.getElementById("blookCard").style.display = "none";
+        document.getElementById("resultsCard").style.display = "none";
+        unboxingState = "closed";
+        document.body.classList.remove("lock-scroll");
+    }
+
+    document.getElementById("closeResultsBtn").onclick = (e) => {
+        e.stopPropagation(); 
+        clearAndCloseOverlay();
+    };
+
+    /* ================= CONFETTI SYSTEM ================= */
+    const canvas = document.getElementById("confettiCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let animationFrameId = null;
+    let spawnIntervalId = null;
+
+    const SHAPES = { SQUARE: 0, RECTANGLE: 1, TRIANGLE: 2 };
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function startConfettiRain(hexColor) {
+        particles = [];
+        resizeCanvas();
+        
+        if (spawnIntervalId) clearInterval(spawnIntervalId);
+        
+        spawnIntervalId = setInterval(() => {
+            if (particles.length < 150) {
+                const shapeType = Math.floor(Math.random() * 3);
+                let baseSize = Math.random() * 8 + 8; 
+                
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: -20,
+                    size: baseSize,
+                    width: baseSize,
+                    height: shapeType === SHAPES.RECTANGLE ? baseSize * 1.5 : baseSize,
+                    shape: shapeType,
+                    color: hexColor || `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    speedY: Math.random() * 4 + 3,
+                    speedX: Math.random() * 2 - 1,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: Math.random() * 0.05 - 0.025
+                });
+            }
+        }, 40);
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotationSpeed;
+
+                if (p.y > canvas.height) {
+                    particles.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.fillStyle = p.color;
+
+                ctx.beginPath();
+                if (p.shape === SHAPES.SQUARE || p.shape === SHAPES.RECTANGLE) {
+                    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+                } else if (p.shape === SHAPES.TRIANGLE) {
+                    ctx.moveTo(0, -p.size / 2);
+                    ctx.lineTo(p.size / 2, p.size / 2);
+                    ctx.lineTo(-p.size / 2, p.size / 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+            animationFrameId = requestAnimationFrame(update);
+        }
+        
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(update);
+    }
+
+    function stopConfettiRain() {
+        if (spawnIntervalId) clearInterval(spawnIntervalId);
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles = [];
+    }
+
+    /* ================= MODALS SYSTEM ================= */
+    document.getElementById("infoBtn").onclick = showInfo;
+    document.getElementById("noBtn").onclick = closeModal;
+    document.getElementById("massNoBtn").onclick = closeMassModal;
+    document.getElementById("closeInfoBtn").onclick = closeInfo;
+
+    function showInfo(){ document.getElementById("infoBg").style.display="flex"; renderInfo(currentPackKey); }
+    function closeInfo(){ document.getElementById("infoBg").style.display="none"; }
+
+    function renderInfo(key){
+        const container = document.getElementById("rarityBox");
+        container.innerHTML = "";
+        const pack = packs[key];
+        pack.blooks.forEach(item => {
+            container.innerHTML += `<div style="display:flex;justify-content:space-between;padding:6px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.12);color:${item.color};"><span>${item.name}</span><span>— ${item.chance}%</span></div>`;
+        });
+    }
+
+    /* ================= BACKGROUND SQUARES ================= */
+    const bg = document.querySelector(".background");
+    for(let i=0; i<45; i++){
+        const s = document.createElement("div");
+        s.className = "square";
+        s.style.left = Math.random()*100+"%";
+        let z = Math.random()*25+10;
+        s.style.width = s.style.height = z + "px";
+        s.style.top = (Math.random()*-100)-50+"px";
+        s.style.animationDelay = Math.random()*10+"s";
+        s.style.opacity = Math.random()*0.6+0.2;
+        s.style.animationDuration = Math.random()*10+6+"s";
+        bg.appendChild(s);
+    }
+</script>
+</body>
+</html>

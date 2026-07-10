@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scratchlet | Register</title>
+<link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+
+    background: linear-gradient(
+        160deg,
+        #fff4d6 0%,
+        #ffc76a 25%,
+        #ff9b2f 50%,
+        #ff7f11 75%,
+        #8f3200 100%
+    );
+}
+
+/* BACKGROUND */
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.square{
+    position:absolute;
+    border:2px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.12);
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    from{ transform:translateY(-120px) rotate(0deg); }
+    to{ transform:translateY(120vh) rotate(360deg); }
+}
+
+/* NAVBAR */
+.navbar{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#ff7f11;
+    box-shadow: inset 0 -6px rgba(0,0,0,.2);
+}
+
+/* LOGO */
+.logo-btn{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
+    text-decoration:none;
+}
+
+/* FORM */
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:60px 20px;
+}
+
+.card{
+    width:100%;
+    max-width:500px;
+    background:#ff8c1a;
+    border-radius:16px;
+    padding:30px;
+    box-shadow:
+        inset 0 -8px rgba(0,0,0,.18),
+        0 10px 25px rgba(0,0,0,.2);
+}
+
+.card h1{
+    font-family:"Titan One",cursive;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.input-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:15px;
+}
+
+label{
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+input, textarea{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    font-family:"Nunito",sans-serif;
+    font-weight:600;
+}
+
+textarea{
+    resize:none;
+    height:100px;
+}
+
+.btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:1rem;
+    background:white;
+    color:#ff7f11;
+    box-shadow:0 6px 0 rgba(0,0,0,.25);
+    transition:0.15s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:translateY(4px);
+    box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+
+.small-text{
+    text-align:center;
+    margin-top:12px;
+    font-weight:700;
+    font-size:0.9rem;
+    opacity:0.9;
+}
+
+.small-text a{
+    color:white;
+    font-weight:900;
+    text-decoration:underline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="logo-btn">Scratchlet</a>
+</nav>
+
+<div class="container">
+
+    <div class="card">
+        <h1>Create Account</h1>
+
+        <form id="registerForm">
+
+            <div class="input-group">
+                <label>Username</label>
+                <input id="username" type="text" required placeholder="Enter username">
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input id="email" type="email" required placeholder="Enter email">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input id="password" type="password" required placeholder="Enter password">
+            </div>
+
+            <div class="input-group">
+                <label>Reason for joining</label>
+                <textarea id="reason" required placeholder="Why do you want to join?"></textarea>
+            </div>
+
+            <button class="btn" id="btn" type="submit">Register</button>
+
+        </form>
+
+        <div class="small-text">
+            Already have an account?
+            <a href="login.html">Login</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// background animation
+const bg = document.querySelector(".background");
+
+for(let i = 0; i < 50; i++){
+    const square = document.createElement("div");
+    square.className = "square";
+
+    square.style.left = Math.random() * 100 + "%";
+
+    const size = Math.random() * 25 + 10;
+    square.style.width = size + "px";
+    square.style.height = size + "px";
+
+    square.style.opacity = Math.random() * 0.6 + 0.25;
+
+    square.style.animationDuration = (Math.random() * 10 + 6) + "s";
+
+    bg.appendChild(square);
+}
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, setDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
+  authDomain: "scratchlet-ss.firebaseapp.com",
+  projectId: "scratchlet-ss",
+  storageBucket: "scratchlet-ss.firebasestorage.app",
+  messagingSenderId: "265174756634",
+  appId: "1:265174756634:web:a4c40ae00434f077e090a3",
+  measurementId: "G-7B7B6VXYJX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById("registerForm");
+const btn = document.getElementById("btn");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const reason = document.getElementById("reason").value.trim();
+
+    btn.disabled = true;
+    btn.innerText = "Creating account...";
+
+    try {
+        // 1. Check if the username already exists in Firestore
+        const q = query(collection(db, "users"), where("username", "==", username));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            throw new Error("This username is already taken. Please choose another.");
+        }
+
+        // 2. Proceed with authentication if username is unique
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        // 3. Save user data
+        await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            username,
+            email,
+            reason,
+            createdAt: Date.now()
+        });
+
+        alert("Account created!");
+        window.location.href = "login.html";
+
+    } catch (err) {
+        alert(err.message);
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Register";
+});
+</script>
+
+</body>
+</html>

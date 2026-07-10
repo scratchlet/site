@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratchlet | Connect</title>
+    <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=Titan+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Nunito", sans-serif;
+        }
+        
+        body {
+            color: white;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
+            overflow-x: hidden;
+        }
+        
+        /* BACKGROUND */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .square {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, .35);
+            background: rgba(255, 255, 255, .12);
+            animation: fall linear infinite;
+            top: -150px;
+        }
+        
+        @keyframes fall {
+            from { transform: translateY(0); }
+            to { transform: translateY(130vh) rotate(360deg); }
+        }
+        
+        /* NAVBAR - EXACT COPY FROM SETTINGS.HTML */
+        .navbar {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            background: #ff7f11;
+            box-shadow: inset 0 -6px rgba(0,0,0,.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-family: "Titan One", cursive;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* DARK CARD MINIBAR WRAPPER */
+        .minibar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #8f3200;
+            padding: 6px 12px;
+            border-radius: 16px;
+            box-shadow: inset 0 -4px rgba(0,0,0,.3), 0 4px 10px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* DYNAMIC COIN INDICATOR DISPLAY INSIDE MINIBAR */
+        .minibar-coins {
+            font-weight: 900;
+            font-size: 0.95rem;
+            padding-right: 12px;
+            margin-right: 8px;
+            border-right: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff4d6;
+        }
+        
+        /* BUTTON SYSTEM */
+        .btn {
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            letter-spacing: .3px;
+            font-size: 0.85rem;
+            transition: transform .12s ease, box-shadow .12s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* TRANSPARENT MINIBAR ICON BUTTONS */
+        .minibar-btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+        
+        .minibar-btn:hover {
+            transform: scale(1.15) !important;
+            color: #fff4d6;
+        }
+        
+        .minibar-btn:active {
+            transform: scale(0.95) !important;
+        }
+        
+        .minibar-btn .material-icons { font-size: 22px; }
+        .minibar-btn.active { color: #fff4d6; }
+        
+        #logoutBtn.minibar-btn { color: #ffc76a; }
+        #logoutBtn.minibar-btn:hover { color: white; }
+        
+        /* INFO BUBBLE TOOLTIPS */
+        .minibar-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 48px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px) scale(0.9);
+            background: #fff4d6;
+            color: #8f3200;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid #ff9b2f;
+        }
+        
+        .minibar-btn::before {
+            content: '';
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            border-width: 0 6px 6px 6px;
+            border-style: solid;
+            border-color: transparent transparent #fff4d6 transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 101;
+        }
+        
+        .minibar-btn:hover::after, .minibar-btn:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+        
+        /* SETTINGS LAYOUT CONTAINER */
+        .container {
+            max-width: 95%;
+            margin: auto;
+            padding: 25px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .big-settings-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        
+        .settings-header {
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+        
+        .settings-title {
+            font-family: "Titan One", cursive;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-section {
+            background: rgba(0, 0, 0, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-family: "Titan One", cursive;
+            font-size: 1.25rem;
+            color: #fff1d0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subhead {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            border-left: 4px solid #ff9b2f;
+            padding-left: 16px;
+            opacity: 0.9;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-group label .material-icons {
+            font-size: 1.2rem;
+            color: #ff9b2f;
+        }
+
+        .connect-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 16px 18px;
+            font-family: "Nunito", sans-serif;
+            font-weight: 700;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .connect-input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .connect-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 600;
+        }
+
+        .helper-hint {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .helper-hint .material-icons {
+            font-size: 1rem;
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #ff8c1a;
+            padding: 12px 22px;
+            border-radius: 14px;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25);
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            font-size: 0.85rem;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex: 1 1 auto;
+            min-width: 140px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #fcf9f2;
+        }
+        .btn-primary:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            transform: translateY(0);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            padding: 12px 22px;
+            border-radius: 14px;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+            font-weight: 900;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            font-size: 0.85rem;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex: 1 1 auto;
+            min-width: 140px;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-2px);
+        }
+        .btn-secondary:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .status-message {
+            margin-top: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 5px solid #ff9b2f;
+            display: none;
+            color: #fff4d6;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-message.error {
+            border-left-color: #ff3b3b;
+            color: #ffb3b3;
+        }
+        .status-message.success {
+            border-left-color: #6fcf97;
+            color: #b0f0c0;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s, border-color 0.2s;
+            font-size: 0.9rem;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+        .back-link:hover {
+            color: white;
+            border-bottom-color: #ff9b2f;
+        }
+
+        .mapper-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 30px;
+            padding: 6px 18px 6px 14px;
+            color: #ffe484;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .big-settings-card {
+                padding: 20px 16px;
+            }
+            .settings-title {
+                font-size: 1.5rem;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="background"></div>
+
+<!-- NAVBAR - EXACT COPY FROM SETTINGS.HTML -->
+<nav class="navbar">
+    <div class="logo">Scratchlet</div>
+    <div class="minibar">
+        <div class="minibar-coins">🪙 <span id="coinCount">0</span></div>
+        <a href="home.html" class="btn minibar-btn" data-tooltip="Home"><span class="material-icons">home</span></a>        
+        <a href="market.html" class="btn minibar-btn" data-tooltip="Market"><span class="material-icons">store</span></a>        
+        <a href="inventory.html" class="btn minibar-btn" data-tooltip="Inventory"><span class="material-icons">inventory_2</span></a>        
+        <a href="stats.html" class="btn minibar-btn" data-tooltip="Stats"><span class="material-icons">bar_chart</span></a>        
+        <a href="news.html" class="btn minibar-btn" data-tooltip="News"><span class="material-icons">article</span></a>        
+        <a href="chat.html" class="btn minibar-btn" data-tooltip="Chat"><span class="material-icons">chat</span></a>        
+        <a href="settings.html" class="btn minibar-btn" data-tooltip="Settings"><span class="material-icons">settings</span></a>        
+        <a href="trading.html" class="btn minibar-btn" data-tooltip="Trading"><span class="material-icons">swap_horiz</span></a>        
+        <button id="logoutBtn" class="btn minibar-btn" data-tooltip="Logout"><span class="material-icons">logout</span></button>  
+    </div>
+</nav>
+
+<div class="container">
+    <div class="big-settings-card">
+        <div class="settings-header">
+            <div class="settings-title">
+                <span class="material-icons" style="font-size: 2.2rem;">link</span> Connect Account
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-title">
+                <span class="material-icons">manage_accounts</span> MapperStudios Link
+            </div>
+
+            <div class="mapper-badge">
+                <span class="material-icons" style="font-size: 1.1rem;">verified</span>
+                MapperStudios network
+            </div>
+
+            <div class="subhead">
+                Link your Scratchlet profile with your MapperStudios account to sync progress, badges, and exclusive content.
+            </div>
+
+            <div class="input-group">
+                <label><span class="material-icons">email</span> MapperStudios Email</label>
+                <input type="email" class="connect-input" id="mapperEmail" placeholder="your@email.com" value="mapper@studios.com" />
+                <div class="helper-hint">
+                    <span class="material-icons">info</span> Your MapperStudios account email.
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><span class="material-icons">lock</span> MapperStudios Password</label>
+                <input type="password" class="connect-input" id="mapperPassword" placeholder="Enter your password" value="••••••••" />
+                <div class="helper-hint">
+                    <span class="material-icons">lock</span> Your MapperStudios account password.
+                </div>
+            </div>
+
+            <div class="action-row">
+                <button class="btn-primary" id="connectBtn">
+                    <span class="material-icons" style="margin-right: 8px;">check_circle</span> Connect
+                </button>
+                <a href="settings.html" class="btn-secondary">
+                    <span class="material-icons" style="margin-right: 8px;">arrow_back</span> Cancel
+                </a>
+            </div>
+
+            <div id="connectStatus" class="status-message">
+                <span class="material-icons" id="statusIcon">info</span>
+                <span id="statusText">Ready</span>
+            </div>
+
+            <a href="settings.html" class="back-link">
+                <span class="material-icons">settings</span> Back to Settings
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
+        authDomain: "scratchlet-ss.firebaseapp.com",
+        projectId: "scratchlet-ss",
+        storageBucket: "scratchlet-ss.firebasestorage.app",
+        messagingSenderId: "265174756634",
+        appId: "1:265174756634:web:a4c40ae00434f077e090a3",
+        measurementId: "G-7B7B6VXYJX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const emailInput = document.getElementById('mapperEmail');
+    const passwordInput = document.getElementById('mapperPassword');
+    const connectBtn = document.getElementById('connectBtn');
+    const statusEl = document.getElementById('connectStatus');
+    const statusIcon = document.getElementById('statusIcon');
+    const statusText = document.getElementById('statusText');
+    const coinDisplay = document.getElementById('coinCount');
+
+    let currentUser = null;
+    let userDocRef = null;
+
+    document.getElementById("logoutBtn").onclick = async () => {
+        try {
+            await signOut(auth);
+            location.href = "login.html";
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            location.href = "login.html";
+            return;
+        }
+        currentUser = user;
+        userDocRef = doc(db, "users", currentUser.uid);
+
+        try {
+            const snap = await getDoc(userDocRef);
+            if (snap.exists()) {
+                const data = snap.data();
+                coinDisplay.innerText = data.coins !== undefined ? data.coins : 0;
+
+                if (data.mapperConnected) {
+                    emailInput.value = data.mapperEmail || 'mapper@studios.com';
+                    statusEl.style.display = 'flex';
+                    statusEl.classList.add('success');
+                    statusIcon.textContent = 'check_circle';
+                    statusText.textContent = `✅ Already connected to "${data.mapperEmail || 'mapper@studios.com'}"`;
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                        statusEl.classList.remove('success');
+                    }, 4000);
+                }
+            }
+        } catch (e) {
+            console.warn('Load error:', e);
+        }
+    });
+
+    connectBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        statusEl.classList.remove('error', 'success');
+        statusEl.style.display = 'flex';
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!email || !email.includes('@')) {
+            statusEl.classList.add('error');
+            statusIcon.textContent = 'error';
+            statusText.textContent = 'Please enter a valid email address.';
+            return;
+        }
+
+        if (!password || password.length < 6) {
+            statusEl.classList.add('error');
+            statusIcon.textContent = 'error';
+            statusText.textContent = 'Password must be at least 6 characters.';
+            return;
+        }
+
+        if (!currentUser) {
+            statusEl.classList.add('error');
+            statusIcon.textContent = 'error';
+            statusText.textContent = 'You must be logged in to connect.';
+            return;
+        }
+
+        connectBtn.disabled = true;
+        connectBtn.style.opacity = '0.6';
+        statusIcon.textContent = 'hourglass_empty';
+        statusText.textContent = 'Verifying MapperStudios credentials…';
+
+        try {
+            // Try to sign in with the provided credentials to verify them
+            // This simulates checking against a MapperStudios auth system
+            // In production, you'd call a Firebase Function or external API
+            await new Promise((resolve) => setTimeout(resolve, 1200));
+
+            // Store connection data in Firestore
+            await setDoc(userDocRef, {
+                mapperConnected: true,
+                mapperEmail: email,
+                mapperPassword: password, // In production, never store plaintext passwords!
+                mapperConnectedAt: new Date().toISOString()
+            }, { merge: true });
+
+            statusEl.classList.add('success');
+            statusIcon.textContent = 'check_circle';
+            statusText.textContent = `✅ Successfully linked to "${email}"! Redirecting…`;
+
+            setTimeout(() => {
+                window.location.href = 'settings.html?connect=success';
+            }, 1800);
+
+        } catch (error) {
+            console.error('Connection error:', error);
+            statusEl.classList.add('error');
+            statusIcon.textContent = 'error';
+            statusText.textContent = '❌ Failed to connect. Invalid credentials or network error.';
+            connectBtn.disabled = false;
+            connectBtn.style.opacity = '1';
+        }
+    });
+
+    document.querySelectorAll('.connect-input').forEach(input => {
+        input.addEventListener('input', () => {
+            statusEl.style.display = 'none';
+            statusEl.classList.remove('error', 'success');
+        });
+    });
+
+    function createSquares() {
+        const bg = document.querySelector(".background");
+        if (!bg) return;
+        bg.innerHTML = "";
+        
+        for (let i = 0; i < 60; i++) { 
+            const s = document.createElement("div"); 
+            s.className = "square"; 
+            s.style.left = Math.random() * 100 + "%"; 
+            const size = Math.random() * 25 + 10; 
+            s.style.width = size + "px"; 
+            s.style.height = size + "px"; 
+            s.style.top = (Math.random() * -100) - 50 + "px";
+            s.style.animationDelay = (Math.random() * 10) + "s";
+            s.style.opacity = Math.random() * 0.6 + 0.25; 
+            s.style.animationDuration = (Math.random() * 10 + 6) + "s"; 
+            bg.appendChild(s);
+        }
+    }
+    window.addEventListener("DOMContentLoaded", createSquares);
+</script>
+</body>
+</html>

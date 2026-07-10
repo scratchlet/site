@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scratchlet</title>
+<link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    overflow-x:hidden;
+    min-height:100vh;
+
+    background:
+        linear-gradient(
+            160deg,
+            #fff4d6 0%,
+            #ffc76a 25%,
+            #ff9b2f 50%,
+            #ff7f11 75%,
+            #8f3200 100%
+        );
+}
+
+/* =========================
+   MATERIAL ICONS
+========================= */
+
+.material-icons{
+    font-size:2.6rem;
+    display:block;
+    margin-bottom:12px;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:-1;
+}
+
+.square{
+    position:absolute;
+    border:2px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.12);
+    box-shadow:0 0 8px rgba(255,255,255,.15);
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    from{ transform:translateY(-120px) rotate(0deg); }
+    to{ transform:translateY(120vh) rotate(360deg); }
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
+    background:#ff7f11;
+    box-shadow: inset 0 -6px rgba(0,0,0,.2);
+}
+
+.logo{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:10px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    letter-spacing:.3px;
+    font-size:0.85rem;
+    transition: transform .12s ease, box-shadow .12s ease;
+
+    text-decoration:none;
+    display:inline-block;
+}
+
+.primary,
+.secondary{
+    padding:10px 18px;
+    border-radius:14px;
+    box-shadow:0 6px 0 rgba(0,0,0,.25);
+    transform: translateY(0);
+}
+
+.primary{
+    background:white;
+    color:#ff8c1a;
+}
+
+.secondary{
+    background:rgba(255,255,255,.18);
+    color:white;
+    border:2px solid rgba(255,255,255,.25);
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+}
+
+.btn:active{
+    transform: translateY(4px);
+    box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    text-align:center;
+    padding:80px 20px 40px;
+}
+
+.badge{
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-family:"Titan One",cursive;
+    font-size:clamp(4rem,10vw,7rem);
+    line-height:.9;
+    text-shadow:0 4px 0 rgba(0,0,0,.15);
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:750px;
+    margin:auto;
+    font-size:1.2rem;
+    line-height:1.8;
+}
+
+.hero-buttons{
+    margin-top:35px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+/* =========================
+   FEATURES
+========================= */
+
+.features{
+    max-width:1100px;
+    margin:60px auto;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.feature{
+    background:#ff8c1a;
+    border-radius:14px;
+    padding:30px;
+    text-align:center;
+    box-shadow:
+        inset 0 -8px rgba(0,0,0,.18),
+        0 4px 12px rgba(0,0,0,.15);
+    transition:.15s ease;
+}
+
+.feature:hover{
+    transform:translateY(-4px);
+}
+
+.feature h3{
+    font-family:"Titan One",cursive;
+    margin-bottom:10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:rgba(0,0,0,.12);
+    font-weight:700;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+    .navbar{ padding:0 15px; }
+    .logo{ font-size:2rem; }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .hero-buttons .btn{
+        width:100%;
+        max-width:350px;
+        margin:auto;
+        text-align:center;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<nav class="navbar">
+    <div class="logo">Scratchlet</div>
+
+    <div class="nav-buttons">
+        <a href="login.html" class="btn secondary">Login</a>
+        <a href="register.html" class="btn primary">Register</a>
+    </div>
+</nav>
+
+<section class="hero">
+
+    <div class="badge">Blooket • But • Scratched</div>
+
+    <h1>Scratchlet</h1>
+
+    <p>
+        Scratchlet (Web) is a private server owned by SuperMemes_64 and created by the scratchlet dev team. This website is fully made out of html, css, and javascript and any art here is made by the website scratch/turbowarp. (Inspired by blooket, blacket, and scratch)
+    </p>
+
+    <div class="hero-buttons">
+        <a href="login.html" class="btn primary">Play Now</a>
+        <a href="register.html" class="btn secondary">Create Account</a>
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="feature">
+        <span class="material-icons">inventory_2</span>
+        <h3>Collect</h3>
+        <p>Build your collection and discover rare items.</p>
+    </div>
+
+    <div class="feature">
+        <span class="material-icons">swap_horiz</span>
+        <h3>Trade</h3>
+        <p>Trade items with friends and grow your inventory.</p>
+    </div>
+
+    <div class="feature">
+        <span class="material-icons">chat</span>
+        <h3>Chat</h3>
+        <p>Connect with the community and make new friends.</p>
+    </div>
+
+    <div class="feature">
+        <span class="material-icons">sports_esports</span>
+        <h3>Play</h3>
+        <p>Enjoy games and earn rewards along the way.</p>
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Scratchlet
+</footer>
+
+<script>
+const bg = document.querySelector(".background");
+
+for(let i = 0; i < 60; i++){
+    const square = document.createElement("div");
+    square.className = "square";
+
+    square.style.left = Math.random() * 100 + "%";
+
+    const size = Math.random() * 25 + 10;
+    square.style.width = size + "px";
+    square.style.height = size + "px";
+
+    square.style.opacity = Math.random() * 0.6 + 0.25;
+
+    square.style.animationDuration = (Math.random() * 10 + 6) + "s";
+
+    bg.appendChild(square);
+}
+</script>
+
+</body>
+</html>

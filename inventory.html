@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratchlet | Inventory</title>
+    <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=Titan+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        /* Reset and Font Inheritance */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Nunito", sans-serif;
+        }
+        
+        body {
+            color: white;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
+            overflow-x: hidden;
+        }
+        
+        /* BACKGROUND */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .square {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, .35);
+            background: rgba(255, 255, 255, .12);
+            animation: fall linear infinite;
+            top: -150px;
+        }
+        
+        @keyframes fall {
+            from { transform: translateY(0); }
+            to { transform: translateY(130vh) rotate(360deg); }
+        }
+        
+        /* NAVBAR */
+        .navbar {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            background: #ff7f11;
+            box-shadow: inset 0 -6px rgba(0,0,0,.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-family: "Titan One", cursive;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* DARK CARD MINIBAR WRAPPER */
+        .minibar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #8f3200;
+            padding: 6px 12px;
+            border-radius: 16px;
+            box-shadow: inset 0 -4px rgba(0,0,0,.3), 0 4px 10px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* DYNAMIC COIN INDICATOR DISPLAY INSIDE MINIBAR */
+        .minibar-coins {
+            font-weight: 900;
+            font-size: 0.95rem;
+            padding-right: 12px;
+            margin-right: 8px;
+            border-right: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff4d6;
+        }
+        
+        /* BUTTON SYSTEM */
+        .btn {
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            letter-spacing: .3px;
+            font-size: 0.85rem;
+            transition: transform .12s ease, box-shadow .12s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .primary, .secondary {
+            padding: 10px 18px;
+            border-radius: 14px;
+            box-shadow: 0 6px 0 rgba(0,0,0,.25);
+            transform: translateY(0);
+        }
+        
+        .primary {
+            background: white;
+            color: #ff8c1a;
+        }
+        
+        .secondary {
+            background: rgba(255, 255, 255, .18);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, .25);
+        }
+        
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+        
+        /* TRANSPARENT MINIBAR ICON BUTTONS */
+        .minibar-btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+        
+        .minibar-btn:hover {
+            transform: scale(1.15) !important;
+            color: #fff4d6;
+        }
+        
+        .minibar-btn:active {
+            transform: scale(0.95) !important;
+        }
+        
+        .minibar-btn .material-icons { font-size: 22px; }
+        .minibar-btn.active { color: #fff4d6; }
+        
+        #logoutBtn.minibar-btn { color: #ffc76a; }
+        #logoutBtn.minibar-btn:hover { color: white; }
+        
+        /* INFO BUBBLE TOOLTIPS */
+        .minibar-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 48px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px) scale(0.9);
+            background: #fff4d6;
+            color: #8f3200;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 2px solid #ff9b2f;
+        }
+        
+        .minibar-btn::before {
+            content: '';
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            border-width: 0 6px 6px 6px;
+            border-style: solid;
+            border-color: transparent transparent #fff4d6 transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+            z-index: 101;
+        }
+        
+        .minibar-btn:hover::after, .minibar-btn:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+        
+        /* MODAL COUPLING OVERLAY FIXES */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s ease;
+            z-index: 998;
+        }
+        
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* INVENTORY LAYOUT CONTAINER - EXPANDED WIDE SCREEN ADJUSTMENT */
+        .container {
+            max-width: 95%;
+            margin: auto;
+            padding: 25px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .big-inventory-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+        
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
+        }
+        
+        .inventory-title {
+            font-family: "Titan One", cursive;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* CONTROLS UTILITY ROW */
+        .inventory-controls-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-bar-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 10px 16px 10px 42px;
+            font-family: "Nunito", sans-serif;
+            font-weight: 700;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            width: 220px;
+            transition: border-color 0.2s, width 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            width: 260px;
+        }
+        
+        .search-bar-wrapper .material-icons {
+            position: absolute;
+            left: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+        
+        .filter-dropdown {
+            background: #ff7f11;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 14px;
+            padding: 10px 32px 10px 16px;
+            font-family: "Nunito", sans-serif;
+            font-weight: 800;
+            color: white;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+        
+        /* SCROLL CONTAINER RULES */
+        .inventory-scroll-container {
+            max-height: 68vh;
+            overflow-y: auto;
+            padding-right: 8px;
+            min-height: 120px;
+        }
+        
+        .inventory-scroll-container::-webkit-scrollbar { width: 8px; }
+        .inventory-scroll-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .inventory-scroll-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+        
+        /* PACK SECTIONS */
+        .pack-section { margin-bottom: 30px; }
+        .pack-section:last-child { margin-bottom: 10px; }
+        .pack-section-title { font-family: "Titan One", cursive; font-size: 1.3rem; margin-bottom: 10px; color: #fff1d0; display: flex; align-items: center; gap: 8px; }
+        .pack-section-line { border: none; height: 2px; background: rgba(255, 255, 255, 0.15); margin-bottom: 15px; }
+        
+        /* BLOOK CONTAINERS */
+        .blook-image-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; padding: 5px; }
+        
+        .blook-img-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            position: relative;
+            width: 84px;
+            height: 84px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+        }
+        
+        .blook-img-btn:not(.locked):hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.12); z-index: 2; }
+        .blook-img-btn:not(.locked):active { transform: scale(0.96); }
+        .blook-img-btn.locked { filter: grayscale(100%); opacity: 0.55; cursor: not-allowed; }
+        .blook-graphic { width: 75%; height: 75%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+        
+        /* BADGE */
+        .blook-qty-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-family: "Titan One", cursive;
+            font-size: 0.85rem;
+            z-index: 3;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+        .blook-qty-badge .material-icons { font-size: 1rem; }
+        .no-results-text { text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.6); padding-top: 40px; }
+        
+        /* VIEW MODAL CARD SYSTEM - HORIZONTAL RECTANGLE LAYOUT */
+        .modal-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            padding: 20px;
+        }
+        
+        .modal-container.show { opacity: 1; pointer-events: auto; }
+        
+        .blook-view-card {
+            background: #ff8c1a;
+            border: 4px solid white;
+            border-radius: 24px;
+            width: 620px;
+            height: 340px;
+            max-width: 100%;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .modal-container.show .blook-view-card { transform: scale(1); }
+        
+        .close-card-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        
+        .card-left-col { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+        .card-graphic-frame { width: 160px; height: 160px; background: rgba(255,255,255,0.15); border-radius: 20px; display: flex; align-items: center; justify-content: center; }
+        .card-graphic { width: 75%; height: 75%; object-fit: contain; }
+        
+        /* VERTICAL DIVIDER LINE */
+        .blook-divider {
+            width: 3px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .card-right-col { flex: 1 1 auto; display: flex; flex-direction: column; text-align: left; height: 100%; }
+        .card-name { font-family: "Titan One", cursive; font-size: 1.8rem; margin-bottom: 8px; line-height: 1.2; }
+        .card-meta-row { display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .card-pill { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; background: rgba(0,0,0,0.15); }
+        .card-pill style { background-color: #8f3200; color: #fff4d6; }
+        .card-actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; width: 100%; }
+        
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            font-family: "Nunito", sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        
+        .action-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+        .btn-sell { background: white; color: #d62424; }
+        
+        /* SEMI-TRANSPARENT SYSTEM STYLE FOR DUPLICATES */
+        .btn-sell-dupes { background: #ffb633; color: white; border: 2px solid rgba(255,255,255,0.4); transition: opacity 0.2s ease; }
+        .btn-sell-dupes.is-transparent {
+            opacity: 0.35;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        /* SAFEGUARD TEXT CONFIRMATION FIELD */
+        .blook-verify-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.15);
+            color: white;
+            font-weight: 700;
+            outline: none;
+            margin-bottom: 4px;
+            transition: border-color 0.2s;
+        }
+        .blook-verify-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .blook-verify-input:focus {
+            border-color: white;
+        }
+        .action-btn:disabled {
+            background: #e0e0e0;
+            color: #9e9e9e;
+            box-shadow: 0 5px 0 #b5b5b5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 480px) {
+            .blook-view-card { flex-direction: column; text-align: center; padding-top: 40px; height: auto; }
+            .blook-divider { width: 100%; height: 3px; margin: 10px 0; }
+            .card-right-col { text-align: center; width: 100%; }
+            .card-meta-row { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="background"></div>
+<div class="overlay" id="overlay"></div>
+
+<div class="modal-container" id="cardModalContainer">
+    <div class="blook-view-card">
+        <button class="close-card-btn" id="closeCardBtn"><span class="material-icons">close</span></button>
+        <div class="card-left-col">
+            <div class="card-graphic-frame">
+                <img src="https://scratchlet.github.io/blooks/" alt="" class="card-graphic" id="modalGraphic">
+            </div>
+        </div>
+        
+        <div class="blook-divider"></div>
+        
+        <div class="card-right-col">
+            <div>
+                <div class="card-name" id="modalName">Blook Name</div>
+                <div class="card-meta-row">
+                    <div class="card-pill" id="modalRarity">Rarity</div>
+                    <div class="card-pill" id="modalChance">0%</div>
+                    <div class="card-pill" id="modalOwned">Owned: 0</div>
+                    <div class="card-pill" id="modalValuePill" style="background-color: #8f3200; color: #fff4d6;">🪙 <span id="sellValue">0</span></div>
+                </div>
+            </div>
+            <div class="card-actions">
+                <div id="verificationWrapper" style="display: none; width: 100%;">
+                    <input type="text" class="blook-verify-input" id="blookVerifyInput" placeholder='Type name to confirm'>
+                </div>
+                <button class="action-btn btn-sell" id="sellSingleBtn">Sell</button>
+                <button class="action-btn btn-sell-dupes" id="sellDupesBtn">Sell Duplicates</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar">
+    <div class="logo">Scratchlet</div>
+    <div class="minibar">
+        <div class="minibar-coins">🪙 <span id="coinCount">0</span></div>
+        <a href="home.html" class="btn minibar-btn" data-tooltip="Home"><span class="material-icons">home</span></a>
+        <a href="market.html" class="btn minibar-btn" data-tooltip="Market"><span class="material-icons">store</span></a>
+        <a href="inventory.html" class="btn minibar-btn active" data-tooltip="Inventory"><span class="material-icons">inventory_2</span></a>
+        <a href="stats.html" class="btn minibar-btn" data-tooltip="Stats"><span class="material-icons">bar_chart</span></a>
+        <a href="news.html" class="btn minibar-btn" data-tooltip="News"><span class="material-icons">article</span></a>
+        <a href="chat.html" class="btn minibar-btn" data-tooltip="Chat"><span class="material-icons">chat</span></a>
+        <a href="settings.html" class="btn minibar-btn" data-tooltip="Settings"><span class="material-icons">settings</span></a>
+        <a href="trading.html" class="btn minibar-btn" data-tooltip="Trading"><span class="material-icons">swap_horiz</span></a>
+        <button id="logoutBtn" class="btn minibar-btn" data-tooltip="Logout"><span class="material-icons">logout</span></button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="big-inventory-card">
+        <div class="inventory-header">
+            <div class="inventory-title">
+                <span class="material-icons" style="font-size: 2.2rem;">inventory_2</span> Blook Collection
+            </div>
+            
+            <div class="inventory-controls-row">
+                <div class="search-bar-wrapper">
+                    <span class="material-icons">search</span>
+                    <input type="text" class="search-input" id="blookSearchInput" placeholder="Search Blooks...">
+                </div>
+                
+                <select class="filter-dropdown" id="categoryFilterDropdown">
+                    <option value="all">All Blooks</option>
+                    <optgroup label="Rarities">
+                        <option value="rarity:Common">Common</option>
+                        <option value="rarity:Uncommon">Uncommon</option>
+                        <option value="rarity:Rare">Rare</option>
+                        <option value="rarity:Epic">Epic</option>
+                        <option value="rarity:Legendary">Legendary</option>
+                        <option value="rarity:Chroma">Chroma</option>
+                        <option value="rarity:Celestial">Celestial</option>
+                        <option value="rarity:Mystical">Mystical</option>
+                        <option value="rarity:Whimsical">Whimsical</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        
+        <div class="inventory-scroll-container" id="inventoryScrollContainer">
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    /* ================= FIREBASE INITIALIZATION ================= */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {  
+        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",  
+        authDomain: "scratchlet-ss.firebaseapp.com",  
+        projectId: "scratchlet-ss",  
+        storageBucket: "scratchlet-ss.firebasestorage.app",  
+        messagingSenderId: "265174756634",  
+        appId: "1:265174756634:web:a4c40ae00434f077e090a3",  
+        measurementId: "G-7B7B6VXYJX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ================= GAME STATES ================= */
+    let coins = 0;
+    let ownedBlocks = []; 
+    let currentUser = null;
+    let selectedBlook = null;
+    let customBlookData = {}; 
+
+    onAuthStateChanged(auth, async (user) => {  
+        if (!user) {    
+            location.href = "login.html";  
+        } else {    
+            currentUser = user;    
+            await loadUserData();  
+        }
+    });
+
+    document.getElementById("logoutBtn").onclick = async () => {  
+        try {    
+            await signOut(auth);    
+            location.href = "login.html";  
+        } catch (err) {    
+            console.error(err);  
+        }
+    };
+
+    /* ================= CLOUD DATABASE CONTROL ================= */
+    async function loadUserData() {    
+        if (!currentUser) return;    
+        try {        
+            const userDocRef = doc(db, "users", currentUser.uid);        
+            const userSnapshot = await getDoc(userDocRef);                
+            if (userSnapshot.exists()) {            
+                const data = userSnapshot.data();            
+                coins = data.coins !== undefined ? data.coins : 0;            
+                ownedBlocks = Array.isArray(data.ownedBlocks) ? data.ownedBlocks : [];        
+                customBlookData = data.customBlookData || {};
+            } else {            
+                coins = 0;            
+                ownedBlocks = [];            
+                customBlookData = {};
+                await saveUserData();        
+            }        
+            document.getElementById("coinCount").innerText = coins;
+            buildRuntimeInventory();
+        } catch (error) {        
+            console.error("Error pulling cloud data Profile:", error);    
+        }
+    }
+
+    async function saveUserData() {    
+        if (!currentUser) return;    
+        try {        
+            const userDocRef = doc(db, "users", currentUser.uid);        
+            await setDoc(userDocRef, {            
+                coins: coins,            
+                ownedBlocks: ownedBlocks,
+                customBlookData: customBlookData
+            }, { merge: true });    
+        } catch (error) {        
+            console.error("Error saving backup cloud sync profile:", error);    
+        }
+    }
+
+    /* ================= MODAL & WINDOW EVENT LISTENERS ================= */
+    const overlay = document.getElementById("overlay");
+    const modalContainer = document.getElementById("cardModalContainer");
+    const verifyInput = document.getElementById("blookVerifyInput");
+    const verifyWrapper = document.getElementById("verificationWrapper");
+    const sellSingleBtn = document.getElementById("sellSingleBtn");
+    const sellValue = document.getElementById("sellValue");
+    
+    modalContainer.onclick = (e) => {
+        if (e.target === modalContainer) {
+            closeCardModal();
+        }
+    };
+    overlay.onclick = () => { closeCardModal(); };
+    document.getElementById("closeCardBtn").onclick = closeCardModal;
+
+    function closeCardModal() {
+        modalContainer.classList.remove("show");
+        overlay.classList.remove("show");
+        selectedBlook = null;
+    }
+
+    /* FLOATING BACKGROUND SQUARES GENERATOR */
+    function createSquares() {
+        const bg = document.querySelector(".background");
+        if (!bg) return;
+        bg.innerHTML = "";
+        
+        for (let i = 0; i < 60; i++) { 
+            const s = document.createElement("div"); 
+            s.className = "square"; 
+            s.style.left = Math.random() * 100 + "%"; 
+            
+            const size = Math.random() * 25 + 10; 
+            s.style.width = size + "px"; 
+            s.style.height = size + "px"; 
+            
+            s.style.top = (Math.random() * -100) - 50 + "px";
+            s.style.animationDelay = (Math.random() * 10) + "s";
+            
+            s.style.opacity = Math.random() * 0.6 + 0.25; 
+            s.style.animationDuration = (Math.random() * 10 + 6) + "s"; 
+            bg.appendChild(s);
+        }
+    }
+    window.addEventListener("DOMContentLoaded", createSquares);
+
+    const FALLBACK_IMAGE = "https://i.postimg.cc/9fZwBPpg/Placeholder.png";
+
+    /* CONFIGS AND REPLICAS DATA STRUCTURES */
+    const CONFIG = {
+        pizzaBlook: "https://i.postimg.cc/YSnT0Zmh/Pizza.webp",
+        fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png"
+    };
+
+    const packs = {
+        breakfast: {
+            name: "Breakfast Pack",
+            blooks: [
+            {name:"Toast",rarity:"Uncommon",chance:12.5, rarityColor:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},      
+            {name:"Cereal",rarity:"Uncommon",chance:12.5, rarityColor:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Tomato Soup",rarity:"Uncommon",chance:12.5, rarityColor:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},       
+            {name:"Yogurt",rarity:"Uncommon",chance:12.5, rarityColor:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},      
+            {name:"Breakfast Combo",rarity:"Uncommon",chance:12.5, rarityColor:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},      
+            {name:"Orange Juice",rarity:"Rare",chance:9, rarityColor:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},      
+            {name:"Milk",rarity:"Rare",chance:9, rarityColor:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},      
+            {name:"Waffle",rarity:"Rare",chance:8.5, rarityColor:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},      
+            {name:"Pancakes",rarity:"Epic",chance:4, rarityColor:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},      
+            {name:"French Toast",rarity:"Epic",chance:3.5, rarityColor:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},      
+            {name:"Pizza",rarity:"Legendary",chance:2, rarityColor:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk",rarity:"Chroma",chance:1, rarityColor:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk",rarity:"Chroma",chance:0.5, rarityColor:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+            ]
+        },
+
+        medieval: {
+            name: "Medieval Pack",
+            blooks: [
+                {name:"Elf",rarity:"Uncommon",rarityColor:"limegreen",chance:13.4,image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
+                {name:"Witch",rarity:"Uncommon",rarityColor:"limegreen",chance:13.4,image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
+                {name:"Wizard",rarity:"Uncommon",rarityColor:"limegreen",chance:13.4,image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
+                {name:"Fairy",rarity:"Uncommon",rarityColor:"limegreen",chance:13.4,image:"https://i.postimg.cc/fRNHT5x0/Fairy.webp"},
+                {name:"Slime Monster",rarity:"Uncommon",rarityColor:"limegreen",chance:13.4,image:"https://i.postimg.cc/HkgSs3Qc/Slime-Monster.webp"},
+                {name:"Jester",rarity:"Rare",rarityColor:"blue",chance:8.9,image:"https://i.postimg.cc/RZBPVGcJ/Jester.webp"},
+                {name:"Dragon",rarity:"Rare",rarityColor:"blue",chance:8.9,image:"https://i.postimg.cc/sgrnDKpx/Dragon.webp"},
+                {name:"Queen",rarity:"Rare",rarityColor:"blue",chance:8.9,image:"https://i.postimg.cc/dVYWtn8h/Queen.webp"},
+                {name:"Unicorn",rarity:"Epic",rarityColor:"red",chance:5.12,image:"https://i.postimg.cc/52VPNpwj/Unicorn.webp"},
+                {name:"King",rarity:"Legendary",rarityColor:"gold",chance:1,image:"https://i.postimg.cc/L8py6vzn/King.webp"},
+                {name:"Master Elf",rarity:"Chroma",rarityColor:"cyan",chance:0.075,image:"https://i.postimg.cc/Gp56nwS0/Master-Elf.webp"},
+                {name:"Agent Owl",rarity:"Chroma",rarityColor:"cyan",chance:0.075,image:"https://i.postimg.cc/yNb2C4rz/Agent-Owl.webp"},
+                {name:"Wise Owl",rarity:"Celestial",rarityColor:"teal",chance:0.025,image:"https://i.postimg.cc/yWqsN84V/Wise-Owl.webp"},
+                {name:"Phantom King",rarity:"Mystical",rarityColor:"purple",chance:0.005,image:"https://i.postimg.cc/QdfkpQvC/Phantom-King.webp"},
+            ]
+        },
+
+                color: {
+            name: "Color Pack",
+            blooks: [
+                {name:"Red",rarity:"Uncommon",rarityColor:"limegreen",chance:16.327,image:"https://i.postimg.cc/Hnm2thKG/Red.webp"},
+                {name:"Blue",rarity:"Uncommon",rarityColor:"limegreen",chance:16.327,image:"https://i.postimg.cc/5yJ3mRrh/Blue.webp"},
+                {name:"Green",rarity:"Uncommon",rarityColor:"limegreen",chance:16.327,image:"https://i.postimg.cc/6qK0hmPg/Green.webp"},
+                {name:"Yellow",rarity:"Uncommon",rarityColor:"limegreen",chance:16.327,image:"https://i.postimg.cc/ZnmcLMQX/Yellow.webp"},
+                {name:"Orange",rarity:"Rare",rarityColor:"blue",chance:6.184,image:"https://i.postimg.cc/D0hgcMNY/Orange.webp"},
+                {name:"Purple",rarity:"Rare",rarityColor:"blue",chance:6.184,image:"https://i.postimg.cc/kGCcypHp/Purple.webp"},
+                {name:"Pink",rarity:"Rare",rarityColor:"blue",chance:6.184,image:"https://i.postimg.cc/brPTRB5V/Pink.webp"},
+                {name:"Brown",rarity:"Rare",rarityColor:"blue",chance:6.184,image:"https://i.postimg.cc/hvnr05Yy/Brown.webp"},
+                {name:"Lime",rarity:"Epic",rarityColor:"red",chance:4.453,image:"https://i.postimg.cc/4yG51S0B/Lime.webpp"},
+                {name:"Cyan",rarity:"Epic",rarityColor:"red",chance:4.453,image:"https://i.postimg.cc/1XSHKjdM/Cyan.webp"},
+                {name:"White",rarity:"Legendary",rarityColor:"gold",chance:0.313,image:"https://i.postimg.cc/tJb5zMck/White.webp"},
+                {name:"Grey",rarity:"Legendary",rarityColor:"gold",chance:0.313,image:"https://i.postimg.cc/0jvfCB4f/Grey.webp"},
+                {name:"Black",rarity:"Legendary",rarityColor:"gold",chance:0.313,image:"https://i.postimg.cc/hvnr05Y1/Black.webp"},
+                {name:"Copper",rarity:"Chroma",rarityColor:"cyan",chance:0.02,image:"https://i.postimg.cc/wMzVkGrc/Copper.webp"},
+                {name:"Silver",rarity:"Chroma",rarityColor:"cyan",chance:0.02,image:"https://i.postimg.cc/NFt4xznx/Silver.webp"},
+                {name:"Gold",rarity:"Chroma",rarityColor:"cyan",chance:0.02,image:"https://i.postimg.cc/ZnmcLMQP/Gold.webp"},
+                {name:"Rainbow",rarity:"Mystical",rarityColor:"purple",chance:0.002,image:"https://i.postimg.cc/G2J4YLyd/Rainbow.webp"},
+            ]
+        },
+
+            wonderland: {
+            name: "Wonderland Pack",
+            blooks: [
+                {name:"Two of Spades",rarity:"Uncommon",rarityColor:"limegreen",chance:14.35,image:"https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp"},
+                {name:"Eat Me",rarity:"Uncommon",rarityColor:"limegreen",chance:14.35,image:"https://i.postimg.cc/B6KQPVgs/Eat-Me.webp"},
+                {name:"Drink Me",rarity:"Uncommon",rarityColor:"limegreen",chance:14.35,image:"https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp"},
+                {name:"Alice",rarity:"Uncommon",rarityColor:"limegreen",chance:14.35,image:"https://i.postimg.cc/tTxCnM5H/Alice.webp"},
+                {name:"Queen of Hearts",rarity:"Uncommon",rarityColor:"limegreen",chance:14.345,image:"https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp"},
+                {name:"Dromouse",rarity:"Rare",rarityColor:"blue",chance:8,image:"https://i.postimg.cc/xCzTN4Rr/Dormouse.webp"},
+                {name:"White Rabbit",rarity:"Rare",rarityColor:"blue",chance:8,image:"https://i.postimg.cc/wBPjvphx/White-Rabbit.webp"},
+                {name:"Cheshire Cat",rarity:"Rare",rarityColor:"blue",chance:8,image:"https://i.postimg.cc/pTFX56Bw/Cheshire-Cat.webp"},
+                {name:"Mad Hatter",rarity:"Epic",rarityColor:"red",chance:3.5,image:"https://i.postimg.cc/nL5hzJvF/Mad-Hatter.webp"},
+                {name:"King of Hearts",rarity:"Legendary",rarityColor:"gold",chance:0.7,image:"https://i.postimg.cc/q7YvRT8k/King-of-Hearts.webp"},
+                {name:"Royal Cat",rarity:"Chroma",rarityColor:"cyan",chance:0.025,image:"https://i.postimg.cc/yN58dHF7/Royal-Cat.webp"},
+                {name:"King Dog",rarity:"Chroma",rarityColor:"cyan",chance:0.025,image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
+                {name:"Card of Hearts",rarity:"Mystical",rarityColor:"purple",chance:0.005,image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"},
+                
+
+            ]
+        },
+
+            space: {
+            name: "Space Pack",
+            blooks: [
+                {name:"Earth",rarity:"Uncommon",rarityColor:"limegreen",chance:18.62,image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
+                {name:"Meteor",rarity:"Uncommon",rarityColor:"limegreen",chance:18.62,image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
+                {name:"Stars",rarity:"Uncommon",rarityColor:"limegreen",chance:18.62,image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
+                {name:"Alien",rarity:"Uncommon",rarityColor:"limegreen",chance:18.62,image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
+                {name:"Planet",rarity:"Rare",rarityColor:"blue",chance:10,image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
+                {name:"UFO",rarity:"Rare",rarityColor:"blue",chance:10,image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
+                {name:"Spaceship",rarity:"Epic",rarityColor:"red",chance:4.5,image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
+                {name:"Astronaut",rarity:"Legendary",rarityColor:"gold",chance:0.45,image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
+                {name:"Pink Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
+                {name:"Red Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
+                {name:"Ornage Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
+                {name:"Yellow Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
+                {name:"Lime Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
+                {name:"Green Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
+                {name:"Cyan Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
+                {name:"Blue Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
+                {name:"Purple Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
+                {name:"Brown Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
+                {name:"Black Astronaut",rarity:"Chroma",rarityColor:"cyan",chance:0.05,image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
+                {name:"Black Hole",rarity:"Chroma",rarityColor:"cyan",chance:0.01,image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
+                {name:"Space Monitor",rarity:"Mystical",rarityColor:"purple",chance:0.0075,image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
+                {name:"Rainbow Astroanut",rarity:"Mystical",rarityColor:"purple",chance:0.0025,image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"},
+
+                
+
+            ]
+        },
+            bot: {
+            name: "Bot Pack",
+            blooks: [
+                {name:"Lil Bot",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
+                {name:"Lovely Bot",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp"},
+                {name:"Angry Bot",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp"},
+                {name:"Happy Bot",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp"},
+                {name:"Watson",rarity:"Rare",rarityColor:"blue",chance:9,image:"https://i.postimg.cc/jSX8tHrH/Watson.webp"},
+                {name:"Buddy Bot",rarity:"Rare",rarityColor:"blue",chance:9,image:"https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp"},
+                {name:"Brainy Bot",rarity:"Epic",rarityColor:"red",chance:3.7,image:"https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp"},
+                {name:"Mega Bot",rarity:"Legendary",rarityColor:"gold",chance:0.25,image:"https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp"},
+                {name:"Neon Bot",rarity:"Chroma",rarityColor:"cyan",chance:0.04,image: ""},
+                {name:"Joyful Bot",rarity:"Mystical",rarityColor:"purple",chance:0.005,image:"https://i.postimg.cc/j21gtvCT/Joyful-Bot.gif"},
+            ]
+        },
+
+            aquatic: {
+            name: "Aquatic Pack",
+            blooks: [
+                {name:"Old Boot",rarity:"Uncommon",rarityColor:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJq6/Old-Boot.webp"},
+                {name:"Jellyfish",rarity:"Uncommon",rarityColor:"limegreen",chance:14.9,image:"https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp"},
+                {name:"Clownfish",rarity:"Uncommon",rarityColor:"limegreen",chance:14.9,image:"https://i.postimg.cc/63HqC2Tc/Goldfish.webp"},
+                {name:"Frog",rarity:"Uncommon",rarityColor:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJqP/Frog.webp"},
+                {name:"Crab",rarity:"Uncommon",rarityColor:"limegreen",chance:14.9,image:"https://i.postimg.cc/j582ywC6/Crab.webp"},
+                {name:"Pufferfish",rarity:"Rare",rarityColor:"Blue",chance:6.06,image:"https://i.postimg.cc/gJMj3XrD/Pufferfish.webp"},
+                {name:"Blobfish",rarity:"Rare",rarityColor:"Blue",chance:6.06,image:"https://i.postimg.cc/0Qtj7Mrp/Blobfish.webp"},
+                {name:"Octopus",rarity:"Rare",rarityColor:"Blue",chance:6.06,image:"https://i.postimg.cc/50Py8YjC/Octopus.webp"},
+                {name:"Narwhal",rarity:"Epic",rarityColor:"Red",chance:2.98,image:"https://i.postimg.cc/4d8yp7nH/Narwhal.webp"},
+                {name:"Dolphin",rarity:"Epic",rarityColor:"Red",chance:2.98,image:"https://i.postimg.cc/W39z0FtJ/Dolphin.webp"},
+                {name:"Baby Shark",rarity: "Legendary",rarityColor:"gold",chance:0.497,image:"https://i.postimg.cc/Y9X0QGjG/Baby-Shark.webp"},
+                {name:"Megalodon",rarity: "Legendary",rarityColor:"gold",chance:0.199,image:"https://i.postimg.cc/26Hynb33/Megalodon.webp"},
+                {name:"Spring Frog",rarity: "Chroma",rarityColor:"Cyan",chance:0.0795,image:"https://i.postimg.cc/fLWk3jWm/Spring-Frog.webp"},
+                {name:"Lucky Frog",rarity: "Chroma",rarityColor:"Cyan",chance:0.0795,image:"https://i.postimg.cc/qRmq2hgR/Lucky-Frog.webp"},
+                {name:"Lovely Frog",rarity: "Chroma",rarityColor:"Cyan",chance:0.0795,image:"https://i.postimg.cc/k4jGW6DB/Lovely-Frog.webpg"},
+                {name:"Rainbow Narwhal",rarity: "Chroma",rarityColor:"Cyan",chance:0.0596,image:"https://i.postimg.cc/MTZXcbZB/Rainbow-Narwhal.webp"},
+                {name:"Crimson Octopus",rarity: "Chroma",rarityColor:"Cyan",chance:0.0596,image:"https://i.postimg.cc/Tw2hyq2W/Crimson-Octopus.webp"},
+                {name:"Donut Blobfish",rarity: "Chroma",rarityColor:"Cyan",chance:0.0596,image:"https://i.postimg.cc/wvx3tcxm/Donut-Blobfish.webp"},
+                {name:"Rainbow Jellyfish",rarity: "Chroma",rarityColor:"Cyan",chance:0.0397,image:"https://i.postimg.cc/Y92j4f24/Rainbow-Jellyfish.webp"},
+                {name:"Poison Dart Frog",rarity: "Chroma",rarityColor:"Cyan",chance:0.0397,image:"https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp"},
+                {name:"Blizzard Clownfish",rarity: "Chroma",rarityColor:"Cyan",chance:0.0397,image:"https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp"},
+                {name:"Beach",rarity: "Celestial",rarityColor:"teal",chance:0.0248,image:"https://i.postimg.cc/sXf1B9fv/Beach.webp"},
+            ]    
+
+        },
+            safari: {
+            name: "Safari Pack",
+            blooks: [
+                {name:"Panda",rarity: "Uncommon",rarityColor:"limegreen",chance:15,image:"https://i.postimg.cc/Xvc56HJF/Panda.webp"},
+                {name:"Sloth",rarity: "Uncommon",rarityColor:"limegreen",chance:15,image:"https://i.postimg.cc/pdYjMGTn/Sloth.webp"},
+                {name:"Tenrec",rarity: "Uncommon",rarityColor:"limegreen",chance:15,image:"https://i.postimg.cc/LsBPFCXP/Tenrec.webp"},
+                {name:"Flamingo",rarity: "Uncommon",rarityColor:"limegreen",chance:15,image:"https://i.postimg.cc/43bcRLdH/Flamingo.webp"},
+                {name:"Zebra",rarity: "Uncommon",rarityColor:"limegreen",chance:15,image:"https://i.postimg.cc/ZqhNgtTc/Zebra.webp"},
+                {name:"Elephant",rarity: "Rare",rarityColor:"Blue",chance:7,image:"https://i.postimg.cc/6QNZSJ9h/Elephant.webp"},
+                {name:"Lemur",rarity: "Rare",rarityColor:"Blue",chance:7,image:"https://i.postimg.cc/HLCMKDp9/Lemur.webp"},
+                {name:"Peacock",rarity: "Rare",rarityColor:"Blue",chance:7,image:"https://i.postimg.cc/N0wXVqg8/Peacock.webp"},
+                {name:"Chameleon",rarity: "Epic",rarityColor:"Red",chance:3.48,image:"https://i.postimg.cc/ZqhNgtTF/Chameleon.webp"},
+                {name:"Lion",rarity: "Legendary",rarityColor:"gold",chance:0.46,image:"https://i.postimg.cc/MG8B42W1/Lion.webp"},
+                {name:"Rainbow Panda",rarity: "Chroma",rarityColor:"Cyan",chance:0.02,image:"https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp"},
+                {name:"White Peacock",rarity: "Chroma",rarityColor:"Cyan",chance:0.02,image:"https://i.postimg.cc/xdSm7D0K/White-Peacock.webp"},
+                {name:"Tiger Zebra",rarity: "Chroma",rarityColor:"Cyan",chance:0.02,image:"https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp"}
+            ]
+        },
+            dino: {
+            name: "Dino Pack",
+            blooks: [
+                {name:"Amber",rarity:"Uncommon",rarityColor:"limegreen",chance:15.58,image:"https://i.postimg.cc/bN18Td2q/Ember.webp"},
+                {name:"Dino Egg",rarity:"Uncommon",rarityColor:"limegreen",chance:15.58,image:"https://i.postimg.cc/027xfrJx/Dino-Egg.webp"},
+                {name:"Dino Fossil",rarity:"Uncommon",rarityColor:"limegreen",chance:15.58,image:"https://i.postimg.cc/8PLDHsrG/Dino-Fossil.webp"},
+                {name:"Dino Footprint",rarity:"Uncommon",rarityColor:"limegreen",chance:15.58,image:"https://i.postimg.cc/qBwM63ff/Dino-Footprint.png"},
+                {name:"Stegosaurus",rarity:"Uncommon",rarityColor:"limegreen",chance:15.58,image:"https://i.postimg.cc/GhvrQ9sw/Stegosaurus.webp"},
+                {name:"Velociraptor",rarity:"Rare",rarityColor:"Blue",chance:9,image:"https://i.postimg.cc/hPVgrhQk/Velociraptor.webp"},
+                {name:"Brontosaurus",rarity:"Rare",rarityColor:"Blue",chance:9,image:"https://i.postimg.cc/8PLDHsf9/Brontosaurus.webp"},
+                {name:"Triceratops",rarity:"Epic",rarityColor:"Red",chance:3.7,image:"https://i.postimg.cc/ZK6Zc0vX/Triceratops.webp"},
+                {name:"Tyrannosaurus Rex",rarity:"Legendary",rarityColor:"gold",chance:0.3,image:"https://i.postimg.cc/gk3dDrL5/Tyrannosaurusrex.webp"},
+                {name:"Golden Amber",rarity:"Chroma",rarityColor:"Cyan",chance:0.07,image:"https://i.postimg.cc/rF5cJzRY/Golden-Ember.webp"}
+            ]
+        },
+            icemonsters: {
+                name: "Ice Monsters Pack",
+                blooks: [
+                    {name:"Ice Bat",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/63KwJn5M/icebat.png"},
+                    {name:"Ice Bug",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/d0rvx4v7/icebug.png"},
+                    {name:"Ice Elemental",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/jSGtcGV0/iceelemental.png"},
+                    {name:"Rock Monster",rarity:"Uncommon",rarityColor:"limegreen",chance:19.5,image:"https://i.postimg.cc/SxXmWmvf/rockmonster.png"},
+                    {name:"Dink",rarity:"Rare",rarityColor:"Blue",chance:8.5,image:"https://i.postimg.cc/LXVSH5J2/dink.png"},
+                    {name:"Donk",rarity:"Rare",rarityColor:"Blue",chance:8.5,image:"https://i.postimg.cc/BQ7qLjMv/donk.png"},
+                    {name:"Bush Monster",rarity:"Epic",rarityColor:"Red",chance:4.5,image:"https://i.postimg.cc/fyBMvysB/bushmonster.png"},
+                    {name:"Yeti",rarity:"Legendary",rarityColor:"gold",chance:0.35,image:"https://i.postimg.cc/gk2z2Vy5/yeti.png"},
+                    {name:"Ice Slime",rarity:"Chroma",rarityColor:"Cyan",chance:0.08,image:"https://i.postimg.cc/nrHH77yX/iceslime.png"},
+                    {name:"Ice Fossil",rarity:"Chroma",rarityColor:"Cyan",chance:0.05,image:"https://i.postimg.cc/sfcfz6W7/frozenfossil.png"},
+                    {name:"Ice Crab",rarity:"Chroma",rarityColor:"Cyan",chance:0.02,image:"https://i.postimg.cc/RF1SNGDr/icecrab.png"}
+                ]
+        },
+    };
+
+    /* RARITY COLOR MATRIX MAPS */
+    const rarityColors = {
+        "Common": "#a6b1b7",
+        "Uncommon": "limegreen",
+        "Rare": "blue",
+        "Epic": "red",
+        "Legendary": "gold",
+        "Chroma": "cyan",
+        "Celestial": "teal",
+        "Mystical": "purple"
+    };
+
+    const rarityValues = { "Common": 2, "Uncommon": 5, "Rare": 20, "Epic": 75, "Legendary": 250, "Chroma": 300, "Celestial": 500, "Mystical": 1000 };
+    let inventoryData = [];
+
+    function buildRuntimeInventory() {
+        inventoryData = [];
+        let runtimeId = 1;
+
+        // Process standard items catalog
+        Object.keys(packs).forEach(key => {
+            const currentPack = packs[key];
+            currentPack.blooks.forEach(blook => {
+                const countOwned = ownedBlocks.filter(name => name === blook.name).length;
+
+                inventoryData.push({
+                    id: runtimeId++,
+                    name: blook.name,
+                    rarity: blook.rarity,
+                    chance: blook.chance,
+                    image: blook.image || "",
+                    rarityColor: blook.rarityColor || "#7f8c8d",
+                    packName: currentPack.name,
+                    qty: countOwned 
+                });
+            });
+        });
+
+        // Merge Custom Config Pack entries
+        const customBlookKeys = Object.keys(customBlookData);
+        if (customBlookKeys.length > 0) {
+            customBlookKeys.forEach(blookKey => {
+                const customBlook = customBlookData[blookKey];
+                const countOwned = ownedBlocks.filter(name => name === customBlook.name).length;
+                
+                // If amount is 0, delete it completely from database profile state
+                if (countOwned === 0) {
+                    delete customBlookData[blookKey];
+                    return;
+                }
+
+                const matchColor = rarityColors[customBlook.rarity] || "#a6b1b7";
+                inventoryData.push({
+                    id: runtimeId++,
+                    name: customBlook.name,
+                    rarity: customBlook.rarity,
+                    chance: 0,
+                    image: customBlook.image || "",
+                    rarityColor: matchColor,
+                    packName: "Custom Pack",
+                    qty: countOwned
+                });
+            });
+        }
+
+        processFilters();
+    }
+
+    /* FILTERS PIPELINE BUILDER */
+    function processFilters() {
+        const scrollBox = document.getElementById("inventoryScrollContainer");
+        scrollBox.innerHTML = "";
+        
+        const searchVal = document.getElementById("blookSearchInput").value.toLowerCase().trim();
+        const dropDownVal = document.getElementById("categoryFilterDropdown").value;
+        
+        let validItems = [...inventoryData];
+        
+        if(searchVal !== "") {
+            validItems = validItems.filter(item => item.name.toLowerCase().includes(searchVal));
+        }
+        
+        if(dropDownVal !== "all") {
+            const [filterType, targetValue] = dropDownVal.split(":");
+            if(filterType === "pack") {
+                validItems = validItems.filter(item => item.packName === targetValue);
+            } else if(filterType === "rarity") {
+                validItems = validItems.filter(item => item.rarity === targetValue);
+            }
+        }
+        
+        if (validItems.length === 0) {
+            scrollBox.innerHTML = `<div class="no-results-text">No matching Blooks found.</div>`;
+            return;
+        }
+
+        const groups = {};
+        validItems.forEach(item => {
+            if(!groups[item.packName]) {
+                groups[item.packName] = [];
+            }
+            groups[item.packName].push(item);
+        });
+
+        Object.keys(groups).forEach(packTitle => {
+            // Strict evaluation: If custom pack contains no blooks, hide it entirely from display view
+            if (groups[packTitle].length === 0) {
+                return; 
+            }
+
+            const section = document.createElement("div");
+            section.className = "pack-section";
+
+            const titleEl = document.createElement("div");
+            titleEl.className = "pack-section-title";
+            titleEl.textContent = packTitle;
+            
+            const lineEl = document.createElement("hr");
+            lineEl.className = "pack-section-line";
+
+            const gridEl = document.createElement("div");
+            gridEl.className = "blook-image-container";
+
+            groups[packTitle].forEach(item => {
+                const button = document.createElement("button");
+                button.className = "blook-img-btn";
+                
+                const isLocked = item.qty === 0;
+                const activeSrc = (item.image && item.image !== "") ? item.image : FALLBACK_IMAGE;
+
+                if (isLocked) {
+                    button.classList.add("locked");
+                    button.innerHTML = `
+                        <div class="blook-qty-badge" style="background-color: #555555;">
+                            <span class="material-icons">lock</span>
+                        </div>
+                        <img class="blook-graphic" src="${activeSrc}" alt="${item.name}">
+                    `;
+                } else {
+                    button.onclick = () => openCardModal(item);
+                    button.innerHTML = `
+                        <div class="blook-qty-badge" style="background-color: ${item.rarityColor};">${item.qty}</div>
+                        <img class="blook-graphic" src="${activeSrc}" alt="${item.name}">
+                    `;
+                }
+                
+                gridEl.appendChild(button);
+            });
+
+            section.appendChild(titleEl);
+            section.appendChild(lineEl);
+            section.appendChild(gridEl);
+            scrollBox.appendChild(section);
+        });
+    }
+
+    function openCardModal(blookItem) {
+        selectedBlook = blookItem;
+        verifyInput.value = ""; 
+        verifyWrapper.style.display = "none"; 
+        
+        document.getElementById("modalName").textContent = blookItem.name;
+        document.getElementById("modalRarity").textContent = blookItem.rarity;
+        document.getElementById("modalRarity").style.backgroundColor = blookItem.rarityColor;
+        document.getElementById("modalChance").textContent = blookItem.chance > 0 ? blookItem.chance + "%" : "Custom";
+        document.getElementById("modalOwned").textContent = "Owned: " + blookItem.qty;
+        document.getElementById("modalGraphic").src = (blookItem.image && blookItem.image !== "") ? blookItem.image : FALLBACK_IMAGE;
+        
+        const price = rarityValues[blookItem.rarity] || 5;
+        sellValue.textContent = price;
+        
+        sellSingleBtn.innerText = "Sell";
+        sellSingleBtn.disabled = false;
+
+        const sellDupesBtn = document.getElementById("sellDupesBtn");
+        if (blookItem.qty > 1) {
+            sellDupesBtn.classList.remove("is-transparent");
+            sellDupesBtn.innerText = `Sell Duplicates (+🪙 ${(blookItem.qty - 1) * price})`;
+        } else {
+            sellDupesBtn.classList.add("is-transparent");
+            sellDupesBtn.innerText = "Sell Duplicates";
+        }
+
+        overlay.classList.add("show");
+        modalContainer.classList.add("show");
+    }
+
+    /* SAFEGUARD REALTIME TEXT MATCH VALIDATION SYSTEM */
+    verifyInput.addEventListener("input", (e) => {
+        if (!selectedBlook) return;
+        if (e.target.value === selectedBlook.name) {
+            sellSingleBtn.disabled = false;
+        } else {
+            sellSingleBtn.disabled = true;
+        }
+    });
+
+    /* TRANSACTION WORKFLOW ENGINE HANDLERS */
+    sellSingleBtn.onclick = async () => {
+        if (!selectedBlook || selectedBlook.qty <= 0) return;
+        
+        // Confirmation appears ONLY if you possess exactly 1 copy
+        if (selectedBlook.qty === 1) {
+            if (verifyWrapper.style.display === "none" || !verifyWrapper.style.display) {
+                verifyWrapper.style.display = "block";
+                verifyInput.value = "";
+                verifyInput.placeholder = `Type "${selectedBlook.name}" to sell last one`;
+                sellSingleBtn.innerText = "Confirm Sell";
+                sellSingleBtn.disabled = true;
+                return;
+            } else {
+                if (verifyInput.value !== selectedBlook.name) return;
+            }
+        }
+
+        const value = rarityValues[selectedBlook.rarity] || 5;
+        coins += value;
+        
+        const targetIndex = ownedBlocks.indexOf(selectedBlook.name);
+        if (targetIndex > -1) {
+            ownedBlocks.splice(targetIndex, 1);
+        }
+        
+        document.getElementById("coinCount").textContent = coins;
+        
+        selectedBlook.qty -= 1;
+        if (selectedBlook.qty === 0) {
+            closeCardModal();
+        } else {
+            openCardModal(selectedBlook);
+        }
+        
+        // Build updates customBlookData state before cloud database sync save triggers
+        buildRuntimeInventory();
+        await saveUserData();
+    };
+
+    document.getElementById("sellDupesBtn").onclick = async () => {
+        if (!selectedBlook || selectedBlook.qty <= 1) return;
+        
+        const duplicateCount = selectedBlook.qty - 1;
+        const value = (rarityValues[selectedBlook.rarity] || 5) * duplicateCount;
+        
+        coins += value;
+        
+        ownedBlocks = ownedBlocks.filter(name => name !== selectedBlook.name);
+        ownedBlocks.push(selectedBlook.name);
+        
+        document.getElementById("coinCount").textContent = coins;
+        
+        selectedBlook.qty = 1;
+        openCardModal(selectedBlook);
+        buildRuntimeInventory();
+        await saveUserData();
+    };
+
+    document.getElementById("blookSearchInput").oninput = processFilters;
+    document.getElementById("categoryFilterDropdown").onchange = processFilters;
+
+</script>
+</body>
+</html>
