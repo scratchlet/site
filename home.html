@@ -132,7 +132,7 @@ body{
 
 .nav-auth {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     align-items: center;
 }
 
@@ -146,6 +146,32 @@ body{
     border-radius: 99px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     white-space: nowrap;
+}
+
+/* COIN COUNTER BADGE */
+.coin-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 900;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 2px solid #ffcc00;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.coin-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+.coin-amount {
+    color: #ffd700;
+    font-size: 1.05rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 /* HUD Symbol Bar */
@@ -192,7 +218,7 @@ body{
     background: rgba(255, 82, 82, 0.2);
 }
 
-/* Nametag Tooltip Popups (Desktop view drops below) */
+/* Nametag Tooltip Popups */
 .hud-item::after {
     content: attr(data-nametag);
     position: absolute;
@@ -577,15 +603,39 @@ body{
         logDisplayView.textContent = localStorage.getItem('scratchlet_changelog_cache');
     }
 
+    // Dynamic state management helpers for token balances
+    function getSavedTokens() {
+        const tokens = localStorage.getItem('scratchlet_token_balance');
+        return tokens ? parseInt(tokens, 10) : 0;
+    }
+
+    function updateTokenDisplay(amount) {
+        localStorage.setItem('scratchlet_token_balance', amount);
+        const counterEl = document.getElementById('token-counter-value');
+        if (counterEl) {
+            counterEl.textContent = amount.toLocaleString();
+        }
+    }
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             const username = user.displayName || "Player";
             welcomeTitle.textContent = `Hello ${username}!`;
             
+            // Set up fallback sample tokens if none exists yet
+            if(localStorage.getItem('scratchlet_token_balance') === null) {
+                localStorage.setItem('scratchlet_token_balance', '1250');
+            }
+            const currentTokens = getSavedTokens();
+            
             navAuthBox.innerHTML = `
                 <div class="user-badge">
                     <span class="material-icons">account_circle</span>
                     <span>${username}</span>
+                </div>
+                <div class="coin-counter" title="Your Token Balance">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
+                    <span id="token-counter-value" class="coin-amount">${currentTokens.toLocaleString()}</span>
                 </div>
                 <div class="hud-badge-bar">
                     <a href="index.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
@@ -597,7 +647,7 @@ body{
                     <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
                     <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
                     <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-                    <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">power_settings_new</span></button>
+                    <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
                 </div>
             `;
 
