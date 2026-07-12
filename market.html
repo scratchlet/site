@@ -12,13 +12,13 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-/* ==========================================================================
-   GLOBAL CONFIGURATIONS & COMPONENT RESET STYLES
-   ========================================================================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* =========================
+   GLOBAL & HIDE SCROLLBAR
+========================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html, body {
@@ -29,20 +29,21 @@ html, body {
     display: none;
 }
 
-body {
-    font-family: "Nunito", sans-serif;
-    color: white;
-    overflow-x: hidden;
-    min-height: 100vh;
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    overflow-x:hidden;
+    min-height:100vh;
     background: #ff9b2f;
     position: relative;
+    
     display: flex;
     flex-direction: column;
 }
 
-/* ==========================================================================
-   BACKGROUND RENDERING COMPLEX LAYERS (GRADIENTS, MOTION LAYERS & STROKES)
-   ========================================================================== */
+/* =========================
+   BACKGROUND LAYERS
+========================= */
 .bg-base-gradient {
     position: fixed;
     inset: 0;
@@ -99,17 +100,17 @@ body {
     transform: rotate(15deg);
 }
 
-/* ==========================================================================
-   STICKY CONFIGURABLE NAVIGATION BAR ELEMENT STYLING
-   ========================================================================== */
-.navbar {
+/* =========================
+   STICKY NAVBAR
+========================= */
+.navbar{
     position: sticky;
     top: 0;
-    min-height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
+    min-height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 30px;
     background: rgba(255, 127, 17, 0.94);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
@@ -128,10 +129,10 @@ body {
     display: inline-block;
 }
 
-.logo {
-    font-family: "Titan One", cursive;
-    font-size: 2.5rem;
-    color: white;
+.logo{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
 }
 
 .nav-profile-section {
@@ -153,6 +154,7 @@ body {
     white-space: nowrap;
 }
 
+/* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
     align-items: center;
@@ -178,6 +180,7 @@ body {
     text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
+/* HUD Symbol Bar */
 .nav-right-group {
     display: flex;
     align-items: center;
@@ -253,11 +256,11 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ==========================================================================
-   ACTION ROWS & UTILITY TOGGLE CONTROLS SECTION STYLING
-   ========================================================================== */
+/* =========================
+   ACTION ROWS & CONTROLS
+========================= */
 .action-bar {
-    max-width: 1000px;
+    max-width: 900px;
     width: 100%;
     margin: 30px auto 0;
     padding: 0 20px;
@@ -279,56 +282,21 @@ body {
     border: 1px solid rgba(255,255,255,.15);
 }
 
-.switch { 
-    position: relative; 
-    display: inline-block; 
-    width: 46px; 
-    height: 24px; 
-}
-
-.switch input { 
-    opacity: 0; 
-    width: 0; 
-    height: 0; 
-}
-
-.slider { 
-    position: absolute; 
-    cursor: pointer; 
-    inset: 0; 
-    background-color: rgba(0,0,0,0.3); 
-    transition: .2s; 
-    border-radius: 34px; 
-}
-
-.slider:before { 
-    position: absolute; 
-    content: ""; 
-    height: 16px; 
-    width: 16px; 
-    left: 4px; 
-    bottom: 4px; 
-    background-color: white; 
-    transition: .2s; 
-    border-radius: 50%; 
-}
-
-input:checked + .slider { 
-    background-color: #4CFF4C; 
-}
-
-input:checked + .slider:before { 
-    transform: translateX(22px); 
-}
+.switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background-color: rgba(0,0,0,0.3); transition: .2s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .2s; border-radius: 50%; }
+input:checked + .slider { background-color: #4CFF4C; }
+input:checked + .slider:before { transform: translateX(22px); }
 
 .btn {
-    font-family: "Nunito", sans-serif;
-    font-weight: 900;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    text-decoration: none;
-    display: inline-flex;
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-flex;
     align-items: center;
     gap: 6px;
     padding: 10px 20px;
@@ -336,35 +304,17 @@ input:checked + .slider:before {
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
     transition: transform 0.1s, box-shadow 0.1s;
 }
+.btn.primary { background: white; color: #ff8c1a; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.18); }
+.btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-.btn.primary { 
-    background: white; 
-    color: #ff8c1a; 
-}
-
-.btn:hover { 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18); 
-}
-
-.btn:active { 
-    transform: translateY(2px); 
-    box-shadow: 0 2px 0 rgba(0,0,0,0.15); 
-}
-
-.btn:disabled { 
-    opacity: 0.6; 
-    cursor: not-allowed; 
-    transform: none; 
-    box-shadow: none; 
-}
-
-/* ==========================================================================
-   STYLIZED CONTAINER AND RESPONSIVE CARD DISPLAY ARCHITECTURE
-   ========================================================================== */
+/* =========================
+   STYLIZED MARKET CARD LAYOUT
+========================= */
 .market-container {
     flex: 1;
-    max-width: 1000px;
+    max-width: 900px;
     width: 100%;
     margin: 20px auto 40px;
     padding: 0 20px;
@@ -391,7 +341,7 @@ input:checked + .slider:before {
     border: 3px solid rgba(255, 255, 255, 0.25);
     border-radius: 24px;
     position: relative;
-    padding: 45px 0 0 0;
+    padding: 45px 0 0 0; /* Clear space for top absolute cost tag asset */
     margin: 0;
     width: 100%;
     height: 290px;
@@ -399,7 +349,7 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Secure layout stacking direction */
     overflow: hidden;
     box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
@@ -416,6 +366,7 @@ input:checked + .slider:before {
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Pack image scaled nicely down, fully contained, sitting naturally over name text */
 .pack-card-img {
     width: auto;
     height: 140px;
@@ -455,6 +406,7 @@ input:checked + .slider:before {
     object-fit: contain;
 }
 
+/* Custom non-absolute flow base template layout bar */
 .pack-name-bar {
     width: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
@@ -469,171 +421,37 @@ input:checked + .slider:before {
     z-index: 2;
 }
 
-/* ==========================================================================
-   MODALS LAYOUT & UNBOXING DISPLAY EFFECT ANIMATION CSS RULES
-   ========================================================================== */
-.modalBg { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0,0,0,0.6); 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 999; 
-    backdrop-filter: blur(4px); 
-}
+/* =========================
+   MODALS & UNBOXING
+========================= */
+.modalBg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
+.modal { width: 400px; background: linear-gradient(145deg, #ff9b2f, #ff7f11); border: 2px solid rgba(255,255,255,.3); border-radius: 24px; padding: 25px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+.modal h3 { font-family: "Titan One", cursive; font-size: 1.5rem; margin-bottom: 15px; }
+.modalBtns { display: flex; gap: 12px; margin-top: 20px; justify-content: center; }
+.modalBtns .btn { flex: 1; justify-content: center; }
+.modal .secondary { background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
-.modal { 
-    width: 400px; 
-    background: linear-gradient(145deg, #ff9b2f, #ff7f11); 
-    border: 2px solid rgba(255,255,255,.3); 
-    border-radius: 24px; 
-    padding: 25px; 
-    text-align: center; 
-    box-shadow: 0 12px 40px rgba(0,0,0,.4); 
-}
+#rarityBox { max-height: 240px; overflow-y: auto; padding-right: 5px; }
+#unboxingOverlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
+.unboxing-pack { width: 220px; height: 220px; object-fit: contain; transform: scale(0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.unboxing-pack.ready { transform: scale(1); opacity: 1; animation: floatAnim 2.5s ease-in-out infinite; }
+.unboxing-pack.shake { animation: intenseShake 0.4s ease-in-out infinite; }
+.unboxing-pack.explode { animation: explodePack 0.3s ease-out forwards; }
 
-.modal h3 { 
-    font-family: "Titan One", cursive; 
-    font-size: 1.5rem; 
-    margin-bottom: 15px; 
-}
+.blook-card { width: 300px; height: 300px; background: linear-gradient(145deg, #2c2f33, #23272a); border: 4px solid #fff; border-radius: 24px; padding: 20px; display: none; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 0 40px rgba(255,255,255,0.2); }
+.blook-name { font-family: 'Titan One', sans-serif; font-size: 2rem; text-shadow: 0 3px 6px rgba(0,0,0,0.5); }
+.blook-rarity { font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; }
+.blook-image-box { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
+.blook-image-box img { width: 85%; height: 85%; object-fit: contain; }
+.blook-chance { font-weight: 800; font-size: 0.9rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
 
-.modalBtns { 
-    display: flex; 
-    gap: 12px; 
-    margin-top: 20px; 
-    justify-content: center; 
-}
+@keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes intenseShake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg) translate(-2px, 1px); } 75% { transform: rotate(3deg) translate(2px, -1px); } }
+@keyframes explodePack { 0% { transform: scale(1); filter: brightness(1); opacity: 1; } 100% { transform: scale(1.6); filter: brightness(8); opacity: 0; } }
 
-.modalBtns .btn { 
-    flex: 1; 
-    justify-content: center; 
-}
-
-.modal .secondary { 
-    background: rgba(0, 0, 0, 0.2); 
-    color: white; 
-    border: 1px solid rgba(255,255,255,0.2); 
-}
-
-#rarityBox { 
-    max-height: 240px; 
-    overflow-y: auto; 
-    padding-right: 5px; 
-}
-
-#unboxingOverlay { 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(10, 10, 15, 0.95); 
-    z-index: 10000; 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    flex-direction: column; 
-    cursor: pointer; 
-}
-
-.unboxing-pack { 
-    width: 220px; 
-    height: 220px; 
-    object-fit: contain; 
-    transform: scale(0.2); 
-    opacity: 0; 
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-}
-
-.unboxing-pack.ready { 
-    transform: scale(1); 
-    opacity: 1; 
-    animation: floatAnim 2.5s ease-in-out infinite; 
-}
-
-.unboxing-pack.shake { 
-    animation: intenseShake 0.4s ease-in-out infinite; 
-}
-
-.unboxing-pack.explode { 
-    animation: explodePack 0.3s ease-out forwards; 
-}
-
-.blook-card { 
-    width: 300px; 
-    height: 300px; 
-    background: linear-gradient(145deg, #2c2f33, #23272a); 
-    border: 4px solid #fff; 
-    border-radius: 24px; 
-    padding: 20px; 
-    display: none; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: space-between; 
-    text-align: center; 
-    box-shadow: 0 0 40px rgba(255,255,255,0.2); 
-}
-
-.blook-name { 
-    font-family: 'Titan One', sans-serif; 
-    font-size: 2rem; 
-    text-shadow: 0 3px 6px rgba(0,0,0,0.5); 
-}
-
-.blook-rarity { 
-    font-weight: 900; 
-    font-size: 0.95rem; 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px; 
-}
-
-.blook-image-box { 
-    width: 120px; 
-    height: 120px; 
-    background: rgba(255,255,255,0.05); 
-    border-radius: 16px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: 1px solid rgba(255,255,255,0.1); 
-}
-
-.blook-image-box img { 
-    width: 85%; 
-    height: 85%; 
-    object-fit: contain; 
-}
-
-.blook-chance { 
-    font-weight: 800; 
-    font-size: 0.9rem; 
-    color: #b9bbbe; 
-    background: rgba(0,0,0,0.2); 
-    padding: 4px 12px; 
-    border-radius: 20px; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 4px; 
-}
-
-@keyframes floatAnim { 
-    0%, 100% { transform: translateY(0); } 
-    50% { transform: translateY(-10px); } 
-}
-
-@keyframes intenseShake { 
-    0%, 100% { transform: rotate(0deg); } 
-    25% { transform: rotate(-3deg) translate(-2px, 1px); } 
-    75% { transform: rotate(3deg) translate(2px, -1px); } 
-}
-
-@keyframes explodePack { 
-    0% { transform: scale(1); filter: brightness(1); opacity: 1; } 
-    100% { transform: scale(1.6); filter: brightness(8); opacity: 0; } 
-}
-
-/* ==========================================================================
-   RESPONSIVE LAYOUT MATRIX GRAPHICS DEFINITION FOR SCREEN CAPTURING
-   ========================================================================== */
+/* =========================
+   RESPONSIVE DESIGN MAPS
+========================= */
 @media(max-width:980px) {
     .navbar { padding: 12px 20px; flex-direction: column; gap: 12px; align-items: center; }
     .nav-left-group { width: 100%; justify-content: center; display: flex; }
@@ -667,12 +485,7 @@ input:checked + .slider:before {
     </div>
     
     <div class="nav-profile-section">
-        <div id="username-badge-target">
-            <div class="user-badge">
-                <span class="material-icons">account_circle</span>
-                <span>Player</span>
-            </div>
-        </div>
+        <div id="username-badge-target"></div>
         <div class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
@@ -744,38 +557,33 @@ input:checked + .slider:before {
 </div>
 
 <script type="module">
-    /* ================= FIREBASE INITIALIZATION ================= */
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // ==========================================
+    // UPDATED FIREBASE CONFIGURATION CREDENTIALS
+    // ==========================================
     const firebaseConfig = {
-        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
-        authDomain: "scratchlet-ss.firebaseapp.com",
-        projectId: "scratchlet-ss",
-        storageBucket: "scratchlet-ss.firebasestorage.app",
-        messagingSenderId: "265174756634",
-        appId: "1:265174756634:web:a4c40ae00434f077e090a3",
-        measurementId: "G-7B7B6VXYJX"
+        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+        authDomain: "scratchlet-194bc.firebaseapp.com",
+        projectId: "scratchlet-194bc",
+        storageBucket: "scratchlet-194bc.firebasestorage.app",
+        messagingSenderId: "480952290764",
+        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+        measurementId: "G-2T6GS8Y9VN"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    /* ================= GAME STATES ================= */
     let tokens = 0;
     let ownedBlooks = {};
     let currentUser = null;
     let currentPackKey = "breakfast";
-    let unboxingState = "closed";
-    let activeRolledItem = null;
-    let massOpenedPool = []; 
-    let accountNextClaimTime = 0;
+    let isUnboxing = false;
 
-    const CONFIG = { fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png" };
-
-    /* ================= PACKS DATA ================= */
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -802,17 +610,20 @@ input:checked + .slider:before {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
+            
             document.getElementById('username-badge-target').innerHTML = `
                 <div class="user-badge">
                     <span class="material-icons">account_circle</span>
                     <span>${user.displayName || "Player"}</span>
                 </div>
             `;
+            
             await loadUserData();
             renderPacksGrid();
-            startHourlyCooldown();
+            updateHourlyTimer();
+            setInterval(updateHourlyTimer, 1000);
         } else {
-            window.location.href = "home.html"; 
+            window.location.href = "login.html";
         }
     });
 
@@ -824,37 +635,10 @@ input:checked + .slider:before {
                 const data = docSnap.data();
                 tokens = data.tokens || 0;
                 ownedBlooks = data.ownedBlooks || {};
-                accountNextClaimTime = data.nextClaimTime || 0;
-            } else {
-                tokens = 100;
-                ownedBlooks = {};
-                accountNextClaimTime = 0;
-                await saveUserData();
             }
             document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
-        } catch (error) {
-            console.error("Error loading profile:", error);
-        }
+        } catch (e) { console.error(e); }
     }
-
-    async function saveUserData() {
-        if (!currentUser) return;
-        try {
-            await setDoc(doc(db, "users", currentUser.uid), {
-                tokens: tokens,
-                ownedBlooks: ownedBlooks,
-                nextClaimTime: accountNextClaimTime
-            }, { merge: true });
-        } catch (error) {
-            console.error("Failed to sync profile:", error);
-        }
-    }
-
-    document.getElementById("logout-hud-btn").onclick = () => {
-        signOut(auth).then(() => {
-            window.location.href = "https://beta-scratchlet.pages.dev/";
-        });
-    };
 
     function renderPacksGrid() {
         const grid = document.getElementById("grid");
@@ -864,212 +648,172 @@ input:checked + .slider:before {
         Object.keys(packs).forEach(key => {
             const pack = packs[key];
             
-            const packBtn = document.createElement("div");
+            const packBtn = document.createElement("button");
             packBtn.className = "pack-card-btn";
+            packBtn.setAttribute("aria-label", `Open ${pack.name}`);
             
             packBtn.innerHTML = `
                 <div class="pack-cost-tag">
                     <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="pack-cost-icon">
                     <span>${pack.cost}</span>
                 </div>
-                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}" onerror="this.src='${CONFIG.fallbackPlaceholder}'">
+                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}">
                 <div class="pack-name-bar">${pack.name}</div>
             `;
             
             packBtn.onclick = () => {
                 currentPackKey = key;
-                if (document.getElementById("instantOpenToggle").checked) {
-                    executeInstantOpen(currentPackKey);
-                } else {
-                    openPromptModal(currentPackKey);
-                }
+                document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
+                document.getElementById("modalBg").style.display = "flex";
             };
             
             grid.appendChild(packBtn);
         });
     }
 
-    function rollItem(pack) {
-        let rand = Math.random() * 100;
-        let cumulative = 0;
-        for (let i = 0; i < pack.blooks.length; i++) {
-            cumulative += pack.blooks[i].chance;
-            if (rand <= cumulative) return pack.blooks[i];
-        }
-        return pack.blooks[pack.blooks.length - 1];
-    }
-
-    /* ================= OPEN PACK LOGICS ================= */
-    function openPromptModal(key) {
-        const pack = packs[key];
-        document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
-        document.getElementById("modalBg").style.display = "flex";
-        document.getElementById("yesBtn").onclick = () => {
-            closeModal();
-            openPack(key);
-        };
-    }
-
-    function closeModal(){ document.getElementById("modalBg").style.display="none"; }
-
-    /* ================= HOURLY REWARD SYSTEM ================= */
-    document.getElementById("hourlyBtn").onclick = claimHourlyCoins;
-
-    async function claimHourlyCoins() {
-        const now = new Date().getTime();
-        if (accountNextClaimTime && now < accountNextClaimTime) return;
-        
-        const reward = Math.floor(Math.random() * 1500) + 500; 
-        tokens += reward;
-        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
-        
-        const hourlyBtn = document.getElementById("hourlyBtn");
-        hourlyBtn.innerHTML = `<span class="material-icons">celebration</span> +${reward} 🪙!`;
-        hourlyBtn.style.background = "#4CFF4C";
-        hourlyBtn.style.color = "#1a5a1a";
-        setTimeout(() => {
-            hourlyBtn.style.background = "";
-            hourlyBtn.style.color = "";
-        }, 2000);
-        
-        accountNextClaimTime = now + (3600 * 1000);
-        await saveUserData();
-        startHourlyCooldown();
-    }
-
-    function startHourlyCooldown() {
-        const hourlyBtn = document.getElementById("hourlyBtn");
-        if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
-
-        const checkTime = () => {
-            const now = new Date().getTime();
-            if (!accountNextClaimTime || now >= accountNextClaimTime) {
-                if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
-                hourlyBtn.disabled = false;
-                hourlyBtn.innerHTML = `<span class="material-icons">hourglass_empty</span> Claim Hourly Reward (500-2,000)`;
-            } else {
-                hourlyBtn.disabled = true;
-                const difference = accountNextClaimTime - now;
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                hourlyBtn.innerHTML = `<span class="material-icons">history</span> Wait ${minutes}m ${seconds}s`;
-            }
-        };
-
-        checkTime();
-        window.hourlyIntervalId = setInterval(checkTime, 1000);
-    }
-
-    /* ================= ENGINE UNBOXING CONTROLLER ================= */
-    async function openPack(key){
-        const pack = packs[key];
-        if(tokens < pack.cost){
-            alert("Not enough tokens!");
-            return;
-        }
-        tokens -= pack.cost;
-        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
-        activeRolledItem = rollItem(pack);
-        
-        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
-        await saveUserData();
-        setupSingleUnboxingUI(pack, false);
-    }
-
-    function setupSingleUnboxingUI(pack, isInstant) {
-        const overlayElement = document.getElementById("unboxingOverlay");
-        const packImg = document.getElementById("unboxingPackImg");
-        const card = document.getElementById("blookCard");
-        
-        card.className = "blook-card";
-        document.getElementById("blookName").innerText = activeRolledItem.name;
-        document.getElementById("blookRarity").innerText = activeRolledItem.rarity;
-        document.getElementById("blookRarity").style.color = activeRolledItem.color;
-        document.getElementById("blookImg").src = activeRolledItem.image;
-        document.getElementById("blookImg").onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-        document.getElementById("blookChance").innerText = `${activeRolledItem.chance}% Chance`;
-        card.style.borderColor = activeRolledItem.color;
-
-        overlayElement.style.display = "flex";
-
-        if (isInstant) {
-            packImg.style.display = "none";
-            card.style.display = "flex";
-            unboxingState = "revealed";
-        } else {
-            packImg.style.display = "block";
-            card.style.display = "none";
-            packImg.src = pack.image;
-            packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-            packImg.className = "unboxing-pack";
-            
-            unboxingState = "ready_to_shake";
-            setTimeout(() => { packImg.classList.add("ready"); }, 50);
-        }
-    }
-
-    async function executeInstantOpen(key) {
-        const pack = packs[key];
+    /* =========================
+       UNBOXING CORE LOGIC
+    ========================= */
+    async function openPack() {
+        const pack = packs[currentPackKey];
         if (tokens < pack.cost) {
             alert("Not enough tokens!");
             return;
         }
+
         tokens -= pack.cost;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
-        activeRolledItem = rollItem(pack);
-        
-        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
-        await saveUserData();
-        
-        setupSingleUnboxingUI(pack, true);
-    }
 
-    document.getElementById("unboxingOverlay").onclick = handleOverlayClick;
+        const rand = Math.random() * 100;
+        let sum = 0;
+        let selectedBlook = pack.blooks[pack.blooks.length - 1];
 
-    function handleOverlayClick() {
-        const packImg = document.getElementById("unboxingPackImg");
-        const card = document.getElementById("blookCard");
-        
-        if (unboxingState === "ready_to_shake") {
-            unboxingState = "shaking";
-            packImg.classList.add("shake");
-            setTimeout(() => {
-                packImg.style.display = "none";
-                packImg.classList.remove("shake");
-                packImg.classList.add("explode");
-                setTimeout(() => {
-                    card.style.display = "flex";
-                    unboxingState = "revealed";
-                }, 250);
-            }, 1000);
-        } else if (unboxingState === "revealed") {
-            clearAndCloseOverlay();
+        for (let b of pack.blooks) {
+            sum += b.chance;
+            if (rand <= sum) {
+                selectedBlook = b;
+                break;
+            }
+        }
+
+        ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
+        } catch (e) { console.error("Error writing to user inventory:", e); }
+
+        const instantOpen = document.getElementById("instantOpenToggle").checked;
+        if (instantOpen) {
+            alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
+        } else {
+            triggerCinematicSequence(pack.image, selectedBlook);
         }
     }
 
-    function clearAndCloseOverlay() {
-        document.getElementById("unboxingOverlay").style.display = "none";
-        document.getElementById("unboxingPackImg").style.display = "block";
-        document.getElementById("blookCard").style.display = "none";
-        unboxingState = "closed";
+    function triggerCinematicSequence(packImgSrc, blook) {
+        isUnboxing = true;
+        const overlay = document.getElementById("unboxingOverlay");
+        const packImg = document.getElementById("unboxingPackImg");
+        const card = document.getElementById("blookCard");
+
+        packImg.src = packImgSrc;
+        packImg.className = "unboxing-pack";
+        card.style.display = "none";
+        overlay.style.display = "flex";
+
+        setTimeout(() => {
+            packImg.classList.add("ready");
+        }, 50);
+
+        overlay.onclick = () => {
+            if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
+                packImg.classList.add("shake");
+                setTimeout(() => {
+                    packImg.classList.replace("shake", "explode");
+                    setTimeout(() => {
+                        packImg.style.display = "none";
+                        showUnboxedCard(blook);
+                    }, 250);
+                }, 1000);
+            } else if (card.style.display === "flex") {
+                overlay.style.display = "none";
+                packImg.style.display = "block";
+                isUnboxing = false;
+            }
+        };
     }
 
-    /* ================= MODALS SYSTEM ================= */
-    document.getElementById("infoBtn").onclick = showInfo;
-    document.getElementById("noBtn").onclick = closeModal;
-    document.getElementById("closeInfoBtn").onclick = closeInfo;
+    function showUnboxedCard(blook) {
+        const card = document.getElementById("blookCard");
+        document.getElementById("blookName").innerText = blook.name;
+        document.getElementById("blookRarity").innerText = blook.rarity;
+        document.getElementById("blookRarity").style.color = blook.color;
+        document.getElementById("blookImg").src = blook.image;
+        document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
+        card.style.borderColor = blook.color;
+        card.style.display = "flex";
+    }
 
-    function showInfo(){ document.getElementById("infoBg").style.display="flex"; renderInfo(currentPackKey); }
-    function closeInfo(){ document.getElementById("infoBg").style.display="none"; }
+    /* =========================
+       HOURLY REWARDS MANAGER
+    ========================= */
+    async function updateHourlyTimer() {
+        if (!currentUser) return;
+        const btn = document.getElementById("hourlyBtn");
+        const claimTime = localStorage.getItem(`hourly_claim_${currentUser.uid}`);
+        const now = Date.now();
 
-    function renderInfo(key){
+        if (claimTime && now < parseInt(claimTime)) {
+            const diff = parseInt(claimTime) - now;
+            const mins = Math.floor(diff / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+            btn.innerHTML = `<span class="material-icons">history</span> ${mins}m ${secs}s`;
+            btn.disabled = true;
+        } else {
+            btn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
+            btn.disabled = false;
+        }
+    }
+
+    document.getElementById("hourlyBtn").onclick = async () => {
+        const reward = Math.floor(Math.random() * 76) + 25; 
+        tokens += reward;
+        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+        
+        localStorage.setItem(`hourly_claim_${currentUser.uid}`, Date.now() + 3600000);
+        
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens }, { merge: true });
+        } catch (e) { console.error(e); }
+
+        alert(`Claimed ${reward} tokens!`);
+        updateHourlyTimer();
+    };
+
+    /* =========================
+       MODAL CONTROLS & LOGOUT
+    ========================= */
+    document.getElementById("yesBtn").onclick = () => {
+        document.getElementById("modalBg").style.display = "none";
+        openPack();
+    };
+    document.getElementById("noBtn").onclick = () => document.getElementById("modalBg").style.display = "none";
+    document.getElementById("infoBtn").onclick = () => {
         const container = document.getElementById("rarityBox");
         container.innerHTML = "";
-        const pack = packs[key];
-        pack.blooks.forEach(item => {
-            container.innerHTML += `<div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1);color:${item.color};"><span>${item.name}</span><span>${item.chance}%</span></div>`;
+        packs[currentPackKey].blooks.forEach(item => {
+            container.innerHTML += `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1);color:${item.color};">
+                    <span>${item.name}</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;">${item.chance}%</span>
+                </div>`;
         });
-    }
+        document.getElementById("infoBg").style.display = "flex";
+    };
+    document.getElementById("closeInfoBtn").onclick = () => document.getElementById("infoBg").style.display = "none";
+    document.getElementById('logout-hud-btn').onclick = () => signOut(auth).then(() => { window.location.reload(); });
 </script>
+
 </body>
 </html>
