@@ -58,7 +58,6 @@ body{
     background-size: 126px 126px;
     background-position: 63px 0px;
     
-    /* Hardware acceleration optimization */
     will-change: transform;
     animation: scrollTiltedTopRight 8s linear infinite;
 }
@@ -68,13 +67,12 @@ body{
         transform: rotate(15deg) translate3d(0px, 0px, 0px);
     }
     to {
-        /* Loops seamlessly by matching the exact grid tile sizing */
         transform: rotate(15deg) translate3d(126px, -126px, 0px);
     }
 }
 
 /* =========================
-   BACKGROUND LAYER 3: STATIC TILTED SQUARES (Top-Left to Bottom-Right Gradient Flow)
+   BACKGROUND LAYER 3: STATIC TILTED SQUARES
 ========================= */
 .bg-static-squares {
     position: fixed;
@@ -123,7 +121,7 @@ body{
 }
 
 /* =========================
-   NAVBAR (With 3D Block Effect & Drop Shadow)
+   NAVBAR
 ========================= */
 .navbar{
     height:70px;
@@ -149,7 +147,7 @@ body{
 }
 
 /* =========================
-   BUTTONS (Playful Style with Vertical Shadow)
+   BUTTONS
 ========================= */
 .btn{
     font-family:"Nunito",sans-serif;
@@ -195,22 +193,26 @@ body{
 }
 
 /* =========================
-   HERO
+   HERO & CONTENT CARD
 ========================= */
 .hero{
     text-align:center;
     padding:80px 20px 40px;
     position: relative;
     z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .badge{
     display:inline-block;
     padding:10px 18px;
     border-radius:999px;
-    background:rgba(255,255,255,.18);
+    background: rgba(0, 0, 0, 0.28);
     font-weight:800;
     margin-bottom:25px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .hero h1{
@@ -221,9 +223,19 @@ body{
     margin-bottom:20px;
 }
 
-.hero p{
-    max-width:750px;
-    margin:auto;
+.hero-card {
+    max-width: 750px;
+    width: 100%;
+    /* Styled to match the dark circle badge exactly */
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    margin: 10px auto 0;
+}
+
+.hero-card p{
     font-size:1.1rem;
     line-height:1.7;
 }
@@ -237,7 +249,7 @@ body{
 }
 
 /* =========================
-   FEATURES (Glassmorphism Cards Layout)
+   FEATURES
 ========================= */
 .features{
     max-width:1100px;
@@ -342,7 +354,11 @@ footer{
         margin-bottom: 15px;
     }
 
-    .hero p {
+    .hero-card {
+        padding: 20px;
+    }
+
+    .hero-card p {
         font-size: 1rem;
         line-height: 1.6;
     }
@@ -392,9 +408,11 @@ footer{
 <section class="hero">
     <div class="badge">Blooket • But • Scratched</div>
     <h1>Scratchlet</h1>
-    <p>
-        Scratchlet (Web) is a private server owned by SuperMemes_64 and created by the scratchlet dev team. This website is fully made out of html, css, and javascript and any art here is made by the website scratch/turbowarp. (Inspired by blooket, blacket, and scratch)
-    </p>
+    <div class="hero-card">
+        <p>
+            Scratchlet (Web) is a private server owned by SuperMemes_64 and created by the scratchlet dev team. This website is fully made out of html, css, and javascript and any art here is made by the website scratch/turbowarp. (Inspired by blooket, blacket, and scratch)
+        </p>
+    </div>
     <div class="hero-buttons">
         <a href="login.html" class="btn primary"><span>Play Now</span></a>
         <a href="register.html" class="btn secondary"><span>Create Account</span></a>
@@ -430,6 +448,5 @@ footer{
 <footer>
     © 2026 Scratchlet
 </footer>
-
 </body>
 </html>
