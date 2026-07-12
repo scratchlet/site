@@ -101,18 +101,20 @@ body{
 }
 
 /* =========================
-   NAVBAR
+   NAVBAR & HUD
 ========================= */
 .navbar{
-    height:70px;
+    min-height:70px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:0 30px;
+    padding:10px 30px;
     background:#ff7f11;
     box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
     position: relative;
     z-index: 10;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .logo-link {
@@ -130,6 +132,7 @@ body{
     display: flex;
     gap: 15px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .user-badge {
@@ -141,6 +144,43 @@ body{
     padding: 8px 16px;
     border-radius: 99px;
     border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* HUD Link Bar */
+.hud-badge-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.hud-item {
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    border-radius: 99px;
+    transition: background 0.15s, color 0.15s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.hud-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.hud-item.logout-trigger {
+    color: #ff4d4d;
+}
+
+.hud-item.logout-trigger:hover {
+    background: rgba(255, 77, 77, 0.2);
 }
 
 /* =========================
@@ -275,6 +315,7 @@ body{
     border-radius: 24px;
     padding: 35px;
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
 }
 
 .changelog-header {
@@ -337,21 +378,32 @@ body{
 }
 
 /* =========================
-   FOOTER
-========================= */
-footer{
-    text-align:center;
-    padding:30px;
-    background:rgba(0,0,0,.12);
-    font-weight:700;
-    position: relative;
-    z-index: 5;
-    margin-top: auto; 
-}
-
-/* =========================
    MOBILE RESPONSIVENESS
 ========================= */
+@media(max-width:850px){
+    .navbar { 
+        padding: 15px; 
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .hud-badge-bar {
+        border-radius: 16px;
+        padding: 8px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        text-align: center;
+    }
+
+    .hud-item {
+        padding: 8px 4px;
+        border-radius: 8px;
+    }
+
+    .logo-link { width: 100%; text-align: center; }
+}
+
 @media(max-width:700px){
     .bg-moving-grid, .bg-static-squares, .bg-stroke-overlay {
         top: -60vh;
@@ -360,16 +412,7 @@ footer{
         height: 220vh;
     }
 
-    .navbar { 
-        height: auto;
-        padding: 16px 15px; 
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .logo-link { width: 100%; text-align: center; }
     .logo { font-size: 2rem; }
-    
     .dashboard-grid { margin: 20px auto; padding: 0 15px; }
     .hero-card { padding: 30px 20px; }
     .hero-card h1 { font-size: 2rem; }
@@ -437,10 +480,6 @@ footer{
     </div>
 </main>
 
-<footer>
-    © 2026 Scratchlet
-</footer>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -482,10 +521,21 @@ footer{
                     <span class="material-icons">account_circle</span>
                     <span>${username}</span>
                 </div>
-                <button id="logout-btn" class="btn secondary">Log Out</button>
+                <div class="hud-badge-bar">
+                    <a href="index.html" class="hud-item">Home</a>
+                    <a href="market.html" class="hud-item">Market</a>
+                    <a href="inventory.html" class="hud-item">Inventory</a>
+                    <a href="stats.html" class="hud-item">Stats</a>
+                    <a href="news.html" class="hud-item">News</a>
+                    <a href="chat.html" class="hud-item">Chat</a>
+                    <a href="trading.html" class="hud-item">Trading</a>
+                    <a href="bazar.html" class="hud-item">Bazar</a>
+                    <a href="settings.html" class="hud-item">Settings</a>
+                    <button id="logout-hud-btn" class="hud-item logout-trigger">Logout</button>
+                </div>
             `;
 
-            document.getElementById('logout-btn').addEventListener('click', () => {
+            document.getElementById('logout-hud-btn').addEventListener('click', () => {
                 signOut(auth).then(() => { window.location.reload(); });
             });
 
@@ -496,7 +546,6 @@ footer{
             }
 
         } else {
-            // Force authorization filter redirect to the gate login system if guest access detected
             window.location.href = "login.html";
         }
     });
