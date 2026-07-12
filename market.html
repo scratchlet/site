@@ -142,18 +142,6 @@ body{
     margin-left: auto;
 }
 
-.user-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 8px 16px;
-    border-radius: 99px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    white-space: nowrap;
-}
-
 /* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
@@ -260,7 +248,7 @@ body{
    ACTION ROWS & CONTROLS
 ========================= */
 .action-bar {
-    max-width: 900px;
+    max-width: 1200px; /* Stretched to match widescreen page layout */
     width: 100%;
     margin: 30px auto 0;
     padding: 0 20px;
@@ -314,7 +302,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 ========================= */
 .market-container {
     flex: 1;
-    max-width: 900px;
+    max-width: 1200px; /* Stretched grid layout container constraints */
     width: 100%;
     margin: 20px auto 40px;
     padding: 0 20px;
@@ -330,7 +318,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 25px;
 }
 
@@ -483,7 +471,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     </div>
     
     <div class="nav-profile-section">
-        <div id="username-badge-target"></div>
         <div class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
@@ -507,7 +494,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 </nav>
 
 <div class="action-bar">
-    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
     <div class="toggle-container">
         <span class="material-icons" style="font-size: 1.2rem; color: #ffd700;">flash_on</span>
         <span style="font-size: 0.9rem;">Instant Open</span>
@@ -516,6 +502,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <span class="slider"></span>
         </label>
     </div>
+    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
 </div>
 
 <main class="market-container">
@@ -605,14 +592,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
-            
-            document.getElementById('username-badge-target').innerHTML = `
-                <div class="user-badge">
-                    <span class="material-icons">account_circle</span>
-                    <span>${user.displayName || "Player"}</span>
-                </div>
-            `;
-            
             await loadUserData();
             renderPacksGrid();
             updateHourlyTimer();
@@ -635,6 +614,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         } catch (e) { console.error(e); }
     }
 
+    // Dynamic grid renders elements correctly dynamically inside widescreen container layouts
     function renderPacksGrid() {
         const grid = document.getElementById("grid");
         if (!grid) return;
