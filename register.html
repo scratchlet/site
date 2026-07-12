@@ -4,293 +4,709 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet | Register</title>
+<title>Scratchlet - Register</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-
-/* GLOBAL */
+/* =========================
+   GLOBAL & HIDE SCROLLBAR
+========================= */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
+html, body {
+    scrollbar-width: none; 
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 body{
     font-family:"Nunito",sans-serif;
     color:white;
-    min-height:100vh;
     overflow-x:hidden;
-
-    background: linear-gradient(
-        160deg,
-        #fff4d6 0%,
-        #ffc76a 25%,
-        #ff9b2f 50%,
-        #ff7f11 75%,
-        #8f3200 100%
-    );
+    min-height:100vh;
+    background: #ff9b2f;
+    position: relative;
+    
+    display: flex;
+    flex-direction: column;
 }
 
-/* BACKGROUND */
-.background{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    overflow:hidden;
+/* =========================
+   BACKGROUND LAYERS
+========================= */
+.bg-base-gradient {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
 }
 
-.square{
-    position:absolute;
-    border:2px solid rgba(255,255,255,.35);
-    background:rgba(255,255,255,.12);
-    animation:fall linear infinite;
+.bg-moving-grid {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -2;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-size: 126px 126px;
+    background-position: 63px 0px;
+    will-change: transform;
+    animation: scrollTiltedTopRight 8s linear infinite;
 }
 
-@keyframes fall{
-    from{ transform:translateY(-120px) rotate(0deg); }
-    to{ transform:translateY(120vh) rotate(360deg); }
+@keyframes scrollTiltedTopRight {
+    from { transform: rotate(15deg) translate3d(0px, 0px, 0px); }
+    to { transform: rotate(15deg) translate3d(126px, -126px, 0px); }
 }
 
-/* NAVBAR */
+.bg-static-squares {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    -webkit-mask-size: 126px 126px;
+    mask-size: 126px 126px;
+    transform: rotate(15deg);
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.bg-stroke-overlay {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-size: 126px 126px;
+    transform: rotate(15deg);
+}
+
+/* =========================
+   NAVBAR
+========================= */
 .navbar{
     height:70px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     padding:0 30px;
     background:#ff7f11;
-    box-shadow: inset 0 -6px rgba(0,0,0,.2);
+    box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 10;
 }
 
-/* LOGO */
-.logo-btn{
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logo{
     font-family:"Titan One",cursive;
     font-size:2.5rem;
     color:white;
-    text-decoration:none;
 }
 
-/* FORM */
-.container{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:60px 20px;
-}
-
-.card{
-    width:100%;
-    max-width:500px;
-    background:#ff8c1a;
-    border-radius:16px;
-    padding:30px;
-    box-shadow:
-        inset 0 -8px rgba(0,0,0,.18),
-        0 10px 25px rgba(0,0,0,.2);
-}
-
-.card h1{
-    font-family:"Titan One",cursive;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.input-group{
-    display:flex;
-    flex-direction:column;
-    margin-bottom:15px;
-}
-
-label{
-    font-weight:800;
-    margin-bottom:6px;
-}
-
-input, textarea{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    outline:none;
-    font-family:"Nunito",sans-serif;
-    font-weight:600;
-}
-
-textarea{
-    resize:none;
-    height:100px;
-}
-
+/* =========================
+   BUTTONS
+========================= */
 .btn{
-    width:100%;
-    padding:12px;
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
     border:none;
-    border-radius:14px;
-    font-weight:900;
     cursor:pointer;
-    font-size:1rem;
-    background:white;
-    color:#ff7f11;
-    box-shadow:0 6px 0 rgba(0,0,0,.25);
-    transition:0.15s ease;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:14px 28px;
+    border-radius:14px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
 }
 
-.btn:hover{
-    transform:translateY(-2px);
+.primary{
+    background: white;
+    color: #ff8c1a;
 }
 
-.btn:active{
-    transform:translateY(4px);
-    box-shadow:0 2px 0 rgba(0,0,0,.25);
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
 }
 
-.small-text{
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+    transition: transform 0.04s ease, box-shadow 0.04s ease;
+}
+
+/* =========================
+   FORM CONTAINER
+========================= */
+.auth-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.auth-card {
+    max-width: 480px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 35px 35px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-family: "Titan One", cursive;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 3px 0 rgba(0,0,0,.15);
+}
+
+.auth-card p {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 25px;
+}
+
+/* =========================
+   INPUT STYLES
+========================= */
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #fff4d6;
+    letter-spacing: 0.3px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper .material-icons {
+    position: absolute;
+    left: 14px;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-family: "Nunito", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    outline: none;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input {
+    padding: 14px 14px 14px 44px;
+}
+
+.form-textarea {
+    padding: 14px;
+    resize: none;
+    height: 80px;
+}
+
+.form-input:focus, .form-textarea:focus {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* =========================
+   PASSWORD STRENGTH METER
+========================= */
+.strength-meter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    margin-top: 8px;
+}
+
+.strength-bar {
+    height: 6px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+    overflow: hidden;
+    position: relative;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease;
+}
+
+/* =========================
+   COLOR STATUS CARD SLICE
+========================= */
+.message-card {
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.message-card .material-icons {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+/* =========================
+   CUSTOM CHECKBOX
+========================= */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.checkbox-group input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.custom-checkbox {
+    height: 24px;
+    width: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+    transition: background 0.1s, border-color 0.1s, transform 0.1s, box-shadow 0.1s;
+}
+
+.custom-checkbox .material-icons {
+    font-size: 1.1rem;
+    color: #ff8c1a;
+    font-weight: 900;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.checkbox-group:hover input ~ .custom-checkbox {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.checkbox-group input:checked ~ .custom-checkbox {
+    background: white;
+    border-color: white;
+}
+
+.checkbox-group input:checked ~ .custom-checkbox .material-icons {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checkbox-group:active .custom-checkbox {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.checkbox-label {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #fff4d6;
+}
+
+.submit-btn {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.switch-auth {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.switch-auth a {
+    color: #fff4d6;
+    text-decoration: none;
+    font-weight: 800;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.switch-auth a:hover {
+    border-color: #fff4d6;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer{
     text-align:center;
-    margin-top:12px;
+    padding:30px;
+    background:rgba(0,0,0,.12);
     font-weight:700;
-    font-size:0.9rem;
-    opacity:0.9;
+    position: relative;
+    z-index: 5;
+    margin-top: auto; 
 }
 
-.small-text a{
-    color:white;
-    font-weight:900;
-    text-decoration:underline;
-}
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+@media(max-width:700px){
+    .bg-moving-grid, .bg-static-squares, .bg-stroke-overlay {
+        top: -60vh;
+        left: -60vw;
+        width: 220vw;
+        height: 220vh;
+        background-size: 126px 126px;
+    }
 
+    .navbar{ 
+        height: auto;
+        padding: 16px 15px; 
+        justify-content: center;
+    }
+    
+    .logo-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .logo{ font-size: 1.8rem; }
+    .auth-container { padding: 30px 15px; }
+    .auth-card { padding: 30px 20px; }
+    .auth-card h2 { font-size: 1.8rem; }
+}
 </style>
 </head>
 
 <body>
 
-<div class="background"></div>
+<div class="bg-base-gradient"></div>
+<div class="bg-moving-grid"></div>
+<div class="bg-static-squares"></div>
+<div class="bg-stroke-overlay"></div>
 
 <nav class="navbar">
-    <a href="index.html" class="logo-btn">Scratchlet</a>
+    <a href="index.html" class="logo-link"><div class="logo">Scratchlet</div></a>
 </nav>
 
-<div class="container">
-
-    <div class="card">
-        <h1>Create Account</h1>
-
-        <form id="registerForm">
-
-            <div class="input-group">
-                <label>Username</label>
-                <input id="username" type="text" required placeholder="Enter username">
+<main class="auth-container">
+    <div class="auth-card">
+        <h2>Join Us!</h2>
+        <p>Create your account to start playing</p>
+        
+        <form id="register-form" action="#" method="POST" novalidate>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="material-icons">person</span>
+                    <input type="text" id="username" class="form-input" placeholder="Choose a username">
+                </div>
             </div>
 
-            <div class="input-group">
-                <label>Email</label>
-                <input id="email" type="email" required placeholder="Enter email">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="material-icons">email</span>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                </div>
             </div>
 
-            <div class="input-group">
-                <label>Password</label>
-                <input id="password" type="password" required placeholder="Enter password">
+            <div class="form-group">
+                <div class="strength-meter-header">
+                    <label for="password" style="margin-bottom: 0;">Password</label>
+                    <span id="strength-text" class="strength-text">Nothing here</span>
+                </div>
+                <div class="input-wrapper">
+                    <span class="material-icons">lock</span>
+                    <input type="password" id="password" class="form-input" placeholder="Create a password">
+                </div>
+                <div class="strength-bar" style="margin-top: 8px;">
+                    <div id="strength-fill" class="strength-fill"></div>
+                </div>
             </div>
 
-            <div class="input-group">
-                <label>Reason for joining</label>
-                <textarea id="reason" required placeholder="Why do you want to join?"></textarea>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <div class="input-wrapper">
+                    <span class="material-icons">gpp_good</span>
+                    <input type="password" id="confirm-password" class="form-input" placeholder="Repeat your password">
+                </div>
             </div>
 
-            <button class="btn" id="btn" type="submit">Register</button>
+            <div class="form-group">
+                <label for="reason">Why do you want to join Scratchlet?</label>
+                <textarea id="reason" class="form-textarea" placeholder="Tell us why you want to join..."></textarea>
+            </div>
 
+            <label class="checkbox-group">
+                <input type="checkbox" id="age-checkbox">
+                <div class="custom-checkbox">
+                    <span class="material-icons">done</span>
+                </div>
+                <span class="checkbox-label">I am older than 13 years old</span>
+            </label>
+
+            <div id="message-card-box" class="message-card">
+                <span id="card-icon" class="material-icons">error</span>
+                <span id="card-text"></span>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn primary submit-btn"><span>Register</span></button>
         </form>
 
-        <div class="small-text">
-            Already have an account?
-            <a href="login.html">Login</a>
+        <div class="switch-auth">
+            Already have an account? <a href="login.html">Login here</a>
         </div>
-
     </div>
+</main>
 
-</div>
+<footer>
+    © 2026 Scratchlet
+</footer>
 
-<script>
-const bg = document.querySelector(".background");
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-for(let i = 0; i < 50; i++){
-    const square = document.createElement("div");
-    square.className = "square";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+        authDomain: "scratchlet-194bc.firebaseapp.com",
+        projectId: "scratchlet-194bc",
+        storageBucket: "scratchlet-194bc.firebasestorage.app",
+        messagingSenderId: "480952290764",
+        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+        measurementId: "G-2T6GS8Y9VN"
+    };
 
-    square.style.left = Math.random() * 100 + "%";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const size = Math.random() * 25 + 10;
-    square.style.width = size + "px";
-    square.style.height = size + "px";
+    const form = document.getElementById('register-form');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const reasonInput = document.getElementById('reason');
+    const ageCheckbox = document.getElementById('age-checkbox');
+    const submitBtn = document.getElementById('submit-btn');
 
-    square.style.opacity = Math.random() * 0.6 + 0.25;
+    const strengthFill = document.getElementById('strength-fill');
+    const strengthText = document.getElementById('strength-text');
+    
+    const messageCardBox = document.getElementById('message-card-box');
+    const cardIcon = document.getElementById('card-icon');
+    const cardText = document.getElementById('card-text');
 
-    square.style.animationDuration = (Math.random() * 10 + 6) + "s";
+    passwordInput.addEventListener('input', () => {
+        const value = passwordInput.value;
+        let score = 0;
 
-    bg.appendChild(square);
-}
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-// Initialize Supabase Client with your real credentials
-const supabaseUrl = 'https://gufsrlpnlajyryojqdva.supabase.co';
-const supabaseKey = 'sb_publishable_e43NsuHlIS-a4nWfqXDiyg_8uUQLDfY'; 
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-const form = document.getElementById("registerForm");
-const btn = document.getElementById("btn");
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const reason = document.getElementById("reason").value.trim();
-
-    btn.disabled = true;
-    btn.innerText = "Creating account...";
-
-    try {
-        // 1. Sign up the user inside Supabase Auth
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-        });
-
-        if (authError) throw authError;
-
-        // 2. Insert the extra profile information into your custom table
-        if (authData.user) {
-            const { error: profileError } = await supabase
-                .from('profiles') // Make sure this matches your Supabase table name
-                .insert([
-                    { 
-                        id: authData.user.id, 
-                        username: username, 
-                        reason: reason 
-                    }
-                ]);
-
-            if (profileError) {
-                throw new Error("Registration failed during profile setup: " + profileError.message);
-            }
+        if (!value) {
+            strengthFill.style.width = '0%';
+            strengthText.textContent = 'Nothing here';
+            strengthText.style.color = 'rgba(255, 255, 255, 0.6)';
+            return;
         }
 
-        alert("Account created successfully! Check your email for confirmation if required.");
-        window.location.href = "login.html";
+        if (value.length >= 6) score++;
+        if (value.length >= 10) score++;
+        if (/[A-Z]/.test(value)) score++;
+        if (/[0-9]/.test(value)) score++;
+        if (/[^A-Za-z0-9]/.test(value)) score++;
 
-    } catch (err) {
-        alert(err.message);
+        if (score <= 2) {
+            strengthFill.style.width = '33%';
+            strengthFill.style.backgroundColor = '#ff4d4d';
+            strengthText.textContent = 'Weak';
+            strengthText.style.color = '#ff4d4d';
+        } else if (score <= 4) {
+            strengthFill.style.width = '66%';
+            strengthFill.style.backgroundColor = '#ffad33';
+            strengthText.textContent = 'Medium';
+            strengthText.style.color = '#ffad33';
+        } else {
+            strengthFill.style.width = '100%';
+            strengthFill.style.backgroundColor = '#2ecc71';
+            strengthText.textContent = 'Strong';
+            strengthText.style.color = '#2ecc71';
+        }
+    });
+
+    function showCard(text, isError) {
+        cardText.textContent = text;
+        messageCardBox.style.display = "flex";
+
+        if (isError) {
+            messageCardBox.style.backgroundColor = "rgba(255, 77, 77, 0.25)";
+            messageCardBox.style.border = "2px solid #ff4d4d";
+            cardIcon.textContent = "error";
+            cardIcon.style.color = "#ff4d4d";
+            cardText.style.color = "#ff9999";
+        } else {
+            messageCardBox.style.backgroundColor = "rgba(46, 204, 113, 0.25)";
+            messageCardBox.style.border = "2px solid #2ecc71";
+            cardIcon.textContent = "check_circle";
+            cardIcon.style.color = "#2ecc71";
+            cardText.style.color = "#a3e4d7";
+        }
     }
 
-    btn.disabled = false;
-    btn.innerText = "Register";
-});
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const cleanUsername = usernameInput.value.trim();
+        const cleanEmail = emailInput.value.trim();
+
+        if (!cleanUsername) {
+            showCard("Username Required", true);
+            return;
+        }
+        if (!cleanEmail) {
+            showCard("Email Address Required", true);
+            return;
+        }
+        if (!passwordInput.value) {
+            showCard("Password Required", true);
+            return;
+        }
+        if (passwordInput.value.length < 6) {
+            showCard("Password must be at least 6 characters", true);
+            return;
+        }
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            showCard("Passwords do not match", true);
+            return;
+        }
+        if (!reasonInput.value.trim()) {
+            showCard("Reason Required", true);
+            return;
+        }
+        if (!ageCheckbox.checked) {
+            showCard("You must be older than 13 to join", true);
+            return;
+        }
+
+        showCard("Creating account...", false);
+        submitBtn.disabled = true;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, cleanEmail, passwordInput.value);
+            
+            await updateProfile(userCredential.user, {
+                displayName: cleanUsername
+            });
+
+            showCard("Registration Successful!", false);
+            console.log("Profile created:", userCredential.user.displayName);
+
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
+
+        } catch (error) {
+            submitBtn.disabled = false;
+            console.error("Firebase Exception:", error.code, error.message);
+            
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    showCard("This email address is already registered.", true);
+                    break;
+                case 'auth/invalid-email':
+                    showCard("Please check your email address format layout.", true);
+                    break;
+                case 'auth/weak-password':
+                    showCard("Insecure password configuration rejected by Firebase.", true);
+                    break;
+                default:
+                    showCard("Authentication issue: " + error.message, true);
+                    break;
+            }
+        }
+    });
 </script>
 
 </body>
