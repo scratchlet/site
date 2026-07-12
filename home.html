@@ -575,6 +575,7 @@ body{
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -588,6 +589,7 @@ body{
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const navAuthBox = document.getElementById('nav-auth-box');
     const welcomeTitle = document.getElementById('welcome-title');
@@ -603,30 +605,37 @@ body{
         logDisplayView.textContent = localStorage.getItem('scratchlet_changelog_cache');
     }
 
-    // Dynamic state management helpers for token balances
-    function getSavedTokens() {
-        const tokens = localStorage.getItem('scratchlet_token_balance');
-        return tokens ? parseInt(tokens, 10) : 0;
-    }
-
-    function updateTokenDisplay(amount) {
-        localStorage.setItem('scratchlet_token_balance', amount);
-        const counterEl = document.getElementById('token-counter-value');
-        if (counterEl) {
-            counterEl.textContent = amount.toLocaleString();
+    // Fetches or creates user coin records directly from Firestore Database backend
+    async function loadUserCoins(user) {
+        const userRef = doc(db, "users", user.uid);
+        try {
+            const userSnap = await getDoc(userRef);
+            
+            if (userSnap.exists()) {
+                // Return existing tokens data
+                return userSnap.data().tokens || 0;
+            } else {
+                // If account/document was just created, initialize with 0 coins
+                await setDoc(userRef, {
+                    username: user.displayName || "Player",
+                    tokens: 0,
+                    createdAt: new Date()
+                });
+                return 0;
+            }
+        } catch (error) {
+            console.error("Error managing coin document state: ", error);
+            return 0;
         }
     }
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             const username = user.displayName || "Player";
             welcomeTitle.textContent = `Hello ${username}!`;
             
-            // Set up fallback sample tokens if none exists yet
-            if(localStorage.getItem('scratchlet_token_balance') === null) {
-                localStorage.setItem('scratchlet_token_balance', '1250');
-            }
-            const currentTokens = getSavedTokens();
+            // Wait for real-time account data from Firestore
+            const currentTokens = await loadUserCoins(user);
             
             navAuthBox.innerHTML = `
                 <div class="user-badge">
