@@ -4,299 +4,492 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet | Login</title>
-
+<title>Scratchlet - Login</title>
+<link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-
-/* GLOBAL */
+/* =========================
+   GLOBAL & HIDE SCROLLBAR
+========================= */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
+html, body {
+    scrollbar-width: none; 
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 body{
     font-family:"Nunito",sans-serif;
     color:white;
-    min-height:100vh;
     overflow-x:hidden;
-
-    background: linear-gradient(
-        160deg,
-        #fff4d6 0%,
-        #ffc76a 25%,
-        #ff9b2f 50%,
-        #ff7f11 75%,
-        #8f3200 100%
-    );
+    min-height:100vh;
+    background: #ff9b2f;
+    position: relative;
+    
+    display: flex;
+    flex-direction: column;
 }
 
-/* BACKGROUND */
-.background{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    overflow:hidden;
+/* =========================
+   BACKGROUND LAYERS
+========================= */
+.bg-base-gradient {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
 }
 
-.square{
-    position:absolute;
-    border:2px solid rgba(255,255,255,.35);
-    background:rgba(255,255,255,.12);
-    animation:fall linear infinite;
+.bg-moving-grid {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -2;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-size: 126px 126px;
+    background-position: 63px 0px;
+    will-change: transform;
+    animation: scrollTiltedTopRight 8s linear infinite;
 }
 
-@keyframes fall{
-    from{ transform:translateY(-120px) rotate(0deg); }
-    to{ transform:translateY(120vh) rotate(360deg); }
+@keyframes scrollTiltedTopRight {
+    from { transform: rotate(15deg) translate3d(0px, 0px, 0px); }
+    to { transform: rotate(15deg) translate3d(126px, -126px, 0px); }
 }
 
-/* NAVBAR */
+.bg-static-squares {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    -webkit-mask-size: 126px 126px;
+    mask-size: 126px 126px;
+    transform: rotate(15deg);
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.bg-stroke-overlay {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-size: 126px 126px;
+    transform: rotate(15deg);
+}
+
+/* =========================
+   NAVBAR
+========================= */
 .navbar{
     height:70px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     padding:0 30px;
     background:#ff7f11;
-    box-shadow: inset 0 -6px rgba(0,0,0,.2);
+    box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 10;
 }
 
-.logo-btn{
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logo{
     font-family:"Titan One",cursive;
     font-size:2.5rem;
     color:white;
-    text-decoration:none;
 }
 
-/* CONTAINER */
-.container{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:60px 20px;
-}
-
-/* CARD */
-.card{
-    width:100%;
-    max-width:500px;
-    background:#ff8c1a;
-    border-radius:16px;
-    padding:30px;
-    box-shadow:
-        inset 0 -8px rgba(0,0,0,.18),
-        0 10px 25px rgba(0,0,0,.2);
-}
-
-.card h1{
-    font-family:"Titan One",cursive;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-/* INPUTS */
-.input-group{
-    display:flex;
-    flex-direction:column;
-    margin-bottom:15px;
-}
-
-label{
-    font-weight:800;
-    margin-bottom:6px;
-}
-
-input{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    outline:none;
-    font-family:"Nunito",sans-serif;
-    font-weight:600;
-}
-
-/* BUTTON */
+/* =========================
+   BUTTONS
+========================= */
 .btn{
-    width:100%;
-    padding:12px;
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
     border:none;
-    border-radius:14px;
-    font-weight:900;
     cursor:pointer;
-    font-size:1rem;
-    background:white;
-    color:#ff7f11;
-    box-shadow:0 6px 0 rgba(0,0,0,.25);
-    transition:0.15s ease;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:14px 28px;
+    border-radius:14px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
 }
 
-.btn:hover{
-    transform:translateY(-2px);
+.primary{
+    background: white;
+    color: #ff8c1a;
 }
 
-.btn:active{
-    transform:translateY(4px);
-    box-shadow:0 2px 0 rgba(0,0,0,.25);
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
 }
 
-.small-text{
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+    transition: transform 0.04s ease, box-shadow 0.04s ease;
+}
+
+/* =========================
+   FORM CONTAINER
+========================= */
+.auth-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.auth-card {
+    max-width: 480px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 35px 35px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-family: "Titan One", cursive;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 3px 0 rgba(0,0,0,.15);
+}
+
+.auth-card p {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 25px;
+}
+
+/* =========================
+   INPUT STYLES
+========================= */
+.form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #fff4d6;
+    letter-spacing: 0.3px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper .material-icons {
+    position: absolute;
+    left: 14px;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input {
+    width: 100%;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-family: "Nunito", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    outline: none;
+    padding: 14px 14px 14px 44px;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* =========================
+   COLOR STATUS CARD SLICE
+========================= */
+.message-card {
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-top: 15px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.message-card .material-icons {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.submit-btn {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.switch-auth {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.switch-auth a {
+    color: #fff4d6;
+    text-decoration: none;
+    font-weight: 800;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.switch-auth a:hover {
+    border-color: #fff4d6;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer{
     text-align:center;
-    margin-top:12px;
+    padding:30px;
+    background:rgba(0,0,0,.12);
     font-weight:700;
-    font-size:0.9rem;
-    opacity:0.9;
+    position: relative;
+    z-index: 5;
+    margin-top: auto; 
 }
 
-.small-text a{
-    color:white;
-    font-weight:900;
-    text-decoration:underline;
-}
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+@media(max-width:700px){
+    .bg-moving-grid, .bg-static-squares, .bg-stroke-overlay {
+        top: -60vh;
+        left: -60vw;
+        width: 220vw;
+        height: 220vh;
+        background-size: 126px 126px;
+    }
 
+    .navbar{ 
+        height: auto;
+        padding: 16px 15px; 
+        justify-content: center;
+    }
+    
+    .logo-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .logo{ font-size: 1.8rem; }
+    .auth-container { padding: 30px 15px; }
+    .auth-card { padding: 30px 20px; }
+    .auth-card h2 { font-size: 1.8rem; }
+}
 </style>
 </head>
 
 <body>
 
-<div class="background"></div>
+<div class="bg-base-gradient"></div>
+<div class="bg-moving-grid"></div>
+<div class="bg-static-squares"></div>
+<div class="bg-stroke-overlay"></div>
 
 <nav class="navbar">
-    <a href="index.html" class="logo-btn">Scratchlet</a>
+    <a href="index.html" class="logo-link"><div class="logo">Scratchlet</div></a>
 </nav>
 
-<div class="container">
+<main class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Log in to your account</p>
+        
+        <form id="login-form" action="#" method="POST" novalidate>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <span class="material-icons">email</span>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                </div>
+            </div>
 
-<div class="card">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="material-icons">lock</span>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password">
+                </div>
+            </div>
 
-    <h1>Login</h1>
+            <div id="message-card-box" class="message-card">
+                <span id="card-icon" class="material-icons">error</span>
+                <span id="card-text"></span>
+            </div>
 
-    <form id="loginForm">
+            <button type="submit" id="submit-btn" class="btn primary submit-btn"><span>Login</span></button>
+        </form>
 
-        <div class="input-group">
-            <label>Email</label>
-            <input id="email" type="email" required placeholder="Enter email">
+        <div class="switch-auth">
+            Don't have an account? <a href="register.html">Register</a>
         </div>
-
-        <div class="input-group">
-            <label>Password</label>
-            <input id="password" type="password" required placeholder="Enter password">
-        </div>
-
-        <button class="btn" id="btn" type="submit">Login</button>
-
-    </form>
-
-    <div class="small-text">
-        Don’t have an account?
-        <a href="register.html">Register</a>
     </div>
-
-</div>
-
-</div>
-
-<script>
-// background animation
-const bg = document.querySelector(".background");
-
-for(let i = 0; i < 50; i++){
-    const square = document.createElement("div");
-    square.className = "square";
-
-    square.style.left = Math.random() * 100 + "%";
-
-    const size = Math.random() * 25 + 10;
-    square.style.width = size + "px";
-    square.style.height = size + "px";
-
-    square.style.opacity = Math.random() * 0.6 + 0.25;
-
-    square.style.animationDuration = (Math.random() * 10 + 6) + "s";
-
-    bg.appendChild(square);
-}
-</script>
-
-<!-- FIREBASE LOGIN SYSTEM -->
+</main>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    setPersistence,
-    browserLocalPersistence,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-import {
-    getFirestore,
-    doc,
-    updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+        authDomain: "scratchlet-194bc.firebaseapp.com",
+        projectId: "scratchlet-194bc",
+        storageBucket: "scratchlet-194bc.firebasestorage.app",
+        messagingSenderId: "480952290764",
+        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+        measurementId: "G-2T6GS8Y9VN"
+    };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
-  authDomain: "scratchlet-ss.firebaseapp.com",
-  projectId: "scratchlet-ss",
-  storageBucket: "scratchlet-ss.firebasestorage.app",
-  messagingSenderId: "265174756634",
-  appId: "1:265174756634:web:a4c40ae00434f077e090a3",
-  measurementId: "G-7B7B6VXYJX"
-};
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submit-btn');
+    
+    const messageCardBox = document.getElementById('message-card-box');
+    const cardIcon = document.getElementById('card-icon');
+    const cardText = document.getElementById('card-text');
 
-/* SESSION PERSISTENCE */
-setPersistence(auth, browserLocalPersistence);
+    function showCard(text, isError) {
+        cardText.textContent = text;
+        messageCardBox.style.display = "flex";
 
-/* 🔒 AUTO-LOGIN REDIRECT */
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        window.location.href = "home.html";
-    }
-});
-
-const form = document.getElementById("loginForm");
-const btn = document.getElementById("btn");
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    btn.innerText = "Logging in...";
-    btn.disabled = true;
-
-    try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        const user = cred.user;
-
-        // 🔥 update Firestore last login
-        await updateDoc(doc(db, "users", user.uid), {
-            lastLogin: Date.now()
-        });
-
-        alert("Login successful!");
-
-        window.location.href = "home.html";
-
-    } catch (err) {
-        alert(err.message);
+        if (isError) {
+            messageCardBox.style.backgroundColor = "rgba(255, 77, 77, 0.25)";
+            messageCardBox.style.border = "2px solid #ff4d4d";
+            cardIcon.textContent = "error";
+            cardIcon.style.color = "#ff4d4d";
+            cardText.style.color = "#ff9999";
+        } else {
+            messageCardBox.style.backgroundColor = "rgba(46, 204, 113, 0.25)";
+            messageCardBox.style.border = "2px solid #2ecc71";
+            cardIcon.textContent = "check_circle";
+            cardIcon.style.color = "#2ecc71";
+            cardText.style.color = "#a3e4d7";
+        }
     }
 
-    btn.innerText = "Login";
-    btn.disabled = false;
-});
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const cleanEmail = emailInput.value.trim();
+        const rawPassword = passwordInput.value;
+
+        if (!cleanEmail) {
+            showCard("Email Address Required", true);
+            return;
+        }
+        if (!rawPassword) {
+            showCard("Password Required", true);
+            return;
+        }
+
+        showCard("Logging in...", false);
+        submitBtn.disabled = true;
+
+        try {
+            // Authenticate users directly through email verification matches
+            const userCredential = await signInWithEmailAndPassword(auth, cleanEmail, rawPassword);
+            
+            showCard("Login Successful!", false);
+            console.log("Logged in user:", userCredential.user.displayName || userCredential.user.email);
+
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
+
+        } catch (error) {
+            submitBtn.disabled = false;
+            console.error("Firebase Auth Exception:", error.code, error.message);
+            
+            switch (error.code) {
+                case 'auth/invalid-credential':
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                    showCard("Incorrect email or password.", true);
+                    break;
+                case 'auth/invalid-email':
+                    showCard("Please check your email address format layout.", true);
+                    break;
+                case 'auth/too-many-requests':
+                    showCard("Account temporarily locked due to too many failed attempts. Try again later.", true);
+                    break;
+                default:
+                    showCard("Login issue: " + error.message, true);
+                    break;
+            }
+        }
+    });
 </script>
-
 </body>
 </html>
