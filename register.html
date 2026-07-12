@@ -475,7 +475,7 @@ footer{
 
 <main class="auth-container">
     <div class="auth-card">
-        <h2>Join Us!</h2>
+        <h2>Register</h2>
         <p>Create your account to start playing</p>
         
         <form id="register-form" action="#" method="POST" novalidate>
@@ -527,7 +527,7 @@ footer{
                 <div class="custom-checkbox">
                     <span class="material-icons">done</span>
                 </div>
-                <span class="checkbox-label">I am older than 13 years old</span>
+                <span class="checkbox-label">I am older than 13 years old and if i'm not, my account will be terminated.</span>
             </label>
 
             <div id="message-card-box" class="message-card">
@@ -539,15 +539,10 @@ footer{
         </form>
 
         <div class="switch-auth">
-            Already have an account? <a href="login.html">Login here</a>
+            Already have an account? <a href="login.html">Login</a>
         </div>
     </div>
 </main>
-
-<footer>
-    © 2026 Scratchlet
-</footer>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -708,6 +703,5 @@ footer{
         }
     });
 </script>
-
 </body>
 </html>
