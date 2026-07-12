@@ -13,7 +13,7 @@
 
 <style>
 /* =========================
-   GLOBAL & HIDE SCROLLBAR
+   GLOBAL & HIDE MAIN SCROLLBAR
 ========================= */
 *{
     margin:0;
@@ -25,7 +25,8 @@ html, body {
     scrollbar-width: none; 
 }
 
-::-webkit-scrollbar {
+/* Hide scrollbar for the entire body window */
+body::-webkit-scrollbar {
     display: none;
 }
 
@@ -248,13 +249,13 @@ body{
    ACTION ROWS & CONTROLS
 ========================= */
 .action-bar {
-    max-width: 1200px;
+    max-width: 900px;
     width: 100%;
     margin: 30px auto 0;
     padding: 0 20px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 15px;
     z-index: 5;
 }
@@ -302,7 +303,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 ========================= */
 .market-container {
     flex: 1;
-    max-width: 1200px;
+    max-width: 900px;
     width: 100%;
     margin: 20px auto 40px;
     padding: 0 20px;
@@ -417,7 +418,33 @@ input:checked + .slider:before { transform: translateX(22px); }
 .modalBtns .btn { flex: 1; justify-content: center; }
 .modal .secondary { background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
-#rarityBox { max-height: 240px; overflow-y: auto; padding-right: 5px; }
+/* VISIBLE CUSTOM SCROLLBAR FOR DROP RATES INFO BOX */
+#rarityBox { 
+    max-height: 240px; 
+    overflow-y: auto; 
+    padding-right: 10px; 
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.2); /* Firefox */
+}
+
+/* Chrome, Safari, Edge support for visible info bar scroll */
+#rarityBox::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+}
+#rarityBox::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+#rarityBox::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+#rarityBox::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
 #unboxingOverlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
 .unboxing-pack { width: 220px; height: 220px; object-fit: contain; transform: scale(0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .unboxing-pack.ready { transform: scale(1); opacity: 1; animation: floatAnim 2.5s ease-in-out infinite; }
@@ -454,7 +481,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     .hud-badge-bar { max-width: 100%; overflow-x: auto; padding: 4px 8px; gap: 4px; border-radius: 25px; }
     .hud-item { width: 36px; height: 36px; flex-shrink: 0; }
     .hud-item::after { top: auto; bottom: 46px; }
-    .action-bar { margin-top: 15px; padding: 0 15px; justify-content: center; }
+    .action-bar { margin-top: 15px; padding: 0 15px; }
 }
 </style>
 </head>
