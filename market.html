@@ -359,15 +359,16 @@ input:checked + .slider:before { transform: translateX(22px); }
     transform: translateY(-1px);
 }
 
+/* Pack image expands completely to fill the container layout */
 .pack-card-img {
-    width: 130px;
-    height: 130px;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.25s ease;
 }
 
 .pack-card-btn:hover .pack-card-img {
-    transform: scale(1.08);
+    transform: scale(1.05);
 }
 
 /* Top Right Cost Tag */
@@ -375,16 +376,23 @@ input:checked + .slider:before { transform: translateX(22px); }
     position: absolute;
     top: 14px;
     right: 14px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff4d6;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffd700;
     font-weight: 900;
-    font-size: 0.9rem;
-    padding: 4px 10px;
-    border-radius: 10px;
+    font-size: 0.95rem;
+    padding: 5px 12px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    z-index: 2;
+}
+
+.pack-cost-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
 }
 
 /* Bottom Name Text Layer */
@@ -393,19 +401,20 @@ input:checked + .slider:before { transform: translateX(22px); }
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.55);
     padding: 14px;
     color: #fff;
     font-family: 'Titan One', sans-serif;
     font-size: 1.15rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2;
 }
 
 /* =========================
-   MODALS & UNBOXING (Ref: market.html)
+   MODALS & UNBOXING
 ========================= */
 .modalBg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
 .modal { width: 400px; background: linear-gradient(145deg, #ff9b2f, #ff7f11); border: 2px solid rgba(255,255,255,.3); border-radius: 24px; padding: 25px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,.4); }
@@ -426,7 +435,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 .blook-rarity { font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; }
 .blook-image-box { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
 .blook-image-box img { width: 85%; height: 85%; object-fit: contain; }
-.blook-chance { font-weight: 800; font-size: 0.9rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; }
+.blook-chance { font-weight: 800; font-size: 0.9rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
 
 @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes intenseShake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg) translate(-2px, 1px); } 75% { transform: rotate(3deg) translate(2px, -1px); } }
@@ -578,7 +587,6 @@ input:checked + .slider:before { transform: translateX(22px); }
         if (user) {
             currentUser = user;
             
-            // Render the User Badge on the left beside the logo
             document.getElementById('username-badge-target').innerHTML = `
                 <div class="user-badge">
                     <span class="material-icons">account_circle</span>
@@ -621,7 +629,10 @@ input:checked + .slider:before { transform: translateX(22px); }
             packBtn.setAttribute("aria-label", `Open ${pack.name}`);
             
             packBtn.innerHTML = `
-                <div class="pack-cost-tag">🪙 ${pack.cost}</div>
+                <div class="pack-cost-tag">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="pack-cost-icon">
+                    <span>${pack.cost}</span>
+                </div>
                 <img class="pack-card-img" src="${pack.image}" alt="${pack.name}">
                 <div class="pack-name-bar">${pack.name}</div>
             `;
@@ -649,7 +660,6 @@ input:checked + .slider:before { transform: translateX(22px); }
         tokens -= pack.cost;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
 
-        // Roll item
         const rand = Math.random() * 100;
         let sum = 0;
         let selectedBlook = pack.blooks[pack.blooks.length - 1];
@@ -662,14 +672,12 @@ input:checked + .slider:before { transform: translateX(22px); }
             }
         }
 
-        // Update database inventory map
         ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
         try {
             const userRef = doc(db, "users", currentUser.uid);
             await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
         } catch (e) { console.error("Error writing to user inventory:", e); }
 
-        // Trigger animations
         const instantOpen = document.getElementById("instantOpenToggle").checked;
         if (instantOpen) {
             alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
@@ -693,7 +701,6 @@ input:checked + .slider:before { transform: translateX(22px); }
             packImg.classList.add("ready");
         }, 50);
 
-        // Click wrapper to advance phases
         overlay.onclick = () => {
             if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
                 packImg.classList.add("shake");
@@ -719,7 +726,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         document.getElementById("blookRarity").style.color = blook.color;
         document.getElementById("blookImg").src = blook.image;
         document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
-        card.style.borderColors = blook.color;
+        card.style.borderColor = blook.color;
         card.style.display = "flex";
     }
 
@@ -745,7 +752,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     }
 
     document.getElementById("hourlyBtn").onclick = async () => {
-        const reward = Math.floor(Math.random() * 76) + 25; // 25-100 random tokens
+        const reward = Math.floor(Math.random() * 76) + 25; 
         tokens += reward;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
         
@@ -772,7 +779,11 @@ input:checked + .slider:before { transform: translateX(22px); }
         const container = document.getElementById("rarityBox");
         container.innerHTML = "";
         packs[currentPackKey].blooks.forEach(item => {
-            container.innerHTML += `<div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1);color:${item.color};"><span>${item.name}</span><span>${item.chance}%</span></div>`;
+            container.innerHTML += `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1);color:${item.color};">
+                    <span>${item.name}</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;">${item.chance}%</span>
+                </div>`;
         });
         document.getElementById("infoBg").style.display = "flex";
     };
