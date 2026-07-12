@@ -13,12 +13,22 @@
 
 <style>
 /* =========================
-   GLOBAL
+   GLOBAL & HIDE SCROLLBAR
 ========================= */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+}
+
+html, body {
+    /* Hides scrollbar for Firefox */
+    scrollbar-width: none; 
+}
+
+/* Hides scrollbar for Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+    display: none;
 }
 
 body{
@@ -226,7 +236,6 @@ body{
 .hero-card {
     max-width: 750px;
     width: 100%;
-    /* Styled to match the dark circle badge exactly */
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
