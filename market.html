@@ -8,49 +8,45 @@
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=Titan+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-/* ==========================================================================
-   GLOBAL RESET & ENVIRONMENT LAYOUTS
-   ========================================================================== */
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Nunito", sans-serif;
+/* =========================
+   GLOBAL & HIDE SCROLLBAR
+========================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html, body {
     scrollbar-width: none; 
-    min-height: 100vh;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-body {
-    color: #fff;
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    overflow-x:hidden;
+    min-height:100vh;
     background: #ff9b2f;
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
 }
 
-body.lock-scroll {
-    overflow: hidden;
-}
-
-/* ==========================================================================
-   VISUAL EFFECTS: TILTED MOVING GRAPHIC GRID & BACKDROP OVERLAYS
-   ========================================================================== */
+/* =========================
+   BACKGROUND LAYERS
+========================= */
 .bg-base-gradient {
     position: fixed;
     inset: 0;
-    z-index: -4;
+    z-index: -3;
     background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
 }
 
@@ -60,12 +56,12 @@ body.lock-scroll {
     left: -50vw;
     width: 200vw;
     height: 200vh;
-    z-index: -3;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.16)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.16)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/></svg>');
+    z-index: -2;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
     background-size: 126px 126px;
     background-position: 63px 0px;
     will-change: transform;
-    animation: scrollTiltedTopRight 12s linear infinite;
+    animation: scrollTiltedTopRight 8s linear infinite;
 }
 
 @keyframes scrollTiltedTopRight {
@@ -79,7 +75,7 @@ body.lock-scroll {
     left: -50vw;
     width: 200vw;
     height: 200vh;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
     background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
     -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
@@ -87,7 +83,7 @@ body.lock-scroll {
     -webkit-mask-size: 126px 126px;
     mask-size: 126px 126px;
     transform: rotate(15deg);
-    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.18));
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
 }
 
 .bg-stroke-overlay {
@@ -96,62 +92,30 @@ body.lock-scroll {
     left: -50vw;
     width: 200vw;
     height: 200vh;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
     background-size: 126px 126px;
     transform: rotate(15deg);
 }
 
-.background {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.square {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    animation: floatParticle linear infinite;
-}
-
-@keyframes floatParticle {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.6;
-    }
-    90% {
-        opacity: 0.6;
-    }
-    100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-/* ==========================================================================
-   NAVIGATION HUD COMPONENTS
-   ========================================================================== */
-.navbar {
+/* =========================
+   STICKY NAVBAR
+========================= */
+.navbar{
     position: sticky;
     top: 0;
-    min-height: 75px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 40px;
+    min-height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 30px;
     background: rgba(255, 127, 17, 0.94);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    box-shadow: inset 0 -6px 0 0 #c65b00, 0 10px 30px rgba(0, 0, 0, 0.25);
-    z-index: 500;
-    gap: 20px;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+    gap: 15px;
 }
 
 .nav-left-group {
@@ -164,56 +128,58 @@ body.lock-scroll {
     display: inline-block;
 }
 
-.logo {
-    font-family: "Titan One", cursive;
-    font-size: 2.6rem;
-    color: #fff;
-    text-shadow: 0 4px 0 #b34a00;
+.logo{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
 }
 
 .nav-profile-section {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     margin-left: auto;
 }
 
 .user-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-weight: 800;
-    background: rgba(0, 0, 0, 0.25);
-    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
     border-radius: 99px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     white-space: nowrap;
 }
 
+/* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-weight: 900;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 8px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 6px 14px;
     border-radius: 99px;
     border: 2px solid #ffcc00;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .coin-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 
 .coin-amount {
     color: #ffd700;
-    font-size: 1.15rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-size: 1.05rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
+/* HUD Symbol Bar */
 .nav-right-group {
     display: flex;
     align-items: center;
@@ -222,11 +188,11 @@ body.lock-scroll {
 .hud-badge-bar {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 99px;
-    padding: 8px 16px;
-    gap: 10px;
+    padding: 6px 12px;
+    gap: 8px;
 }
 
 .hud-item {
@@ -235,10 +201,10 @@ body.lock-scroll {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    transition: background 0.2s, transform 0.15s;
+    transition: background 0.15s, transform 0.1s;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -246,12 +212,12 @@ body.lock-scroll {
 }
 
 .hud-item .material-icons {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .hud-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
 }
 
 .hud-item.logout-trigger {
@@ -259,29 +225,29 @@ body.lock-scroll {
 }
 
 .hud-item.logout-trigger:hover {
-    background: rgba(255, 82, 82, 0.25);
+    background: rgba(255, 82, 82, 0.2);
 }
 
 .hud-item::after {
     content: attr(data-nametag);
     position: absolute;
-    top: 55px;
+    top: 50px;
     left: 50%;
-    transform: translateX(-50%) translateY(-8px);
-    background: rgba(15, 15, 20, 0.96);
+    transform: translateX(-50%) translateY(-6px);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
     font-family: "Nunito", sans-serif;
     font-weight: 800;
     font-size: 0.8rem;
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 8px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.12);
-    z-index: 600;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 110;
 }
 
 .hud-item:hover::after {
@@ -289,615 +255,209 @@ body.lock-scroll {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ==========================================================================
-   INTERACTIVE BUTTONS AND SWITCHES
-   ========================================================================== */
+/* =========================
+   ACTION ROWS & CONTROLS
+========================= */
 .action-bar {
-    max-width: 1100px;
+    max-width: 900px;
     width: 100%;
-    margin: 35px auto 5px;
-    padding: 0 25px;
+    margin: 30px auto 0;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    z-index: 10;
+    gap: 15px;
+    z-index: 5;
 }
 
 .toggle-container {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-weight: 800;
-    background: rgba(0, 0, 0, 0.28);
-    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 8px 16px;
     border-radius: 99px;
-    border: 1px solid rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.15);
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 26px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    inset: 0;
-    background-color: rgba(0,0,0,0.35);
-    transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #4CFF4C;
-}
-
-input:checked + .slider:before {
-    transform: translateX(24px);
-}
+.switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background-color: rgba(0,0,0,0.3); transition: .2s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .2s; border-radius: 50%; }
+input:checked + .slider { background-color: #4CFF4C; }
+input:checked + .slider:before { transform: translateX(22px); }
 
 .btn {
-    font-family: "Nunito", sans-serif;
-    font-weight: 900;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    text-decoration: none;
-    display: inline-flex;
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 16px;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.2);
-    transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.1s, box-shadow 0.1s;
 }
+.btn.primary { background: white; color: #ff8c1a; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.18); }
+.btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-.btn.primary {
-    background: white;
-    color: #ff8c1a;
-}
-
-.btn.secondary {
-    background: rgba(0, 0, 0, 0.25);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 0 rgba(0,0,0,0.22);
-}
-
-.btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-}
-
-.btn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-/* ==========================================================================
-   MARKET GRID DISPLAY ARCHITECTURE
-   ========================================================================== */
+/* =========================
+   STYLIZED MARKET CARD LAYOUT
+========================= */
 .market-container {
     flex: 1;
-    max-width: 1100px;
+    max-width: 900px;
     width: 100%;
-    margin: 15px auto 50px;
-    padding: 0 25px;
-    z-index: 10;
+    margin: 20px auto 40px;
+    padding: 0 20px;
+    z-index: 5;
 }
 
 .market-title {
     font-family: "Titan One", cursive;
-    font-size: 2.5rem;
-    margin-bottom: 25px;
-    text-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    text-shadow: 0 3px 0 rgba(0,0,0,0.15);
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
 }
 
-/* ==========================================================================
-   PACK DISPLAY CARDS (MARKET DOM HOOKS)
-   ========================================================================== */
-.card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+.pack-card-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
     border: 3px solid rgba(255, 255, 255, 0.25);
-    border-radius: 28px;
-    width: 100%;
-    height: 310px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    box-shadow: 0 10px 0 rgba(0, 0, 0, 0.18), 0 16px 30px rgba(0, 0, 0, 0.15);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s, border-color 0.25s;
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 18px 0 rgba(0, 0, 0, 0.18), 0 22px 40px rgba(0, 0, 0, 0.25);
-    border-color: rgba(255, 255, 255, 0.45);
-}
-
-.card-body {
-    padding: 20px 20px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
-
-.thumb {
-    width: 100%;
-    height: 125px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-.pack-thumb-img {
-    max-height: 100%;
-    max-width: 90%;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-}
-
-.card:hover .pack-thumb-img {
-    transform: scale(1.08);
-}
-
-.card h3 {
-    font-family: 'Titan One', sans-serif;
-    font-size: 1.35rem;
-    text-align: center;
-    letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.card-footer {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.22);
-    padding: 15px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.card-price {
-    font-family: 'Titan One', sans-serif;
-    color: #ffcc00;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
-.card-buttons-row {
-    display: flex;
-    gap: 10px;
-}
-
-.card-buttons-row .btn {
-    flex: 1;
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    justify-content: center;
-    border-radius: 12px;
-}
-
-/* ==========================================================================
-   MODALS LAYER & BOX HOVER ARCHITECTURE
-   ========================================================================== */
-.modalBg {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-}
-
-.modal {
-    width: 440px;
-    max-width: 90%;
-    background: linear-gradient(145deg, #ff9b2f, #ff7f11);
-    border: 3px solid rgba(255, 255, 255, 0.35);
-    border-radius: 28px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-}
-
-.modal h3 {
-    font-family: "Titan One", cursive;
-    font-size: 1.7rem;
-    margin-bottom: 12px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-.modal-description {
-    font-size: 1rem;
-    font-weight: 700;
-    opacity: 0.9;
-    margin-bottom: 20px;
-}
-
-.mass-input-wrapper {
-    background: rgba(0, 0, 0, 0.18);
-    padding: 15px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.mass-input-wrapper label {
-    display: block;
-    font-weight: 800;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: #ffebad;
-}
-
-.mass-input-wrapper input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 900;
-    text-align: center;
-    outline: none;
-    font-family: "Titan One", sans-serif;
-}
-
-.mass-input-wrapper input:focus {
-    border-color: #ffcc00;
-}
-
-.modalBtns {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.modalBtns .btn {
-    flex: 1;
-    justify-content: center;
-}
-
-#rarityBox {
-    max-height: 280px;
-    overflow-y: auto;
-    padding-right: 8px;
-}
-
-/* ==========================================================================
-   UNBOXING GRAPHICS & EXPLOSION OVERLAYS
-   ========================================================================== */
-#unboxingOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10, 10, 15, 0.96);
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    cursor: pointer;
-}
-
-#confettiCanvas {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10005;
-}
-
-.unboxing-pack {
-    width: 240px;
-    height: 240px;
-    object-fit: contain;
-    transform: scale(0.1);
-    opacity: 0;
-    z-index: 10010;
-    transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.unboxing-pack.ready {
-    transform: scale(1);
-    opacity: 1;
-    animation: floatingPackObject 3s ease-in-out infinite;
-}
-
-@keyframes floatingPackObject {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-.unboxing-pack.shake {
-    animation: unboxingPackVibration 0.12s linear infinite;
-}
-
-@keyframes unboxingPackVibration {
-    0% { transform: translate(2px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(0px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(2px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(2px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-}
-
-.unboxing-pack.explode {
-    animation: packageBlastBurst 0.35s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-}
-
-@keyframes packageBlastBurst {
-    0% { transform: scale(1); filter: brightness(1); opacity: 1; }
-    100% { transform: scale(1.8); filter: brightness(10); opacity: 0; }
-}
-
-/* ==========================================================================
-   BLOOK CARDS DESIGN SYSTEM
-   ========================================================================== */
-.blook-card {
-    width: 320px;
-    height: 330px;
-    background: linear-gradient(145deg, #2c2f33, #191b1d);
-    border: 5px solid #fff;
-    border-radius: 28px;
-    padding: 25px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-    z-index: 10020;
+    border-radius: 24px;
     position: relative;
-    overflow: hidden;
-}
-
-.blook-name {
-    font-family: 'Titan One', sans-serif;
-    font-size: 2.2rem;
-    text-shadow: 0 4px 8px rgba(0,0,0,0.6);
-    line-height: 1.1;
-}
-
-.blook-rarity {
-    font-weight: 900;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-}
-
-.blook-image-box {
-    width: 130px;
-    height: 130px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 20px;
+    padding: 45px 0 0 0; 
+    margin: 0;
+    width: 100%;
+    height: 290px;
+    cursor: pointer;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    margin: 8px 0;
-}
-
-.blook-image-box img {
-    width: 85%;
-    height: 85%;
-    object-fit: contain;
-}
-
-.blook-chance {
-    font-weight: 800;
-    font-size: 0.9rem;
-    color: #b9bbbe;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 5px 14px;
-    border-radius: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.new-tag {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    background: #ffaa00;
-    color: #000;
-    font-family: "Titan One", sans-serif;
-    font-size: 0.85rem;
-    padding: 12px 24px 6px;
-    transform: rotate(-45deg);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    border-bottom: 2px solid white;
-    z-index: 5;
-}
-
-/* ==========================================================================
-   BLOOK INTEGRATED DRAW REVEAL ENGINE ANIMATIONS
-   ========================================================================== */
-.reveal-default { animation: defaultCardEntrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-@keyframes defaultCardEntrance {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.reveal-zoom { animation: zoomCardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-@keyframes zoomCardEntrance {
-    0% { transform: scale(0.2) rotate(-10deg); filter: brightness(2); opacity: 0; }
-    100% { transform: scale(1) rotate(0deg); filter: brightness(1); opacity: 1; }
-}
-
-.reveal-spin { animation: spinCardEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-@keyframes spinCardEntrance {
-    0% { transform: scale(0.3) rotate(-720deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-.reveal-rain { animation: rainCardEntrance 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
-@keyframes rainCardEntrance {
-    0% { transform: translateY(-150px) scale(0.8); opacity: 0; }
-    70% { transform: translateY(15px) scale(1.02); }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-/* ==========================================================================
-   MASS RESULTS SUMMARY OVERLAY COMPONENT
-   ========================================================================== */
-.results-card {
-    width: 620px;
-    max-width: 92%;
-    background: linear-gradient(145deg, #202225, #131416);
-    border: 4px solid rgba(255,255,255,0.25);
-    border-radius: 32px;
-    padding: 30px;
-    display: none;
     flex-direction: column;
-    z-index: 10020;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.65);
-    max-height: 85vh;
+    align-items: center;
+    justify-content: space-between; 
+    overflow: hidden;
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
 }
 
-.results-header {
-    text-align: center;
-    margin-bottom: 20px;
+.pack-card-btn:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 0 rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
-.results-header h4 {
-    font-family: 'Titan One', sans-serif;
-    font-size: 2.2rem;
-    color: #fff;
-    text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+.pack-card-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.results-header p {
-    font-weight: 700;
-    color: #8e9297;
+.pack-card-img {
+    width: auto;
+    height: 140px;
+    max-width: 85%;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+    margin-bottom: auto;
     margin-top: 5px;
 }
 
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 15px;
-    overflow-y: auto;
-    padding: 10px 5px;
-    flex: 1;
-    background: rgba(0,0,0,0.2);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.05);
+.pack-card-btn:hover .pack-card-img {
+    transform: scale(1.06);
 }
 
-.summary-item-node {
-    background: rgba(255, 255, 255, 0.04);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 18px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    text-align: center;
-}
-
-.summary-item-count {
+.pack-cost-tag {
     position: absolute;
-    top: 6px;
-    right: 8px;
-    background: #ffcc00;
-    color: #000;
+    top: 14px;
+    right: 14px;
+    background: #1a1c1e;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #ffcc00;
     font-family: 'Titan One', sans-serif;
-    font-size: 0.75rem;
-    padding: 2px 6px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.summary-img-item-node {
-    width: 55px;
-    height: 55px;
-    object-fit: contain;
-    margin-bottom: 8px;
-}
-
-.summary-item-name {
-    font-weight: 800;
-    font-size: 0.8rem;
-    line-height: 1.2;
-    word-break: break-word;
-}
-
-.results-footer {
-    margin-top: 25px;
+    font-size: 0.95rem;
+    padding: 6px 14px;
+    border-radius: 14px;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.2);
+    letter-spacing: 0.5px;
 }
 
-.results-footer .btn {
-    width: 180px;
-    justify-content: center;
+.pack-cost-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
-/* ==========================================================================
-   RESPONSIVE LAYOUT CONSTRAINTS
-   ========================================================================== */
+.pack-name-bar {
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
+    padding: 16px 14px;
+    color: #fff;
+    font-family: 'Titan One', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    z-index: 2;
+}
+
+/* =========================
+   MODALS & UNBOXING
+========================= */
+.modalBg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
+.modal { width: 400px; background: linear-gradient(145deg, #ff9b2f, #ff7f11); border: 2px solid rgba(255,255,255,.3); border-radius: 24px; padding: 25px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+.modal h3 { font-family: "Titan One", cursive; font-size: 1.5rem; margin-bottom: 15px; }
+.modalBtns { display: flex; gap: 12px; margin-top: 20px; justify-content: center; }
+.modalBtns .btn { flex: 1; justify-content: center; }
+.modal .secondary { background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255,255,255,0.2); }
+
+#rarityBox { max-height: 240px; overflow-y: auto; padding-right: 5px; }
+#unboxingOverlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
+.unboxing-pack { width: 220px; height: 220px; object-fit: contain; transform: scale(0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.unboxing-pack.ready { transform: scale(1); opacity: 1; animation: floatAnim 2.5s ease-in-out infinite; }
+.unboxing-pack.shake { animation: intenseShake 0.4s ease-in-out infinite; }
+.unboxing-pack.explode { animation: explodePack 0.3s ease-out forwards; }
+
+.blook-card { width: 300px; height: 300px; background: linear-gradient(145deg, #2c2f33, #23272a); border: 4px solid #fff; border-radius: 24px; padding: 20px; display: none; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 0 40px rgba(255,255,255,0.2); }
+.blook-name { font-family: 'Titan One', sans-serif; font-size: 2rem; text-shadow: 0 3px 6px rgba(0,0,0,0.5); }
+.blook-rarity { font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; }
+.blook-image-box { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
+.blook-image-box img { width: 85%; height: 85%; object-fit: contain; }
+.blook-chance { font-weight: 800; font-size: 0.9rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
+
+@keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes intenseShake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg) translate(-2px, 1px); } 75% { transform: rotate(3deg) translate(2px, -1px); } }
+@keyframes explodePack { 0% { transform: scale(1); filter: brightness(1); opacity: 1; } 100% { transform: scale(1.6); filter: brightness(8); opacity: 0; } }
+
+/* =========================
+   RESPONSIVE DESIGN MAPS
+========================= */
 @media(max-width:980px) {
-    .navbar { padding: 15px 25px; flex-direction: column; gap: 15px; align-items: center; }
-    .nav-left-group { width: 100%; justify-content: center; }
-    .nav-profile-section { margin-left: 0; width: 100%; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .navbar { padding: 12px 20px; flex-direction: column; gap: 12px; align-items: center; }
+    .nav-left-group { width: 100%; justify-content: center; display: flex; }
+    .nav-profile-section { margin-left: 0; width: 100%; justify-content: center; gap: 10px; flex-wrap: wrap; }
     .nav-right-group { width: 100%; justify-content: center; }
-    .hud-badge-bar { max-width: 100%; overflow-x: auto; padding: 6px 12px; gap: 6px; border-radius: 25px; }
-    .hud-item { width: 38px; height: 38px; flex-shrink: 0; }
-    .hud-item::after { top: auto; bottom: 52px; }
-    .action-bar { margin-top: 20px; padding: 0 20px; flex-direction: column; align-items: stretch; gap: 12px; }
-    .toggle-container { justify-content: center; }
-    .btn { justify-content: center; }
+    .hud-badge-bar { max-width: 100%; overflow-x: auto; padding: 4px 8px; gap: 4px; border-radius: 25px; }
+    .hud-item { width: 36px; height: 36px; flex-shrink: 0; }
+    .hud-item::after { top: auto; bottom: 46px; }
+    .action-bar { margin-top: 15px; padding: 0 15px; }
 }
 </style>
 </head>
@@ -907,7 +467,6 @@ input:checked + .slider:before {
 <div class="bg-moving-grid"></div>
 <div class="bg-static-squares"></div>
 <div class="bg-stroke-overlay"></div>
-<div class="background"></div>
 
 <nav class="navbar">
     <div class="nav-left-group">
@@ -915,14 +474,10 @@ input:checked + .slider:before {
     </div>
     
     <div class="nav-profile-section">
-        <div id="username-badge-target">
-            <div class="user-badge">
-                <span class="material-icons">account_circle</span>
-                <span>Loading...</span>
-            </div>
-        </div>
-        <div class="coin-counter" title="Your Coin Balance">
-            <span class="coin-amount">🪙 <span id="coins">0</span></span>
+        <div id="username-badge-target"></div>
+        <div class="coin-counter" title="Your Token Balance">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
+            <span id="token-counter-value" class="coin-amount">0</span>
         </div>
     </div>
 
@@ -937,16 +492,16 @@ input:checked + .slider:before {
             <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
             <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
             <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-            <button id="logoutBtn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
         </div>
     </div>
 </nav>
 
 <div class="action-bar">
-    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading Cooldown...</button>
+    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
     <div class="toggle-container">
-        <span class="material-icons" style="font-size: 1.3rem; color: #ffd700;">flash_on</span>
-        <span style="font-size: 0.95rem;">Instant Open</span>
+        <span class="material-icons" style="font-size: 1.2rem; color: #ffd700;">flash_on</span>
+        <span style="font-size: 0.9rem;">Instant Open</span>
         <label class="switch">
             <input type="checkbox" id="instantOpenToggle">
             <span class="slider"></span>
@@ -962,7 +517,6 @@ input:checked + .slider:before {
 <div class="modalBg" id="modalBg">
     <div class="modal">
         <h3 id="modalText">Open Pack?</h3>
-        <p class="modal-description">Are you sure you want to purchase this pack?</p>
         <div class="modalBtns">
             <button class="btn primary" id="yesBtn">Yes</button>
             <button class="btn secondary" id="infoBtn">Info</button>
@@ -971,95 +525,57 @@ input:checked + .slider:before {
     </div>
 </div>
 
-<div class="modalBg" id="massModalBg">
-    <div class="modal">
-        <h3 id="massModalText">Mass Open</h3>
-        <p class="modal-description" id="massMaxInfo">Max affordable items: 0</p>
-        <div class="mass-input-wrapper">
-            <label for="massAmountInput">Packs to Open:</label>
-            <input type="number" id="massAmountInput" min="1" value="10">
-        </div>
-        <div class="modalBtns">
-            <button class="btn primary" id="massYesBtn">Purchase</button>
-            <button class="btn secondary" id="massNoBtn">Cancel</button>
-        </div>
-    </div>
-</div>
-
 <div class="modalBg" id="infoBg">
     <div class="modal">
         <h3>Drop Rates</h3>
-        <p class="modal-description" style="margin-bottom: 12px;">Chance breakdowns for each item in the pack:</p>
         <div id="rarityBox" style="margin: 15px 0; text-align: left;"></div>
         <button class="btn primary" id="closeInfoBtn" style="width:100%; justify-content:center;">Close</button>
     </div>
 </div>
 
 <div id="unboxingOverlay">
-    <canvas id="confettiCanvas"></canvas>
-    <img id="unboxingPackImg" class="unboxing-pack" src="" alt="Pack Graphic Asset">
-    
+    <img id="unboxingPackImg" class="unboxing-pack" src="" alt="Pack">
     <div id="blookCard" class="blook-card">
-        <div class="new-tag" id="newTag" style="display: none;">NEW</div>
         <div id="blookName" class="blook-name">Blook Name</div>
         <div id="blookRarity" class="blook-rarity">Rarity</div>
         <div class="blook-image-box">
-            <img id="blookImg" src="" alt="Blook Node Asset">
+            <img id="blookImg" src="" alt="Blook">
         </div>
         <div id="blookChance" class="blook-chance">0% Chance</div>
-    </div>
-
-    <div id="resultsCard" class="results-card">
-        <div class="results-header">
-            <h4>Packs Opened!</h4>
-            <p>Summary of acquired entities added to your user profile document</p>
-        </div>
-        <div class="results-grid" id="resultsGrid"></div>
-        <div class="results-footer">
-            <button class="btn primary" id="closeResultsBtn">Collect Items</button>
-        </div>
     </div>
 </div>
 
 <script type="module">
-    /* ==========================================================================
-       FIREBASE INITIALIZATION & MODULE IMPORTS
-       ========================================================================== */
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // ==========================================
+    // UPDATED FIREBASE CONFIGURATION CREDENTIALS
+    // ==========================================
     const firebaseConfig = {
-        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",
-        authDomain: "scratchlet-ss.firebaseapp.com",
-        projectId: "scratchlet-ss",
-        storageBucket: "scratchlet-ss.firebasestorage.app",
-        messagingSenderId: "265174756634",
-        appId: "1:265174756634:web:a4c40ae00434f077e090a3",
-        measurementId: "G-7B7B6VXYJX"
+        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+        authDomain: "scratchlet-194bc.firebaseapp.com",
+        projectId: "scratchlet-194bc",
+        storageBucket: "scratchlet-194bc.firebasestorage.app",
+        messagingSenderId: "480952290764",
+        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+        measurementId: "G-2T6GS8Y9VN"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    /* ==========================================================================
-       GAME STATE MANAGEMENT METRICS
-       ========================================================================== */
-    let coins = 0;
-    let ownedBlocks = [];
+    let tokens = 0;
+    let ownedBlooks = {};
     let currentUser = null;
     let currentPackKey = "breakfast";
-    let unboxingState = "closed";
-    let activeRolledItem = null;
-    let massOpenedPool = []; 
-    let accountNextClaimTime = 0;
+    let isUnboxing = false;
 
-    const CONFIG = { fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png" };
-
-    /* ==========================================================================
-       DATA DICTIONARY LAYER: PACKS & CHANCES
-       ========================================================================== */
+    // ==========================================
+    // DATA LAYER: EXTENDED ITEMS LIST
+    // ==========================================
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -1083,573 +599,219 @@ input:checked + .slider:before {
         }
     };
 
-    /* ==========================================================================
-       AUTHENTICATION STATE CONTROL DELEGATE
-       ========================================================================== */
+    /* =========================
+       AUTHENTICATION LAYER
+    ========================= */
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
             
-            const nameToDisplay = user.displayName || "Player";
             document.getElementById('username-badge-target').innerHTML = `
                 <div class="user-badge">
                     <span class="material-icons">account_circle</span>
-                    <span>${nameToDisplay}</span>
+                    <span>${user.displayName || "Player"}</span>
                 </div>
             `;
             
             await loadUserData();
             renderPacksGrid();
-            startHourlyCooldown();
+            updateHourlyTimer();
+            setInterval(updateHourlyTimer, 1000);
         } else {
-            window.location.href = "home.html"; 
+            window.location.href = "login.html";
         }
     });
 
-    /* ==========================================================================
-       DATABASE WORKFLOW TRANSACTION SYNC METHODS
-       ========================================================================== */
+    /* =========================
+       DATABASE SYNC (FIRESTORE)
+    ========================= */
     async function loadUserData() {
         try {
             const docRef = doc(db, "users", currentUser.uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                coins = data.coins || 0;
-                ownedBlocks = data.ownedBlocks || [];
-                accountNextClaimTime = data.nextClaimTime || 0; 
-            } else {
-                coins = 100;
-                ownedBlocks = [];
-                accountNextClaimTime = 0;
-                await saveUserData();
+                tokens = data.tokens || 0;
+                ownedBlooks = data.ownedBlooks || {};
             }
-            document.getElementById("coins").innerText = coins.toLocaleString();
-        } catch (error) {
-            console.error("Error loading profile data from firestore document references:", error);
-        }
+            document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+        } catch (e) { console.error("Database reading fault:", e); }
     }
 
-    async function saveUserData() {
-        if (!currentUser) return;
-        try {
-            await setDoc(doc(db, "users", currentUser.uid), {
-                coins: coins,
-                ownedBlocks: ownedBlocks,
-                nextClaimTime: accountNextClaimTime 
-            }, { merge: true });
-        } catch (error) {
-            console.error("Failed to sync profile metrics upstream:", error);
-        }
-    }
-
-    document.getElementById("logoutBtn").onclick = () => {
-        signOut(auth).then(() => {
-            window.location.href = "https://beta-scratchlet.pages.dev/";
-        });
-    };
-
-    /* ==========================================================================
-       GRID RENDERING INTERACTIVE DISPLAY
-       ========================================================================== */
+    /* =========================
+       DYNAMIC DOM RENDERING
+    ========================= */
     function renderPacksGrid() {
         const grid = document.getElementById("grid");
         if (!grid) return;
         grid.innerHTML = "";
-        
+
         Object.keys(packs).forEach(key => {
             const pack = packs[key];
-            grid.innerHTML += `
-            <div class="card">
-                <div class="card-body">
-                    <div class="thumb">
-                        <img src="${pack.image}" class="pack-thumb-img" onerror="this.src='${CONFIG.fallbackPlaceholder}'">
-                    </div>
-                    <h3>${pack.name}</h3>
-                </div>
-                <div class="card-footer">
-                    <div class="card-price">🪙 ${pack.cost}</div>
-                    <div class="card-buttons-row">
-                        <button class="btn primary open-btn" data-key="${key}">Open</button>
-                        <button class="btn secondary mass-btn" data-key="${key}">Mass</button>
-                    </div>
-                </div>
-            </div>`;
-        });
-
-        document.querySelectorAll(".open-btn").forEach(b => {
-            b.onclick = () => { 
-                currentPackKey = b.getAttribute("data-key"); 
-                if (document.getElementById("instantOpenToggle").checked) {
-                    executeInstantOpen(currentPackKey);
-                } else {
-                    openPromptModal(currentPackKey);
-                }
-            };
-        });
-        
-        document.querySelectorAll(".mass-btn").forEach(b => {
-            b.onclick = () => { 
-                currentPackKey = b.getAttribute("data-key"); 
-                openMassPromptModal(currentPackKey); 
-            };
-        });
-    }
-
-    /* ==========================================================================
-       PSEUDO-RANDOM ALGORITHMIC MULTI-TIER PROBABILITY GENERATOR
-       ========================================================================== */
-    function rollItem(pack) {
-        let rand = Math.random() * 100;
-        let cumulative = 0;
-        for (let i = 0; i < pack.blooks.length; i++) {
-            cumulative += pack.blooks[i].chance;
-            if (rand <= cumulative) return pack.blooks[i];
-        }
-        return pack.blooks[pack.blooks.length - 1];
-    }
-
-    /* ==========================================================================
-       MODAL CONTROL INTERFACES
-       ========================================================================== */
-    function openPromptModal(key) {
-        const pack = packs[key];
-        document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} coins?`;
-        document.getElementById("modalBg").style.display = "flex";
-        document.getElementById("yesBtn").onclick = () => {
-            closeModal();
-            openPack(key);
-        };
-    }
-
-    function openMassPromptModal(key) {
-        const pack = packs[key];
-        const maxAffordable = Math.floor(coins / pack.cost);
-        document.getElementById("massModalText").innerText = `Mass Open: ${pack.name}`;
-        document.getElementById("massMaxInfo").innerText = `Max affordable items: ${maxAffordable} (${pack.cost} 🪙 each)`;
-        document.getElementById("massAmountInput").max = maxAffordable;
-        document.getElementById("massAmountInput").value = Math.min(10, maxAffordable || 1);
-        document.getElementById("massModalBg").style.display = "flex";
-
-        document.getElementById("massYesBtn").onclick = () => {
-            const count = parseInt(document.getElementById("massAmountInput").value);
-            if (isNaN(count) || count <= 0) {
-                alert("Please enter a valid count!");
-                return;
-            }
-            if (count > maxAffordable) {
-                alert("You cannot afford that many packs!");
-                return;
-            }
-            closeMassModal();
-            executeMassOpen(key, count);
-        };
-    }
-
-    function closeModal() { document.getElementById("modalBg").style.display="none"; }
-    function closeMassModal() { document.getElementById("massModalBg").style.display = "none"; }
-    function showInfo() { document.getElementById("infoBg").style.display="flex"; renderInfo(currentPackKey); }
-    function closeInfo() { document.getElementById("infoBg").style.display="none"; }
-
-    function renderInfo(key) {
-        const container = document.getElementById("rarityBox");
-        if (!container) return;
-        container.innerHTML = "";
-        const pack = packs[key];
-        pack.blooks.forEach(item => {
-            container.innerHTML += `
-            <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.12);color:${item.color};">
-                <span>${item.name}</span>
-                <span>— ${item.chance}%</span>
-            </div>`;
-        });
-    }
-
-    /* ==========================================================================
-       HOURLY COOLDOWN PROFILE SYSTEM
-       ========================================================================== */
-    document.getElementById("hourlyBtn").onclick = claimHourlyCoins;
-
-    async function claimHourlyCoins() {
-        const now = new Date().getTime();
-        if (accountNextClaimTime && now < accountNextClaimTime) {
-            return;
-        }
-        
-        const reward = Math.floor(Math.random() * 1500) + 500; 
-        coins += reward;
-        document.getElementById("coins").innerText = coins.toLocaleString();
-        
-        const hourlyBtn = document.getElementById("hourlyBtn");
-        hourlyBtn.innerHTML = `<span class="material-icons">celebration</span> +${reward} 🪙 Acquired!`;
-        hourlyBtn.style.background = "#4CFF4C";
-        hourlyBtn.style.color = "#1a5a1a";
-        setTimeout(() => {
-            hourlyBtn.style.background = "";
-            hourlyBtn.style.color = "";
-        }, 2500);
-        
-        const oneHourFromNow = now + (3600 * 1000);
-        accountNextClaimTime = oneHourFromNow;
-        await saveUserData();
-        startHourlyCooldown();
-    }
-
-    function startHourlyCooldown() {
-        const hourlyBtn = document.getElementById("hourlyBtn");
-        
-        if (window.hourlyIntervalId) {
-            clearInterval(window.hourlyIntervalId);
-        }
-
-        const checkTime = () => {
-            const now = new Date().getTime();
+            const packBtn = document.createElement("button");
+            packBtn.className = "pack-card-btn";
+            packBtn.setAttribute("aria-label", `Open ${pack.name}`);
             
-            if (!accountNextClaimTime || now >= accountNextClaimTime) {
-                if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
-                hourlyBtn.disabled = false;
-                hourlyBtn.innerHTML = `<span class="material-icons">hourglass_empty</span> Claim Hourly Reward (500-2,000 🪙)`;
-            } else {
-                hourlyBtn.disabled = true;
-                const difference = accountNextClaimTime - now;
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                hourlyBtn.innerHTML = `<span class="material-icons">history</span> Wait ${minutes}m ${seconds}s`;
+            packBtn.innerHTML = `
+                <div class="pack-cost-tag">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="pack-cost-icon">
+                    <span>${pack.cost}</span>
+                </div>
+                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}">
+                <div class="pack-name-bar">${pack.name}</div>
+            `;
+            
+            packBtn.onclick = () => {
+                currentPackKey = key;
+                document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
+                document.getElementById("modalBg").style.display = "flex";
+            };
+            
+            grid.appendChild(packBtn);
+        });
+    }
+
+    /* =========================
+       UNBOXING CORE LOGIC
+    ========================= */
+    async function openPack() {
+        const pack = packs[currentPackKey];
+        if (tokens < pack.cost) {
+            alert("Not enough tokens!");
+            return;
+        }
+
+        tokens -= pack.cost;
+        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+
+        const rand = Math.random() * 100;
+        let sum = 0;
+        let selectedBlook = pack.blooks[pack.blooks.length - 1];
+
+        for (let b of pack.blooks) {
+            sum += b.chance;
+            if (rand <= sum) {
+                selectedBlook = b;
+                break;
             }
-        };
+        }
 
-        checkTime();
-        window.hourlyIntervalId = setInterval(checkTime, 1000);
+        ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
+        } catch (e) { console.error("Error writing to user inventory:", e); }
+
+        const instantOpen = document.getElementById("instantOpenToggle").checked;
+        if (instantOpen) {
+            alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
+        } else {
+            triggerCinematicSequence(pack.image, selectedBlook);
+        }
     }
 
-    /* ==========================================================================
-       UNBOXING CORE PIPELINES (SINGLE & INSTANT & MASS)
-       ========================================================================== */
-    async function openPack(key) {
-        const pack = packs[key];
-        if (coins < pack.cost) {
-            alert("Not enough coins!");
-            return;
-        }
-        coins -= pack.cost;
-        document.getElementById("coins").innerText = coins.toLocaleString();
-        
-        activeRolledItem = rollItem(pack);
-        const isNewItem = !ownedBlocks.includes(activeRolledItem.name);
-        ownedBlocks.push(activeRolledItem.name);
-        await saveUserData();
-        setupSingleUnboxingUI(pack, isNewItem, false);
-    }
-
-    async function executeInstantOpen(key) {
-        const pack = packs[key];
-        if (coins < pack.cost) {
-            alert("Not enough coins!");
-            return;
-        }
-        coins -= pack.cost;
-        document.getElementById("coins").innerText = coins.toLocaleString();
-        
-        activeRolledItem = rollItem(pack);
-        const isNewItem = !ownedBlocks.includes(activeRolledItem.name);
-        ownedBlocks.push(activeRolledItem.name);
-        await saveUserData();
-        
-        setupSingleUnboxingUI(pack, isNewItem, true);
-    }
-
-    async function executeMassOpen(key, count) {
-        const pack = packs[key];
-        coins -= (pack.cost * count);
-        document.getElementById("coins").innerText = coins.toLocaleString();
-
-        massOpenedPool = [];
-        for (let i = 0; i < count; i++) {
-            const rolled = rollItem(pack);
-            massOpenedPool.push(rolled);
-            ownedBlocks.push(rolled.name);
-        }
-        await saveUserData();
-
-        const overlayElement = document.getElementById("unboxingOverlay");
+    function triggerCinematicSequence(packImgSrc, blook) {
+        isUnboxing = true;
+        const overlay = document.getElementById("unboxingOverlay");
         const packImg = document.getElementById("unboxingPackImg");
         const card = document.getElementById("blookCard");
-        const resultsCard = document.getElementById("resultsCard");
-        
-        document.body.classList.add("lock-scroll");
-        card.style.display = "none";
-        resultsCard.style.display = "none";
-        packImg.style.display = "block";
-        packImg.src = pack.image;
-        packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+
+        packImg.src = packImgSrc;
         packImg.className = "unboxing-pack";
-        
-        overlayElement.style.display = "flex";
-        unboxingState = "mass_ready_to_shake";
+        card.style.display = "none";
+        overlay.style.display = "flex";
+
         setTimeout(() => {
             packImg.classList.add("ready");
         }, 50);
+
+        overlay.onclick = () => {
+            if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
+                packImg.classList.add("shake");
+                setTimeout(() => {
+                    packImg.classList.replace("shake", "explode");
+                    setTimeout(() => {
+                        packImg.style.display = "none";
+                        showUnboxedCard(blook);
+                    }, 250);
+                }, 1000);
+            } else if (card.style.display === "flex") {
+                overlay.style.display = "none";
+                packImg.style.display = "block";
+                isUnboxing = false;
+            }
+        };
     }
 
-    function setupSingleUnboxingUI(pack, isNewItem, isInstant) {
-        const overlayElement = document.getElementById("unboxingOverlay");
-        const packImg = document.getElementById("unboxingPackImg");
+    function showUnboxedCard(blook) {
         const card = document.getElementById("blookCard");
-        const resultsCard = document.getElementById("resultsCard");
-        
-        document.body.classList.add("lock-scroll");
-        resultsCard.style.display = "none";
-        
-        card.className = "blook-card";
+        document.getElementById("blookName").innerText = blook.name;
+        document.getElementById("blookRarity").innerText = blook.rarity;
+        document.getElementById("blookRarity").style.color = blook.color;
+        document.getElementById("blookImg").src = blook.image;
+        document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
+        card.style.borderColor = blook.color;
+        card.style.display = "flex";
+    }
 
-        document.getElementById("blookName").innerText = activeRolledItem.name;
-        document.getElementById("blookRarity").innerText = activeRolledItem.rarity;
-        document.getElementById("blookRarity").style.color = activeRolledItem.color;
-        document.getElementById("blookImg").src = activeRolledItem.image;
-        document.getElementById("blookImg").onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-        document.getElementById("blookChance").innerText = `${activeRolledItem.chance}% Chance`;
-        card.style.borderColor = activeRolledItem.color;
-        card.style.boxShadow = `0 0 50px ${activeRolledItem.color}`;
+    /* =========================
+       HOURLY REWARDS MANAGER
+    ========================= */
+    async function updateHourlyTimer() {
+        if (!currentUser) return;
+        const btn = document.getElementById("hourlyBtn");
+        const claimTime = localStorage.getItem(`hourly_claim_${currentUser.uid}`);
+        const now = Date.now();
 
-        document.getElementById("newTag").style.display = isNewItem ? "block" : "none";
-        overlayElement.style.display = "flex";
-
-        if (isInstant) {
-            packImg.style.display = "none";
-            card.style.display = "flex";
-            
-            const tier = activeRolledItem.rarity ? activeRolledItem.rarity.toLowerCase() : "uncommon";
-            if (tier === "epic" || tier === "legendary") card.classList.add("reveal-zoom");
-            else if (tier === "chroma" || tier === "mystical") card.classList.add("reveal-spin");
-            else if (tier === "whimsical") card.classList.add("reveal-rain");
-            else card.classList.add("reveal-default");
-            
-            startConfettiRain(activeRolledItem.color);
-            unboxingState = "revealed";
+        if (claimTime && now < parseInt(claimTime)) {
+            const diff = parseInt(claimTime) - now;
+            const mins = Math.floor(diff / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+            btn.innerHTML = `<span class="material-icons">history</span> ${mins}m ${secs}s`;
+            btn.disabled = true;
         } else {
-            packImg.style.display = "block";
-            card.style.display = "none";
-            packImg.src = pack.image;
-            packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-            packImg.className = "unboxing-pack";
-            
-            unboxingState = "ready_to_shake";
-            setTimeout(() => { packImg.classList.add("ready"); }, 50);
+            btn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
+            btn.disabled = false;
         }
     }
 
-    /* ==========================================================================
-       CINEMATIC OVERLAY CLICK STATE-MACHINE DRIVER
-       ========================================================================== */
-    document.getElementById("unboxingOverlay").onclick = handleOverlayClick;
-
-    function handleOverlayClick(e) {
-        if (e.target.closest('#resultsCard') && unboxingState === "mass_summary_revealed") {
-            return;
-        }
-        const packImg = document.getElementById("unboxingPackImg");
-        const card = document.getElementById("blookCard");
+    document.getElementById("hourlyBtn").onclick = async () => {
+        const reward = Math.floor(Math.random() * 76) + 25; 
+        tokens += reward;
+        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+        localStorage.setItem(`hourly_claim_${currentUser.uid}`, Date.now() + 3600000);
         
-        if (unboxingState === "ready_to_shake") {
-            unboxingState = "shaking";
-            packImg.classList.add("shake");
-            setTimeout(() => {
-                packImg.style.display = "none";
-                packImg.classList.remove("shake");
-                packImg.classList.add("explode");
-                setTimeout(() => {
-                    card.style.display = "flex";
-                    const tier = activeRolledItem.rarity ? activeRolledItem.rarity.toLowerCase() : "uncommon";
-                    if (tier === "epic" || tier === "legendary") {
-                        card.classList.add("reveal-zoom");
-                    } else if (tier === "chroma" || tier === "mystical") {
-                        card.classList.add("reveal-spin");
-                    } else if (tier === "whimsical") {
-                        card.classList.add("reveal-rain");
-                    } else {
-                        card.classList.add("reveal-default");
-                    }
-                    startConfettiRain(activeRolledItem.color);
-                    unboxingState = "revealed";
-                }, 300);
-            }, 1200);
-        } else if (unboxingState === "revealed") {
-            clearAndCloseOverlay();
-        } else if (unboxingState === "mass_ready_to_shake") {
-            unboxingState = "shaking";
-            packImg.classList.add("shake");
-            setTimeout(() => {
-                packImg.style.display = "none";
-                packImg.classList.remove("shake");
-                packImg.classList.add("explode");
-                setTimeout(() => {
-                    showMassResultsSummary();
-                }, 300);
-            }, 1200);
-        }
-    }
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens }, { merge: true });
+        } catch (e) { console.error(e); }
 
-    function showMassResultsSummary() {
-        const resultsGrid = document.getElementById("resultsGrid");
-        if (!resultsGrid) return;
-        resultsGrid.innerHTML = "";
-
-        const counts = {};
-        massOpenedPool.forEach(item => {
-            counts[item.name] = (counts[item.name] || 0) + 1;
-        });
-
-        const rendered = [];
-        massOpenedPool.forEach(item => {
-            if (rendered.includes(item.name)) return;
-            rendered.push(item.name);
-
-            const count = counts[item.name];
-            resultsGrid.innerHTML += `
-            <div class="summary-item-node" style="border-color: ${item.color || 'rgba(255,255,255,0.1)'};">
-                <span class="summary-item-count">x${count}</span>
-                <img src="${item.image}" onerror="this.src='${CONFIG.fallbackPlaceholder}'" class="summary-img-item-node">
-                <div class="summary-item-name" style="color: ${item.color || '#fff'}">${item.name}</div>
-            </div>`;
-        });
-
-        document.getElementById("resultsCard").style.display = "flex";
-        unboxingState = "mass_summary_revealed";
-        stopConfettiRain();
-    }
-
-    function clearAndCloseOverlay() {
-        stopConfettiRain();
-        document.getElementById("unboxingOverlay").style.display = "none";
-        document.getElementById("unboxingPackImg").style.display = "block";
-        document.getElementById("blookCard").style.display = "none";
-        document.getElementById("resultsCard").style.display = "none";
-        unboxingState = "closed";
-        document.body.classList.remove("lock-scroll");
-    }
-
-    document.getElementById("closeResultsBtn").onclick = (e) => {
-        e.stopPropagation(); 
-        clearAndCloseOverlay();
+        alert(`Claimed ${reward} tokens!`);
+        updateHourlyTimer();
     };
 
-    /* ==========================================================================
-       CANVAS GENERATED CONFETTI RENDERING SYSTEM
-       ========================================================================== */
-    const canvas = document.getElementById("confettiCanvas");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-    let animationFrameId = null;
-    let spawnIntervalId = null;
-
-    const SHAPES = { SQUARE: 0, RECTANGLE: 1, TRIANGLE: 2 };
-
-    function resizeCanvas() {
-        if (!canvas) return;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-
-    function startConfettiRain(hexColor) {
-        particles = [];
-        resizeCanvas();
-        
-        if (spawnIntervalId) clearInterval(spawnIntervalId);
-        
-        spawnIntervalId = setInterval(() => {
-            if (particles.length < 180) {
-                const shapeType = Math.floor(Math.random() * 3);
-                let baseSize = Math.random() * 8 + 8; 
-                
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: -20,
-                    size: baseSize,
-                    width: baseSize,
-                    height: shapeType === SHAPES.RECTANGLE ? baseSize * 1.6 : baseSize,
-                    shape: shapeType,
-                    color: hexColor || `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    speedY: Math.random() * 4 + 4,
-                    speedX: Math.random() * 2 - 1,
-                    rotation: Math.random() * Math.PI * 2,
-                    rotationSpeed: Math.random() * 0.06 - 0.03
-                });
-            }
-        }, 35);
-
-        function updateConfettiFrame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                let p = particles[i];
-                p.y += p.speedY;
-                p.x += p.speedX;
-                p.rotation += p.rotationSpeed;
-
-                if (p.y > canvas.height) {
-                    particles.splice(i, 1);
-                    i--;
-                    continue;
-                }
-
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation);
-                ctx.fillStyle = p.color;
-
-                ctx.beginPath();
-                if (p.shape === SHAPES.SQUARE || p.shape === SHAPES.RECTANGLE) {
-                    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
-                } else if (p.shape === SHAPES.TRIANGLE) {
-                    ctx.moveTo(0, -p.size / 2);
-                    ctx.lineTo(p.size / 2, p.size / 2);
-                    ctx.lineTo(-p.size / 2, p.size / 2);
-                    ctx.closePath();
-                    ctx.fill();
-                }
-                ctx.restore();
-            }
-            animationFrameId = requestAnimationFrame(updateConfettiFrame);
-        }
-        
-        if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        animationFrameId = requestAnimationFrame(updateConfettiFrame);
-    }
-
-    function stopConfettiRain() {
-        if (spawnIntervalId) clearInterval(spawnIntervalId);
-        if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles = [];
-    }
-
-    /* ==========================================================================
-       EVENT BINDINGS & ASSIGNED ELEMENT LISTENERS
-       ========================================================================== */
-    document.getElementById("infoBtn").onclick = showInfo;
-    document.getElementById("noBtn").onclick = closeModal;
-    document.getElementById("massNoBtn").onclick = closeMassModal;
-    document.getElementById("closeInfoBtn").onclick = closeInfo;
-
-    /* ==========================================================================
-       DYNAMICS: PARALLAX BACKGROUND AMBIENT OBJECT FLOATING STYLES
-       ========================================================================== */
-    const bgContainer = document.querySelector(".background");
-    if (bgContainer) {
-        for (let i = 0; i < 45; i++) {
-            const s = document.createElement("div");
-            s.className = "square";
-            s.style.left = Math.random() * 100 + "%";
-            let dimensionSize = Math.random() * 25 + 10;
-            s.style.width = s.style.height = dimensionSize + "px";
-            s.style.top = (Math.random() * -100) - 50 + "px";
-            s.style.animationDelay = Math.random() * 10 + "s";
-            s.style.opacity = (Math.random() * 0.5 + 0.15).toString();
-            s.style.animationDuration = Math.random() * 10 + 7 + "s";
-            bgContainer.appendChild(s);
-        }
-    }
+    /* =========================
+       MODAL CONTROLS & LOGOUT
+    ========================= */
+    document.getElementById("yesBtn").onclick = () => {
+        document.getElementById("modalBg").style.display = "none";
+        openPack();
+    };
+    document.getElementById("noBtn").onclick = () => document.getElementById("modalBg").style.display = "none";
+    document.getElementById("infoBtn").onclick = () => {
+        const container = document.getElementById("rarityBox");
+        container.innerHTML = "";
+        packs[currentPackKey].blooks.forEach(item => {
+            container.innerHTML += `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-weight:800;border-bottom:1px solid rgba(255,255,255,0.1);color:${item.color};">
+                    <span>${item.name}</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;">${item.chance}%</span>
+                </div>`;
+        });
+        document.getElementById("infoBg").style.display = "flex";
+    };
+    document.getElementById("closeInfoBtn").onclick = () => document.getElementById("infoBg").style.display = "none";
+    document.getElementById('logout-hud-btn').onclick = () => signOut(auth).then(() => { window.location.reload(); });
 </script>
 
 </body>
