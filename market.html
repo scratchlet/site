@@ -142,6 +142,18 @@ body{
     margin-left: auto;
 }
 
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+}
+
 /* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
@@ -245,7 +257,7 @@ body{
 }
 
 /* =========================
-   ACTION BAR & CONTROLS
+   ACTION ROWS & CONTROLS
 ========================= */
 .action-bar {
     max-width: 900px;
@@ -254,7 +266,7 @@ body{
     padding: 0 20px;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Aligns items to the left side */
+    justify-content: space-between;
     gap: 15px;
     z-index: 5;
 }
@@ -262,24 +274,15 @@ body{
 .toggle-container {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Stretches elements inside the container */
-    gap: 15px;
+    gap: 10px;
     font-weight: 800;
     background: rgba(0, 0, 0, 0.25);
-    padding: 8px 20px;
-    border-radius: 14px;
+    padding: 8px 16px;
+    border-radius: 99px;
     border: 1px solid rgba(255,255,255,.15);
-    min-width: 220px; /* Stretches the size out wider */
-    height: 44px; /* Matches the hourly button height nicely */
 }
 
-.toggle-label-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.switch { position: relative; display: inline-block; width: 46px; height: 24px; flex-shrink: 0; }
+.switch { position: relative; display: inline-block; width: 46px; height: 24px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; inset: 0; background-color: rgba(0,0,0,0.3); transition: .2s; border-radius: 34px; }
 .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .2s; border-radius: 50%; }
@@ -297,7 +300,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     align-items: center;
     gap: 6px;
     padding: 10px 20px;
-    height: 44px;
     border-radius: 14px;
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
     transition: transform 0.1s, box-shadow 0.1s;
@@ -339,7 +341,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     border: 3px solid rgba(255, 255, 255, 0.25);
     border-radius: 24px;
     position: relative;
-    padding: 45px 0 0 0;
+    padding: 45px 0 0 0; /* Clear space for top absolute cost tag asset */
     margin: 0;
     width: 100%;
     height: 290px;
@@ -347,7 +349,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Secure layout stacking direction */
     overflow: hidden;
     box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
@@ -364,6 +366,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Pack image scaled nicely down, fully contained, sitting naturally over name text */
 .pack-card-img {
     width: auto;
     height: 140px;
@@ -403,6 +406,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     object-fit: contain;
 }
 
+/* Custom non-absolute flow base template layout bar */
 .pack-name-bar {
     width: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
@@ -464,8 +468,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     .hud-badge-bar { max-width: 100%; overflow-x: auto; padding: 4px 8px; gap: 4px; border-radius: 25px; }
     .hud-item { width: 36px; height: 36px; flex-shrink: 0; }
     .hud-item::after { top: auto; bottom: 46px; }
-    .action-bar { margin-top: 15px; padding: 0 15px; flex-direction: column; align-items: stretch; }
-    .toggle-container { min-width: 100%; }
+    .action-bar { margin-top: 15px; padding: 0 15px; }
 }
 </style>
 </head>
@@ -482,6 +485,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     </div>
     
     <div class="nav-profile-section">
+        <div id="username-badge-target"></div>
         <div class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
@@ -507,10 +511,8 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="action-bar">
     <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
     <div class="toggle-container">
-        <div class="toggle-label-group">
-            <span class="material-icons" style="font-size: 1.2rem; color: #ffd700;">flash_on</span>
-            <span style="font-size: 0.9rem;">Instant Open</span>
-        </div>
+        <span class="material-icons" style="font-size: 1.2rem; color: #ffd700;">flash_on</span>
+        <span style="font-size: 0.9rem;">Instant Open</span>
         <label class="switch">
             <input type="checkbox" id="instantOpenToggle">
             <span class="slider"></span>
@@ -555,7 +557,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 </div>
 
 <script type="module">
-    /* ================= FIREBASE INITIALIZATION ================= */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -574,18 +575,12 @@ input:checked + .slider:before { transform: translateX(22px); }
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    /* ================= GAME STATES ================= */
     let tokens = 0;
     let ownedBlooks = {};
     let currentUser = null;
     let currentPackKey = "breakfast";
-    let unboxingState = "closed";
-    let activeRolledItem = null;
-    let accountNextClaimTime = 0;
+    let isUnboxing = false;
 
-    const CONFIG = { fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png" };
-
-    /* ================= PACKS DATA ================= */
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -612,9 +607,18 @@ input:checked + .slider:before { transform: translateX(22px); }
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
+            
+            document.getElementById('username-badge-target').innerHTML = `
+                <div class="user-badge">
+                    <span class="material-icons">account_circle</span>
+                    <span>${user.displayName || "Player"}</span>
+                </div>
+            `;
+            
             await loadUserData();
             renderPacksGrid();
-            startHourlyCooldown();
+            updateHourlyTimer();
+            setInterval(updateHourlyTimer, 1000);
         } else {
             window.location.href = "login.html";
         }
@@ -628,32 +632,10 @@ input:checked + .slider:before { transform: translateX(22px); }
                 const data = docSnap.data();
                 tokens = data.tokens || 0;
                 ownedBlooks = data.ownedBlooks || {};
-                accountNextClaimTime = data.nextClaimTime || 0;
-            } else {
-                tokens = 100;
-                ownedBlooks = {};
-                accountNextClaimTime = 0;
-                await saveUserData();
             }
             document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
         } catch (e) { console.error(e); }
     }
-
-    async function saveUserData() {
-        if (!currentUser) return;
-        try {
-            const userRef = doc(db, "users", currentUser.uid);
-            await setDoc(userRef, { 
-                tokens: tokens, 
-                ownedBlooks: ownedBlooks,
-                nextClaimTime: accountNextClaimTime
-            }, { merge: true });
-        } catch (e) { console.error("Error writing user data:", e); }
-    }
-
-    document.getElementById('logout-hud-btn').onclick = () => {
-        signOut(auth).then(() => { window.location.reload(); });
-    };
 
     function renderPacksGrid() {
         const grid = document.getElementById("grid");
@@ -672,39 +654,25 @@ input:checked + .slider:before { transform: translateX(22px); }
                     <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="pack-cost-icon">
                     <span>${pack.cost}</span>
                 </div>
-                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}" onerror="this.src='${CONFIG.fallbackPlaceholder}'">
+                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}">
                 <div class="pack-name-bar">${pack.name}</div>
             `;
             
             packBtn.onclick = () => {
                 currentPackKey = key;
-                if (document.getElementById("instantOpenToggle").checked) {
-                    executeInstantOpen(currentPackKey);
-                } else {
-                    document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
-                    document.getElementById("modalBg").style.display = "flex";
-                }
+                document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
+                document.getElementById("modalBg").style.display = "flex";
             };
             
             grid.appendChild(packBtn);
         });
     }
 
-    function rollItem(pack) {
-        let rand = Math.random() * 100;
-        let cumulative = 0;
-        for (let i = 0; i < pack.blooks.length; i++) {
-            cumulative += pack.blooks[i].chance;
-            if (rand <= cumulative) return pack.blooks[i];
-        }
-        return pack.blooks[pack.blooks.length - 1];
-    }
-
     /* =========================
-       UNBOXING LOGIC
+       UNBOXING CORE LOGIC
     ========================= */
-    async function openPack(key) {
-        const pack = packs[key];
+    async function openPack() {
+        const pack = packs[currentPackKey];
         if (tokens < pack.cost) {
             alert("Not enough tokens!");
             return;
@@ -713,141 +681,121 @@ input:checked + .slider:before { transform: translateX(22px); }
         tokens -= pack.cost;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
 
-        activeRolledItem = rollItem(pack);
-        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
-        await saveUserData();
+        const rand = Math.random() * 100;
+        let sum = 0;
+        let selectedBlook = pack.blooks[pack.blooks.length - 1];
 
-        setupSingleUnboxingUI(pack, false);
-    }
-
-    async function executeInstantOpen(key) {
-        const pack = packs[key];
-        if (tokens < pack.cost) {
-            alert("Not enough tokens!");
-            return;
+        for (let b of pack.blooks) {
+            sum += b.chance;
+            if (rand <= sum) {
+                selectedBlook = b;
+                break;
+            }
         }
 
-        tokens -= pack.cost;
-        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+        ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
+        } catch (e) { console.error("Error writing to user inventory:", e); }
 
-        activeRolledItem = rollItem(pack);
-        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
-        await saveUserData();
-
-        setupSingleUnboxingUI(pack, true);
-    }
-
-    function setupSingleUnboxingUI(pack, isInstant) {
-        const overlayElement = document.getElementById("unboxingOverlay");
-        const packImg = document.getElementById("unboxingPackImg");
-        const card = document.getElementById("blookCard");
-
-        card.className = "blook-card";
-        document.getElementById("blookName").innerText = activeRolledItem.name;
-        document.getElementById("blookRarity").innerText = activeRolledItem.rarity;
-        document.getElementById("blookRarity").style.color = activeRolledItem.color;
-        document.getElementById("blookImg").src = activeRolledItem.image;
-        document.getElementById("blookImg").onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-        document.getElementById("blookChance").innerText = `${activeRolledItem.chance}% Chance`;
-        card.style.borderColor = activeRolledItem.color;
-
-        overlayElement.style.display = "flex";
-
-        if (isInstant) {
-            packImg.style.display = "none";
-            card.style.display = "flex";
-            unboxingState = "revealed";
+        const instantOpen = document.getElementById("instantOpenToggle").checked;
+        if (instantOpen) {
+            alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
         } else {
-            packImg.style.display = "block";
-            card.style.display = "none";
-            packImg.src = pack.image;
-            packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
-            packImg.className = "unboxing-pack";
-            
-            unboxingState = "ready_to_shake";
-            setTimeout(() => { packImg.classList.add("ready"); }, 50);
+            triggerCinematicSequence(pack.image, selectedBlook);
         }
     }
 
-    document.getElementById("unboxingOverlay").onclick = handleOverlayClick;
-
-    function handleOverlayClick() {
+    function triggerCinematicSequence(packImgSrc, blook) {
+        isUnboxing = true;
+        const overlay = document.getElementById("unboxingOverlay");
         const packImg = document.getElementById("unboxingPackImg");
         const card = document.getElementById("blookCard");
-        
-        if (unboxingState === "ready_to_shake") {
-            unboxingState = "shaking";
-            packImg.classList.add("shake");
-            setTimeout(() => {
-                packImg.classList.replace("shake", "explode");
+
+        packImg.src = packImgSrc;
+        packImg.className = "unboxing-pack";
+        card.style.display = "none";
+        overlay.style.display = "flex";
+
+        setTimeout(() => {
+            packImg.classList.add("ready");
+        }, 50);
+
+        overlay.onclick = () => {
+            if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
+                packImg.classList.add("shake");
                 setTimeout(() => {
-                    packImg.style.display = "none";
-                    card.style.display = "flex";
-                    unboxingState = "revealed";
-                }, 250);
-            }, 1000);
-        } else if (unboxingState === "revealed") {
-            clearAndCloseOverlay();
-        }
-    }
-
-    function clearAndCloseOverlay() {
-        document.getElementById("unboxingOverlay").style.display = "none";
-        document.getElementById("unboxingPackImg").style.display = "block";
-        document.getElementById("blookCard").style.display = "none";
-        unboxingState = "closed";
-    }
-
-    /* =========================
-       HOURLY REWARDS MANAGER (FIRESTORE BOUND)
-    ========================= */
-    function startHourlyCooldown() {
-        const hourlyBtn = document.getElementById("hourlyBtn");
-        if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
-
-        const checkTime = () => {
-            const now = Date.now();
-            if (!accountNextClaimTime || now >= accountNextClaimTime) {
-                if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
-                hourlyBtn.disabled = false;
-                hourlyBtn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
-            } else {
-                hourlyBtn.disabled = true;
-                const difference = accountNextClaimTime - now;
-                const minutes = Math.floor(difference / 60000);
-                const seconds = Math.floor((difference % 60000) / 1000);
-                hourlyBtn.innerHTML = `<span class="material-icons">history</span> Wait ${minutes}m ${seconds}s`;
+                    packImg.classList.replace("shake", "explode");
+                    setTimeout(() => {
+                        packImg.style.display = "none";
+                        showUnboxedCard(blook);
+                    }, 250);
+                }, 1000);
+            } else if (card.style.display === "flex") {
+                overlay.style.display = "none";
+                packImg.style.display = "block";
+                isUnboxing = false;
             }
         };
+    }
 
-        checkTime();
-        window.hourlyIntervalId = setInterval(checkTime, 1000);
+    function showUnboxedCard(blook) {
+        const card = document.getElementById("blookCard");
+        document.getElementById("blookName").innerText = blook.name;
+        document.getElementById("blookRarity").innerText = blook.rarity;
+        document.getElementById("blookRarity").style.color = blook.color;
+        document.getElementById("blookImg").src = blook.image;
+        document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
+        card.style.borderColor = blook.color;
+        card.style.display = "flex";
+    }
+
+    /* =========================
+       HOURLY REWARDS MANAGER
+    ========================= */
+    async function updateHourlyTimer() {
+        if (!currentUser) return;
+        const btn = document.getElementById("hourlyBtn");
+        const claimTime = localStorage.getItem(`hourly_claim_${currentUser.uid}`);
+        const now = Date.now();
+
+        if (claimTime && now < parseInt(claimTime)) {
+            const diff = parseInt(claimTime) - now;
+            const mins = Math.floor(diff / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+            btn.innerHTML = `<span class="material-icons">history</span> ${mins}m ${secs}s`;
+            btn.disabled = true;
+        } else {
+            btn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
+            btn.disabled = false;
+        }
     }
 
     document.getElementById("hourlyBtn").onclick = async () => {
-        const now = Date.now();
-        if (accountNextClaimTime && now < accountNextClaimTime) return;
-
-        const reward = Math.floor(Math.random() * 1500) + 500;
+        const reward = Math.floor(Math.random() * 76) + 25; 
         tokens += reward;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
         
-        accountNextClaimTime = now + (3600 * 1000);
-        await saveUserData();
+        localStorage.setItem(`hourly_claim_${currentUser.uid}`, Date.now() + 3600000);
+        
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { tokens: tokens }, { merge: true });
+        } catch (e) { console.error(e); }
 
         alert(`Claimed ${reward} tokens!`);
-        startHourlyCooldown();
+        updateHourlyTimer();
     };
 
     /* =========================
-       MODAL CONTROLS
+       MODAL CONTROLS & LOGOUT
     ========================= */
     document.getElementById("yesBtn").onclick = () => {
         document.getElementById("modalBg").style.display = "none";
-        openPack(currentPackKey);
+        openPack();
     };
     document.getElementById("noBtn").onclick = () => document.getElementById("modalBg").style.display = "none";
-    
     document.getElementById("infoBtn").onclick = () => {
         const container = document.getElementById("rarityBox");
         container.innerHTML = "";
@@ -861,6 +809,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         document.getElementById("infoBg").style.display = "flex";
     };
     document.getElementById("closeInfoBtn").onclick = () => document.getElementById("infoBg").style.display = "none";
+    document.getElementById('logout-hud-btn').onclick = () => signOut(auth).then(() => { window.location.reload(); });
 </script>
 
 </body>
