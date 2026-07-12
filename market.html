@@ -142,6 +142,18 @@ body{
     margin-left: auto;
 }
 
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+}
+
 /* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
@@ -248,7 +260,7 @@ body{
    ACTION ROWS & CONTROLS
 ========================= */
 .action-bar {
-    max-width: 1200px; /* Stretched to match widescreen page layout */
+    max-width: 900px;
     width: 100%;
     margin: 30px auto 0;
     padding: 0 20px;
@@ -302,7 +314,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 ========================= */
 .market-container {
     flex: 1;
-    max-width: 1200px; /* Stretched grid layout container constraints */
+    max-width: 900px;
     width: 100%;
     margin: 20px auto 40px;
     padding: 0 20px;
@@ -318,7 +330,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 25px;
 }
 
@@ -329,7 +341,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     border: 3px solid rgba(255, 255, 255, 0.25);
     border-radius: 24px;
     position: relative;
-    padding: 45px 0 0 0;
+    padding: 45px 0 0 0; /* Clear space for top absolute cost tag asset */
     margin: 0;
     width: 100%;
     height: 290px;
@@ -337,7 +349,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Secure layout stacking direction */
     overflow: hidden;
     box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
@@ -354,6 +366,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Pack image scaled nicely down, fully contained, sitting naturally over name text */
 .pack-card-img {
     width: auto;
     height: 140px;
@@ -393,6 +406,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     object-fit: contain;
 }
 
+/* Custom non-absolute flow base template layout bar */
 .pack-name-bar {
     width: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 100%);
@@ -471,6 +485,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     </div>
     
     <div class="nav-profile-section">
+        <div id="username-badge-target"></div>
         <div class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
@@ -494,6 +509,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 </nav>
 
 <div class="action-bar">
+    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
     <div class="toggle-container">
         <span class="material-icons" style="font-size: 1.2rem; color: #ffd700;">flash_on</span>
         <span style="font-size: 0.9rem;">Instant Open</span>
@@ -502,7 +518,6 @@ input:checked + .slider:before { transform: translateX(22px); }
             <span class="slider"></span>
         </label>
     </div>
-    <button class="btn primary" id="hourlyBtn" disabled><span class="material-icons">history</span> Loading...</button>
 </div>
 
 <main class="market-container">
@@ -542,6 +557,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 </div>
 
 <script type="module">
+    /* ================= FIREBASE INITIALIZATION ================= */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -560,12 +576,18 @@ input:checked + .slider:before { transform: translateX(22px); }
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    /* ================= GAME STATES ================= */
     let tokens = 0;
     let ownedBlooks = {};
     let currentUser = null;
     let currentPackKey = "breakfast";
-    let isUnboxing = false;
+    let unboxingState = "closed";
+    let activeRolledItem = null;
+    let accountNextClaimTime = 0;
 
+    const CONFIG = { fallbackPlaceholder: "https://i.postimg.cc/p9VdWF3K/Placeholder.png" };
+
+    /* ================= PACKS DATA ================= */
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -592,10 +614,17 @@ input:checked + .slider:before { transform: translateX(22px); }
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             currentUser = user;
+            
+            document.getElementById('username-badge-target').innerHTML = `
+                <div class="user-badge">
+                    <span class="material-icons">account_circle</span>
+                    <span>${user.displayName || "Player"}</span>
+                </div>
+            `;
+            
             await loadUserData();
             renderPacksGrid();
-            updateHourlyTimer();
-            setInterval(updateHourlyTimer, 1000);
+            startHourlyCooldown();
         } else {
             window.location.href = "login.html";
         }
@@ -609,12 +638,33 @@ input:checked + .slider:before { transform: translateX(22px); }
                 const data = docSnap.data();
                 tokens = data.tokens || 0;
                 ownedBlooks = data.ownedBlooks || {};
+                accountNextClaimTime = data.nextClaimTime || 0;
+            } else {
+                tokens = 100;
+                ownedBlooks = {};
+                accountNextClaimTime = 0;
+                await saveUserData();
             }
             document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
         } catch (e) { console.error(e); }
     }
 
-    // Dynamic grid renders elements correctly dynamically inside widescreen container layouts
+    async function saveUserData() {
+        if (!currentUser) return;
+        try {
+            const userRef = doc(db, "users", currentUser.uid);
+            await setDoc(userRef, { 
+                tokens: tokens, 
+                ownedBlooks: ownedBlooks,
+                nextClaimTime: accountNextClaimTime
+            }, { merge: true });
+        } catch (e) { console.error("Error writing to user inventory:", e); }
+    }
+
+    document.getElementById('logout-hud-btn').onclick = () => {
+        signOut(auth).then(() => { window.location.reload(); });
+    };
+
     function renderPacksGrid() {
         const grid = document.getElementById("grid");
         if (!grid) return;
@@ -632,25 +682,39 @@ input:checked + .slider:before { transform: translateX(22px); }
                     <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="pack-cost-icon">
                     <span>${pack.cost}</span>
                 </div>
-                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}">
+                <img class="pack-card-img" src="${pack.image}" alt="${pack.name}" onerror="this.src='${CONFIG.fallbackPlaceholder}'">
                 <div class="pack-name-bar">${pack.name}</div>
             `;
             
             packBtn.onclick = () => {
                 currentPackKey = key;
-                document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
-                document.getElementById("modalBg").style.display = "flex";
+                if (document.getElementById("instantOpenToggle").checked) {
+                    executeInstantOpen(currentPackKey);
+                } else {
+                    document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
+                    document.getElementById("modalBg").style.display = "flex";
+                }
             };
             
             grid.appendChild(packBtn);
         });
     }
 
+    function rollItem(pack) {
+        let rand = Math.random() * 100;
+        let cumulative = 0;
+        for (let i = 0; i < pack.blooks.length; i++) {
+            cumulative += pack.blooks[i].chance;
+            if (rand <= cumulative) return pack.blooks[i];
+        }
+        return pack.blooks[pack.blooks.length - 1];
+    }
+
     /* =========================
-       UNBOXING CORE LOGIC
+       UNBOXING LOGIC
     ========================= */
-    async function openPack() {
-        const pack = packs[currentPackKey];
+    async function openPack(key) {
+        const pack = packs[key];
         if (tokens < pack.cost) {
             alert("Not enough tokens!");
             return;
@@ -659,121 +723,141 @@ input:checked + .slider:before { transform: translateX(22px); }
         tokens -= pack.cost;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
 
-        const rand = Math.random() * 100;
-        let sum = 0;
-        let selectedBlook = pack.blooks[pack.blooks.length - 1];
+        activeRolledItem = rollItem(pack);
+        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
+        await saveUserData();
 
-        for (let b of pack.blooks) {
-            sum += b.chance;
-            if (rand <= sum) {
-                selectedBlook = b;
-                break;
-            }
-        }
-
-        ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
-        try {
-            const userRef = doc(db, "users", currentUser.uid);
-            await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
-        } catch (e) { console.error("Error writing to user inventory:", e); }
-
-        const instantOpen = document.getElementById("instantOpenToggle").checked;
-        if (instantOpen) {
-            alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
-        } else {
-            triggerCinematicSequence(pack.image, selectedBlook);
-        }
+        setupSingleUnboxingUI(pack, false);
     }
 
-    function triggerCinematicSequence(packImgSrc, blook) {
-        isUnboxing = true;
-        const overlay = document.getElementById("unboxingOverlay");
+    async function executeInstantOpen(key) {
+        const pack = packs[key];
+        if (tokens < pack.cost) {
+            alert("Not enough tokens!");
+            return;
+        }
+
+        tokens -= pack.cost;
+        document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
+
+        activeRolledItem = rollItem(pack);
+        ownedBlooks[activeRolledItem.name] = (ownedBlooks[activeRolledItem.name] || 0) + 1;
+        await saveUserData();
+
+        setupSingleUnboxingUI(pack, true);
+    }
+
+    function setupSingleUnboxingUI(pack, isInstant) {
+        const overlayElement = document.getElementById("unboxingOverlay");
         const packImg = document.getElementById("unboxingPackImg");
         const card = document.getElementById("blookCard");
 
-        packImg.src = packImgSrc;
-        packImg.className = "unboxing-pack";
-        card.style.display = "none";
-        overlay.style.display = "flex";
+        card.className = "blook-card";
+        document.getElementById("blookName").innerText = activeRolledItem.name;
+        document.getElementById("blookRarity").innerText = activeRolledItem.rarity;
+        document.getElementById("blookRarity").style.color = activeRolledItem.color;
+        document.getElementById("blookImg").src = activeRolledItem.image;
+        document.getElementById("blookImg").onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+        document.getElementById("blookChance").innerText = `${activeRolledItem.chance}% Chance`;
+        card.style.borderColor = activeRolledItem.color;
 
-        setTimeout(() => {
-            packImg.classList.add("ready");
-        }, 50);
+        overlayElement.style.display = "flex";
 
-        overlay.onclick = () => {
-            if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
-                packImg.classList.add("shake");
-                setTimeout(() => {
-                    packImg.classList.replace("shake", "explode");
-                    setTimeout(() => {
-                        packImg.style.display = "none";
-                        showUnboxedCard(blook);
-                    }, 250);
-                }, 1000);
-            } else if (card.style.display === "flex") {
-                overlay.style.display = "none";
-                packImg.style.display = "block";
-                isUnboxing = false;
-            }
-        };
-    }
-
-    function showUnboxedCard(blook) {
-        const card = document.getElementById("blookCard");
-        document.getElementById("blookName").innerText = blook.name;
-        document.getElementById("blookRarity").innerText = blook.rarity;
-        document.getElementById("blookRarity").style.color = blook.color;
-        document.getElementById("blookImg").src = blook.image;
-        document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
-        card.style.borderColor = blook.color;
-        card.style.display = "flex";
-    }
-
-    /* =========================
-       HOURLY REWARDS MANAGER
-    ========================= */
-    async function updateHourlyTimer() {
-        if (!currentUser) return;
-        const btn = document.getElementById("hourlyBtn");
-        const claimTime = localStorage.getItem(`hourly_claim_${currentUser.uid}`);
-        const now = Date.now();
-
-        if (claimTime && now < parseInt(claimTime)) {
-            const diff = parseInt(claimTime) - now;
-            const mins = Math.floor(diff / 60000);
-            const secs = Math.floor((diff % 60000) / 1000);
-            btn.innerHTML = `<span class="material-icons">history</span> ${mins}m ${secs}s`;
-            btn.disabled = true;
+        if (isInstant) {
+            packImg.style.display = "none";
+            card.style.display = "flex";
+            unboxingState = "revealed";
         } else {
-            btn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
-            btn.disabled = false;
+            packImg.style.display = "block";
+            card.style.display = "none";
+            packImg.src = pack.image;
+            packImg.onerror = function() { this.src = CONFIG.fallbackPlaceholder; };
+            packImg.className = "unboxing-pack";
+            
+            unboxingState = "ready_to_shake";
+            setTimeout(() => { packImg.classList.add("ready"); }, 50);
         }
     }
 
+    document.getElementById("unboxingOverlay").onclick = handleOverlayClick;
+
+    function handleOverlayClick() {
+        const packImg = document.getElementById("unboxingPackImg");
+        const card = document.getElementById("blookCard");
+        
+        if (unboxingState === "ready_to_shake") {
+            unboxingState = "shaking";
+            packImg.classList.add("shake");
+            setTimeout(() => {
+                packImg.classList.replace("shake", "explode");
+                setTimeout(() => {
+                    packImg.style.display = "none";
+                    card.style.display = "flex";
+                    unboxingState = "revealed";
+                }, 250);
+            }, 1000);
+        } else if (unboxingState === "revealed") {
+            clearAndCloseOverlay();
+        }
+    }
+
+    function clearAndCloseOverlay() {
+        document.getElementById("unboxingOverlay").style.display = "none";
+        document.getElementById("unboxingPackImg").style.display = "block";
+        document.getElementById("blookCard").style.display = "none";
+        unboxingState = "closed";
+    }
+
+    /* =========================
+       HOURLY REWARDS MANAGER (FIRESTORE BOUND)
+    ========================= */
+    function startHourlyCooldown() {
+        const hourlyBtn = document.getElementById("hourlyBtn");
+        if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
+
+        const checkTime = () => {
+            const now = Date.now();
+            if (!accountNextClaimTime || now >= accountNextClaimTime) {
+                if (window.hourlyIntervalId) clearInterval(window.hourlyIntervalId);
+                hourlyBtn.disabled = false;
+                hourlyBtn.innerHTML = `<span class="material-icons">star</span> Claim Hourly Tokens`;
+            } else {
+                hourlyBtn.disabled = true;
+                const difference = accountNextClaimTime - now;
+                const minutes = Math.floor(difference / 60000);
+                const seconds = Math.floor((difference % 60000) / 1000);
+                hourlyBtn.innerHTML = `<span class="material-icons">history</span> Wait ${minutes}m ${seconds}s`;
+            }
+        };
+
+        checkTime();
+        window.hourlyIntervalId = setInterval(checkTime, 1000);
+    }
+
     document.getElementById("hourlyBtn").onclick = async () => {
-        const reward = Math.floor(Math.random() * 76) + 25; 
+        const now = Date.now();
+        if (accountNextClaimTime && now < accountNextClaimTime) return;
+
+        const reward = Math.floor(Math.random() * 1500) + 500; // Random 500-2000 tokens
         tokens += reward;
         document.getElementById("token-counter-value").innerText = tokens.toLocaleString();
         
-        localStorage.setItem(`hourly_claim_${currentUser.uid}`, Date.now() + 3600000);
-        
-        try {
-            const userRef = doc(db, "users", currentUser.uid);
-            await setDoc(userRef, { tokens: tokens }, { merge: true });
-        } catch (e) { console.error(e); }
+        accountNextClaimTime = now + (3600 * 1000); // 1 Hour from now
+        await saveUserData();
 
         alert(`Claimed ${reward} tokens!`);
-        updateHourlyTimer();
+        startHourlyCooldown();
     };
 
     /* =========================
-       MODAL CONTROLS & LOGOUT
+       MODAL CONTROLS
     ========================= */
     document.getElementById("yesBtn").onclick = () => {
         document.getElementById("modalBg").style.display = "none";
-        openPack();
+        openPack(currentPackKey);
     };
     document.getElementById("noBtn").onclick = () => document.getElementById("modalBg").style.display = "none";
+    
     document.getElementById("infoBtn").onclick = () => {
         const container = document.getElementById("rarityBox");
         container.innerHTML = "";
@@ -787,7 +871,6 @@ input:checked + .slider:before { transform: translateX(22px); }
         document.getElementById("infoBg").style.display = "flex";
     };
     document.getElementById("closeInfoBtn").onclick = () => document.getElementById("infoBg").style.display = "none";
-    document.getElementById('logout-hud-btn').onclick = () => signOut(auth).then(() => { window.location.reload(); });
 </script>
 
 </body>
