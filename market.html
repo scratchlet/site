@@ -13,7 +13,7 @@
 
 <style>
 /* =========================
-   GLOBAL & HIDE MAIN SCROLLBAR
+   GLOBAL & HIDE SCROLLBAR
 ========================= */
 *{
     margin:0;
@@ -25,8 +25,7 @@ html, body {
     scrollbar-width: none; 
 }
 
-/* Hide scrollbar for the entire body window */
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
     display: none;
 }
 
@@ -143,6 +142,18 @@ body{
     margin-left: auto;
 }
 
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+}
+
 /* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
@@ -249,7 +260,7 @@ body{
    ACTION ROWS & CONTROLS
 ========================= */
 .action-bar {
-    max-width: 1400px; /* Stretched position */
+    max-width: 900px;
     width: 100%;
     margin: 30px auto 0;
     padding: 0 20px;
@@ -303,7 +314,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 ========================= */
 .market-container {
     flex: 1;
-    max-width: 1400px; /* Stretched position */
+    max-width: 900px;
     width: 100%;
     margin: 20px auto 40px;
     padding: 0 20px;
@@ -418,49 +429,61 @@ input:checked + .slider:before { transform: translateX(22px); }
 .modalBtns .btn { flex: 1; justify-content: center; }
 .modal .secondary { background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
-/* VISIBLE CUSTOM SCROLLBAR FOR DROP RATES INFO BOX */
-#rarityBox { 
-    max-height: 240px; 
-    overflow-y: auto; 
-    padding-right: 10px; 
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.2); /* Firefox */
-}
-
-/* Chrome, Safari, Edge support for visible info bar scroll */
-#rarityBox::-webkit-scrollbar {
-    display: block;
-    width: 6px;
-}
-#rarityBox::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-}
-#rarityBox::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.35);
-    border-radius: 10px;
-    border: 1px solid transparent;
-}
-#rarityBox::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.55);
-}
-
+#rarityBox { max-height: 240px; overflow-y: auto; padding-right: 5px; }
 #unboxingOverlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.95); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
-.unboxing-pack { width: 220px; height: 220px; object-fit: contain; transform: scale(0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.unboxing-pack.ready { transform: scale(1); opacity: 1; animation: floatAnim 2.5s ease-in-out infinite; }
-.unboxing-pack.shake { animation: intenseShake 0.4s ease-in-out infinite; }
-.unboxing-pack.explode { animation: explodePack 0.3s ease-out forwards; }
 
-.blook-card { width: 300px; height: 300px; background: linear-gradient(145deg, #2c2f33, #23272a); border: 4px solid #fff; border-radius: 24px; padding: 20px; display: none; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 0 40px rgba(255,255,255,0.2); }
+/* Cinematic Pack Updates */
+.unboxing-pack { width: 220px; height: 220px; object-fit: contain; opacity: 1; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease; }
+.unboxing-pack.ready { transform: scale(1); }
+.unboxing-pack.spin-shrink { transform: scale(0) rotate(720deg); opacity: 0; }
+
+.blook-card { width: 300px; height: 300px; background: linear-gradient(145deg, #2c2f33, #23272a); border: 4px solid #fff; border-radius: 24px; padding: 20px; display: none; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 0 40px rgba(255,255,255,0.2); position: relative; }
 .blook-name { font-family: 'Titan One', sans-serif; font-size: 2rem; text-shadow: 0 3px 6px rgba(0,0,0,0.5); }
 .blook-rarity { font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; }
 .blook-image-box { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
 .blook-image-box img { width: 85%; height: 85%; object-fit: contain; }
 .blook-chance { font-weight: 800; font-size: 0.9rem; color: #b9bbbe; background: rgba(0,0,0,0.2); padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
 
-@keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes intenseShake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg) translate(-2px, 1px); } 75% { transform: rotate(3deg) translate(2px, -1px); } }
-@keyframes explodePack { 0% { transform: scale(1); filter: brightness(1); opacity: 1; } 100% { transform: scale(1.6); filter: brightness(8); opacity: 0; } }
+/* NEW! Tag Indicator Styling */
+.new-tag {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff3e3e;
+    color: white;
+    font-family: 'Titan One', sans-serif;
+    font-size: 0.85rem;
+    padding: 4px 14px;
+    border-radius: 99px;
+    box-shadow: 0 4px 12px rgba(255, 62, 62, 0.4);
+    border: 2px solid white;
+    display: none;
+    z-index: 10;
+    letter-spacing: 1px;
+    animation: bounceTag 1s infinite alternate cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceTag {
+    from { transform: translateX(-50%) translateY(0); }
+    to { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* Back Confetti Particles */
+.confetti-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: scatterConfetti 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes scatterConfetti {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(0.4); opacity: 0; }
+}
 
 /* =========================
    RESPONSIVE DESIGN MAPS
@@ -498,6 +521,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     </div>
     
     <div class="nav-profile-section">
+        <div id="username-badge-target"></div>
         <div class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
@@ -559,6 +583,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div id="unboxingOverlay">
     <img id="unboxingPackImg" class="unboxing-pack" src="" alt="Pack">
     <div id="blookCard" class="blook-card">
+        <div id="newTag" class="new-tag">NEW!</div>
         <div id="blookName" class="blook-name">Blook Name</div>
         <div id="blookRarity" class="blook-rarity">Rarity</div>
         <div class="blook-image-box">
@@ -571,6 +596,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -620,6 +646,13 @@ input:checked + .slider:before { transform: translateX(22px); }
         if (user) {
             currentUser = user;
             
+            document.getElementById('username-badge-target').innerHTML = `
+                <div class="user-badge">
+                    <span class="material-icons">account_circle</span>
+                    <span>${user.displayName || "Player"}</span>
+                </div>
+            `;
+            
             await loadUserData();
             renderPacksGrid();
             updateHourlyTimer();
@@ -665,8 +698,13 @@ input:checked + .slider:before { transform: translateX(22px); }
             
             packBtn.onclick = () => {
                 currentPackKey = key;
-                document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
-                document.getElementById("modalBg").style.display = "flex";
+                const instantOpen = document.getElementById("instantOpenToggle").checked;
+                if (instantOpen) {
+                    openPack();
+                } else {
+                    document.getElementById("modalText").innerText = `Open ${pack.name} for ${pack.cost} tokens?`;
+                    document.getElementById("modalBg").style.display = "flex";
+                }
             };
             
             grid.appendChild(packBtn);
@@ -698,61 +736,88 @@ input:checked + .slider:before { transform: translateX(22px); }
             }
         }
 
+        const isNew = !ownedBlooks[selectedBlook.name] || ownedBlooks[selectedBlook.name] === 0;
         ownedBlooks[selectedBlook.name] = (ownedBlooks[selectedBlook.name] || 0) + 1;
+        
         try {
             const userRef = doc(db, "users", currentUser.uid);
             await setDoc(userRef, { tokens: tokens, ownedBlooks: ownedBlooks }, { merge: true });
         } catch (e) { console.error("Error writing to user inventory:", e); }
 
-        const instantOpen = document.getElementById("instantOpenToggle").checked;
-        if (instantOpen) {
-            alert(`You got: ${selectedBlook.name} (${selectedBlook.rarity})!`);
-        } else {
-            triggerCinematicSequence(pack.image, selectedBlook);
+        triggerCinematicSequence(pack.image, selectedBlook, isNew);
+    }
+
+    function triggerConfetti(color) {
+        const overlay = document.getElementById("unboxingOverlay");
+        const particleCount = 50;
+        for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement("div");
+            p.className = "confetti-particle";
+            p.style.backgroundColor = color;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 80 + Math.random() * 220;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            p.style.setProperty("--x", `${x}px`);
+            p.style.setProperty("--y", `${y}px`);
+            p.style.left = `calc(50% + ${(Math.random() - 0.5) * 15}px)`;
+            p.style.top = `calc(50% + ${(Math.random() - 0.5) * 15}px)`;
+            
+            overlay.appendChild(p);
+            setTimeout(() => p.remove(), 1200);
         }
     }
 
-    function triggerCinematicSequence(packImgSrc, blook) {
+    function triggerCinematicSequence(packImgSrc, blook, isNew) {
         isUnboxing = true;
         const overlay = document.getElementById("unboxingOverlay");
         const packImg = document.getElementById("unboxingPackImg");
         const card = document.getElementById("blookCard");
 
         packImg.src = packImgSrc;
-        packImg.className = "unboxing-pack";
+        packImg.className = "unboxing-pack ready";
+        packImg.style.display = "block";
         card.style.display = "none";
         overlay.style.display = "flex";
 
-        setTimeout(() => {
-            packImg.classList.add("ready");
-        }, 50);
+        let animStarted = false;
 
         overlay.onclick = () => {
-            if (packImg.classList.contains("ready") && !packImg.classList.contains("shake")) {
-                packImg.classList.add("shake");
+            if (!animStarted && packImg.style.display !== "none") {
+                animStarted = true;
+                packImg.classList.add("spin-shrink");
+                
                 setTimeout(() => {
-                    packImg.classList.replace("shake", "explode");
-                    setTimeout(() => {
-                        packImg.style.display = "none";
-                        showUnboxedCard(blook);
-                    }, 250);
-                }, 1000);
+                    packImg.style.display = "none";
+                    triggerConfetti(blook.color);
+                    showUnboxedCard(blook, isNew);
+                }, 600);
             } else if (card.style.display === "flex") {
                 overlay.style.display = "none";
-                packImg.style.display = "block";
                 isUnboxing = false;
             }
         };
     }
 
-    function showUnboxedCard(blook) {
+    function showUnboxedCard(blook, isNew) {
         const card = document.getElementById("blookCard");
+        const newTag = document.getElementById("newTag");
+        
         document.getElementById("blookName").innerText = blook.name;
         document.getElementById("blookRarity").innerText = blook.rarity;
         document.getElementById("blookRarity").style.color = blook.color;
         document.getElementById("blookImg").src = blook.image;
         document.getElementById("blookChance").innerText = `${blook.chance}% Chance`;
         card.style.borderColor = blook.color;
+        
+        if (isNew) {
+            newTag.style.display = "block";
+        } else {
+            newTag.style.display = "none";
+        }
+        
         card.style.display = "flex";
     }
 
