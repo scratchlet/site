@@ -201,6 +201,36 @@ body{
     color: #ff5252;
 }
 
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:12px 24px;
+    border-radius:14px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+}
+
+.secondary {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.danger {
+    background: linear-gradient(135deg, #ff5252, #c62828);
+    color: white;
+}
+
 /* =================================
    INVENTORY CONTAINER & UNIFIED MASTER CARD
 ================================= */
@@ -243,6 +273,7 @@ body{
     color: #fff4d6;
 }
 
+/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
 .master-inventory-card {
     background: rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.12);
@@ -257,7 +288,9 @@ body{
     gap: 18px;
 }
 
-/* BLOOK IMAGE BUTTONS */
+/* =================================
+   IMAGE BUTTON STATE LAYOUT RULES
+================================= */
 .blook-image-btn {
     background: rgba(0, 0, 0, 0.45);
     border: 3px solid transparent;
@@ -274,6 +307,7 @@ body{
     user-select: none;
 }
 
+/* OWNED ITEMS STYLES */
 .blook-image-btn.owned {
     cursor: pointer;
 }
@@ -284,6 +318,7 @@ body{
     object-fit: contain;
 }
 
+/* NOT OWNED STATE - DARK & GRAYSCALE WITH NO CURSOR INTERACTION */
 .blook-image-btn.locked {
     border-color: #222222 !important;
     background: rgba(0, 0, 0, 0.7);
@@ -298,6 +333,7 @@ body{
     filter: grayscale(100%) brightness(50%);
 }
 
+/* LOCK BADGE STYLING OVERLAYED CENTRALLY */
 .lock-overlay-icon {
     position: absolute;
     font-size: 2rem;
@@ -306,6 +342,7 @@ body{
     z-index: 5;
 }
 
+/* DUPLICATE QUANTITY BADGE */
 .quantity-badge {
     position: absolute;
     bottom: -6px;
@@ -322,14 +359,12 @@ body{
 }
 
 /* ====================================
-   HORIZONTAL EVENED-OUT BLOCK CARD MODAL
+   HORIZONTAL ORIGINAL-STYLED MODAL CARD
 ==================================== */
 .modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
     z-index: 1500;
     display: none;
     align-items: center;
@@ -337,186 +372,106 @@ body{
     padding: 20px;
 }
 
-.card-view-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 580px; /* Expands wider for side-by-side design */
-    background: #111111;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+.modal-content {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 6px; /* Replaced 28px with fixed neat corners */
+    padding: 30px;
+    width: 95%;
+    max-width: 560px; /* Made wider for side-by-side design */
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
     display: flex;
-    flex-direction: row; /* Aligns left and right blocks side-by-side */
-    overflow: hidden;
-    border-radius: 6px; /* Uniform flat box styling */
-}
-
-/* Left Dynamic Rarity Frame Side */
-.card-art-section {
-    position: relative;
-    width: 45%; 
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 28px;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-right: 4px solid rgba(0, 0, 0, 0.4);
 }
 
-.card-close-btn {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(0, 0, 0, 0.45);
-    border: none;
-    color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px; 
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-}
-.card-close-btn:hover {
-    background: rgba(0, 0, 0, 0.65);
-}
-
-.card-blook-title {
-    font-family: 'Titan One', cursive;
-    font-size: 1.8rem;
-    color: white;
-    text-transform: uppercase;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.85);
-    margin-bottom: 15px;
-    letter-spacing: 0.5px;
-    text-align: center;
-    z-index: 10;
-}
-
-.card-image-holder {
-    width: 110px;
-    height: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.card-main-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.4));
-}
-
-/* Right Actions & Settings Side */
-.card-control-section {
-    width: 55%;
-    background: #151515;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 16px;
-}
-
-.card-count-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #999999;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0 2px;
-}
-
-.card-count-value {
-    color: white;
-    font-weight: 900;
-    font-size: 1.1rem;
-}
-
-/* Flattened Stepper Block */
-.card-input-stepper {
-    display: flex;
-    align-items: center;
-    background: #1e1e1e;
-    padding: 2px;
-    border: 2px solid #2d2d2d;
-    border-radius: 6px;
-}
-
-.stepper-btn {
-    background: transparent;
-    border: none;
-    color: #ff9b2f;
-    font-family: 'Titan One', cursive;
-    font-size: 1.05rem;
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    user-select: none;
-    border-radius: 4px;
-}
-.stepper-btn:hover {
-    color: #ffb666;
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.card-sell-field {
+.modal-left-pane {
     flex: 1;
-    background: transparent;
-    border: none;
-    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-right: 2px solid rgba(255, 155, 47, 0.18);
+    padding-right: 20px;
+}
+
+.modal-right-pane {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-blook-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin: 10px auto;
+    display: block;
+}
+
+.sell-calc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+}
+
+.sell-input {
+    width: 80px;
+    padding: 8px;
     font-family: 'Nunito', sans-serif;
     font-size: 1.3rem;
     font-weight: 900;
     text-align: center;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid #ff9b2f;
+    border-radius: 12px;
+    color: #ffd700;
     outline: none;
-    width: 100%;
-}
-.card-sell-field::-webkit-outer-spin-button,
-.card-sell-field::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
-.card-action-submit-btn {
-    background: #ff9b2f;
-    color: white;
-    font-family: 'Titan One', cursive;
-    font-size: 1.1rem;
-    padding: 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    text-transform: uppercase;
-    display: flex;
+.total-payout-box {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
-}
-.card-action-submit-btn:hover {
-    background: #ffb666;
-}
-.card-action-submit-btn:disabled {
-    background: #2a2a2a !important;
-    color: #555555;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-.card-payout-counter {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    gap: 6px;
+    font-size: 1.3rem;
     font-weight: 900;
     color: #ffd700;
+    background: rgba(0,0,0,0.35);
+    padding: 6px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255,215,0,0.2);
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+.modal-btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff4d6;
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+    .modal-content { flex-direction: column; }
+    .modal-left-pane { border-right: none; padding-right: 0; padding-bottom: 15px; border-bottom: 2px solid rgba(255, 155, 47, 0.18); }
+    .total-payout-box { align-self: center; }
+}
+
+@media(max-width: 768px) {
+    .navbar { padding: 12px 20px; flex-direction: column; }
+    .inventory-container { padding: 0 15px; }
+    .master-inventory-card { padding: 20px; }
 }
 </style>
 </head>
@@ -569,39 +524,35 @@ body{
 </main>
 
 <div class="modal-overlay" id="sell-modal">
-    <div class="card-view-wrapper">
+    <div class="modal-content" id="sell-modal-card">
         
-        <div class="card-art-section" id="card-dynamic-bg">
-            <button class="card-close-btn" id="close-sell-modal-btn">
-                <span class="material-icons" style="font-size: 1.1rem;">close</span>
-            </button>
-            <h2 class="card-blook-title" id="modal-blook-name">BLOOK NAME</h2>
-            <div class="card-image-holder">
-                <img id="modal-blook-image" src="" alt="Blook Preview" class="card-main-img">
-            </div>
+        <div class="modal-left-pane">
+            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase;">BLOOK NAME</h2>
+            <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px; font-weight: 900; text-transform: uppercase;">RARITY</div>
+            <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
         </div>
         
-        <div class="card-control-section">
-            <div class="card-count-row">
-                <span>Owned</span>
-                <span class="card-count-value" id="modal-owned-count">0</span>
-            </div>
+        <div class="modal-right-pane">
+            <div style="font-weight: 800; color: #fff4d6;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
             
-            <div class="card-input-stepper">
-                <button class="stepper-btn" id="sell-min-btn">MIN</button>
-                <input type="number" id="sell-quantity-input" class="card-sell-field" min="1" value="1">
-                <button class="stepper-btn" id="sell-max-btn">MAX</button>
+            <div class="sell-calc-row">
+                <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
+                <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
+                <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
             </div>
-            
-            <button class="card-action-submit-btn" id="confirm-sell-btn">
-                <span>Sell for</span>
-                <div class="card-payout-counter">
-                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
-                    <span id="total-sell-value">0</span>
-                </div>
-            </button>
-        </div>
 
+            <div style="font-size: 0.9rem; margin-bottom: 2px; font-weight: 700; color: #ffe3b3;">Total Payout:</div>
+            <div class="total-payout-box">
+                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
+                <span id="total-sell-value">0</span>
+            </div>
+            
+            <div class="modal-btn-group">
+                <button class="btn secondary" id="close-sell-modal-btn" style="padding:10px 20px;">Cancel</button>
+                <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px;">Sell Blook(s)</button>
+            </div>
+        </div>
+        
     </div>
 </div>
 
@@ -638,16 +589,6 @@ const sellValueMap = {
     "Chroma": 300,
     "Celestial": 500,
     "Mystical": 1000
-};
-
-const gradientRarityMap = {
-    "Uncommon": "linear-gradient(to bottom, #47d647 0%, #1e6b1e 100%)",
-    "Rare": "linear-gradient(to bottom, #4f6cf7 0%, #1d2b7d 100%)",
-    "Epic": "linear-gradient(to bottom, #e03434 0%, #6b1414 100%)",
-    "Legendary": "linear-gradient(to bottom, #fcd33f 0%, #947103 100%)",
-    "Chroma": "linear-gradient(to bottom, #2de6e6 0%, #0c6969 100%)",
-    "Celestial": "linear-gradient(to bottom, #a44ef5 0%, #46147a 100%)",
-    "Mystical": "linear-gradient(to bottom, #f54ebd 0%, #80125a 100%)"
 };
 
 const packsRegistry = {
@@ -723,7 +664,7 @@ const uniqueBlooksStat = document.getElementById('unique-blooks-stat');
 
 const sellModal = document.getElementById('sell-modal');
 const modalBlookName = document.getElementById('modal-blook-name');
-const cardDynamicBg = document.getElementById('card-dynamic-bg');
+const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
 const modalOwnedCount = document.getElementById('modal-owned-count');
 const sellQuantityInput = document.getElementById('sell-quantity-input');
@@ -734,7 +675,7 @@ const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
 
 let userTokens = 0;
-let userInventoryArray = []; 
+let userInventoryMap = {};
 let currentUserRef = null;
 let selectedBlookToSell = null;
 
@@ -746,21 +687,12 @@ function findBlookDetails(blookName) {
     return null;
 }
 
-function getInventoryCounts() {
-    const counts = {};
-    userInventoryArray.forEach(name => {
-        counts[name] = (counts[name] || 0) + 1;
-    });
-    return counts;
-}
-
 function renderInventoryLayout() {
     let totalValidOwnedBlooks = 0;
     let uniqueCollectedCount = 0;
-    const inventoryMap = getInventoryCounts();
 
-    Object.keys(inventoryMap).forEach(name => {
-        const count = inventoryMap[name] || 0;
+    Object.keys(userInventoryMap).forEach(name => {
+        const count = userInventoryMap[name] || 0;
         if (count > 0) {
             const detailedData = findBlookDetails(name);
             if (detailedData) {
@@ -774,6 +706,7 @@ function renderInventoryLayout() {
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
     inventoryMountNode.innerHTML = "";
+
     inventoryMountNode.style.display = "flex";
     inventoryMountNode.style.flexDirection = "column";
     inventoryMountNode.style.gap = "30px";
@@ -796,7 +729,7 @@ function renderInventoryLayout() {
 
         let gridHtml = "";
         pack.blooks.forEach(blook => {
-            const count = inventoryMap[blook.name] || 0;
+            const count = userInventoryMap[blook.name] || 0;
             const isOwned = count > 0;
 
             if (isOwned) {
@@ -835,8 +768,7 @@ function renderInventoryLayout() {
     document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
         btn.addEventListener('click', () => {
             const bName = btn.getAttribute('data-blookname');
-            const currentCounts = getInventoryCounts();
-            const bCount = currentCounts[bName] || 0;
+            const bCount = userInventoryMap[bName] || 0;
             const bDetails = findBlookDetails(bName);
             openSellWindow(bDetails, bCount);
         });
@@ -850,11 +782,11 @@ function openSellWindow(blook, totalOwned) {
     selectedBlookToSell = { ...blook, ownedCount: totalOwned };
     
     modalBlookName.textContent = blook.name;
+    modalBlookName.style.color = blook.color;
+    modalBlookRarityText.textContent = blook.rarity;
+    modalBlookRarityText.style.color = blook.color;
     modalBlookImage.src = blook.image;
     modalOwnedCount.textContent = totalOwned;
-    
-    const cardBgGradient = gradientRarityMap[blook.rarity] || "linear-gradient(to bottom, #4f6cf7, #1d2b7d)";
-    cardDynamicBg.style.background = cardBgGradient;
     
     sellQuantityInput.value = 1;
     sellQuantityInput.max = totalOwned;
@@ -908,21 +840,19 @@ confirmSellBtn.addEventListener('click', async () => {
     try {
         confirmSellBtn.disabled = true;
 
-        let itemsRemoved = 0;
-        userInventoryArray = userInventoryArray.filter(blookName => {
-            if (blookName === selectedBlookToSell.name && itemsRemoved < qtyToSell) {
-                itemsRemoved++;
-                return false; 
+        if (userInventoryMap[selectedBlookToSell.name]) {
+            userInventoryMap[selectedBlookToSell.name] -= qtyToSell;
+            if (userInventoryMap[selectedBlookToSell.name] <= 0) {
+                delete userInventoryMap[selectedBlookToSell.name];
             }
-            return true; 
-        });
+        }
 
         userTokens += payoutGained;
 
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
-            inventory: userInventoryArray
+            inventory: userInventoryMap
         });
 
         tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -949,7 +879,7 @@ onAuthStateChanged(auth, async (user) => {
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
-                userInventoryArray = Array.isArray(userData.inventory) ? userData.inventory : [];
+                userInventoryMap = userData.inventory || {};
                 
                 tokenCounterValue.textContent = userTokens.toLocaleString();
                 renderInventoryLayout();
