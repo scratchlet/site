@@ -643,7 +643,7 @@ const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
 
 let userTokens = 0;
-let userInventoryMap = {}; // Changed from Array to Object/Map
+let userInventoryMap = {};
 let currentUserRef = null;
 let selectedBlookToSell = null;
 
@@ -659,7 +659,6 @@ function renderInventoryLayout() {
     let totalValidOwnedBlooks = 0;
     let uniqueCollectedCount = 0;
 
-    // Calculate total count and unique counts based on the map structure
     Object.keys(userInventoryMap).forEach(name => {
         const count = userInventoryMap[name] || 0;
         if (count > 0) {
@@ -674,11 +673,34 @@ function renderInventoryLayout() {
     totalBlooksStat.textContent = totalValidOwnedBlooks;
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
-    let gridHtml = "";
+    // Clear the master node first to completely handle custom layout sections
+    inventoryMountNode.innerHTML = "";
 
-    // Loop through registered blooks to generate the checklist items
+    // Change the grid parent to act as a vertical section block container instead of a simple grid
+    inventoryMountNode.style.display = "flex";
+    inventoryMountNode.style.flexDirection = "column";
+    inventoryMountNode.style.gap = "30px";
+
     for (const packKey in packsRegistry) {
-        packsRegistry[packKey].blooks.forEach(blook => {
+        const pack = packsRegistry[packKey];
+        
+        // Create Section Header Element
+        const packHeader = document.createElement('h2');
+        packHeader.style.fontFamily = "'Titan One', cursive";
+        packHeader.style.fontSize = "1.4rem";
+        packHeader.style.color = "#fff4d6";
+        packHeader.style.textShadow = "2px 2px 0px rgba(0,0,0,0.4)";
+        packHeader.style.marginBottom = "10px";
+        packHeader.style.textTransform = "uppercase";
+        packHeader.style.letterSpacing = "0.5px";
+        packHeader.textContent = pack.name;
+
+        // Create inner grid element specifically for this pack's items
+        const packGrid = document.createElement('div');
+        packGrid.className = "blook-grid"; // Retains your CSS styling variables
+
+        let gridHtml = "";
+        pack.blooks.forEach(blook => {
             const count = userInventoryMap[blook.name] || 0;
             const isOwned = count > 0;
 
@@ -698,9 +720,25 @@ function renderInventoryLayout() {
                 `;
             }
         });
+
+        packGrid.innerHTML = gridHtml;
+
+        // Create Section Line Separator Element
+        const lineSeparator = document.createElement('hr');
+        lineSeparator.style.border = "none";
+        lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
+        lineSeparator.style.marginTop = "25px";
+
+        // Append to core inventory container view
+        inventoryMountNode.appendChild(packHeader);
+        inventoryMountNode.appendChild(packGrid);
+        inventoryMountNode.appendChild(lineSeparator);
     }
 
-    inventoryMountNode.innerHTML = gridHtml;
+    // Clean up the trailing absolute final separating line
+    if(inventoryMountNode.lastChild) {
+        inventoryMountNode.removeChild(inventoryMountNode.lastChild);
+    }
 
     document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -777,10 +815,8 @@ confirmSellBtn.addEventListener('click', async () => {
     try {
         confirmSellBtn.disabled = true;
 
-        // Subtract quantity from object mapping instead of arrays filtering
         if (userInventoryMap[selectedBlookToSell.name]) {
             userInventoryMap[selectedBlookToSell.name] -= qtyToSell;
-            // Clean up the key if quantity hits 0
             if (userInventoryMap[selectedBlookToSell.name] <= 0) {
                 delete userInventoryMap[selectedBlookToSell.name];
             }
@@ -818,7 +854,7 @@ onAuthStateChanged(auth, async (user) => {
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
-                userInventoryMap = userData.inventory || {}; // Read as Map/Object default
+                userInventoryMap = userData.inventory || {};
                 
                 tokenCounterValue.textContent = userTokens.toLocaleString();
                 renderInventoryLayout();
