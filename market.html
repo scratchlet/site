@@ -644,10 +644,15 @@ input:checked + .toggle-slider:before {
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-.info-rarity-badge-img {
-    height: 32px;
-    width: auto;
-    object-fit: contain;
+/* Updated Text Rarity Badge Styling */
+.info-rarity-text-badge {
+    font-family: 'Titan One', cursive;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    min-width: 100px;
+    text-align: right;
 }
 
 /* ====================================
@@ -884,7 +889,8 @@ input:checked + .toggle-slider:before {
     .info-blook-card { flex-direction: column; height: auto; padding: 20px; gap: 14px; text-align: center; }
     .info-left-item-pack { flex-direction: column; gap: 8px; }
     .info-blook-name { text-align: center; }
-    .info-right-item-pack { gap: 14px; }
+    .info-right-item-pack { gap: 14px; flex-direction: column; }
+    .info-rarity-text-badge { text-align: center; }
 }
 </style>
 </head>
@@ -1170,7 +1176,6 @@ input:checked + .toggle-slider:before {
         infoCardsContainer.innerHTML = "";
 
         selectedPack.blooks.forEach(b => {
-            const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
             infoCardsContainer.innerHTML += `
                 <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%);">
                     <div class="info-left-item-pack">
@@ -1179,7 +1184,7 @@ input:checked + .toggle-slider:before {
                     </div>
                     <div class="info-right-item-pack">
                         <div class="info-blook-chance">${b.chance}%</div>
-                        <img src="${rarityImgUrl}" alt="${b.rarity}" class="info-rarity-badge-img">
+                        <div class="info-rarity-text-badge" style="color: ${b.color};">${b.rarity}</div>
                     </div>
                 </div>
             `;
@@ -1203,7 +1208,7 @@ input:checked + .toggle-slider:before {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             try {
-                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
                 currentUserRef = firestoreModule.doc(db, "users", user.uid);
                 const userSnap = await firestoreModule.getDoc(currentUserRef);
                 if (userSnap.exists()) {
@@ -1329,7 +1334,7 @@ input:checked + .toggle-slider:before {
             isRewardModalActive = true;
             const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
 
-            // Combined drop result display block layout
+            // Single item box card structure
             rewardDisplayNode.innerHTML = `
                 <div style="background: linear-gradient(135deg, #2c1a04 0%, #000000 100%); padding: 30px 24px; border-radius: 28px; width: 100%; max-width: 330px; border: 4px solid ${awardedBlook.color}; position: relative; margin: 0 auto; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8);">
                     
@@ -1404,7 +1409,13 @@ input:checked + .toggle-slider:before {
 
             isRewardModalActive = true;
 
-            let resultsHtml = `<div class="mass-open-results-container">`;
+            // Updated Layout: Placed the "Mass Open Results" heading layout within the card wrapper
+            let resultsHtml = `
+                <div class="mass-open-results-container">
+                    <h2 style="font-family:'Titan One', cursive; font-size:1.5rem; color:#fff4d6; text-transform: uppercase; margin-bottom: 15px; text-align: center; text-shadow: 2px 2px 0px #000;">
+                        Mass Open Results
+                    </h2>
+            `;
             Object.keys(resultsTally).forEach(name => {
                 const current = resultsTally[name];
                 resultsHtml += `
