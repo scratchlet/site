@@ -340,6 +340,7 @@ body{
     width: 100%;
 }
 
+/* THE PACK CARD IS THE TRIGGER BUTTON */
 .pack-card {
     position: relative;
     background: rgba(0, 0, 0, 0.28);
@@ -367,6 +368,7 @@ body{
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* FLOATING COST BADGE TAG (TOP RIGHT INSIDE) */
 .pack-price-tag-badge {
     position: absolute;
     top: 12px;
@@ -392,6 +394,7 @@ body{
     object-fit: contain;
 }
 
+/* FLOATING CONTENT TOGGLE BUTTON (TOP LEFT INSIDE) */
 .pack-info-toggle-btn {
     position: absolute;
     top: 12px;
@@ -450,7 +453,7 @@ body{
 }
 
 /* ====================================
-   INFO MODAL STYLES
+   INFO MODAL STYLES (STRETCHED HORIZONTAL ROW LIST)
 ==================================== */
 .info-modal-overlay {
     position: fixed;
@@ -527,9 +530,12 @@ body{
     text-align: left;
 }
 
-.info-right-item-pack {
+.nav-right-group, .info-right-item-pack {
     display: flex;
     align-items: center;
+}
+
+.info-right-item-pack {
     gap: 24px;
 }
 
@@ -612,7 +618,7 @@ body{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 1000; /* Backdrop is at 1000 */
+    z-index: 1000; /* Stays beneath raining elements */
     display: none;
     align-items: center;
     justify-content: center;
@@ -633,7 +639,7 @@ body{
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     cursor: default;
-    z-index: 1100; /* Result card card container is on top of rain layer */
+    z-index: 1020; /* Stays securely on top of the rain elements */
 }
 
 #reward-display-node {
@@ -645,21 +651,20 @@ body{
 }
 
 /* ====================================
-   TOKEN / RARITY RAIN SYSTEM
+   TOKEN & RARITY RAIN ANIMATION ELEMENTS
 ==================================== */
 .rain-element {
     position: fixed;
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
     pointer-events: none;
-    z-index: 1050; /* In front of black backdrop overlay (1000) but behind card card (1100) */
+    z-index: 1010; /* Placed in front of the dark backdrop, but behind the modal content card */
     top: -80px;
     will-change: transform, opacity;
-    animation: rainFall linear forwards;
+    animation: rainFallAnimation linear forwards;
 }
 
-@keyframes rainFall {
+@keyframes rainFallAnimation {
     0% {
         transform: translateY(0) translateX(0) rotate(0deg);
         opacity: 1;
@@ -748,7 +753,9 @@ body{
 <div class="info-modal-overlay" id="info-modal">
     <div class="info-modal-content" id="info-modal-card">
         <h2 id="info-modal-title" style="font-family:'Titan One'; font-size:1.8rem; color:#fff4d6; text-transform: uppercase;">PACK CONTENT</h2>
+        
         <div class="info-cards-grid" id="info-cards-container"></div>
+        
         <button class="btn primary" id="close-info-modal-btn" style="padding:10px 24px; align-self: center;">Close</button>
     </div>
 </div>
@@ -773,6 +780,7 @@ body{
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
         <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
+        
         <div id="reward-display-node"></div>
     </div>
 </div>
@@ -868,10 +876,12 @@ body{
                     <button class="pack-info-toggle-btn" id="info-toggle-${key}" title="View Contents">
                         <span class="material-icons">search</span>
                     </button>
+
                     <div class="pack-price-tag-badge">
                         <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
                         <span>${currentPack.cost}</span>
                     </div>
+                    
                     <div class="pack-image-holder">
                         <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
                     </div>
@@ -937,6 +947,7 @@ body{
                     const userData = userSnap.data();
                     userTokens = userData.tokens || 0;
                     tokenCounterValue.textContent = userTokens.toLocaleString();
+                    
                     initializeHourlyCooldownLoop(userData.hourlyCooldown);
                 }
             } catch (err) {
@@ -965,45 +976,39 @@ body{
     }
 
     /* ====================================
-       UNIVERSAL RAIN FUNCTION (TOKENS / RARITIES)
+       UNIVERSAL RAIN EFFECTS SYSTEM
     ==================================== */
-    function triggerRainAnimation(imgUrl, isRarityTag = false) {
+    function triggerRainEffect(imageSrc) {
         const totalElements = 45; 
         
         for (let i = 0; i < totalElements; i++) {
             setTimeout(() => {
-                const element = document.createElement('div');
-                element.className = 'rain-element';
-                element.style.backgroundImage = `url('${imgUrl}')`;
+                const rainItem = document.createElement('div');
+                rainItem.className = 'rain-element';
+                rainItem.style.backgroundImage = `url('${imageSrc}')`;
                 
                 const randomLeftPos = Math.random() * 100;
-                element.style.left = `${randomLeftPos}vw`;
+                rainItem.style.left = `${randomLeftPos}vw`;
                 
-                // Adjust bounding box layout styles depending on if asset is a square token or a wider rectangular badge
-                if (isRarityTag) {
-                    const baseWidth = 55 + Math.random() * 30;
-                    element.style.width = `${baseWidth}px`;
-                    element.style.height = `${baseWidth * 0.42}px`; // Maintain rectangular aspect ratio
-                } else {
-                    const dimensions = 38 + Math.random() * 30;
-                    element.style.width = `${dimensions}px`;
-                    element.style.height = `${dimensions}px`;
-                }
+                // Generous random size array setup (38px - 68px)
+                const dimensions = 38 + Math.random() * 30;
+                rainItem.style.width = `${dimensions}px`;
+                rainItem.style.height = `${dimensions}px`;
                 
                 const lateralSway = (Math.random() * 120 - 60) + "px";
                 const midRotation = (Math.random() * 360) + "deg";
                 const endRotation = (Math.random() * 720 + 360) + "deg";
                 
-                element.style.setProperty('--sway', lateralSway);
-                element.style.setProperty('--rotMid', midRotation);
-                element.style.setProperty('--rotEnd', endRotation);
+                rainItem.style.setProperty('--sway', lateralSway);
+                rainItem.style.setProperty('--rotMid', midRotation);
+                rainItem.style.setProperty('--rotEnd', endRotation);
                 
                 const fallDuration = 1.8 + Math.random() * 1.6;
-                element.style.animationDuration = `${fallDuration}s`;
+                rainItem.style.animationDuration = `${fallDuration}s`;
                 
-                document.body.appendChild(element);
+                document.body.appendChild(rainItem);
                 
-                setTimeout(() => element.remove(), fallDuration * 1000);
+                setTimeout(() => rainItem.remove(), fallDuration * 1000);
             }, i * 65); 
         }
     }
@@ -1022,6 +1027,8 @@ body{
         modalContainerCard.style.transform = "scale(0.7)";
         setTimeout(() => {
             rewardModal.style.display = "none";
+            // Clear any lingering active raining nodes
+            document.querySelectorAll('.rain-element').forEach(el => el.remove());
         }, 300);
     }
 
@@ -1084,9 +1091,9 @@ body{
                         rewardModal.style.opacity = "1";
                         modalContainerCard.style.transform = "scale(1)";
                         
-                        // Dynamic calculation of matching rarity imagery asset
-                        const rarityBadgeUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
-                        triggerRainAnimation(rarityBadgeUrl, true);
+                        // Grab targeted pull image asset url for rarity stream
+                        const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
+                        triggerRainEffect(matchingRarityUrl); 
                     }, 15);
 
                 } catch (err) {
@@ -1185,9 +1192,7 @@ body{
             setTimeout(() => {
                 rewardModal.style.opacity = "1";
                 modalContainerCard.style.transform = "scale(1)";
-                
-                // Fall token image assets behind card card, over dark overlay context
-                triggerRainAnimation('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp', false); 
+                triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp'); 
             }, 15);
 
             lockHourlyClaimButton(newCooldownTarget);
@@ -1198,5 +1203,6 @@ body{
         }
     });
 </script>
+
 </body>
 </html>
