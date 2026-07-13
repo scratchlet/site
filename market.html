@@ -776,11 +776,11 @@ input:checked + .toggle-slider:before {
     cursor: pointer;
 }
 
+/* Custom Base Drop Modal Properties */
 .modal-content {
-    background: linear-gradient(135deg, #2c1a04 0%, #000000 100%);
-    border: 4px solid #ffcc00;
-    border-radius: 32px;
-    padding: 40px;
+    background: transparent;
+    border: none;
+    padding: 0;
     width: 90%;
     max-width: 480px;
     text-align: center;
@@ -792,19 +792,12 @@ input:checked + .toggle-slider:before {
 }
 
 #reward-display-node {
-    margin: 20px auto 5px auto;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-height: 380px;
-    overflow-y: auto;
     width: 100%;
-    scrollbar-width: none;
-}
-
-#reward-display-node::-webkit-scrollbar {
-    display: none;
 }
 
 /* MASS RESULTS GRID CONTAINER */
@@ -813,7 +806,17 @@ input:checked + .toggle-slider:before {
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    padding: 5px;
+    padding: 25px;
+    background: linear-gradient(135deg, #2c1a04 0%, #000000 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 32px;
+    max-height: 480px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.mass-open-results-container::-webkit-scrollbar {
+    display: none;
 }
 
 .mass-result-row {
@@ -1001,7 +1004,6 @@ input:checked + .toggle-slider:before {
 
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
-        <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
         <div id="reward-display-node"></div>
     </div>
 </div>
@@ -1057,7 +1059,6 @@ input:checked + .toggle-slider:before {
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
     const rewardDisplayNode = document.getElementById('reward-display-node');
-    const modalRewardHeader = document.getElementById('modal-reward-header');
     
     const claimHourlyBtn = document.getElementById('claim-hourly-btn');
     const hourlyBtnText = document.getElementById('hourly-btn-text');
@@ -1311,7 +1312,6 @@ input:checked + .toggle-slider:before {
         try {
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             
-            // Check inventory state to discover unique item status
             const freshSnap = await firestoreModule.getDoc(currentUserRef);
             const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || []) : [];
 
@@ -1327,35 +1327,31 @@ input:checked + .toggle-slider:before {
             });
 
             isRewardModalActive = true;
-            modalRewardHeader.textContent = "YOU UNBOXED!";
-            modalRewardHeader.style.color = "#ffd700";
-            modalContainerCard.style.borderColor = awardedBlook.color;
-
             const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
 
-            // Structured content card containing New Tag -> Image -> Name -> Rarity -> Drop Rate
+            // Combined drop result display block layout
             rewardDisplayNode.innerHTML = `
-                <div style="background: rgba(0,0,0,0.4); padding: 22px 20px; border-radius: 20px; width: 100%; max-width: 320px; border: 2px solid ${awardedBlook.color}; position: relative; margin: 15px auto 5px auto; text-align: center;">
+                <div style="background: linear-gradient(135deg, #2c1a04 0%, #000000 100%); padding: 30px 24px; border-radius: 28px; width: 100%; max-width: 330px; border: 4px solid ${awardedBlook.color}; position: relative; margin: 0 auto; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8);">
                     
                     ${isNewDiscovery ? `
-                        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff0055, #ff5000); color: white; font-weight: 900; font-size: 0.85rem; padding: 4px 14px; border-radius: 99px; box-shadow: 0 4px 10px rgba(255,0,85,0.4); border: 2px solid white; letter-spacing: 1px; animation: pulseRewardTag 1.5s infinite; z-index: 50;">
+                        <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff0055, #ff5000); color: white; font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.85rem; padding: 4px 16px; border-radius: 99px; box-shadow: 0 4px 12px rgba(255,0,85,0.5); border: 2px solid white; letter-spacing: 1px; animation: pulseRewardTag 1.5s infinite; z-index: 50;">
                             NEW!
                         </div>
                     ` : ''}
 
-                    <div style="width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; background: rgba(255,255,255,0.02); border-radius: 12px;">
-                        <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="max-height: 120px; max-width: 90%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));">
+                    <div style="width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; background: rgba(255,255,255,0.03); border-radius: 16px;">
+                        <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="max-height: 125px; max-width: 85%; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));">
                     </div>
 
-                    <div style="font-family: 'Titan One', cursive; font-size: 1.6rem; color: #fff4d6; text-shadow: 2px 2px 0px #000; margin-bottom: 6px; tracking-spacing: 0.5px;">
+                    <div style="font-family: 'Titan One', cursive; font-size: 1.75rem; color: #fff4d6; text-shadow: 2px 2px 0px #000; margin-bottom: 4px;">
                         ${awardedBlook.name}
                     </div>
 
-                    <div style="display: flex; justify-content: center; margin-bottom: 14px;">
-                        <img src="${matchingRarityUrl}" alt="${awardedBlook.rarity}" style="height: 28px; object-fit: contain;">
+                    <div style="font-family: 'Titan One', cursive; font-size: 1.15rem; color: ${awardedBlook.color}; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
+                        ${awardedBlook.rarity}
                     </div>
 
-                    <div style="font-weight: 800; font-size: 0.85rem; background: rgba(255,255,255,0.08); display: inline-block; padding: 4px 14px; border-radius: 99px; color: #ffe3b3; border: 1px solid rgba(255,255,255,0.15);">
+                    <div style="font-weight: 800; font-size: 0.85rem; background: rgba(255,255,255,0.07); display: inline-block; padding: 5px 16px; border-radius: 99px; color: #ffe3b3; border: 1px solid rgba(255,255,255,0.12);">
                         Drop Rate: ${awardedBlook.chance}%
                     </div>
                 </div>
@@ -1407,9 +1403,6 @@ input:checked + .toggle-slider:before {
             });
 
             isRewardModalActive = true;
-            modalRewardHeader.textContent = `MASS UNBOXED (${quantity}x)`;
-            modalRewardHeader.style.color = "#00cc66";
-            modalContainerCard.style.borderColor = "#ff9b2f";
 
             let resultsHtml = `<div class="mass-open-results-container">`;
             Object.keys(resultsTally).forEach(name => {
@@ -1418,7 +1411,10 @@ input:checked + .toggle-slider:before {
                     <div class="mass-result-row" style="border-left-color: ${current.data.color};">
                         <div style="display:flex; align-items:center; gap:12px;">
                             <img src="${current.data.image}" alt="${name}" style="width:40px; height:40px; object-fit:contain;">
-                            <span style="font-weight:900; color:${current.data.color}; font-size:1.1rem;">${name}</span>
+                            <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                                <span style="font-weight:900; color:${current.data.color}; font-size:1.1rem; line-height:1.2;">${name}</span>
+                                <span style="font-size:0.75rem; color:rgba(255,255,255,0.6); text-transform:uppercase;">${current.data.rarity}</span>
+                            </div>
                         </div>
                         <span style="font-weight:900; background:rgba(0,0,0,0.4); padding:4px 12px; border-radius:8px; color:#ffd700;">x${current.count}</span>
                     </div>
@@ -1576,14 +1572,12 @@ input:checked + .toggle-slider:before {
             tokenCounterValue.textContent = userTokens.toLocaleString();
             isRewardModalActive = true;
 
-            modalRewardHeader.textContent = "REWARD CLAIMED!";
-            modalRewardHeader.style.color = "#ffd700";
-            modalContainerCard.style.borderColor = "#ffd700";
-
             rewardDisplayNode.innerHTML = `
-                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens" style="width:110px; height:110px; object-fit:contain; margin: 15px auto;">
-                <div style="font-weight:900; font-size:1.6rem; color:#ffd700;">+${rolledPrize.toLocaleString()}</div>
-                <div style="font-weight:800; font-size:0.95rem; color:#fff4d6; text-transform:uppercase; margin-top:4px;">Tokens Added</div>
+                <div style="background: linear-gradient(135deg, #2c1a04 0%, #000000 100%); padding: 30px 24px; border-radius: 28px; width: 100%; max-width: 330px; border: 4px solid #ffd700; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8);">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens" style="width:110px; height:110px; object-fit:contain; margin: 0 auto 12px auto; display:block;">
+                    <div style="font-family:'Titan One', cursive; font-size:1.8rem; color:#ffd700; text-shadow: 2px 2px 0 #000;">+${rolledPrize.toLocaleString()}</div>
+                    <div style="font-weight:800; font-size:0.9rem; color:#fff4d6; text-transform:uppercase; margin-top:4px; letter-spacing:0.5px;">Tokens Claimed</div>
+                </div>
             `;
 
             rewardModal.style.display = "flex";
