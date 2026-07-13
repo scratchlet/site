@@ -187,7 +187,6 @@ body{
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    transition: background 0.15s, transform 0.1s;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -198,44 +197,8 @@ body{
     font-size: 1.4rem;
 }
 
-.hud-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: scale(1.05);
-}
-
 .hud-item.logout-trigger {
     color: #ff5252;
-}
-
-.hud-item.logout-trigger:hover {
-    background: rgba(255, 82, 82, 0.2);
-}
-
-.hud-item::after {
-    content: attr(data-nametag);
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-6px);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    font-family: "Nunito", sans-serif;
-    font-weight: 800;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    border-radius: 8px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
-    z-index: 110;
-}
-
-.hud-item:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
 }
 
 /* =========================
@@ -255,13 +218,6 @@ body{
     position: relative;
     text-align: center;
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transform: translateY(0);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-}
-
-.primary {
-    background: white;
-    color: #ff8c1a;
 }
 
 .secondary {
@@ -275,20 +231,8 @@ body{
     color: white;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-    filter: brightness(1.05);
-}
-
-.btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-    filter: brightness(0.95);
-}
-
 /* =================================
-   INVENTORY CONTAINER & TABS
+   INVENTORY CONTAINER & UNIFIED MASTER CARD
 ================================= */
 .inventory-container {
     flex: 1;
@@ -329,106 +273,93 @@ body{
     color: #fff4d6;
 }
 
-.pack-section {
-    background: rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: 20px;
-    margin-bottom: 25px;
-}
-
-.pack-section-title {
-    font-family: "Titan One", cursive;
-    font-size: 1.4rem;
-    color: #fff4d6;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 8px;
+/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
+.master-inventory-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 3px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 30px;
+    min-height: 200px;
 }
 
 .blook-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 18px;
 }
 
 /* =================================
-   BLOOK CARD STYLES
+   IMAGE BUTTON STATE LAYOUT RULES
 ================================= */
-.blook-card {
-    background: linear-gradient(135deg, rgba(24, 12, 2, 0.85) 0%, rgba(5, 2, 0, 0.95) 100%);
+.blook-image-btn {
+    background: rgba(0, 0, 0, 0.45);
     border: 3px solid transparent;
-    border-radius: 18px;
-    padding: 12px;
-    text-align: center;
-    position: relative;
+    border-radius: 16px;
+    width: 100px;
+    height: 100px;
+    padding: 8px;
     cursor: pointer;
-    user-select: none;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.blook-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.45);
-}
-
-.blook-image-wrapper {
-    width: 90px;
-    height: 90px;
+    outline: none;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
+    user-select: none;
 }
 
-.blook-img {
+/* OWNED ITEMS STYLES */
+.blook-image-btn.owned {
+    cursor: pointer;
+}
+
+.blook-image-btn.owned .blook-img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
-.blook-name {
-    font-weight: 800;
-    font-size: 1rem;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
+/* NOT OWNED STATE - DARK & GRAYSCALE WITH NO CURSOR INTERACTION */
+.blook-image-btn.locked {
+    border-color: #222222 !important;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: default;
 }
 
-.blook-rarity {
-    font-size: 0.75rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.blook-image-btn.locked .blook-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    opacity: 0.25;
+    filter: grayscale(100%) brightness(50%);
+}
+
+/* LOCK BADGE STYLING OVERLAYED CENTRALLY */
+.lock-overlay-icon {
+    position: absolute;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.45);
+    pointer-events: none;
+    z-index: 5;
 }
 
 /* DUPLICATE QUANTITY BADGE */
 .quantity-badge {
     position: absolute;
-    bottom: -10px;
-    right: -5px;
+    bottom: -6px;
+    right: -4px;
     background: #ff9b2f;
     color: white;
     font-family: 'Titan One', cursive;
-    font-size: 0.85rem;
-    padding: 3px 9px;
+    font-size: 0.8rem;
+    padding: 2px 7px;
     border-radius: 99px;
     border: 2px solid white;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     z-index: 10;
 }
 
 /* ====================================
-   SELL MODAL INTERFACE
+   SELL MODAL INTERFACE (NO ANIMATIONS)
 ==================================== */
 .modal-overlay {
     position: fixed;
@@ -438,8 +369,6 @@ body{
     display: none;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s ease;
 }
 
 .modal-content {
@@ -450,8 +379,6 @@ body{
     width: 90%;
     max-width: 420px;
     text-align: center;
-    transform: scale(0.8);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 12px 40px rgba(0,0,0,0.6);
 }
 
@@ -461,7 +388,6 @@ body{
     object-fit: contain;
     margin: 15px auto;
     display: block;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
 }
 
 .sell-calc-row {
@@ -518,7 +444,7 @@ body{
 @media(max-width: 768px) {
     .navbar { padding: 12px 20px; flex-direction: column; }
     .inventory-container { padding: 0 15px; }
-    .blook-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+    .master-inventory-card { padding: 20px; }
 }
 </style>
 </head>
@@ -542,16 +468,16 @@ body{
         </div>
         
         <div class="hud-badge-bar">
-            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
-            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
-            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
-            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
-            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
-            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
-            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
-            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
-            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
+            <a href="home.html" class="hud-item"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger"><span class="material-icons">logout</span></button>
         </div>
     </div>
 </nav>
@@ -565,13 +491,15 @@ body{
         </div>
     </div>
 
-    <div id="inventory-mount-node"></div>
+    <div class="master-inventory-card">
+        <div id="inventory-mount-node" class="blook-grid"></div>
+    </div>
 </main>
 
 <div class="modal-overlay" id="sell-modal">
     <div class="modal-content" id="sell-modal-card">
         <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase;">BLOOK NAME</h2>
-        <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px;">RARITY</div>
+        <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px; font-weight: 900; text-transform: uppercase;">RARITY</div>
         
         <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
         
@@ -600,7 +528,6 @@ body{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Exact matching config credentials from market template
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
     authDomain: "scratchlet-194bc.firebaseapp.com",
@@ -622,7 +549,6 @@ try {
     console.error("Firestore instantiation issue:", e);
 }
 
-// Blook standard value tables for selling mechanics
 const sellValueMap = {
     "Uncommon": 5,
     "Rare": 15,
@@ -633,7 +559,6 @@ const sellValueMap = {
     "Mystical": 1000
 };
 
-// Complete Pack Registry Data Schema mapping to cross reference imagery/rarity definitions
 const packsRegistry = {
     breakfast: {
         name: "Breakfast Pack",
@@ -652,63 +577,15 @@ const packsRegistry = {
             {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
             {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
         ]
-    },
-    medieval: {
-        name: "Medieval Pack",
-        blooks: [
-            {name:"Elf",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
-            {name:"Witch",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
-            {name:"Wizard",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
-            {name:"Fairy",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"}, // fallback placeholder
-            {name:"King Dog",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
-            {name:"Card of Hearts",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"}
-        ]
-    },
-    space: {
-        name: "Space Pack",
-        blooks: [
-            {name:"Earth",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
-            {name:"Meteor",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
-            {name:"Stars",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
-            {name:"Alien",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
-            {name:"Planet",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
-            {name:"UFO",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
-            {name:"Spaceship",rarity:"Epic",color:"red",image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
-            {name:"Astronaut",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
-            {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
-            {name:"Red Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
-            {name:"Orange Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
-            {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
-            {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
-            {name:"Green Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
-            {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
-            {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
-            {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
-            {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
-            {name:"Black Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
-            {name:"Black Hole",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
-            {name:"Space Monitor",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
-            {name:"Rainbow Astronaut",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"}
-        ]
-    },
-    bot: {
-        name: "Bot Pack",
-        blooks: [
-            {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
-            {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/fRKF0W8Y/Lovely-Bot.webp"}
-        ]
     }
 };
 
-// Global UI Pointer Hooks
 const tokenCounterValue = document.getElementById('token-counter-value');
 const inventoryMountNode = document.getElementById('inventory-mount-node');
 const totalBlooksStat = document.getElementById('total-blooks-stat');
 const uniqueBlooksStat = document.getElementById('unique-blooks-stat');
 
-// Modal Elements Hooks
 const sellModal = document.getElementById('sell-modal');
-const sellModalCard = document.getElementById('sell-modal-card');
 const modalBlookName = document.getElementById('modal-blook-name');
 const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
@@ -725,87 +602,63 @@ let userInventoryArray = [];
 let currentUserRef = null;
 let selectedBlookToSell = null;
 
-// Utility helper to scan registry configurations for specific blook stats
 function findBlookDetails(blookName) {
     for (const key in packsRegistry) {
         const found = packsRegistry[key].blooks.find(b => b.name === blookName);
         if (found) return { ...found, packId: key, packName: packsRegistry[key].name };
     }
-    // Dynamic absolute fallback object construction
-    return { name: blookName, rarity: "Uncommon", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp", packId: "other", packName: "Custom Rewards" };
+    return null;
 }
 
-// Main rendering engine
 function renderInventoryLayout() {
-    if (!userInventoryArray || userInventoryArray.length === 0) {
-        inventoryMountNode.innerHTML = `<div class="empty-state">You don't own any blooks yet! Go buy some packs in the Market!</div>`;
-        totalBlooksStat.textContent = "0";
-        uniqueBlooksStat.textContent = "0";
-        return;
-    }
-
-    totalBlooksStat.textContent = userInventoryArray.length;
-
-    // Tally and group items by original container sets
+    // 1. Tally items currently sitting in the user's registry database
     const inventoryTally = {};
+    let totalValidOwnedBlooks = 0;
+
     userInventoryArray.forEach(name => {
+        const detailedData = findBlookDetails(name);
+        if (!detailedData) return;
         inventoryTally[name] = (inventoryTally[name] || 0) + 1;
+        totalValidOwnedBlooks++;
     });
 
+    totalBlooksStat.textContent = totalValidOwnedBlooks;
     uniqueBlooksStat.textContent = Object.keys(inventoryTally).length;
 
-    const categorizedPacks = {};
-    Object.keys(inventoryTally).forEach(blookName => {
-        const detailedData = findBlookDetails(blookName);
-        if (!categorizedPacks[detailedData.packId]) {
-            categorizedPacks[detailedData.packId] = {
-                title: detailedData.packName,
-                blooksList: []
-            };
-        }
-        categorizedPacks[detailedData.packId].blooksList.push({
-            ...detailedData,
-            count: inventoryTally[blookName]
-        });
-    });
+    // 2. Loop through EVERY registered pack blook to present the unified master checklist grid
+    let gridHtml = "";
 
-    // Empty template layouts
-    inventoryMountNode.innerHTML = "";
+    for (const packKey in packsRegistry) {
+        packsRegistry[packKey].blooks.forEach(blook => {
+            const count = inventoryTally[blook.name] || 0;
+            const isOwned = count > 0;
 
-    // Build grid structure outputs
-    for (const packId in categorizedPacks) {
-        const group = categorizedPacks[packId];
-        
-        let blockHtml = `
-            <section class="pack-section">
-                <h2 class="pack-section-title">${group.title}</h2>
-                <div class="blook-grid">
-        `;
-
-        group.blooksList.forEach(blook => {
-            blockHtml += `
-                <div class="blook-card" data-blookname="${blook.name}" style="border-color: ${blook.color};">
-                    <div class="blook-image-wrapper">
+            if (isOwned) {
+                // Render fully colored interactive button with badge count
+                gridHtml += `
+                    <button class="blook-image-btn owned" data-blookname="${blook.name}" style="border-color: ${blook.color};" title="${blook.name} (${blook.rarity}) - Owned: ${count}">
                         <img src="${blook.image}" alt="${blook.name}" class="blook-img">
-                    </div>
-                    <div class="blook-name" style="color: ${blook.color};">${blook.name}</div>
-                    <div class="blook-rarity" style="color: ${blook.color}; opacity: 0.8;">${blook.rarity}</div>
-                    ${blook.count > 1 ? `<div class="quantity-badge">x${blook.count}</div>` : ''}
-                </div>
-            `;
+                        ${count > 1 ? `<div class="quantity-badge">x${count}</div>` : ''}
+                    </button>
+                `;
+            } else {
+                // Render darkened locked out button structure with absolute icon layout
+                gridHtml += `
+                    <button class="blook-image-btn locked" title="${blook.name} (${blook.rarity}) - Locked">
+                        <span class="material-icons lock-overlay-icon">lock</span>
+                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
+                    </button>
+                `;
+            }
         });
-
-        blockHtml += `
-                </div>
-            </section>
-        `;
-        inventoryMountNode.innerHTML += blockHtml;
     }
 
-    // Attach click events to standard cards
-    document.querySelectorAll('.blook-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const bName = card.getAttribute('data-blookname');
+    inventoryMountNode.innerHTML = gridHtml;
+
+    // Attach click triggers strictly to the owned buttons
+    document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const bName = btn.getAttribute('data-blookname');
             const bCount = inventoryTally[bName];
             const bDetails = findBlookDetails(bName);
             openSellWindow(bDetails, bCount);
@@ -830,21 +683,12 @@ function openSellWindow(blook, totalOwned) {
     sellQuantityInput.max = totalOwned;
     
     recalculateSellPayout();
-
     sellModal.style.display = "flex";
-    setTimeout(() => {
-        sellModal.style.opacity = "1";
-        sellModalCard.style.transform = "scale(1)";
-    }, 15);
 }
 
 function closeSellWindow() {
-    sellModal.style.opacity = "0";
-    sellModalCard.style.transform = "scale(0.8)";
-    setTimeout(() => {
-        sellModal.style.display = "none";
-        selectedBlookToSell = null;
-    }, 200);
+    sellModal.style.display = "none";
+    selectedBlookToSell = null;
 }
 
 function recalculateSellPayout() {
@@ -852,7 +696,6 @@ function recalculateSellPayout() {
     const rate = sellValueMap[selectedBlookToSell.rarity] || 5;
     let typedAmount = parseInt(sellQuantityInput.value) || 0;
     
-    // Bounds checking
     if (typedAmount > selectedBlookToSell.ownedCount) {
         typedAmount = selectedBlookToSell.ownedCount;
         sellQuantityInput.value = typedAmount;
@@ -865,23 +708,17 @@ function recalculateSellPayout() {
     totalSellValue.textContent = (typedAmount * rate).toLocaleString();
 }
 
-// Input Listener attachments
 sellQuantityInput.addEventListener('input', recalculateSellPayout);
 sellMinBtn.addEventListener('click', () => { sellQuantityInput.value = 1; recalculateSellPayout(); });
-makeMaxAction();
-
-function makeMaxAction() {
-    sellMaxBtn.addEventListener('click', () => { 
-        if(selectedBlookToSell) {
-            sellQuantityInput.value = selectedBlookToSell.ownedCount; 
-            recalculateSellPayout(); 
-        }
-    });
-}
+sellMaxBtn.addEventListener('click', () => { 
+    if(selectedBlookToSell) {
+        sellQuantityInput.value = selectedBlookToSell.ownedCount; 
+        recalculateSellPayout(); 
+    }
+});
 
 closeSellModalBtn.addEventListener('click', closeSellWindow);
 
-// Firestore submission interaction logic
 confirmSellBtn.addEventListener('click', async () => {
     if (!selectedBlookToSell || !currentUserRef) return;
     
@@ -893,8 +730,6 @@ confirmSellBtn.addEventListener('click', async () => {
 
     try {
         confirmSellBtn.disabled = true;
-        
-        // Filter elements out up to the chosen quantity removal count
         let instancesRemoved = 0;
         const freshUpdatedInventory = [];
         
@@ -909,7 +744,6 @@ confirmSellBtn.addEventListener('click', async () => {
         userTokens += payoutGained;
         userInventoryArray = freshUpdatedInventory;
 
-        // Commit execution payload data sets directly to cloud firestore database rules
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
