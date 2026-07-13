@@ -548,7 +548,25 @@ body{
         <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
     </div>
     
-    <div id="nav-right-target" class="nav-right-group"></div>
+    <div class="nav-right-group">
+        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance" style="display: none;">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
+            <span id="token-counter-value" class="coin-amount">0</span>
+        </div>
+        
+        <div class="hud-badge-bar">
+            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
+        </div>
+    </div>
 </nav>
 
 <main class="dashboard-grid">
@@ -612,8 +630,9 @@ body{
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const navRightTarget = document.getElementById('nav-right-target');
     const welcomeTitle = document.getElementById('welcome-title');
+    const coinCounterWrapper = document.getElementById('coin-counter-wrapper');
+    const tokenCounterValue = document.getElementById('token-counter-value');
     
     const editChangelogBtn = document.getElementById('edit-changelog-btn');
     const adminEditorBox = document.getElementById('admin-editor-box');
@@ -654,25 +673,9 @@ body{
             
             const currentTokens = await loadUserCoins(user);
             
-            // Render the Coin Counter and Action HUD bar on the right
-            navRightTarget.innerHTML = `
-                <div class="coin-counter" title="Your Token Balance">
-                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
-                    <span id="token-counter-value" class="coin-amount">${currentTokens.toLocaleString()}</span>
-                </div>
-                <div class="hud-badge-bar">
-                    <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
-                    <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
-                    <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
-                    <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
-                    <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
-                    <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
-                    <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
-                    <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
-                    <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-                    <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
-                </div>
-            `;
+            // Populating data values into the structural nav instead of rewriting the entire innerHTML
+            tokenCounterValue.textContent = currentTokens.toLocaleString();
+            coinCounterWrapper.style.display = "flex";
 
             document.getElementById('logout-hud-btn').addEventListener('click', () => {
                 signOut(auth).then(() => { window.location.reload(); });
