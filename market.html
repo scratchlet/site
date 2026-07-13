@@ -368,7 +368,7 @@ body{
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* FLOATING COST BADGE TAG (TOP RIGHT INSIDE) */
+/* FLOATING COST BADGE TAG */
 .pack-price-tag-badge {
     position: absolute;
     top: 12px;
@@ -394,7 +394,7 @@ body{
     object-fit: contain;
 }
 
-/* FLOATING CONTENT TOGGLE BUTTON (TOP LEFT INSIDE) */
+/* FLOATING CONTENT TOGGLE BUTTON */
 .pack-info-toggle-btn {
     position: absolute;
     top: 12px;
@@ -783,7 +783,6 @@ body{
 </div>
 
 <script type="module">
-    // FIXED: Corrected Firestore modular distribution paths from 'firebase-auth' to 'firebase-firestore'
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -831,6 +830,9 @@ body{
     let currentUserRef = null;
     let serverTimerInterval = null;
     let activeSelectedPackId = null;
+    
+    // NEW FIX Toggle State Tracker to instantly break the loop loops
+    let isRewardModalActive = false;
 
     const rarityAssetMap = {
         "Uncommon": "https://i.postimg.cc/xTvKgWWj/Uncommon.webp",
@@ -981,8 +983,8 @@ body{
         
         for (let i = 0; i < totalElements; i++) {
             setTimeout(() => {
-                // Safeguard: Check if user clicked away early before creating new items
-                if (rewardModal.style.display === "none") return;
+                // FIXED: Explicitly breaks and halts generation if modal state was flipped to false
+                if (!isRewardModalActive) return;
 
                 const rainItem = document.createElement('div');
                 rainItem.className = 'rain-element';
@@ -1023,10 +1025,12 @@ body{
     }
 
     function closeRewardModal() {
+        // FIXED: Switch status value to false immediately to kill future generation cycles
+        isRewardModalActive = false;
+        
         rewardModal.style.opacity = "0";
         modalContainerCard.style.transform = "scale(0.7)";
         
-        // FIXED: Instantly removes all active raining images when modal card closes out
         document.querySelectorAll('.rain-element').forEach(el => el.remove());
 
         setTimeout(() => {
@@ -1078,6 +1082,9 @@ body{
                         inventory: arrayUnion(awardedBlook.name)
                     });
 
+                    // FIXED: Flipped flag status to active before generating
+                    isRewardModalActive = true;
+
                     modalRewardHeader.textContent = "YOU UNBOXED!";
                     modalRewardHeader.style.color = "#ffd700";
                     modalContainerCard.style.borderColor = awardedBlook.color;
@@ -1093,7 +1100,6 @@ body{
                         rewardModal.style.opacity = "1";
                         modalContainerCard.style.transform = "scale(1)";
                         
-                        // FIXED: Rains custom matching rarity icon instead of basic token item
                         const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
                         triggerRainEffect(matchingRarityUrl); 
                     }, 15);
@@ -1179,6 +1185,9 @@ body{
             });
 
             tokenCounterValue.textContent = userTokens.toLocaleString();
+
+            // FIXED: Set track indicator state for hourly drop panel
+            isRewardModalActive = true;
 
             modalRewardHeader.textContent = "REWARD CLAIMED!";
             modalRewardHeader.style.color = "#ffd700";
