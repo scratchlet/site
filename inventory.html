@@ -359,7 +359,7 @@ body{
 }
 
 /* ====================================
-   HORIZONTAL ORIGINAL-STYLED MODAL CARD
+   SELL MODAL INTERFACE (NO ANIMATIONS)
 ==================================== */
 .modal-overlay {
     position: fixed;
@@ -369,53 +369,33 @@ body{
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 20px;
 }
 
 .modal-content {
     background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
     border: 4px solid #ff9b2f;
-    border-radius: 6px; /* Replaced 28px with fixed neat corners */
+    border-radius: 28px;
     padding: 30px;
-    width: 95%;
-    max-width: 560px; /* Made wider for side-by-side design */
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: row;
-    gap: 28px;
-    align-items: center;
-}
-
-.modal-left-pane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 90%;
+    max-width: 420px;
     text-align: center;
-    border-right: 2px solid rgba(255, 155, 47, 0.18);
-    padding-right: 20px;
-}
-
-.modal-right-pane {
-    flex: 1.2;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
 }
 
 .modal-blook-preview {
     width: 120px;
     height: 120px;
     object-fit: contain;
-    margin: 10px auto;
+    margin: 15px auto;
     display: block;
 }
 
 .sell-calc-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin: 6px 0;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
 }
 
 .sell-input {
@@ -443,14 +423,13 @@ body{
     padding: 6px 16px;
     border-radius: 99px;
     border: 1px solid rgba(255,215,0,0.2);
-    align-self: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
 }
 
 .modal-btn-group {
     display: flex;
-    gap: 12px;
-    margin-top: 5px;
+    justify-content: center;
+    gap: 15px;
 }
 
 .empty-state {
@@ -462,12 +441,6 @@ body{
 }
 
 /* Responsive adjustments */
-@media(max-width: 600px) {
-    .modal-content { flex-direction: column; }
-    .modal-left-pane { border-right: none; padding-right: 0; padding-bottom: 15px; border-bottom: 2px solid rgba(255, 155, 47, 0.18); }
-    .total-payout-box { align-self: center; }
-}
-
 @media(max-width: 768px) {
     .navbar { padding: 12px 20px; flex-direction: column; }
     .inventory-container { padding: 0 15px; }
@@ -525,40 +498,36 @@ body{
 
 <div class="modal-overlay" id="sell-modal">
     <div class="modal-content" id="sell-modal-card">
+        <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase;">BLOOK NAME</h2>
+        <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px; font-weight: 900; text-transform: uppercase;">RARITY</div>
         
-        <div class="modal-left-pane">
-            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase;">BLOOK NAME</h2>
-            <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px; font-weight: 900; text-transform: uppercase;">RARITY</div>
-            <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
+        <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
+        
+        <div style="font-weight: 800; color: #fff4d6;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
+        
+        <div class="sell-calc-row">
+            <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
+            <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
+            <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
         </div>
-        
-        <div class="modal-right-pane">
-            <div style="font-weight: 800; color: #fff4d6;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
-            
-            <div class="sell-calc-row">
-                <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
-                <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
-                <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
-            </div>
 
-            <div style="font-size: 0.9rem; margin-bottom: 2px; font-weight: 700; color: #ffe3b3;">Total Payout:</div>
-            <div class="total-payout-box">
-                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
-                <span id="total-sell-value">0</span>
-            </div>
-            
-            <div class="modal-btn-group">
-                <button class="btn secondary" id="close-sell-modal-btn" style="padding:10px 20px;">Cancel</button>
-                <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px;">Sell Blook(s)</button>
-            </div>
+        <div style="font-size: 0.9rem; margin-bottom: 6px; font-weight: 700; color: #ffe3b3;">Total Payout:</div>
+        <div class="total-payout-box">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
+            <span id="total-sell-value">0</span>
         </div>
         
+        <div class="modal-btn-group">
+            <button class="btn secondary" id="close-sell-modal-btn" style="padding:10px 20px;">Cancel</button>
+            <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px;">Sell Blook(s)</button>
+        </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -572,14 +541,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-let db;
-
-try {
-    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    db = firestoreModule.getFirestore(app);
-} catch(e) {
-    console.error("Firestore instantiation issue:", e);
-}
+const db = getFirestore(app);
 
 const sellValueMap = {
     "Uncommon": 5,
@@ -706,7 +668,6 @@ function renderInventoryLayout() {
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
     inventoryMountNode.innerHTML = "";
-
     inventoryMountNode.style.display = "flex";
     inventoryMountNode.style.flexDirection = "column";
     inventoryMountNode.style.gap = "30px";
@@ -775,9 +736,6 @@ function renderInventoryLayout() {
     });
 }
 
-/* ====================================
-   MODAL ACTIONS INTERACTION CODES
-==================================== */
 function openSellWindow(blook, totalOwned) {
     selectedBlookToSell = { ...blook, ownedCount: totalOwned };
     
@@ -849,8 +807,7 @@ confirmSellBtn.addEventListener('click', async () => {
 
         userTokens += payoutGained;
 
-        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-        await firestoreModule.updateDoc(currentUserRef, {
+        await updateDoc(currentUserRef, {
             tokens: userTokens,
             inventory: userInventoryMap
         });
@@ -866,16 +823,11 @@ confirmSellBtn.addEventListener('click', async () => {
     }
 });
 
-/* ====================================
-   INITIAL AUTH STATE LISTENERS
-==================================== */
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            currentUserRef = firestoreModule.doc(db, "users", user.uid);
-            
-            const userSnap = await firestoreModule.getDoc(currentUserRef);
+            currentUserRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(currentUserRef);
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
