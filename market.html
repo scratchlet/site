@@ -346,7 +346,7 @@ body{
     background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 55px 16px 16px 16px; /* Increased top padding to cleanly clear inside top anchors */
+    padding: 55px 16px 16px 16px;
     width: 250px; 
     text-align: center;
     display: flex;
@@ -452,59 +452,95 @@ body{
     pointer-events: none;
 }
 
-/* STRETCHED RESULT DISPLAY VIEW AREA CONTAINER */
-.blook-probabilities-list {
+/* ====================================
+   INFO MODAL STYLES (STRETCHED CARDS)
+==================================== */
+.info-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
     display: none;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-    background: rgba(15, 10, 5, 0.95);
-    border-radius: 16px;
-    padding: 12px;
-    max-height: 320px;
-    overflow-y: auto;
-    text-align: left;
-    border: 3px solid rgba(255, 255, 255, 0.15);
-    position: relative;
-    z-index: 10;
-    box-shadow: inset 0 4px 15px rgba(0,0,0,0.6);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
 }
 
-/* STRETCHED CARD MODEL MATCHING SITE THEME OUTCOME NODES */
-.probability-row {
+.info-modal-content {
+    background: linear-gradient(135deg, #241402 0%, #0c0701 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 28px;
+    padding: 30px;
+    width: 95%;
+    max-width: 580px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255, 155, 47, 0.35);
+    transform: scale(0.7);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+.info-cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+    overflow-y: auto;
+    padding: 10px;
+    scrollbar-width: none;
+}
+
+.info-cards-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual blook result display replica card nodes */
+.info-blook-card {
+    width: 140px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 14px 10px;
-    position: relative;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    border: 3px solid transparent;
+    transition: transform 0.2s ease;
+}
+
+.info-blook-card:hover {
+    transform: scale(1.04);
+}
+
+.info-blook-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
+}
+
+.info-blook-name {
+    font-weight: 900;
+    font-size: 1.05rem;
+    margin-bottom: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 100%;
 }
 
-.prob-blook-icon {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
-    margin-bottom: 6px;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
-}
-
-.prob-blook-name {
-    font-family: "Nunito", sans-serif;
-    font-weight: 900;
-    font-size: 1.1rem;
-    margin-bottom: 2px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    text-align: center;
-}
-
-.prob-blook-chance {
+.info-blook-chance {
     font-weight: 800;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     background: rgba(0,0,0,0.4);
     padding: 2px 8px;
     border-radius: 99px;
@@ -513,10 +549,10 @@ body{
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-.prob-rarity-badge-img {
-    height: 18px;
+.info-rarity-badge-img {
+    height: 16px;
     width: auto;
-    max-width: 90%;
+    max-width: 95%;
     object-fit: contain;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
@@ -666,6 +702,17 @@ body{
     <div class="market-grid" id="dynamic-packs-mount-node"></div>
 </main>
 
+<div class="info-modal-overlay" id="info-modal">
+    <div class="info-modal-content" id="info-modal-card">
+        <h2 id="info-modal-title" style="font-family:'Titan One'; font-size:1.8rem; color:#fff4d6; text-transform: uppercase;">PACK CONTENT</h2>
+        
+        <div class="info-cards-grid" id="info-cards-container">
+            </div>
+        
+        <button class="btn primary" id="close-info-modal-btn" style="padding:10px 24px; align-self: center;">Close</button>
+    </div>
+</div>
+
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
         <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
@@ -698,6 +745,15 @@ body{
 
     const tokenCounterValue = document.getElementById('token-counter-value');
     const dynamicPacksMountNode = document.getElementById('dynamic-packs-mount-node');
+    
+    // Drop Rate/Info Modal Elements
+    const infoModal = document.getElementById('info-modal');
+    const infoModalCard = document.getElementById('info-modal-card');
+    const infoModalTitle = document.getElementById('info-modal-title');
+    const infoCardsContainer = document.getElementById('info-cards-container');
+    const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
+
+    // Reveal Unboxing Modal Elements
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
     const rewardDisplayNode = document.getElementById('reward-display-node');
@@ -748,22 +804,8 @@ body{
         dynamicPacksMountNode.innerHTML = "";
         Object.keys(packs).forEach(key => {
             const currentPack = packs[key];
-            let probabilitiesHTML = "";
-            
-            currentPack.blooks.forEach(b => {
-                const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
-                // Custom stretched reward node copy styling layout logic 
-                probabilitiesHTML += `
-                    <div class="probability-row" style="border-color: ${b.color}; background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.3) 100%);">
-                        <img src="${b.image}" alt="${b.name}" class="prob-blook-icon">
-                        <div class="prob-blook-name" style="color: ${b.color};">${b.name}</div>
-                        <div class="prob-blook-chance">${b.chance}%</div>
-                        <img src="${rarityImgUrl}" alt="${b.rarity}" class="prob-rarity-badge-img">
-                    </div>
-                `;
-            });
 
-            dynamicPacksMountNode.innerHTML = `
+            dynamicPacksMountNode.innerHTML += `
                 <div class="pack-card" data-pack-id="${key}">
                     <button class="pack-info-toggle-btn" id="info-toggle-${key}" title="View Contents">
                         <span class="material-icons">search</span>
@@ -778,29 +820,55 @@ body{
                         <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
                     </div>
                     <div class="pack-title">${currentPack.name}</div>
-                    
-                    <div class="blook-probabilities-list" id="prob-list-${key}">
-                        ${probabilitiesHTML}
-                    </div>
                 </div>
             `;
+        });
 
-            const card = dynamicPacksMountNode.firstElementChild;
-            const toggleBtn = card.querySelector(`#info-toggle-${key}`);
-            const probList = card.querySelector(`#prob-list-${key}`);
-            
+        // Add info click listener to toggle buttons
+        Object.keys(packs).forEach(key => {
+            const toggleBtn = document.getElementById(`info-toggle-${key}`);
             toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Stops unboxing purchase trigger
-                if(probList.style.display === "flex") {
-                    probList.style.display = "none";
-                    toggleBtn.querySelector('.material-icons').textContent = "search";
-                } else {
-                    probList.style.display = "flex";
-                    toggleBtn.querySelector('.material-icons').textContent = "close";
-                }
+                e.stopPropagation(); // Stop unboxing trigger
+                openPackContentsModal(key);
             });
         });
     }
+
+    function openPackContentsModal(packId) {
+        const selectedPack = packs[packId];
+        if(!selectedPack) return;
+
+        infoModalTitle.textContent = `${selectedPack.name} Contents`;
+        infoCardsContainer.innerHTML = "";
+
+        selectedPack.blooks.forEach(b => {
+            const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
+            
+            // Generate full stretched mini reward nodes
+            infoCardsContainer.innerHTML += `
+                <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.3) 100%);">
+                    <img src="${b.image}" alt="${b.name}" class="info-blook-img">
+                    <div class="info-blook-name" style="color: ${b.color};">${b.name}</div>
+                    <div class="info-blook-chance">${b.chance}%</div>
+                    <img src="${rarityImgUrl}" alt="${b.rarity}" class="info-rarity-badge-img">
+                </div>
+            `;
+        });
+
+        infoModal.style.display = "flex";
+        setTimeout(() => {
+            infoModal.style.opacity = "1";
+            infoModalCard.style.transform = "scale(1)";
+        }, 15);
+    }
+
+    closeInfoModalBtn.addEventListener('click', () => {
+        infoModal.style.opacity = "0";
+        infoModalCard.style.transform = "scale(0.7)";
+        setTimeout(() => {
+            infoModal.style.display = "none";
+        }, 250);
+    });
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
