@@ -1362,23 +1362,19 @@ input:checked + .toggle-slider:before {
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             
             const freshSnap = await firestoreModule.getDoc(currentUserRef);
-            // Handle structured Map instead of Array
-            const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || {}) : {};
+            // Handle structured Array instead of Map to store duplicates explicitly
+            const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || []) : [];
 
             userTokens -= targetedPack.cost;
             tokenCounterValue.textContent = userTokens.toLocaleString();
 
             const awardedBlook = rollMysteryBlook(targetedPack.blooks);
             
-            // Check if it's a new discovery by looking at the object key mapping
-            const isNewDiscovery = !currentInventory[awardedBlook.name] || currentInventory[awardedBlook.name] <= 0;
+            // Check if it's a new discovery by looking if the array does NOT include it yet
+            const isNewDiscovery = !currentInventory.includes(awardedBlook.name);
 
-            // Increment count instead of doing arrayUnion
-            if (currentInventory[awardedBlook.name]) {
-                currentInventory[awardedBlook.name] += 1;
-            } else {
-                currentInventory[awardedBlook.name] = 1;
-            }
+            // Append duplicate directly to the array list
+            currentInventory.push(awardedBlook.name);
 
             await firestoreModule.updateDoc(currentUserRef, {
                 tokens: userTokens,
@@ -1448,8 +1444,8 @@ input:checked + .toggle-slider:before {
         try {
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             const freshSnap = await firestoreModule.getDoc(currentUserRef);
-            // Handle structured Map instead of Array
-            const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || {}) : {};
+            // Handle structured Array instead of Map to store duplicates explicitly
+            const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || []) : [];
 
             userTokens -= totalCost;
             tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -1465,12 +1461,8 @@ input:checked + .toggle-slider:before {
                 }
                 resultsTally[rolled.name].count++;
 
-                // Increment the database payload tracker directly
-                if (currentInventory[rolled.name]) {
-                    currentInventory[rolled.name] += 1;
-                } else {
-                    currentInventory[rolled.name] = 1;
-                }
+                // Append duplicate directly to the array list payload
+                currentInventory.push(rolled.name);
             }
 
             await firestoreModule.updateDoc(currentUserRef, {
