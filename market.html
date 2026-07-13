@@ -346,7 +346,7 @@ body{
     background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 24px 20px 20px 20px;
+    padding: 55px 16px 16px 16px; /* Increased top padding to cleanly clear inside top anchors */
     width: 250px; 
     text-align: center;
     display: flex;
@@ -368,40 +368,40 @@ body{
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* FLOATING COST BADGE TAG (TOP RIGHT) */
+/* FLOATING COST BADGE TAG (TOP RIGHT INSIDE) */
 .pack-price-tag-badge {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: 12px;
+    right: 12px;
     z-index: 20;
     display: flex;
     align-items: center;
     gap: 4px;
     background: rgba(18, 10, 2, 0.92);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 99px;
     border: 2px solid #ffd700;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
     font-weight: 900;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: #ffd700;
     pointer-events: none;
 }
 
 .pack-price-tag-badge img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
 }
 
-/* FLOATING CONTENT TOGGLE BUTTON (TOP LEFT) */
+/* FLOATING CONTENT TOGGLE BUTTON (TOP LEFT INSIDE) */
 .pack-info-toggle-btn {
     position: absolute;
-    top: -12px;
-    left: -12px;
+    top: 12px;
+    left: 12px;
     z-index: 30;
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: rgba(18, 10, 2, 0.92);
     border: 2px solid #ff9b2f;
@@ -409,7 +409,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
 }
@@ -418,16 +418,16 @@ body{
     background: #ff9b2f;
     color: white;
     border-color: white;
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 .pack-info-toggle-btn .material-icons {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
 }
 
 .pack-image-holder {
     width: 100%;
-    height: 160px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -439,7 +439,7 @@ body{
 }
 
 .pack-img {
-    max-height: 130px;
+    max-height: 120px;
     max-width: 90%;
     object-fit: contain;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
@@ -447,79 +447,78 @@ body{
 
 .pack-title {
     font-family: "Titan One", cursive;
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     color: #fff4d6;
     pointer-events: none;
 }
 
-/* NEW DETAILED BLOOK DROP RATE CONTAINER CARD */
+/* STRETCHED RESULT DISPLAY VIEW AREA CONTAINER */
 .blook-probabilities-list {
     display: none;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     margin-top: 15px;
-    background: rgba(15, 10, 5, 0.94);
-    border-radius: 14px;
-    padding: 10px;
-    max-height: 250px;
+    background: rgba(15, 10, 5, 0.95);
+    border-radius: 16px;
+    padding: 12px;
+    max-height: 320px;
     overflow-y: auto;
     text-align: left;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.15);
     position: relative;
     z-index: 10;
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    box-shadow: inset 0 4px 15px rgba(0,0,0,0.6);
 }
 
-/* Horizontal Row representing a drop card entity */
+/* STRETCHED CARD MODEL MATCHING SITE THEME OUTCOME NODES */
 .probability-row {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 10px;
-    border-radius: 8px;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-}
-
-.probability-left-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px 10px;
+    position: relative;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    width: 100%;
 }
 
 .prob-blook-icon {
-    width: 32px;
-    height: 32px;
+    width: 65px;
+    height: 65px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    margin-bottom: 6px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
 }
 
 .prob-blook-name {
-    font-weight: 800;
-    font-size: 0.9rem;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-}
-
-.probability-right-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    text-align: center;
 }
 
 .prob-blook-chance {
-    font-weight: 900;
-    font-size: 0.85rem;
-    background: rgba(0,0,0,0.3);
-    padding: 2px 6px;
-    border-radius: 5px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    background: rgba(0,0,0,0.4);
+    padding: 2px 8px;
+    border-radius: 99px;
+    color: #fff4d6;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .prob-rarity-badge-img {
     height: 18px;
     width: auto;
+    max-width: 90%;
     object-fit: contain;
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 /* =========================
@@ -753,16 +752,13 @@ body{
             
             currentPack.blooks.forEach(b => {
                 const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
+                // Custom stretched reward node copy styling layout logic 
                 probabilitiesHTML += `
-                    <div class="probability-row">
-                        <div class="probability-left-meta">
-                            <img src="${b.image}" alt="${b.name}" class="prob-blook-icon">
-                            <span class="prob-blook-name" style="color: ${b.color};">${b.name}</span>
-                        </div>
-                        <div class="probability-right-meta">
-                            <span class="prob-blook-chance" style="color: ${b.color};">${b.chance}%</span>
-                            <img src="${rarityImgUrl}" alt="${b.rarity}" class="prob-rarity-badge-img">
-                        </div>
+                    <div class="probability-row" style="border-color: ${b.color}; background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.3) 100%);">
+                        <img src="${b.image}" alt="${b.name}" class="prob-blook-icon">
+                        <div class="prob-blook-name" style="color: ${b.color};">${b.name}</div>
+                        <div class="prob-blook-chance">${b.chance}%</div>
+                        <img src="${rarityImgUrl}" alt="${b.rarity}" class="prob-rarity-badge-img">
                     </div>
                 `;
             });
