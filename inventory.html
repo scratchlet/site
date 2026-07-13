@@ -322,52 +322,57 @@ body{
 }
 
 /* ====================================
-   EVENED-OUT RECTANGLE CARD MODAL
+   HORIZONTAL EVENED-OUT BLOCK CARD MODAL
 ==================================== */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     z-index: 1500;
     display: none;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
 .card-view-wrapper {
     position: relative;
-    width: 300px; /* Uniform width profile */
+    width: 100%;
+    max-width: 580px; /* Expands wider for side-by-side design */
     background: #111111;
-    border: 3px solid rgba(255,255,255,0.08);
+    border: 3px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 25px 60px rgba(0,0,0,0.85);
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Aligns left and right blocks side-by-side */
     overflow: hidden;
+    border-radius: 6px; /* Uniform flat box styling */
 }
 
-/* Perfect rectangle top section */
+/* Left Dynamic Rarity Frame Side */
 .card-art-section {
     position: relative;
-    height: 330px; 
+    width: 45%; 
+    min-height: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 20px;
+    border-right: 4px solid rgba(0, 0, 0, 0.4);
 }
 
 .card-close-btn {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(0, 0, 0, 0.4);
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.45);
     border: none;
     color: white;
     width: 32px;
     height: 32px;
-    border-radius: 6px; /* Squared clean styling accent */
+    border-radius: 6px; 
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -375,24 +380,24 @@ body{
     z-index: 20;
 }
 .card-close-btn:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.65);
 }
 
 .card-blook-title {
     font-family: 'Titan One', cursive;
-    font-size: 2.1rem;
+    font-size: 1.8rem;
     color: white;
     text-transform: uppercase;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.8);
-    margin-bottom: 25px;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.85);
+    margin-bottom: 15px;
     letter-spacing: 0.5px;
     text-align: center;
     z-index: 10;
 }
 
 .card-image-holder {
-    width: 140px;
-    height: 160px;
+    width: 110px;
+    height: 130px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -403,29 +408,30 @@ body{
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.4));
 }
 
-/* Perfect rectangle bottom section */
+/* Right Actions & Settings Side */
 .card-control-section {
-    background: #141414;
-    padding: 20px;
+    width: 55%;
+    background: #151515;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    border-top: 5px solid rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    gap: 16px;
 }
 
 .card-count-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 800;
     color: #999999;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 2px 4px;
+    padding: 0 2px;
 }
 
 .card-count-value {
@@ -434,13 +440,14 @@ body{
     font-size: 1.1rem;
 }
 
-/* Flattened and squared interactive items */
+/* Flattened Stepper Block */
 .card-input-stepper {
     display: flex;
     align-items: center;
     background: #1e1e1e;
     padding: 2px;
     border: 2px solid #2d2d2d;
+    border-radius: 6px;
 }
 
 .stepper-btn {
@@ -448,15 +455,16 @@ body{
     border: none;
     color: #ff9b2f;
     font-family: 'Titan One', cursive;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     width: 44px;
     height: 44px;
     cursor: pointer;
     user-select: none;
+    border-radius: 4px;
 }
 .stepper-btn:hover {
     color: #ffb666;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .card-sell-field {
@@ -481,9 +489,10 @@ body{
     background: #ff9b2f;
     color: white;
     font-family: 'Titan One', cursive;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     padding: 14px;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
     text-transform: uppercase;
     display: flex;
@@ -564,7 +573,7 @@ body{
         
         <div class="card-art-section" id="card-dynamic-bg">
             <button class="card-close-btn" id="close-sell-modal-btn">
-                <span class="material-icons" style="font-size: 1.2rem;">close</span>
+                <span class="material-icons" style="font-size: 1.1rem;">close</span>
             </button>
             <h2 class="card-blook-title" id="modal-blook-name">BLOOK NAME</h2>
             <div class="card-image-holder">
