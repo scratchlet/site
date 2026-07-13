@@ -643,17 +643,6 @@ input:checked + .toggle-slider:before {
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Updated Text Rarity Badge Styling */
-.info-rarity-text-badge {
-    font-family: 'Titan One', cursive;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-    min-width: 100px;
-    text-align: right;
-}
-
 /* ====================================
    CONFIRMATION CARD INTERFACE
 ==================================== */
@@ -909,7 +898,6 @@ input:checked + .toggle-slider:before {
     .info-left-item-pack { flex-direction: column; gap: 8px; }
     .info-blook-name { text-align: center; }
     .info-right-item-pack { gap: 14px; flex-direction: column; }
-    .info-rarity-text-badge { text-align: center; }
 }
 </style>
 </head>
@@ -1032,6 +1020,7 @@ input:checked + .toggle-slider:before {
         <div id="reward-display-node"></div>
     </div>
 </div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1187,7 +1176,7 @@ input:checked + .toggle-slider:before {
         });
     }
 
-function openPackContentsModal(packId) {
+    function openPackContentsModal(packId) {
         const selectedPack = packs[packId];
         if(!selectedPack) return;
 
@@ -1195,7 +1184,6 @@ function openPackContentsModal(packId) {
         infoCardsContainer.innerHTML = "";
 
         selectedPack.blooks.forEach(b => {
-            // Fetch the corresponding rarity image from the map, default to Uncommon if missing
             const rarityImgSrc = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
 
             infoCardsContainer.innerHTML += `
@@ -1417,7 +1405,13 @@ function openPackContentsModal(packId) {
                         </div>
                     </div>
                 `;
-                triggerRainEffect(matchingRarityUrl);
+
+                rewardModal.style.display = "flex";
+                setTimeout(() => {
+                    rewardModal.style.opacity = "1";
+                    modalContainerCard.style.transform = "scale(1)";
+                    triggerRainEffect(matchingRarityUrl);
+                }, 15);
             };
 
             if (instantOpenCheckbox.checked) {
@@ -1490,7 +1484,13 @@ function openPackContentsModal(packId) {
                 });
                 resultsHtml += `</div>`;
                 rewardDisplayNode.innerHTML = resultsHtml;
-                triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
+                
+                rewardModal.style.display = "flex";
+                setTimeout(() => {
+                    rewardModal.style.opacity = "1";
+                    modalContainerCard.style.transform = "scale(1)";
+                    triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
+                }, 15);
             };
 
             renderPackPreOpenAnimation(targetedPack.image, proceedWithMassReveal);
@@ -1659,5 +1659,6 @@ function openPackContentsModal(packId) {
         }
     });
 </script>
+
 </body>
 </html>
