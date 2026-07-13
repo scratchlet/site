@@ -82,7 +82,6 @@ body{
     -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
     mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
     -webkit-mask-size: 126px 126px;
-    mask-size: 126px 126px;
     transform: rotate(15deg);
     filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
 }
@@ -855,12 +854,6 @@ input:checked + .toggle-slider:before {
     100% { transform: scale(0) rotate(720deg); opacity: 0; filter: brightness(3); }
 }
 
-@keyframes hintPulse {
-    0% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
-    100% { opacity: 0.5; transform: scale(1); }
-}
-
 .animate-pack-pop {
     animation: packPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
@@ -1039,7 +1032,6 @@ input:checked + .toggle-slider:before {
         <div id="reward-display-node"></div>
     </div>
 </div>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1235,7 +1227,7 @@ input:checked + .toggle-slider:before {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             try {
-                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
                 currentUserRef = firestoreModule.doc(db, "users", user.uid);
                 const userSnap = await firestoreModule.getDoc(currentUserRef);
                 if (userSnap.exists()) {
@@ -1325,7 +1317,7 @@ input:checked + .toggle-slider:before {
     }
 
     function closeRewardModal() {
-        if (isAnimationStateActive) return; // Prevent early closure during pack click segment
+        if (isAnimationStateActive) return; 
         isRewardModalActive = false;
         rewardModal.style.opacity = "0";
         modalContainerCard.style.transform = "scale(0.7)";
@@ -1340,9 +1332,6 @@ input:checked + .toggle-slider:before {
         rewardDisplayNode.innerHTML = `
             <div id="interactive-animated-pack" class="animate-pack-pop" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                 <img src="${packImgUrl}" alt="Opening Pack" style="max-height: 220px; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));">
-                <div style="margin-top: 25px; font-family: 'Titan One', cursive; font-size: 1.4rem; color: #ffd700; text-shadow: 2px 2px 0px #000; animation: hintPulse 1.4s infinite; text-transform: uppercase; letter-spacing: 1px;">
-                    Click anywhere to open!
-                </div>
             </div>
         `;
         
@@ -1352,7 +1341,6 @@ input:checked + .toggle-slider:before {
             modalContainerCard.style.transform = "scale(1)";
         }, 15);
 
-        // Click wrapper listener to trigger the spin/shrink spin transitions
         const triggerOpeningSequence = () => {
             rewardModal.removeEventListener('click', triggerOpeningSequence);
             const targetPackNode = document.getElementById('interactive-animated-pack');
@@ -1363,7 +1351,7 @@ input:checked + .toggle-slider:before {
             setTimeout(() => {
                 isAnimationStateActive = false;
                 onPackClickCallback();
-            }, 450); // Matches keyframe layout duration
+            }, 450); 
         };
 
         setTimeout(() => {
