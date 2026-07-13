@@ -492,7 +492,7 @@ body{
     </div>
 
     <div class="master-inventory-card">
-        <div id="inventory-mount-node"></div>
+        <div id="inventory-mount-node" class="blook-grid"></div>
     </div>
 </main>
 
@@ -646,6 +646,7 @@ let userTokens = 0;
 let userInventoryMap = {};
 let currentUserRef = null;
 let selectedBlookToSell = null;
+let isInventoryArray = false; // Track database schema format dynamically
 
 function findBlookDetails(blookName) {
     for (const key in packsRegistry) {
@@ -673,7 +674,10 @@ function renderInventoryLayout() {
     totalBlooksStat.textContent = totalValidOwnedBlooks;
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
+    // Clear the master node first to completely handle custom layout sections
     inventoryMountNode.innerHTML = "";
+
+    // Change the grid parent to act as a vertical section block container instead of a simple grid
     inventoryMountNode.style.display = "flex";
     inventoryMountNode.style.flexDirection = "column";
     inventoryMountNode.style.gap = "30px";
@@ -681,6 +685,7 @@ function renderInventoryLayout() {
     for (const packKey in packsRegistry) {
         const pack = packsRegistry[packKey];
         
+        // Create Section Header Element
         const packHeader = document.createElement('h2');
         packHeader.style.fontFamily = "'Titan One', cursive";
         packHeader.style.fontSize = "1.4rem";
@@ -691,8 +696,9 @@ function renderInventoryLayout() {
         packHeader.style.letterSpacing = "0.5px";
         packHeader.textContent = pack.name;
 
+        // Create inner grid element specifically for this pack's items
         const packGrid = document.createElement('div');
-        packGrid.className = "blook-grid";
+        packGrid.className = "blook-grid"; // Retains your CSS styling variables
 
         let gridHtml = "";
         pack.blooks.forEach(blook => {
@@ -718,16 +724,19 @@ function renderInventoryLayout() {
 
         packGrid.innerHTML = gridHtml;
 
+        // Create Section Line Separator Element
         const lineSeparator = document.createElement('hr');
         lineSeparator.style.border = "none";
         lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
         lineSeparator.style.marginTop = "25px";
 
+        // Append to core inventory container view
         inventoryMountNode.appendChild(packHeader);
         inventoryMountNode.appendChild(packGrid);
         inventoryMountNode.appendChild(lineSeparator);
     }
 
+    // Clean up the trailing absolute final separating line
     if(inventoryMountNode.lastChild) {
         inventoryMountNode.removeChild(inventoryMountNode.lastChild);
     }
@@ -742,6 +751,9 @@ function renderInventoryLayout() {
     });
 }
 
+/* ====================================
+   MODAL ACTIONS INTERACTION CODES
+==================================== */
 function openSellWindow(blook, totalOwned) {
     selectedBlookToSell = { ...blook, ownedCount: totalOwned };
     
@@ -813,10 +825,24 @@ confirmSellBtn.addEventListener('click', async () => {
 
         userTokens += payoutGained;
 
+        // Build array database value if the schema matches an Array type structure
+        let inventoryDataValue;
+        if (isInventoryArray) {
+            inventoryDataValue = [];
+            Object.keys(userInventoryMap).forEach(blookName => {
+                const count = userInventoryMap[blookName];
+                for (let i = 0; i < count; i++) {
+                    inventoryDataValue.push(blookName);
+                }
+            });
+        } else {
+            inventoryDataValue = userInventoryMap;
+        }
+
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
-            inventory: userInventoryMap
+            inventory: inventoryDataValue
         });
 
         tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -830,6 +856,9 @@ confirmSellBtn.addEventListener('click', async () => {
     }
 });
 
+/* ====================================
+   INITIAL AUTH STATE LISTENERS
+==================================== */
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
@@ -840,7 +869,19 @@ onAuthStateChanged(auth, async (user) => {
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
-                userInventoryMap = userData.inventory || {};
+                
+                // Mismatch Handler: Convert database arrays seamlessly into frequency objects
+                const rawInventory = userData.inventory || [];
+                isInventoryArray = Array.isArray(rawInventory);
+                
+                userInventoryMap = {};
+                if (isInventoryArray) {
+                    rawInventory.forEach(blookName => {
+                        userInventoryMap[blookName] = (userInventoryMap[blookName] || 0) + 1;
+                    });
+                } else {
+                    userInventoryMap = rawInventory;
+                }
                 
                 tokenCounterValue.textContent = userTokens.toLocaleString();
                 renderInventoryLayout();
