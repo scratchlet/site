@@ -251,7 +251,7 @@ body{
     font-size:0.95rem;
     text-decoration:none;
     display:inline-block;
-    padding:10px 20px;
+    padding:12px 24px;
     border-radius:14px;
     position: relative;
     text-align: center;
@@ -283,60 +283,49 @@ body{
     filter: brightness(0.95);
 }
 
+/* Disabled button state */
+.btn:disabled {
+    background: rgba(255,255,255,0.2) !important;
+    color: rgba(255,255,255,0.4) !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 /* =========================
-   MARKET LAYOUT HOUSING
+   MARKET LAYOUT HOUSING (STRETCHED)
 ========================= */
 .market-container {
     flex: 1;
-    max-width: 950px;
+    max-width: 1350px; /* Stretched position width */
     width: 100%;
     margin: 40px auto;
-    padding: 0 20px;
+    padding: 0 30px;
     position: relative;
     z-index: 5;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-.market-header {
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 30px;
-    margin-bottom: 30px;
-    text-align: center;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-}
-
-.market-header h1 {
-    font-family: "Titan One", cursive;
-    font-size: 2.8rem;
-    margin-bottom: 8px;
-    text-shadow: 0 4px 0 rgba(0,0,0,.15);
-}
-
-.market-header p {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff4d6;
-}
-
-/* Pack Card Design */
+/* Combined dynamic layout grid stretching across columns */
 .market-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); /* Stretched wide layouts */
+    gap: 30px;
     margin-bottom: 50px;
-    justify-content: center;
 }
 
 .pack-card {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    padding: 25px;
+    padding: 35px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s, border-color 0.2s;
 }
 
@@ -347,18 +336,18 @@ body{
 
 .pack-image-holder {
     width: 100%;
-    height: 180px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     background: rgba(255,255,255,0.05);
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
 }
 
 .pack-img {
-    max-height: 150px;
+    max-height: 170px;
     max-width: 90%;
     object-fit: contain;
     filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
@@ -366,8 +355,8 @@ body{
 
 .pack-title {
     font-family: "Titan One", cursive;
-    font-size: 1.6rem;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    margin-bottom: 12px;
     color: #fff4d6;
 }
 
@@ -377,25 +366,24 @@ body{
     justify-content: center;
     gap: 8px;
     font-weight: 900;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #ffd700;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .pack-price-row img {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
 }
 
-/* Pack Dropdown Info Panel */
 .pack-info-toggle {
     margin-top: auto;
     background: rgba(0,0,0,0.2);
     border-radius: 12px;
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -411,12 +399,12 @@ body{
 .blook-probabilities-list {
     display: none;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 15px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 12px;
-    padding: 12px;
-    max-height: 220px;
+    padding: 15px;
+    max-height: 240px;
     overflow-y: auto;
     text-align: left;
     border: 1px solid rgba(255,255,255,0.1);
@@ -426,11 +414,11 @@ body{
     display: flex;
     justify-content: space-between;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
 }
 
 /* =========================
-   REVEAL MODAL ANIMATION
+   REVEAL MODAL ANIMATION & EXPLOSION
 ========================= */
 .modal-overlay {
     position: fixed;
@@ -450,16 +438,17 @@ body{
     border-radius: 32px;
     padding: 40px;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     text-align: center;
     box-shadow: 0 0 50px rgba(255, 204, 0, 0.4);
     transform: scale(0.7);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
 }
 
-.blook-reward-card {
-    width: 140px;
-    height: 165px;
+.reward-card-node {
+    width: 150px;
+    height: 180px;
     background: rgba(255,255,255,0.1);
     border-radius: 20px;
     margin: 25px auto;
@@ -467,36 +456,47 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    animation: unboxSpin 0.6s ease-out;
+    padding: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    position: relative;
 }
 
-.blook-reward-img {
-    width: 85px;
-    height: 85px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
-
-.reward-blook-name {
-    font-family: "Nunito", sans-serif;
-    font-weight: 900;
-    font-size: 1.15rem;
-}
-
-.reward-rarity-badge {
-    font-weight: 900;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
+/* Unbox Card pop animation */
+.animate-pop {
+    animation: unboxSpin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 @keyframes unboxSpin {
     0% { transform: scale(0.3) rotate(-45deg); opacity: 0; }
     70% { transform: scale(1.1) rotate(10deg); }
     100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Particle Explosion Elements */
+.token-particle {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background-image: url('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1100;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: explodeParticle 0.8s ease-out forwards;
+}
+
+@keyframes explodeParticle {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(0) rotate(var(--r));
+        opacity: 0;
+    }
 }
 
 /* =========================
@@ -509,6 +509,7 @@ body{
     .hud-badge-bar { max-width: 100%; overflow-x: auto; padding: 4px 8px; gap: 4px; border-radius: 25px; }
     .hud-item { width: 36px; height: 36px; flex-shrink: 0; }
     .hud-item::after { top: auto; bottom: 46px; }
+    .market-container { padding: 0 15px; }
 }
 </style>
 </head>
@@ -547,20 +548,32 @@ body{
 </nav>
 
 <main class="market-container">
-    <div class="market-header">
-        <h1>Marketplace</h1>
-        <p>Purchase custom Blook mystery packs to complete your unique digital collections!</p>
-    </div>
+    <div class="market-grid">
+        
+        <div class="pack-card" style="border-color: #ff9333; background: rgba(143, 50, 0, 0.25);">
+            <div class="pack-image-holder" style="background: rgba(255, 155, 47, 0.15);">
+                <span class="material-icons" style="font-size: 6.5rem; color: #ffd700; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">alarm_on</span>
+            </div>
+            <div class="pack-title">Hourly Reward</div>
+            <div class="pack-price-row" style="color: #fff4d6; font-size: 1.1rem; min-height: 30px;">
+                <span id="hourly-timer-text">Claim free tokens every single hour!</span>
+            </div>
+            <button class="btn primary" id="claim-hourly-btn" style="background: linear-gradient(135deg, #ffd700, #ff8c1a); color: white; width: 100%;">Claim 500 - 2,000 Tokens</button>
+        </div>
 
-    <div class="market-grid" id="packs-rendering-grid"></div>
+        <div id="dynamic-packs-mount-node"></div>
+        
+    </div>
 </main>
 
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
-        <h2 font-family="Titan One" style="font-size:2rem; color:#ffd700;">YOU UNBOXED!</h2>
-        <div class="blook-reward-card" id="reward-display-node">
+        <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
+        
+        <div class="reward-card-node" id="reward-display-node">
             </div>
-        <button class="btn primary" id="close-reward-modal-btn" style="padding:12px 30px;">Awesome!</button>
+        
+        <button class="btn primary" id="close-reward-modal-btn" style="padding:12px 30px; margin-top: 10px;">Awesome!</button>
     </div>
 </div>
 
@@ -584,16 +597,19 @@ body{
     const db = getFirestore(app);
 
     const tokenCounterValue = document.getElementById('token-counter-value');
-    const packsGrid = document.getElementById('packs-rendering-grid');
+    const dynamicPacksMountNode = document.getElementById('dynamic-packs-mount-node');
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
     const rewardDisplayNode = document.getElementById('reward-display-node');
+    const modalRewardHeader = document.getElementById('modal-reward-header');
     const closeRewardModalBtn = document.getElementById('close-reward-modal-btn');
+    
+    const claimHourlyBtn = document.getElementById('claim-hourly-btn');
+    const hourlyTimerText = document.getElementById('hourly-timer-text');
 
     let userTokens = 0;
     let currentUserRef = null;
 
-    // Core application configuration database data source
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -617,13 +633,10 @@ body{
         }
     };
 
-    // Render configuration UI items onto layout structure automatically
     function setupPackMarketplace() {
-        packsGrid.innerHTML = "";
+        dynamicPacksMountNode.innerHTML = "";
         Object.keys(packs).forEach(key => {
             const currentPack = packs[key];
-            
-            // Generate list items matching all underlying configurations
             let probabilitiesHTML = "";
             currentPack.blooks.forEach(b => {
                 probabilitiesHTML += `
@@ -634,33 +647,32 @@ body{
                 `;
             });
 
-            const packCard = document.createElement('div');
-            packCard.className = "pack-card";
-            packCard.innerHTML = `
-                <div class="pack-image-holder">
-                    <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
-                </div>
-                <div class="pack-title">${currentPack.name}</div>
-                <div class="pack-price-row">
-                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
-                    <span>${currentPack.cost}</span>
-                </div>
-                <button class="btn primary purchase-action-trigger" data-pack-id="${key}" style="width: 100%; margin-bottom: 12px;">Open Pack</button>
-                
-                <div class="pack-info-toggle" id="info-toggle-${key}">
-                    <span>View Contents</span>
-                    <span class="material-icons" id="arrow-${key}" style="font-size: 1.1rem;">expand_more</span>
-                </div>
-                <div class="blook-probabilities-list" id="prob-list-${key}">
-                    ${probabilitiesHTML}
+            dynamicPacksMountNode.innerHTML = `
+                <div class="pack-card">
+                    <div class="pack-image-holder">
+                        <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
+                    </div>
+                    <div class="pack-title">${currentPack.name}</div>
+                    <div class="pack-price-row">
+                        <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
+                        <span>${currentPack.cost}</span>
+                    </div>
+                    <button class="btn primary pack-purchase-btn" data-pack-id="${key}" style="width: 100%; margin-bottom: 12px;">Open Pack</button>
+                    
+                    <div class="pack-info-toggle" id="info-toggle-${key}">
+                        <span>View Contents</span>
+                        <span class="material-icons" id="arrow-${key}" style="font-size: 1.1rem;">expand_more</span>
+                    </div>
+                    <div class="blook-probabilities-list" id="prob-list-${key}">
+                        ${probabilitiesHTML}
+                    </div>
                 </div>
             `;
-            packsGrid.appendChild(packCard);
 
-            // Wire collapsible element interaction metrics
-            const toggleBtn = packCard.querySelector(`#info-toggle-${key}`);
-            const probList = packCard.querySelector(`#prob-list-${key}`);
-            const arrow = packCard.querySelector(`#arrow-${key}`);
+            const card = dynamicPacksMountNode.firstElementChild;
+            const toggleBtn = card.querySelector(`#info-toggle-${key}`);
+            const probList = card.querySelector(`#prob-list-${key}`);
+            const arrow = card.querySelector(`#arrow-${key}`);
             
             toggleBtn.addEventListener('click', () => {
                 if(probList.style.display === "flex") {
@@ -683,12 +695,11 @@ body{
             }
             return 0;
         } catch (error) {
-            console.error("Error managing user balance entry configurations: ", error);
+            console.error(error);
             return 0;
         }
     }
 
-    // Initialize authenticated layout listeners
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             userTokens = await loadUserCoins(user);
@@ -700,81 +711,192 @@ body{
 
             setupPackMarketplace();
             attachPurchaseEventListeners();
+            initializeHourlyCooldownLoop();
         } else {
             window.location.href = "login.html";
         }
     });
 
-    // Weighted mathematical probability randomizer engine mapping percentages safely
     function rollMysteryBlook(blookArray) {
         const totalWeight = blookArray.reduce((acc, b) => acc + b.chance, 0);
         let randomValue = Math.random() * totalWeight;
-        
         for (let i = 0; i < blookArray.length; i++) {
-            if (randomValue < blookArray[i].chance) {
-                return blookArray[i];
-            }
+            if (randomValue < blookArray[i].chance) return blookArray[i];
             randomValue -= blookArray[i].chance;
         }
-        return blookArray[0]; // Fail-safe default
+        return blookArray[0];
+    }
+
+    function createTokenExplosionEffect() {
+        const particleCount = 45; 
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'token-particle';
+            
+            // Random physics vectors
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 80 + Math.random() * 160;
+            const xDistance = Math.cos(angle) * velocity;
+            const yDistance = Math.sin(angle) * velocity;
+            const randomRotation = (Math.random() * 360) + "deg";
+
+            particle.style.setProperty('--x', `${xDistance}px`);
+            particle.style.setProperty('--y', `${yDistance}px`);
+            particle.style.setProperty('--r', randomRotation);
+
+            modalContainerCard.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
     }
 
     function attachPurchaseEventListeners() {
         document.addEventListener('click', async (e) => {
-            const targetButton = e.target.closest('.purchase-action-trigger');
+            const targetButton = e.target.closest('.pack-purchase-btn');
             if (!targetButton) return;
 
             const packId = targetButton.getAttribute('data-pack-id');
             const targetedPack = packs[packId];
-
             if (!targetedPack) return;
 
             if (userTokens >= targetedPack.cost) {
                 try {
-                    // Update client token balance logic locally to prevent waiting lags
                     userTokens -= targetedPack.cost;
                     tokenCounterValue.textContent = userTokens.toLocaleString();
 
-                    // Calculate item outcomes from matrix configurations
                     const awardedBlook = rollMysteryBlook(targetedPack.blooks);
 
-                    // Commit changes safely to Firebase collection databases
                     await updateDoc(currentUserRef, {
                         tokens: userTokens,
-                        // Saves the awarded item into a user's inventory array automatically
                         inventory: arrayUnion(awardedBlook.name)
                     });
 
-                    // Trigger unboxing modal visuals animations
-                    displayUnboxedReward(awardedBlook);
+                    // Trigger unbox modal payload
+                    modalRewardHeader.textContent = "YOU UNBOXED!";
+                    modalRewardHeader.style.color = "#ffd700";
+                    modalContainerCard.style.borderColor = awardedBlook.color;
+                    modalContainerCard.style.boxShadow = `0 0 50px ${awardedBlook.color}`;
+
+                    rewardDisplayNode.innerHTML = `
+                        <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="width:90px; height:90px; object-fit:contain; margin-bottom:10px;">
+                        <div style="font-weight:900; font-size:1.2rem; color:${awardedBlook.color};">${awardedBlook.name}</div>
+                        <div style="font-weight:800; font-size:0.8rem; color:${awardedBlook.color}; text-transform:uppercase; margin-top:2px;">${awardedBlook.rarity}</div>
+                    `;
+
+                    rewardModal.style.display = "flex";
+                    rewardDisplayNode.classList.remove('animate-pop');
+                    void rewardDisplayNode.offsetWidth; // Trigger reflow 
+                    rewardDisplayNode.classList.add('animate-pop');
+
+                    setTimeout(() => {
+                        rewardModal.style.opacity = "1";
+                        modalContainerCard.style.transform = "scale(1)";
+                    }, 15);
 
                 } catch (err) {
-                    console.error("Database connection configuration transaction failed: ", err);
-                    alert("Error processing transaction logic entry maps.");
+                    console.error(err);
                 }
             } else {
-                alert(`Insufficient tokens! You need ${targetedPack.cost - userTokens} more tokens to open this pack.`);
+                alert(`Insufficient tokens!`);
             }
         });
     }
 
-    function displayUnboxedReward(blook) {
-        rewardDisplayNode.innerHTML = `
-            <img src="${blook.image}" alt="${blook.name}" class="blook-reward-img">
-            <div class="reward-blook-name" style="color: ${blook.color};">${blook.name}</div>
-            <div class="reward-rarity-badge" style="color: ${blook.color}; font-size:0.75rem;">${blook.rarity}</div>
-        `;
+    /* =========================
+       HOURLY REWARD CONTROLLERS
+    ========================= */
+    function initializeHourlyCooldownLoop() {
+        const nextClaimTimestamp = localStorage.getItem('scratchlet_next_hourly_claim');
         
-        // Match border card glow parameters to won Blook rarity colors natively
-        modalContainerCard.style.borderColor = blook.color;
-        modalContainerCard.style.boxShadow = `0 0 50px ${blook.color}`;
-
-        rewardModal.style.display = "flex";
-        setTimeout(() => {
-            rewardModal.style.opacity = "1";
-            modalContainerCard.style.transform = "scale(1)";
-        }, 15);
+        if (nextClaimTimestamp) {
+            const remainingMs = parseInt(nextClaimTimestamp) - Date.now();
+            if (remainingMs > 0) {
+                lockHourlyClaimButton(remainingMs);
+                return;
+            }
+        }
+        enableHourlyClaimButton();
     }
+
+    function lockHourlyClaimButton(duration) {
+        claimHourlyBtn.disabled = true;
+        updateTimerCountdown(duration);
+
+        const countdownInterval = setInterval(() => {
+            const nextClaimTimestamp = localStorage.getItem('scratchlet_next_hourly_claim');
+            const remaining = parseInt(nextClaimTimestamp) - Date.now();
+            
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                enableHourlyClaimButton();
+            } else {
+                updateTimerCountdown(remaining);
+            }
+        }, 1000);
+    }
+
+    function updateTimerCountdown(ms) {
+        const totalSeconds = Math.ceil(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        hourlyTimerText.textContent = `Available in ${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+    }
+
+    function enableHourlyClaimButton() {
+        claimHourlyBtn.disabled = false;
+        hourlyTimerText.textContent = "Your hourly reward is ready to be claimed!";
+    }
+
+    claimHourlyBtn.addEventListener('click', async () => {
+        if (claimHourlyBtn.disabled || !currentUserRef) return;
+
+        // Generate dynamic prize pool (500 - 2000 tokens)
+        const rolledPrize = Math.floor(Math.random() * (2000 - 500 + 1)) + 500;
+        
+        try {
+            claimHourlyBtn.disabled = true;
+            userTokens += rolledPrize;
+            
+            // Set 1 Hour constraint timer configurations 
+            const unlockTimestamp = Date.now() + (60 * 60 * 1000);
+            localStorage.setItem('scratchlet_next_hourly_claim', unlockTimestamp);
+
+            await updateDoc(currentUserRef, {
+                tokens: userTokens
+            });
+
+            tokenCounterValue.textContent = userTokens.toLocaleString();
+
+            // Set up unboxed visual text overlay layouts
+            modalRewardHeader.textContent = "REWARD CLAIMED!";
+            modalRewardHeader.style.color = "#ffd700";
+            modalContainerCard.style.borderColor = "#ffd700";
+            modalContainerCard.style.boxShadow = `0 0 60px #ffd700`;
+
+            rewardDisplayNode.innerHTML = `
+                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens" style="width:95px; height:95px; object-fit:contain; margin-bottom:12px;">
+                <div style="font-weight:900; font-size:1.4rem; color:#ffd700;">+${rolledPrize.toLocaleString()}</div>
+                <div style="font-weight:800; font-size:0.85rem; color:#fff4d6; text-transform:uppercase; margin-top:2px;">Tokens Added</div>
+            `;
+
+            rewardModal.style.display = "flex";
+            rewardDisplayNode.classList.remove('animate-pop');
+            void rewardDisplayNode.offsetWidth;
+            rewardDisplayNode.classList.add('animate-pop');
+
+            setTimeout(() => {
+                rewardModal.style.opacity = "1";
+                modalContainerCard.style.transform = "scale(1)";
+                // Detonate token particle explosion!
+                createTokenExplosionEffect();
+            }, 15);
+
+            lockHourlyClaimButton(60 * 60 * 1000);
+
+        } catch (err) {
+            console.error("Hourly claim database submission failed: ", err);
+            enableHourlyClaimButton();
+        }
+    });
 
     closeRewardModalBtn.addEventListener('click', () => {
         rewardModal.style.opacity = "0";
