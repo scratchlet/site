@@ -1187,7 +1187,7 @@ input:checked + .toggle-slider:before {
         });
     }
 
-    function openPackContentsModal(packId) {
+function openPackContentsModal(packId) {
         const selectedPack = packs[packId];
         if(!selectedPack) return;
 
@@ -1195,6 +1195,9 @@ input:checked + .toggle-slider:before {
         infoCardsContainer.innerHTML = "";
 
         selectedPack.blooks.forEach(b => {
+            // Fetch the corresponding rarity image from the map, default to Uncommon if missing
+            const rarityImgSrc = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
+
             infoCardsContainer.innerHTML += `
                 <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%);">
                     <div class="info-left-item-pack">
@@ -1203,7 +1206,7 @@ input:checked + .toggle-slider:before {
                     </div>
                     <div class="info-right-item-pack">
                         <div class="info-blook-chance">${b.chance}%</div>
-                        <div class="info-rarity-text-badge" style="color: ${b.color};">${b.rarity}</div>
+                        <img src="${rarityImgSrc}" alt="${b.rarity}" style="max-height: 35px; width: auto; object-fit: contain; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5));">
                     </div>
                 </div>
             `;
