@@ -142,18 +142,6 @@ body{
     align-items: center;
 }
 
-.user-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 8px 16px;
-    border-radius: 99px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    white-space: nowrap;
-}
-
 /* COIN COUNTER BADGE */
 .coin-counter {
     display: flex;
@@ -558,7 +546,6 @@ body{
 <nav class="navbar">
     <div class="nav-left-group">
         <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
-        <div id="username-badge-target"></div>
     </div>
     
     <div id="nav-right-target" class="nav-right-group"></div>
@@ -625,7 +612,6 @@ body{
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const usernameBadgeTarget = document.getElementById('username-badge-target');
     const navRightTarget = document.getElementById('nav-right-target');
     const welcomeTitle = document.getElementById('welcome-title');
     
@@ -667,14 +653,6 @@ body{
             welcomeTitle.textContent = `Hello ${username}!`;
             
             const currentTokens = await loadUserCoins(user);
-            
-            // Render the User Badge on the left beside the logo
-            usernameBadgeTarget.innerHTML = `
-                <div class="user-badge">
-                    <span class="material-icons">account_circle</span>
-                    <span>${username}</span>
-                </div>
-            `;
             
             // Render the Coin Counter and Action HUD bar on the right
             navRightTarget.innerHTML = `
