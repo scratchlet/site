@@ -797,7 +797,7 @@ input:checked + .toggle-slider:before {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-height: 340px;
+    max-height: 380px;
     overflow-y: auto;
     width: 100%;
     scrollbar-width: none;
@@ -824,6 +824,15 @@ input:checked + .toggle-slider:before {
     border-radius: 12px;
     padding: 8px 16px;
     border-left: 5px solid transparent;
+}
+
+/* ====================================
+   PULSE REWARD TAG EFFECT
+==================================== */
+@keyframes pulseRewardTag {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.08); filter: brightness(1.15); }
+    100% { transform: translateX(-50%) scale(1); }
 }
 
 /* ====================================
@@ -1300,12 +1309,18 @@ input:checked + .toggle-slider:before {
         }
 
         try {
+            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            
+            // Check inventory state to discover unique item status
+            const freshSnap = await firestoreModule.getDoc(currentUserRef);
+            const currentInventory = freshSnap.exists() ? (freshSnap.data().inventory || []) : [];
+
             userTokens -= targetedPack.cost;
             tokenCounterValue.textContent = userTokens.toLocaleString();
 
             const awardedBlook = rollMysteryBlook(targetedPack.blooks);
+            const isNewDiscovery = !currentInventory.includes(awardedBlook.name);
 
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             await firestoreModule.updateDoc(currentUserRef, {
                 tokens: userTokens,
                 inventory: firestoreModule.arrayUnion(awardedBlook.name)
@@ -1316,17 +1331,40 @@ input:checked + .toggle-slider:before {
             modalRewardHeader.style.color = "#ffd700";
             modalContainerCard.style.borderColor = awardedBlook.color;
 
+            const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
+
+            // Structured content card containing New Tag -> Image -> Name -> Rarity -> Drop Rate
             rewardDisplayNode.innerHTML = `
-                <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="width:110px; height:110px; object-fit:contain; margin: 15px auto;">
-                <div style="font-weight:900; font-size:1.4rem; color:${awardedBlook.color};">${awardedBlook.name}</div>
-                <div style="font-weight:800; font-size:0.9rem; color:${awardedBlook.color}; text-transform:uppercase; margin-top:4px;">${awardedBlook.rarity}</div>
+                <div style="background: rgba(0,0,0,0.4); padding: 22px 20px; border-radius: 20px; width: 100%; max-width: 320px; border: 2px solid ${awardedBlook.color}; position: relative; margin: 15px auto 5px auto; text-align: center;">
+                    
+                    ${isNewDiscovery ? `
+                        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff0055, #ff5000); color: white; font-weight: 900; font-size: 0.85rem; padding: 4px 14px; border-radius: 99px; box-shadow: 0 4px 10px rgba(255,0,85,0.4); border: 2px solid white; letter-spacing: 1px; animation: pulseRewardTag 1.5s infinite; z-index: 50;">
+                            NEW!
+                        </div>
+                    ` : ''}
+
+                    <div style="width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; background: rgba(255,255,255,0.02); border-radius: 12px;">
+                        <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="max-height: 120px; max-width: 90%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));">
+                    </div>
+
+                    <div style="font-family: 'Titan One', cursive; font-size: 1.6rem; color: #fff4d6; text-shadow: 2px 2px 0px #000; margin-bottom: 6px; tracking-spacing: 0.5px;">
+                        ${awardedBlook.name}
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin-bottom: 14px;">
+                        <img src="${matchingRarityUrl}" alt="${awardedBlook.rarity}" style="height: 28px; object-fit: contain;">
+                    </div>
+
+                    <div style="font-weight: 800; font-size: 0.85rem; background: rgba(255,255,255,0.08); display: inline-block; padding: 4px 14px; border-radius: 99px; color: #ffe3b3; border: 1px solid rgba(255,255,255,0.15);">
+                        Drop Rate: ${awardedBlook.chance}%
+                    </div>
+                </div>
             `;
 
             rewardModal.style.display = "flex";
             setTimeout(() => {
                 rewardModal.style.opacity = "1";
                 modalContainerCard.style.transform = "scale(1)";
-                const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
                 triggerRainEffect(matchingRarityUrl); 
             }, 15);
 
@@ -1352,7 +1390,6 @@ input:checked + .toggle-slider:before {
             const rolledInventoryBatch = [];
             const resultsTally = {};
 
-            // Loop and calculate unboxed values
             for (let i = 0; i < quantity; i++) {
                 const rolled = rollMysteryBlook(targetedPack.blooks);
                 rolledInventoryBatch.push(rolled.name);
@@ -1363,7 +1400,6 @@ input:checked + .toggle-slider:before {
                 resultsTally[rolled.name].count++;
             }
 
-            // FIXED: Sync structural database updates to Firestore using correct arrayUnion syntax
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             await firestoreModule.updateDoc(currentUserRef, {
                 tokens: userTokens,
@@ -1375,7 +1411,6 @@ input:checked + .toggle-slider:before {
             modalRewardHeader.style.color = "#00cc66";
             modalContainerCard.style.borderColor = "#ff9b2f";
 
-            // Render aggregated results to screen nodes safely
             let resultsHtml = `<div class="mass-open-results-container">`;
             Object.keys(resultsTally).forEach(name => {
                 const current = resultsTally[name];
@@ -1420,7 +1455,6 @@ input:checked + .toggle-slider:before {
             if (instantOpenCheckbox.checked) {
                 executePackOpening(targetedPack);
             } else if (massOpenCheckbox.checked) {
-                // MASS OPEN ROUTE
                 massPackTitle.textContent = `${targetedPack.name}`;
                 const maxAfford = Math.floor(userTokens / targetedPack.cost);
                 massOpenInput.value = maxAfford > 0 ? Math.min(10, maxAfford) : 1;
@@ -1431,7 +1465,6 @@ input:checked + .toggle-slider:before {
                     massModalCard.style.transform = "scale(1)";
                 }, 15);
             } else {
-                // STANDARD OPT-IN ROUTE
                 confirmPackTitle.textContent = `Open ${targetedPack.name}?`;
                 confirmPackImage.src = targetedPack.image;
                 confirmPackCost.textContent = targetedPack.cost;
@@ -1453,7 +1486,6 @@ input:checked + .toggle-slider:before {
             executePackOpening(targetedPack);
         });
 
-        // MASS OPEN LAYERS EVENT LISTENERS
         massCancelBtn.addEventListener('click', closeMassModal);
         massMaxTrigger.addEventListener('click', () => {
             if (!activeSelectedPackId) return;
