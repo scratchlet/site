@@ -316,7 +316,6 @@ body{
     padding: 0 10px;
 }
 
-/* FIXED HEADING STYLING */
 .market-heading {
     font-family: "Titan One", cursive;
     font-size: 2rem;
@@ -427,13 +426,6 @@ input:checked + .toggle-slider:before {
     flex-direction: column;
     align-items: flex-end;
     gap: 4px;
-}
-
-.hourly-timer-subtext {
-    font-weight: 800;
-    font-size: 0.85rem;
-    color: #fff4d6;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .market-grid {
@@ -866,9 +858,8 @@ input:checked + .toggle-slider:before {
 
             <div class="hourly-action-wrapper">
                 <button class="btn primary" id="claim-hourly-btn" style="background: linear-gradient(135deg, #ffd700, #ff8c1a); color: white; display: flex; align-items: center; gap: 8px; font-size: 1rem; box-shadow: 0 4px 12px rgba(230,140,0,0.3);">
-                    <span class="material-icons">alarm</span> Claim Hourly Reward
+                    <span class="material-icons">alarm</span> <span id="hourly-btn-text">Claim Hourly Reward</span>
                 </button>
-                <span id="hourly-timer-text" class="hourly-timer-subtext">Checking cooldown...</span>
             </div>
         </div>
     </div>
@@ -956,7 +947,7 @@ input:checked + .toggle-slider:before {
     const modalRewardHeader = document.getElementById('modal-reward-header');
     
     const claimHourlyBtn = document.getElementById('claim-hourly-btn');
-    const hourlyTimerText = document.getElementById('hourly-timer-text');
+    const hourlyBtnText = document.getElementById('hourly-btn-text');
     
     // DROPDOWN ELEMENTS
     const settingsToggleBtn = document.getElementById('market-settings-toggle-btn');
@@ -1004,7 +995,6 @@ input:checked + .toggle-slider:before {
         }
     };
 
-    // HANDLES DROPDOWN VISIBILITY AND MUTUAL EXCLUSION
     settingsToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         settingsDropdown.classList.toggle('show');
@@ -1265,11 +1255,9 @@ input:checked + .toggle-slider:before {
             const targetedPack = packs[packId];
             if (!targetedPack) return;
 
-            // INSTANT OPEN ROUTE
             if (instantOpenCheckbox.checked) {
                 executePackOpening(targetedPack);
             } else {
-                // NORMAL CONFIRMATION DIALOG ROUTE (OR FUTURE MASS OPEN FLOW)
                 activeSelectedPackId = packId;
                 confirmPackTitle.textContent = `Open ${targetedPack.name}?`;
                 confirmPackImage.src = targetedPack.image;
@@ -1316,6 +1304,7 @@ input:checked + .toggle-slider:before {
     function lockHourlyClaimButton(cooldownTarget) {
         claimHourlyBtn.disabled = true;
         
+        // FIXED: Updates time left directly within the button string
         const updateTimer = () => {
             const remaining = cooldownTarget - Date.now();
             if (remaining <= 0) {
@@ -1325,7 +1314,7 @@ input:checked + .toggle-slider:before {
                 const totalSeconds = Math.ceil(remaining / 1000);
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
-                hourlyTimerText.textContent = `Available in ${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+                hourlyBtnText.textContent = `Hourly Reward (${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s)`;
             }
         };
 
@@ -1335,14 +1324,14 @@ input:checked + .toggle-slider:before {
 
     function enableHourlyClaimButton() {
         claimHourlyBtn.disabled = false;
-        hourlyTimerText.textContent = "Reward is ready to claim!";
+        hourlyBtnText.textContent = "Claim Hourly Reward";
     }
 
     claimHourlyBtn.addEventListener('click', async () => {
         if (claimHourlyBtn.disabled || !currentUserRef) return;
 
         claimHourlyBtn.disabled = true;
-        hourlyTimerText.textContent = "Processing reward...";
+        hourlyBtnText.textContent = "Processing...";
 
         try {
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
