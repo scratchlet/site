@@ -998,7 +998,7 @@ input:checked + .toggle-slider:before {
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -1336,7 +1336,7 @@ input:checked + .toggle-slider:before {
     }
 
     /* ====================================
-       NEW: MASS PACK OPENING ENGINE
+       MASS PACK OPENING ENGINE
     ==================================== */
     async function executeMassOpening(targetedPack, quantity) {
         const totalCost = targetedPack.cost * quantity;
@@ -1363,11 +1363,11 @@ input:checked + .toggle-slider:before {
                 resultsTally[rolled.name].count++;
             }
 
-            // Sync structural database updates to Firestore
+            // FIXED: Sync structural database updates to Firestore using correct arrayUnion syntax
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
             await firestoreModule.updateDoc(currentUserRef, {
                 tokens: userTokens,
-                inventory: firestoreModule.arrayWith(rolledInventoryBatch) // Note: arrayUnion handles updates safely inside systems. If you have arrays of identical names, push configuration blocks appropriately inside server-side lists.
+                inventory: firestoreModule.arrayUnion(...rolledInventoryBatch)
             });
 
             isRewardModalActive = true;
