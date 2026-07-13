@@ -615,7 +615,7 @@ body{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 1000;
+    z-index: 1000; /* Stays securely on top of the background elements */
     display: none;
     align-items: center;
     justify-content: center;
@@ -651,14 +651,12 @@ body{
 ==================================== */
 .rain-token {
     position: fixed;
-    width: 28px;
-    height: 28px;
     background-image: url('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;
-    z-index: 9999;
-    top: -40px;
+    z-index: 950; /* Set below the active outcome modal overlays to fall behind it */
+    top: -60px;
     will-change: transform, opacity;
     animation: tokenFall linear forwards;
 }
@@ -669,7 +667,6 @@ body{
         opacity: 1;
     }
     50% {
-        /* Adds a smooth lateral swaying path midway through falling */
         transform: translateY(50vh) translateX(var(--sway)) rotate(var(--rotMid));
         opacity: 1;
     }
@@ -754,8 +751,7 @@ body{
     <div class="info-modal-content" id="info-modal-card">
         <h2 id="info-modal-title" style="font-family:'Titan One'; font-size:1.8rem; color:#fff4d6; text-transform: uppercase;">PACK CONTENT</h2>
         
-        <div class="info-cards-grid" id="info-cards-container">
-            </div>
+        <div class="info-cards-grid" id="info-cards-container"></div>
         
         <button class="btn primary" id="close-info-modal-btn" style="padding:10px 24px; align-self: center;">Close</button>
     </div>
@@ -782,8 +778,7 @@ body{
     <div class="modal-content" id="modal-container-card">
         <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
         
-        <div id="reward-display-node">
-            </div>
+        <div id="reward-display-node"></div>
     </div>
 </div>
 
@@ -809,14 +804,12 @@ body{
     const tokenCounterValue = document.getElementById('token-counter-value');
     const dynamicPacksMountNode = document.getElementById('dynamic-packs-mount-node');
     
-    // Drop Rate/Info Modal Elements
     const infoModal = document.getElementById('info-modal');
     const infoModalCard = document.getElementById('info-modal-card');
     const infoModalTitle = document.getElementById('info-modal-title');
     const infoCardsContainer = document.getElementById('info-cards-container');
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
 
-    // Confirm Modal Elements
     const confirmModal = document.getElementById('confirm-modal');
     const confirmModalCard = document.getElementById('confirm-modal-card');
     const confirmPackTitle = document.getElementById('confirm-pack-title');
@@ -825,7 +818,6 @@ body{
     const cancelOpenBtn = document.getElementById('cancel-open-btn');
     const confirmOpenBtn = document.getElementById('confirm-open-btn');
 
-    // Reveal Unboxing Modal Elements
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
     const rewardDisplayNode = document.getElementById('reward-display-node');
@@ -839,7 +831,6 @@ body{
     let serverTimerInterval = null;
     let activeSelectedPackId = null;
 
-    // Map rarities to corresponding external asset links
     const rarityAssetMap = {
         "Uncommon": "https://i.postimg.cc/xTvKgWWj/Uncommon.webp",
         "Rare": "https://i.postimg.cc/SNCG3XY1/Rare.webp",
@@ -985,23 +976,21 @@ body{
        HIGHLY ANIMATED TOKEN RAIN SYSTEM
     ==================================== */
     function triggerTokenRainEffect() {
-        const totalTokens = 45; // Amount of raining tokens to create
+        const totalTokens = 45; 
         
         for (let i = 0; i < totalTokens; i++) {
             setTimeout(() => {
                 const tokenElement = document.createElement('div');
                 tokenElement.className = 'rain-token';
                 
-                // Randomize horizontal placement across screen widths
                 const randomLeftPos = Math.random() * 100;
                 tokenElement.style.left = `${randomLeftPos}vw`;
                 
-                // Randomize sizes slightly for a depth field effect
-                const dimensions = 20 + Math.random() * 20;
+                // Increased dimensions (originally 20-40px, now scaled to 38-68px)
+                const dimensions = 38 + Math.random() * 30;
                 tokenElement.style.width = `${dimensions}px`;
                 tokenElement.style.height = `${dimensions}px`;
                 
-                // Dynamic CSS variables for physics calculations inside the keyframe animation loop
                 const lateralSway = (Math.random() * 120 - 60) + "px";
                 const midRotation = (Math.random() * 360) + "deg";
                 const endRotation = (Math.random() * 720 + 360) + "deg";
@@ -1010,15 +999,13 @@ body{
                 tokenElement.style.setProperty('--rotMid', midRotation);
                 tokenElement.style.setProperty('--rotEnd', endRotation);
                 
-                // Staggered speed ranges for falling timelines
                 const fallDuration = 1.8 + Math.random() * 1.6;
                 tokenElement.style.animationDuration = `${fallDuration}s`;
                 
                 document.body.appendChild(tokenElement);
                 
-                // Automatically clean up memory footprints from the active view document tree
                 setTimeout(() => tokenElement.remove(), fallDuration * 1000);
-            }, i * 65); // Seamless drip interval cascading
+            }, i * 65); 
         }
     }
 
@@ -1195,7 +1182,7 @@ body{
             setTimeout(() => {
                 rewardModal.style.opacity = "1";
                 modalContainerCard.style.transform = "scale(1)";
-                triggerTokenRainEffect(); // Executing token rain sequence across view window context bounds
+                triggerTokenRainEffect(); 
             }, 15);
 
             lockHourlyClaimButton(newCooldownTarget);
@@ -1206,6 +1193,5 @@ body{
         }
     });
 </script>
-
 </body>
 </html>
