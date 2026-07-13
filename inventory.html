@@ -643,7 +643,7 @@ const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
 
 let userTokens = 0;
-let userInventoryMap = {};
+let userInventoryArray = []; // Using a flat array now to support the Market system structure
 let currentUserRef = null;
 let selectedBlookToSell = null;
 
@@ -655,12 +655,23 @@ function findBlookDetails(blookName) {
     return null;
 }
 
+// Convert flat sequence array into a counted object map dynamically for layout building
+function getInventoryCounts() {
+    const counts = {};
+    userInventoryArray.forEach(name => {
+        counts[name] = (counts[name] || 0) + 1;
+    });
+    return counts;
+}
+
 function renderInventoryLayout() {
     let totalValidOwnedBlooks = 0;
     let uniqueCollectedCount = 0;
 
-    Object.keys(userInventoryMap).forEach(name => {
-        const count = userInventoryMap[name] || 0;
+    const inventoryMap = getInventoryCounts();
+
+    Object.keys(inventoryMap).forEach(name => {
+        const count = inventoryMap[name] || 0;
         if (count > 0) {
             const detailedData = findBlookDetails(name);
             if (detailedData) {
@@ -673,10 +684,7 @@ function renderInventoryLayout() {
     totalBlooksStat.textContent = totalValidOwnedBlooks;
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
-    // Clear the master node first to completely handle custom layout sections
     inventoryMountNode.innerHTML = "";
-
-    // Change the grid parent to act as a vertical section block container instead of a simple grid
     inventoryMountNode.style.display = "flex";
     inventoryMountNode.style.flexDirection = "column";
     inventoryMountNode.style.gap = "30px";
@@ -684,7 +692,6 @@ function renderInventoryLayout() {
     for (const packKey in packsRegistry) {
         const pack = packsRegistry[packKey];
         
-        // Create Section Header Element
         const packHeader = document.createElement('h2');
         packHeader.style.fontFamily = "'Titan One', cursive";
         packHeader.style.fontSize = "1.4rem";
@@ -695,13 +702,12 @@ function renderInventoryLayout() {
         packHeader.style.letterSpacing = "0.5px";
         packHeader.textContent = pack.name;
 
-        // Create inner grid element specifically for this pack's items
         const packGrid = document.createElement('div');
-        packGrid.className = "blook-grid"; // Retains your CSS styling variables
+        packGrid.className = "blook-grid";
 
         let gridHtml = "";
         pack.blooks.forEach(blook => {
-            const count = userInventoryMap[blook.name] || 0;
+            const count = inventoryMap[blook.name] || 0;
             const isOwned = count > 0;
 
             if (isOwned) {
@@ -723,19 +729,16 @@ function renderInventoryLayout() {
 
         packGrid.innerHTML = gridHtml;
 
-        // Create Section Line Separator Element
         const lineSeparator = document.createElement('hr');
         lineSeparator.style.border = "none";
         lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
         lineSeparator.style.marginTop = "25px";
 
-        // Append to core inventory container view
         inventoryMountNode.appendChild(packHeader);
         inventoryMountNode.appendChild(packGrid);
         inventoryMountNode.appendChild(lineSeparator);
     }
 
-    // Clean up the trailing absolute final separating line
     if(inventoryMountNode.lastChild) {
         inventoryMountNode.removeChild(inventoryMountNode.lastChild);
     }
@@ -743,7 +746,8 @@ function renderInventoryLayout() {
     document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
         btn.addEventListener('click', () => {
             const bName = btn.getAttribute('data-blookname');
-            const bCount = userInventoryMap[bName] || 0;
+            const currentCounts = getInventoryCounts();
+            const bCount = currentCounts[bName] || 0;
             const bDetails = findBlookDetails(bName);
             openSellWindow(bDetails, bCount);
         });
@@ -815,19 +819,22 @@ confirmSellBtn.addEventListener('click', async () => {
     try {
         confirmSellBtn.disabled = true;
 
-        if (userInventoryMap[selectedBlookToSell.name]) {
-            userInventoryMap[selectedBlookToSell.name] -= qtyToSell;
-            if (userInventoryMap[selectedBlookToSell.name] <= 0) {
-                delete userInventoryMap[selectedBlookToSell.name];
+        // Correctly filter out only the exact number of sold instances from the flat array list
+        let itemsRemoved = 0;
+        userInventoryArray = userInventoryArray.filter(blookName => {
+            if (blookName === selectedBlookToSell.name && itemsRemoved < qtyToSell) {
+                itemsRemoved++;
+                return false; // Drops this element instance from the sequence
             }
-        }
+            return true; // Retains everything else
+        });
 
         userTokens += payoutGained;
 
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
-            inventory: userInventoryMap
+            inventory: userInventoryArray
         });
 
         tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -854,7 +861,9 @@ onAuthStateChanged(auth, async (user) => {
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
-                userInventoryMap = userData.inventory || {};
+                
+                // Fallback to array setup if inventory fields are completely new/blank
+                userInventoryArray = Array.isArray(userData.inventory) ? userData.inventory : [];
                 
                 tokenCounterValue.textContent = userTokens.toLocaleString();
                 renderInventoryLayout();
