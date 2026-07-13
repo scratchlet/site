@@ -292,7 +292,7 @@ body{
 }
 
 /* =================================
-   MARKET LAYOUT HOUSING (LEFT ROW EXTENDED)
+   MARKET LAYOUT HOUSING
 ================================= */
 .market-container {
     flex: 1;
@@ -340,8 +340,9 @@ body{
     width: 100%;
 }
 
-/* THE PACK CARD IS NOW THE TRIGGER BUTTON */
+/* THE PACK CARD IS THE TRIGGER BUTTON (Relative position parent for corner placement) */
 .pack-card {
+    position: relative;
     background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
@@ -362,10 +363,35 @@ body{
     box-shadow: 0 12px 35px rgba(255, 204, 0, 0.15);
 }
 
-/* Clicking scale animation directly applied to the whole card element */
 .pack-card:active {
     transform: translateY(1px) scale(0.97);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* NEW TOP-RIGHT FLOATING COST BADGE TAG */
+.pack-price-tag-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(18, 10, 2, 0.92);
+    padding: 6px 12px;
+    border-radius: 99px;
+    border: 2px solid #ffd700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    font-weight: 900;
+    font-size: 1.05rem;
+    color: #ffd700;
+    pointer-events: none;
+}
+
+.pack-price-tag-badge img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
 .pack-image-holder {
@@ -374,11 +400,11 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     background: rgba(255,255,255,0.05);
     border-radius: 14px;
     overflow: hidden;
-    pointer-events: none; /* Passes clicking events directly to the main card layout */
+    pointer-events: none;
 }
 
 .pack-img {
@@ -391,26 +417,9 @@ body{
 .pack-title {
     font-family: "Titan One", cursive;
     font-size: 1.4rem;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
     color: #fff4d6;
     pointer-events: none;
-}
-
-.pack-price-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-weight: 900;
-    font-size: 1.2rem;
-    color: #ffd700;
-    margin-bottom: 18px;
-    pointer-events: none;
-}
-
-.pack-price-row img {
-    width: 22px;
-    height: 22px;
 }
 
 /* Isolated drop down configuration so it doesn't immediately open the pack when checked */
@@ -684,17 +693,18 @@ body{
                 `;
             });
 
-            // Rebuilt output so the pack-card node holds data properties natively
+            // Placed price badge absolutely via floating corner wrapper tag
             dynamicPacksMountNode.innerHTML = `
                 <div class="pack-card" data-pack-id="${key}">
+                    <div class="pack-price-tag-badge">
+                        <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
+                        <span>${currentPack.cost}</span>
+                    </div>
+                    
                     <div class="pack-image-holder">
                         <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
                     </div>
                     <div class="pack-title">${currentPack.name}</div>
-                    <div class="pack-price-row">
-                        <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
-                        <span>${currentPack.cost}</span>
-                    </div>
                     
                     <div class="pack-info-toggle" id="info-toggle-${key}">
                         <span>View Contents</span>
@@ -711,7 +721,6 @@ body{
             const probList = card.querySelector(`#prob-list-${key}`);
             const arrow = card.querySelector(`#arrow-${key}`);
             
-            // stopPropagation ensures that clicking 'View Contents' won't accidentally trigger an unboxing
             toggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation(); 
                 if(probList.style.display === "flex") {
@@ -785,7 +794,6 @@ body{
 
     function attachPurchaseEventListeners() {
         document.addEventListener('click', async (e) => {
-            // Targets the pack card element itself
             const cardTarget = e.target.closest('.pack-card');
             if (!cardTarget) return;
 
