@@ -549,7 +549,7 @@ body{
     </div>
     
     <div class="nav-right-group">
-        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance" style="display: none;">
+        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
         </div>
@@ -631,7 +631,6 @@ body{
     const db = getFirestore(app);
 
     const welcomeTitle = document.getElementById('welcome-title');
-    const coinCounterWrapper = document.getElementById('coin-counter-wrapper');
     const tokenCounterValue = document.getElementById('token-counter-value');
     
     const editChangelogBtn = document.getElementById('edit-changelog-btn');
@@ -673,9 +672,8 @@ body{
             
             const currentTokens = await loadUserCoins(user);
             
-            // Populating data values into the structural nav instead of rewriting the entire innerHTML
+            // Seamlessly updates the counter text safely without changing node visibility layout rules
             tokenCounterValue.textContent = currentTokens.toLocaleString();
-            coinCounterWrapper.style.display = "flex";
 
             document.getElementById('logout-hud-btn').addEventListener('click', () => {
                 signOut(auth).then(() => { window.location.reload(); });
