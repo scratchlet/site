@@ -340,13 +340,13 @@ body{
     width: 100%;
 }
 
-/* THE PACK CARD IS THE TRIGGER BUTTON (Relative position parent for corner placement) */
+/* THE PACK CARD IS THE TRIGGER BUTTON */
 .pack-card {
     position: relative;
     background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
-    padding: 20px;
+    padding: 24px 20px 20px 20px;
     width: 250px; 
     text-align: center;
     display: flex;
@@ -368,7 +368,7 @@ body{
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* NEW TOP-RIGHT FLOATING COST BADGE TAG */
+/* FLOATING COST BADGE TAG (TOP RIGHT) */
 .pack-price-tag-badge {
     position: absolute;
     top: -12px;
@@ -394,6 +394,37 @@ body{
     object-fit: contain;
 }
 
+/* FLOATING CONTENT TOGGLE BUTTON (TOP LEFT) */
+.pack-info-toggle-btn {
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    z-index: 30;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(18, 10, 2, 0.92);
+    border: 2px solid #ff9b2f;
+    color: #ff9b2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.pack-info-toggle-btn:hover {
+    background: #ff9b2f;
+    color: white;
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.pack-info-toggle-btn .material-icons {
+    font-size: 1.25rem;
+}
+
 .pack-image-holder {
     width: 100%;
     height: 160px;
@@ -417,53 +448,78 @@ body{
 .pack-title {
     font-family: "Titan One", cursive;
     font-size: 1.4rem;
-    margin-bottom: 16px;
     color: #fff4d6;
     pointer-events: none;
 }
 
-/* Isolated drop down configuration so it doesn't immediately open the pack when checked */
-.pack-info-toggle {
-    margin-top: auto;
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-    padding: 10px;
-    font-weight: 800;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    transition: background 0.15s;
-    position: relative;
-    z-index: 10; 
-}
-
-.pack-info-toggle:hover {
-    background: rgba(0,0,0,0.4);
-}
-
+/* NEW DETAILED BLOOK DROP RATE CONTAINER CARD */
 .blook-probabilities-list {
     display: none;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 12px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    padding: 12px;
-    max-height: 200px;
+    gap: 8px;
+    margin-top: 15px;
+    background: rgba(15, 10, 5, 0.94);
+    border-radius: 14px;
+    padding: 10px;
+    max-height: 250px;
     overflow-y: auto;
     text-align: left;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 10;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
 }
 
+/* Horizontal Row representing a drop card entity */
 .probability-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    font-weight: 700;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 10px;
+    border-radius: 8px;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.probability-left-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prob-blook-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.prob-blook-name {
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.probability-right-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prob-blook-chance {
+    font-weight: 900;
     font-size: 0.85rem;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+.prob-rarity-badge-img {
+    height: 18px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
 }
 
 /* =========================
@@ -656,6 +712,16 @@ body{
     let currentUserRef = null;
     let serverTimerInterval = null;
 
+    // Map rarities to corresponding external asset links
+    const rarityAssetMap = {
+        "Uncommon": "https://i.postimg.cc/xTvKgWWj/Uncommon.webp",
+        "Rare": "https://i.postimg.cc/SNCG3XY1/Rare.webp",
+        "Epic": "https://i.postimg.cc/bNkRWGSm/Epic.webp",
+        "Legendary": "https://i.postimg.cc/44r5Wvyq/Legendary.webp",
+        "Chroma": "https://i.postimg.cc/xjWR6G8W/Chroma.webp",
+        "Mystical": "https://i.postimg.cc/9XvpLP0S/Mystical.webp"
+    };
+
     const packs = {
         breakfast: {     
             name: "Breakfast Pack",    
@@ -684,18 +750,29 @@ body{
         Object.keys(packs).forEach(key => {
             const currentPack = packs[key];
             let probabilitiesHTML = "";
+            
             currentPack.blooks.forEach(b => {
+                const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
                 probabilitiesHTML += `
-                    <div class="probability-row" style="color: ${b.color};">
-                        <span>${b.name}</span>
-                        <span>${b.chance}%</span>
+                    <div class="probability-row">
+                        <div class="probability-left-meta">
+                            <img src="${b.image}" alt="${b.name}" class="prob-blook-icon">
+                            <span class="prob-blook-name" style="color: ${b.color};">${b.name}</span>
+                        </div>
+                        <div class="probability-right-meta">
+                            <span class="prob-blook-chance" style="color: ${b.color};">${b.chance}%</span>
+                            <img src="${rarityImgUrl}" alt="${b.rarity}" class="prob-rarity-badge-img">
+                        </div>
                     </div>
                 `;
             });
 
-            // Placed price badge absolutely via floating corner wrapper tag
             dynamicPacksMountNode.innerHTML = `
                 <div class="pack-card" data-pack-id="${key}">
+                    <button class="pack-info-toggle-btn" id="info-toggle-${key}" title="View Contents">
+                        <span class="material-icons">search</span>
+                    </button>
+
                     <div class="pack-price-tag-badge">
                         <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
                         <span>${currentPack.cost}</span>
@@ -706,10 +783,6 @@ body{
                     </div>
                     <div class="pack-title">${currentPack.name}</div>
                     
-                    <div class="pack-info-toggle" id="info-toggle-${key}">
-                        <span>View Contents</span>
-                        <span class="material-icons" id="arrow-${key}" style="font-size: 1rem;">expand_more</span>
-                    </div>
                     <div class="blook-probabilities-list" id="prob-list-${key}">
                         ${probabilitiesHTML}
                     </div>
@@ -719,16 +792,15 @@ body{
             const card = dynamicPacksMountNode.firstElementChild;
             const toggleBtn = card.querySelector(`#info-toggle-${key}`);
             const probList = card.querySelector(`#prob-list-${key}`);
-            const arrow = card.querySelector(`#arrow-${key}`);
             
             toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); 
+                e.stopPropagation(); // Stops unboxing purchase trigger
                 if(probList.style.display === "flex") {
                     probList.style.display = "none";
-                    arrow.textContent = "expand_more";
+                    toggleBtn.querySelector('.material-icons').textContent = "search";
                 } else {
                     probList.style.display = "flex";
-                    arrow.textContent = "expand_less";
+                    toggleBtn.querySelector('.material-icons').textContent = "close";
                 }
             });
         });
@@ -794,6 +866,8 @@ body{
 
     function attachPurchaseEventListeners() {
         document.addEventListener('click', async (e) => {
+            if (e.target.closest('.pack-info-toggle-btn')) return;
+
             const cardTarget = e.target.closest('.pack-card');
             if (!cardTarget) return;
 
