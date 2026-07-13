@@ -453,7 +453,7 @@ body{
 }
 
 /* ====================================
-   INFO MODAL STYLES (STRETCHED CARDS)
+   INFO MODAL STYLES (STRETCHED HORIZONTAL ROW LIST)
 ==================================== */
 .info-modal-overlay {
     position: fixed;
@@ -470,14 +470,11 @@ body{
 .info-modal-content {
     background: linear-gradient(135deg, #241402 0%, #0c0701 100%);
     border: 4px solid #ff9b2f;
-    border-radius: 28px;
+    border-radius: 24px;
     padding: 30px;
     width: 95%;
-    max-width: 580px;
+    max-width: 650px;
     text-align: center;
-    box-shadow: 0 0 40px rgba(255, 155, 47, 0.35);
-    transform: scale(0.7);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     max-height: 85vh;
@@ -485,12 +482,11 @@ body{
 
 .info-cards-grid {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
+    flex-direction: column;
+    gap: 12px;
     margin: 20px 0;
     overflow-y: auto;
-    padding: 10px;
+    padding: 8px;
     scrollbar-width: none;
 }
 
@@ -498,67 +494,67 @@ body{
     display: none;
 }
 
-/* Individual blook result display replica card nodes */
+/* Individual stretched full horizontal list nodes matching result styling */
 .info-blook-card {
-    width: 140px;
-    height: 180px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
+    width: 100%;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    padding: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    border: 3px solid transparent;
-    transition: transform 0.2s ease;
+    justify-content: space-between;
+    padding: 0 20px;
+    border: 2px solid transparent;
+    transition: background-color 0.15s ease;
 }
 
 .info-blook-card:hover {
-    transform: scale(1.04);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.info-left-item-pack {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .info-blook-img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
 }
 
 .info-blook-name {
     font-weight: 900;
-    font-size: 1.05rem;
-    margin-bottom: 2px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.info-right-item-pack {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .info-blook-chance {
     font-weight: 800;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     background: rgba(0,0,0,0.4);
-    padding: 2px 8px;
+    padding: 4px 12px;
     border-radius: 99px;
     color: #fff4d6;
-    margin-bottom: 8px;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
 .info-rarity-badge-img {
-    height: 16px;
+    height: 20px;
     width: auto;
-    max-width: 95%;
     object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 /* =========================
-   REVEAL MODAL ANIMATION & EXPLOSION
+   REVEAL MODAL ANIMATION
 ========================= */
 .modal-overlay {
     position: fixed;
@@ -580,7 +576,6 @@ body{
     width: 90%;
     max-width: 420px;
     text-align: center;
-    box-shadow: 0 0 50px rgba(255, 204, 0, 0.4);
     transform: scale(0.7);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
@@ -652,6 +647,10 @@ body{
     .market-action-bar { justify-content: center; }
     .hourly-action-wrapper { align-items: center; width: 100%; }
     .market-grid { justify-content: center; }
+    .info-blook-card { flex-direction: column; height: auto; padding: 15px; gap: 10px; text-align: center; }
+    .info-left-item-pack { flex-direction: column; gap: 6px; }
+    .info-blook-name { text-align: center; }
+    .info-right-item-pack { gap: 10px; }
 }
 </style>
 </head>
@@ -824,11 +823,10 @@ body{
             `;
         });
 
-        // Add info click listener to toggle buttons
         Object.keys(packs).forEach(key => {
             const toggleBtn = document.getElementById(`info-toggle-${key}`);
             toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Stop unboxing trigger
+                e.stopPropagation(); 
                 openPackContentsModal(key);
             });
         });
@@ -844,13 +842,17 @@ body{
         selectedPack.blooks.forEach(b => {
             const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
             
-            // Generate full stretched mini reward nodes
+            // Render beautiful custom full stretched horizontal structural nodes
             infoCardsContainer.innerHTML += `
-                <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.3) 100%);">
-                    <img src="${b.image}" alt="${b.name}" class="info-blook-img">
-                    <div class="info-blook-name" style="color: ${b.color};">${b.name}</div>
-                    <div class="info-blook-chance">${b.chance}%</div>
-                    <img src="${rarityImgUrl}" alt="${b.rarity}" class="info-rarity-badge-img">
+                <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%);">
+                    <div class="info-left-item-pack">
+                        <img src="${b.image}" alt="${b.name}" class="info-blook-img">
+                        <div class="info-blook-name" style="color: ${b.color};">${b.name}</div>
+                    </div>
+                    <div class="info-right-item-pack">
+                        <div class="info-blook-chance">${b.chance}%</div>
+                        <img src="${rarityImgUrl}" alt="${b.rarity}" class="info-rarity-badge-img">
+                    </div>
                 </div>
             `;
         });
@@ -954,7 +956,6 @@ body{
                     modalRewardHeader.textContent = "YOU UNBOXED!";
                     modalRewardHeader.style.color = "#ffd700";
                     modalContainerCard.style.borderColor = awardedBlook.color;
-                    modalContainerCard.style.boxShadow = `0 0 50px ${awardedBlook.color}`;
 
                     rewardDisplayNode.innerHTML = `
                         <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="width:95px; height:95px; object-fit:contain; margin-bottom:10px;">
@@ -1054,7 +1055,6 @@ body{
             modalRewardHeader.textContent = "REWARD CLAIMED!";
             modalRewardHeader.style.color = "#ffd700";
             modalContainerCard.style.borderColor = "#ffd700";
-            modalContainerCard.style.boxShadow = `0 0 60px #ffd700`;
 
             rewardDisplayNode.innerHTML = `
                 <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens" style="width:100px; height:100px; object-fit:contain; margin-bottom:12px;">
