@@ -643,7 +643,7 @@ const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
 
 let userTokens = 0;
-let userInventoryArray = [];
+let userInventoryMap = {}; // Changed from Array to Object/Map
 let currentUserRef = null;
 let selectedBlookToSell = null;
 
@@ -656,30 +656,33 @@ function findBlookDetails(blookName) {
 }
 
 function renderInventoryLayout() {
-    // 1. Tally items currently sitting in the user's registry database
-    const inventoryTally = {};
     let totalValidOwnedBlooks = 0;
+    let uniqueCollectedCount = 0;
 
-    userInventoryArray.forEach(name => {
-        const detailedData = findBlookDetails(name);
-        if (!detailedData) return;
-        inventoryTally[name] = (inventoryTally[name] || 0) + 1;
-        totalValidOwnedBlooks++;
+    // Calculate total count and unique counts based on the map structure
+    Object.keys(userInventoryMap).forEach(name => {
+        const count = userInventoryMap[name] || 0;
+        if (count > 0) {
+            const detailedData = findBlookDetails(name);
+            if (detailedData) {
+                totalValidOwnedBlooks += count;
+                uniqueCollectedCount++;
+            }
+        }
     });
 
     totalBlooksStat.textContent = totalValidOwnedBlooks;
-    uniqueBlooksStat.textContent = Object.keys(inventoryTally).length;
+    uniqueBlooksStat.textContent = uniqueCollectedCount;
 
-    // 2. Loop through EVERY registered pack blook to present the unified master checklist grid
     let gridHtml = "";
 
+    // Loop through registered blooks to generate the checklist items
     for (const packKey in packsRegistry) {
         packsRegistry[packKey].blooks.forEach(blook => {
-            const count = inventoryTally[blook.name] || 0;
+            const count = userInventoryMap[blook.name] || 0;
             const isOwned = count > 0;
 
             if (isOwned) {
-                // Render fully colored interactive button with badge count
                 gridHtml += `
                     <button class="blook-image-btn owned" data-blookname="${blook.name}" style="border-color: ${blook.color};" title="${blook.name} (${blook.rarity}) - Owned: ${count}">
                         <img src="${blook.image}" alt="${blook.name}" class="blook-img">
@@ -687,7 +690,6 @@ function renderInventoryLayout() {
                     </button>
                 `;
             } else {
-                // Render darkened locked out button structure with absolute icon layout
                 gridHtml += `
                     <button class="blook-image-btn locked" title="${blook.name} (${blook.rarity}) - Locked">
                         <span class="material-icons lock-overlay-icon">lock</span>
@@ -700,11 +702,10 @@ function renderInventoryLayout() {
 
     inventoryMountNode.innerHTML = gridHtml;
 
-    // Attach click triggers strictly to the owned buttons
     document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
         btn.addEventListener('click', () => {
             const bName = btn.getAttribute('data-blookname');
-            const bCount = inventoryTally[bName];
+            const bCount = userInventoryMap[bName] || 0;
             const bDetails = findBlookDetails(bName);
             openSellWindow(bDetails, bCount);
         });
@@ -775,24 +776,22 @@ confirmSellBtn.addEventListener('click', async () => {
 
     try {
         confirmSellBtn.disabled = true;
-        let instancesRemoved = 0;
-        const freshUpdatedInventory = [];
-        
-        userInventoryArray.forEach(blookName => {
-            if (blookName === selectedBlookToSell.name && instancesRemoved < qtyToSell) {
-                instancesRemoved++;
-            } else {
-                freshUpdatedInventory.push(blookName);
+
+        // Subtract quantity from object mapping instead of arrays filtering
+        if (userInventoryMap[selectedBlookToSell.name]) {
+            userInventoryMap[selectedBlookToSell.name] -= qtyToSell;
+            // Clean up the key if quantity hits 0
+            if (userInventoryMap[selectedBlookToSell.name] <= 0) {
+                delete userInventoryMap[selectedBlookToSell.name];
             }
-        });
+        }
 
         userTokens += payoutGained;
-        userInventoryArray = freshUpdatedInventory;
 
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
-            inventory: userInventoryArray
+            inventory: userInventoryMap
         });
 
         tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -819,7 +818,7 @@ onAuthStateChanged(auth, async (user) => {
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
-                userInventoryArray = userData.inventory || [];
+                userInventoryMap = userData.inventory || {}; // Read as Map/Object default
                 
                 tokenCounterValue.textContent = userTokens.toLocaleString();
                 renderInventoryLayout();
@@ -838,6 +837,5 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 </script>
-
 </body>
 </html>
