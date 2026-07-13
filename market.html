@@ -835,12 +835,38 @@ input:checked + .toggle-slider:before {
 }
 
 /* ====================================
-   PULSE REWARD TAG EFFECT
+   ANIMATION KEYFRAMES
 ==================================== */
 @keyframes pulseRewardTag {
     0% { transform: translateX(-50%) scale(1); }
     50% { transform: translateX(-50%) scale(1.08); filter: brightness(1.15); }
     100% { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes packPopIn {
+    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+    70% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes packSpinVanish {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
+    40% { transform: scale(1.2) rotate(-20deg); filter: brightness(1.5); }
+    100% { transform: scale(0) rotate(720deg); opacity: 0; filter: brightness(3); }
+}
+
+@keyframes hintPulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.5; transform: scale(1); }
+}
+
+.animate-pack-pop {
+    animation: packPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-pack-vanish {
+    animation: packSpinVanish 0.45s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
 
 /* ====================================
@@ -1013,6 +1039,7 @@ input:checked + .toggle-slider:before {
         <div id="reward-display-node"></div>
     </div>
 </div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1079,6 +1106,7 @@ input:checked + .toggle-slider:before {
     let activeSelectedPackId = null;
     
     let isRewardModalActive = false;
+    let isAnimationStateActive = false; 
     let rainTimers = []; 
 
     const rarityAssetMap = {
@@ -1297,12 +1325,50 @@ input:checked + .toggle-slider:before {
     }
 
     function closeRewardModal() {
+        if (isAnimationStateActive) return; // Prevent early closure during pack click segment
         isRewardModalActive = false;
         rewardModal.style.opacity = "0";
         modalContainerCard.style.transform = "scale(0.7)";
         rainTimers.forEach(timer => clearTimeout(timer));
         document.querySelectorAll('.rain-element').forEach(el => el.remove());
         setTimeout(() => { rewardModal.style.display = "none"; }, 300);
+    }
+
+    /* PRE OPEN ANIMATION ENGINE INTERMEDIARY */
+    function renderPackPreOpenAnimation(packImgUrl, onPackClickCallback) {
+        isAnimationStateActive = true;
+        rewardDisplayNode.innerHTML = `
+            <div id="interactive-animated-pack" class="animate-pack-pop" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <img src="${packImgUrl}" alt="Opening Pack" style="max-height: 220px; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));">
+                <div style="margin-top: 25px; font-family: 'Titan One', cursive; font-size: 1.4rem; color: #ffd700; text-shadow: 2px 2px 0px #000; animation: hintPulse 1.4s infinite; text-transform: uppercase; letter-spacing: 1px;">
+                    Click anywhere to open!
+                </div>
+            </div>
+        `;
+        
+        rewardModal.style.display = "flex";
+        setTimeout(() => {
+            rewardModal.style.opacity = "1";
+            modalContainerCard.style.transform = "scale(1)";
+        }, 15);
+
+        // Click wrapper listener to trigger the spin/shrink spin transitions
+        const triggerOpeningSequence = () => {
+            rewardModal.removeEventListener('click', triggerOpeningSequence);
+            const targetPackNode = document.getElementById('interactive-animated-pack');
+            if (targetPackNode) {
+                targetPackNode.classList.remove('animate-pack-pop');
+                targetPackNode.classList.add('animate-pack-vanish');
+            }
+            setTimeout(() => {
+                isAnimationStateActive = false;
+                onPackClickCallback();
+            }, 450); // Matches keyframe layout duration
+        };
+
+        setTimeout(() => {
+            rewardModal.addEventListener('click', triggerOpeningSequence);
+        }, 100);
     }
 
     /* EXECUTES SINGLE PACK OPENING ENGINE */
@@ -1330,43 +1396,44 @@ input:checked + .toggle-slider:before {
                 inventory: firestoreModule.arrayUnion(awardedBlook.name)
             });
 
-            isRewardModalActive = true;
-            const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
+            const proceedWithReveal = () => {
+                isRewardModalActive = true;
+                const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
 
-            // Single item box card structure
-            rewardDisplayNode.innerHTML = `
-                <div style="background: linear-gradient(135deg, #2c1a04 0%, #000000 100%); padding: 30px 24px; border-radius: 28px; width: 100%; max-width: 330px; border: 4px solid ${awardedBlook.color}; position: relative; margin: 0 auto; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8);">
-                    
-                    ${isNewDiscovery ? `
-                        <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff0055, #ff5000); color: white; font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.85rem; padding: 4px 16px; border-radius: 99px; box-shadow: 0 4px 12px rgba(255,0,85,0.5); border: 2px solid white; letter-spacing: 1px; animation: pulseRewardTag 1.5s infinite; z-index: 50;">
-                            NEW!
+                rewardDisplayNode.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #2c1a04 0%, #000000 100%); padding: 30px 24px; border-radius: 28px; width: 100%; max-width: 330px; border: 4px solid ${awardedBlook.color}; position: relative; margin: 0 auto; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8);">
+                        
+                        ${isNewDiscovery ? `
+                            <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff0055, #ff5000); color: white; font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.85rem; padding: 4px 16px; border-radius: 99px; box-shadow: 0 4px 12px rgba(255,0,85,0.5); border: 2px solid white; letter-spacing: 1px; animation: pulseRewardTag 1.5s infinite; z-index: 50;">
+                                NEW!
+                            </div>
+                        ` : ''}
+
+                        <div style="width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; background: rgba(255,255,255,0.03); border-radius: 16px;">
+                            <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="max-height: 125px; max-width: 85%; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));">
                         </div>
-                    ` : ''}
 
-                    <div style="width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; background: rgba(255,255,255,0.03); border-radius: 16px;">
-                        <img src="${awardedBlook.image}" alt="${awardedBlook.name}" style="max-height: 125px; max-width: 85%; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));">
+                        <div style="font-family: 'Titan One', cursive; font-size: 1.75rem; color: #fff4d6; text-shadow: 2px 2px 0px #000; margin-bottom: 4px;">
+                            ${awardedBlook.name}
+                        </div>
+
+                        <div style="font-family: 'Titan One', cursive; font-size: 1.15rem; color: ${awardedBlook.color}; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
+                            ${awardedBlook.rarity}
+                        </div>
+
+                        <div style="font-weight: 800; font-size: 0.85rem; background: rgba(255,255,255,0.07); display: inline-block; padding: 5px 16px; border-radius: 99px; color: #ffe3b3; border: 1px solid rgba(255,255,255,0.12);">
+                            Drop Rate: ${awardedBlook.chance}%
+                        </div>
                     </div>
+                `;
+                triggerRainEffect(matchingRarityUrl);
+            };
 
-                    <div style="font-family: 'Titan One', cursive; font-size: 1.75rem; color: #fff4d6; text-shadow: 2px 2px 0px #000; margin-bottom: 4px;">
-                        ${awardedBlook.name}
-                    </div>
-
-                    <div style="font-family: 'Titan One', cursive; font-size: 1.15rem; color: ${awardedBlook.color}; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
-                        ${awardedBlook.rarity}
-                    </div>
-
-                    <div style="font-weight: 800; font-size: 0.85rem; background: rgba(255,255,255,0.07); display: inline-block; padding: 5px 16px; border-radius: 99px; color: #ffe3b3; border: 1px solid rgba(255,255,255,0.12);">
-                        Drop Rate: ${awardedBlook.chance}%
-                    </div>
-                </div>
-            `;
-
-            rewardModal.style.display = "flex";
-            setTimeout(() => {
-                rewardModal.style.opacity = "1";
-                modalContainerCard.style.transform = "scale(1)";
-                triggerRainEffect(matchingRarityUrl); 
-            }, 15);
+            if (instantOpenCheckbox.checked) {
+                proceedWithReveal();
+            } else {
+                renderPackPreOpenAnimation(targetedPack.image, proceedWithReveal);
+            }
 
         } catch (err) {
             console.error("Single opening failed:", err);
@@ -1406,39 +1473,36 @@ input:checked + .toggle-slider:before {
                 inventory: firestoreModule.arrayUnion(...rolledInventoryBatch)
             });
 
-            isRewardModalActive = true;
+            const proceedWithMassReveal = () => {
+                isRewardModalActive = true;
 
-            // Updated Layout: Placed the "Mass Open Results" heading layout within the card wrapper
-            let resultsHtml = `
-                <div class="mass-open-results-container">
-                    <h2 style="font-family:'Titan One', cursive; font-size:1.5rem; color:#fff4d6; text-transform: uppercase; margin-bottom: 15px; text-align: center; text-shadow: 2px 2px 0px #000;">
-                        Mass Open Results
-                    </h2>
-            `;
-            Object.keys(resultsTally).forEach(name => {
-                const current = resultsTally[name];
-                resultsHtml += `
-                    <div class="mass-result-row" style="border-left-color: ${current.data.color};">
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <img src="${current.data.image}" alt="${name}" style="width:40px; height:40px; object-fit:contain;">
-                            <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                                <span style="font-weight:900; color:${current.data.color}; font-size:1.1rem; line-height:1.2;">${name}</span>
-                                <span style="font-size:0.75rem; color:rgba(255,255,255,0.6); text-transform:uppercase;">${current.data.rarity}</span>
-                            </div>
-                        </div>
-                        <span style="font-weight:900; background:rgba(0,0,0,0.4); padding:4px 12px; border-radius:8px; color:#ffd700;">x${current.count}</span>
-                    </div>
+                let resultsHtml = `
+                    <div class="mass-open-results-container">
+                        <h2 style="font-family:'Titan One', cursive; font-size:1.5rem; color:#fff4d6; text-transform: uppercase; margin-bottom: 15px; text-align: center; text-shadow: 2px 2px 0px #000;">
+                            Mass Open Results
+                        </h2>
                 `;
-            });
-            resultsHtml += `</div>`;
-            rewardDisplayNode.innerHTML = resultsHtml;
-
-            rewardModal.style.display = "flex";
-            setTimeout(() => {
-                rewardModal.style.opacity = "1";
-                modalContainerCard.style.transform = "scale(1)";
+                Object.keys(resultsTally).forEach(name => {
+                    const current = resultsTally[name];
+                    resultsHtml += `
+                        <div class="mass-result-row" style="border-left-color: ${current.data.color};">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <img src="${current.data.image}" alt="${name}" style="width:40px; height:40px; object-fit:contain;">
+                                <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                                    <span style="font-weight:900; color:${current.data.color}; font-size:1.1rem; line-height:1.2;">${name}</span>
+                                    <span style="font-size:0.75rem; color:rgba(255,255,255,0.6); text-transform:uppercase;">${current.data.rarity}</span>
+                                </div>
+                            </div>
+                            <span style="font-weight:900; background:rgba(0,0,0,0.4); padding:4px 12px; border-radius:8px; color:#ffd700;">x${current.count}</span>
+                        </div>
+                    `;
+                });
+                resultsHtml += `</div>`;
+                rewardDisplayNode.innerHTML = resultsHtml;
                 triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
-            }, 15);
+            };
+
+            renderPackPreOpenAnimation(targetedPack.image, proceedWithMassReveal);
 
         } catch(err) {
             console.error("Mass unboxing failed:", err);
