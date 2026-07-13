@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scratchlet - Breakfast Inventory</title>
+
+<title>Scratchlet - Inventory</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,495 +13,952 @@
 
 <style>
 /* =========================
-   GLOBAL & LAYOUT BASE
+   GLOBAL & HIDE SCROLLBAR
 ========================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
-body {
-    font-family: "Nunito", sans-serif;
-    color: white;
-    overflow-x: hidden;
-    min-height: 100vh;
+
+html, body {
+    scrollbar-width: none; 
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body{
+    font-family:"Nunito",sans-serif;
+    color:white;
+    overflow-x:hidden;
+    min-height:100vh;
     background: #ff9b2f;
+    position: relative;
+    
     display: flex;
     flex-direction: column;
 }
 
-/* BACKGROUNDS */
+/* =========================
+   BACKGROUND LAYERS
+========================= */
 .bg-base-gradient {
     position: fixed;
     inset: 0;
     z-index: -3;
     background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
 }
+
 .bg-moving-grid {
     position: fixed;
-    top: -50vh; left: -50vw; width: 200vw; height: 200vh;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
     z-index: -2;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
     background-size: 126px 126px;
+    background-position: 63px 0px;
+    will-change: transform;
     animation: scrollTiltedTopRight 8s linear infinite;
 }
+
 @keyframes scrollTiltedTopRight {
-    from { transform: rotate(15deg) translate3d(0, 0, 0); }
-    to { transform: rotate(15deg) translate3d(126px, -126px, 0); }
+    from { transform: rotate(15deg) translate3d(0px, 0px, 0px); }
+    to { transform: rotate(15deg) translate3d(126px, -126px, 0px); }
 }
 
-/* NAVBAR */
-.navbar {
+.bg-static-squares {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    -webkit-mask-size: 126px 126px;
+    transform: rotate(15deg);
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.bg-stroke-overlay {
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-size: 126px 126px;
+    transform: rotate(15deg);
+}
+
+/* =========================
+   STICKY NAVBAR
+========================= */
+.navbar{
     position: sticky;
     top: 0;
-    min-height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
+    min-height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 30px;
     background: rgba(255, 127, 17, 0.94);
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
     z-index: 100;
+    gap: 15px;
 }
-.logo-link { text-decoration: none; }
-.logo { font-family: "Titan One", cursive; font-size: 2.5rem; color: white; }
-.nav-right-group { display: flex; gap: 12px; align-items: center; }
-.coin-counter {
-    display: flex; align-items: center; gap: 6px; font-weight: 900;
-    background: rgba(0, 0, 0, 0.35); padding: 6px 14px; border-radius: 99px;
-    border: 2px solid #ffcc00;
-}
-.coin-icon { width: 22px; height: 22px; }
-.coin-amount { color: #ffd700; font-size: 1.05rem; }
-.hud-badge-bar { display: flex; background: rgba(0, 0, 0, 0.25); border-radius: 99px; padding: 6px 12px; gap: 8px; }
-.hud-item {
-    color: white; text-decoration: none; display: flex; align-items: center; justify-content: center;
-    width: 38px; height: 38px; border-radius: 50%; transition: background 0.15s, transform 0.1s;
-}
-.hud-item:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.05); }
 
-/* MAIN AREA CONFIG SPLIT */
-.inventory-split-wrapper {
+.nav-left-group {
     display: flex;
-    flex: 1;
-    max-width: 95%;
-    width: 100%;
-    margin: 30px auto;
-    gap: 25px;
-    z-index: 5;
+    align-items: center;
+    gap: 20px;
 }
 
-/* COLLECTIBLE CANVAS (LEFT PANEL) */
-.collection-main-panel {
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logo{
+    font-family:"Titan One",cursive;
+    font-size:2.5rem;
+    color:white;
+}
+
+.nav-right-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* COIN COUNTER BADGE */
+.coin-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 900;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 2px solid #ffcc00;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.coin-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+.coin-amount {
+    color: #ffd700;
+    font-size: 1.05rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* HUD Symbol Bar */
+.hud-badge-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+    padding: 6px 12px;
+    gap: 8px;
+}
+
+.hud-item {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    transition: background 0.15s, transform 0.1s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.hud-item .material-icons {
+    font-size: 1.4rem;
+}
+
+.hud-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.hud-item.logout-trigger {
+    color: #ff5252;
+}
+
+.hud-item.logout-trigger:hover {
+    background: rgba(255, 82, 82, 0.2);
+}
+
+.hud-item::after {
+    content: attr(data-nametag);
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 110;
+}
+
+.hud-item:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:12px 24px;
+    border-radius:14px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+
+.primary {
+    background: white;
+    color: #ff8c1a;
+}
+
+.secondary {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.danger {
+    background: linear-gradient(135deg, #ff5252, #c62828);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
+}
+
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+}
+
+/* =================================
+   INVENTORY CONTAINER & TABS
+================================= */
+.inventory-container {
     flex: 1;
-    background: #8b38a3; 
-    border: 5px solid #5d2070;
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    max-width: 95%; 
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 30px;
+    position: relative;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.panel-header-row {
+
+.inventory-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.panel-title {
-    font-family: "Titan One", cursive;
-    font-size: 2.4rem;
-    text-shadow: 3px 3px 0px #000;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-/* PACK GROUP ROWS */
-.pack-section-block {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-.pack-row-title {
+.inventory-heading {
     font-family: "Titan One", cursive;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #ffffff;
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    text-shadow: 3px 3px 0px #00000050;
+    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-.pack-divider-line {
-    height: 4px;
-    background: rgba(255,255,255,0.7);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-.blooks-row-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    padding-top: 10px;
+
+.stats-summary {
+    font-weight: 800;
+    background: rgba(0,0,0,0.25);
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff4d6;
 }
 
-/* HIGHLY STYLIZED BLOOK CARD */
-.blook-item-box {
+.pack-section {
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.pack-section-title {
+    font-family: "Titan One", cursive;
+    font-size: 1.4rem;
+    color: #fff4d6;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.blook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 20px;
+}
+
+/* =================================
+   BLOOK CARD STYLES
+================================= */
+.blook-card {
+    background: linear-gradient(135deg, rgba(24, 12, 2, 0.85) 0%, rgba(5, 2, 0, 0.95) 100%);
+    border: 3px solid transparent;
+    border-radius: 18px;
+    padding: 12px;
+    text-align: center;
     position: relative;
-    width: 105px;
-    height: 120px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.3) 100%);
-    border-radius: 16px;
     cursor: pointer;
+    user-select: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blook-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+}
+
+.blook-image-wrapper {
+    width: 90px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 6px 0px rgba(0, 0, 0, 0.25);
+    margin-bottom: 8px;
 }
-.blook-item-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 0px rgba(0,0,0,0.25);
-}
-.blook-item-box.locked-grey {
-    opacity: 0.25;
-    filter: grayscale(1) contrast(0.8);
-}
-.blook-item-box.selected-active {
-    border-color: #ffd700 !important;
-    box-shadow: 0 0 18px #ffd700, 0 6px 0px rgba(0,0,0,0.25);
-    transform: scale(1.04) translateY(-2px);
-}
-.blook-thumbnail {
-    width: 80%;
-    height: 80%;
+
+.blook-img {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
-.blook-counter-badge {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background: #00cc66;
-    color: white;
+
+.blook-name {
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.blook-rarity {
+    font-size: 0.75rem;
     font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* DUPLICATE QUANTITY BADGE */
+.quantity-badge {
+    position: absolute;
+    bottom: -10px;
+    right: -5px;
+    background: #ff9b2f;
+    color: white;
+    font-family: 'Titan One', cursive;
     font-size: 0.85rem;
-    min-width: 24px;
-    height: 24px;
+    padding: 3px 9px;
+    border-radius: 99px;
+    border: 2px solid white;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+/* ====================================
+   SELL MODAL INTERFACE
+==================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 28px;
+    padding: 30px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.modal-blook-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin: 15px auto;
+    display: block;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+}
+
+.sell-calc-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+    gap: 15px;
+    margin: 20px 0;
 }
 
-/* INSPECTION SIDEBAR */
-.inspection-sidebar-panel {
-    width: 340px;
-    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
-    border: 4px solid #ff9b2f;
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.sell-input {
+    width: 80px;
+    padding: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
     text-align: center;
-    position: sticky;
-    top: 100px;
-    height: fit-content;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid #ff9b2f;
+    border-radius: 12px;
+    color: #ffd700;
+    outline: none;
 }
-.sidebar-empty-state {
-    color: rgba(255,255,255,0.4);
-    font-weight: 700;
-    margin-top: 60px;
-}
-.sidebar-preview-img {
-    max-height: 150px;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
-    margin-bottom: 20px;
-}
-.sidebar-name {
-    font-family: "Titan One", cursive;
-    font-size: 2rem;
-    color: #fff4d6;
-    margin-bottom: 8px;
-    text-shadow: 2px 2px 0px #000;
-}
-.sidebar-rarity-banner {
-    max-height: 35px;
-    width: auto;
-    object-fit: contain;
+
+.total-payout-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #ffd700;
+    background: rgba(0,0,0,0.35);
+    padding: 6px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255,215,0,0.2);
     margin-bottom: 25px;
 }
-.action-button-stack {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
-}
-.inventory-btn {
-    width: 100%;
-    font-family: "Nunito", sans-serif;
-    font-weight: 900;
-    font-size: 1.05rem;
-    padding: 14px;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
-    transition: transform 0.1s, box-shadow 0.1s;
-}
-.inventory-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
-.inventory-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
-.btn-sell-single { background: linear-gradient(135deg, #ff9b2f, #ff7f11); color: white; }
-.btn-sell-dupes { background: linear-gradient(135deg, #ff4d4d, #cc0000); color: white; }
 
-/* RESPONSIBILITY SCALING */
-@media(max-width: 980px) {
-    .inventory-split-wrapper { flex-direction: column; }
-    .inspection-sidebar-panel { width: 100%; position: static; }
+.modal-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff4d6;
+}
+
+/* Responsive adjustments */
+@media(max-width: 768px) {
+    .navbar { padding: 12px 20px; flex-direction: column; }
+    .inventory-container { padding: 0 15px; }
+    .blook-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
 }
 </style>
 </head>
+
 <body>
 
 <div class="bg-base-gradient"></div>
 <div class="bg-moving-grid"></div>
+<div class="bg-static-squares"></div>
+<div class="bg-stroke-overlay"></div>
 
 <nav class="navbar">
-    <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
+    <div class="nav-left-group">
+        <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
+    </div>
+    
     <div class="nav-right-group">
-        <div class="coin-counter">
+        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
             <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
             <span id="token-counter-value" class="coin-amount">0</span>
         </div>
+        
         <div class="hud-badge-bar">
-            <a href="home.html" class="hud-item"><span class="material-icons">home</span></a>
-            <a href="market.html" class="hud-item"><span class="material-icons">storefront</span></a>
-            <a href="inventory.html" class="hud-item"><span class="material-icons">inventory_2</span></a>
+            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
         </div>
     </div>
 </nav>
 
-<main class="inventory-split-wrapper">
-    <div class="collection-main-panel">
-        <div class="panel-header-row">
-            <h1 class="panel-title">My Blooks</h1>
+<main class="inventory-container">
+    <div class="inventory-header">
+        <h1 class="inventory-heading">My Blooks</h1>
+        <div class="stats-summary">
+            Total Blooks: <span id="total-blooks-stat" style="color:#ffd700; font-weight:900;">0</span> | 
+            Unique Collected: <span id="unique-blooks-stat" style="color:#00cc66; font-weight:900;">0</span>
         </div>
-        <div id="packs-collection-mount-node" style="display:flex; flex-direction:column; gap:30px;">
-            </div>
     </div>
 
-    <div class="inspection-sidebar-panel" id="inspection-panel">
-        <div class="sidebar-empty-state" id="sidebar-empty-message">
-            <span class="material-icons" style="font-size: 3.5rem; margin-bottom: 12px; color: #ff9b2f;">touch_app</span>
-            <p>Select a breakfast item to view stats or sell duplicates</p>
-        </div>
-        <div id="sidebar-content-node" style="display: none; width: 100%;">
-            </div>
-    </div>
+    <div id="inventory-mount-node"></div>
 </main>
 
+<div class="modal-overlay" id="sell-modal">
+    <div class="modal-content" id="sell-modal-card">
+        <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase;">BLOOK NAME</h2>
+        <div id="modal-blook-rarity-text" class="blook-rarity" style="margin-top: 4px;">RARITY</div>
+        
+        <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
+        
+        <div style="font-weight: 800; color: #fff4d6;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
+        
+        <div class="sell-calc-row">
+            <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
+            <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
+            <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
+        </div>
+
+        <div style="font-size: 0.9rem; margin-bottom: 6px; font-weight: 700; color: #ffe3b3;">Total Payout:</div>
+        <div class="total-payout-box">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
+            <span id="total-sell-value">0</span>
+        </div>
+        
+        <div class="modal-btn-group">
+            <button class="btn secondary" id="close-sell-modal-btn" style="padding:10px 20px;">Cancel</button>
+            <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px;">Sell Blook(s)</button>
+        </div>
+    </div>
+</div>
+
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
-        authDomain: "scratchlet-194bc.firebaseapp.com",
-        projectId: "scratchlet-194bc",
-        storageBucket: "scratchlet-194bc.firebasestorage.app",
-        messagingSenderId: "480952290764",
-        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
-        measurementId: "G-2T6GS8Y9VN"
-    };
+// Exact matching config credentials from market template
+const firebaseConfig = {
+    apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+    authDomain: "scratchlet-194bc.firebaseapp.com",
+    projectId: "scratchlet-194bc",
+    storageBucket: "scratchlet-194bc.firebasestorage.app",
+    messagingSenderId: "480952290764",
+    appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+    measurementId: "G-2T6GS8Y9VN"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    let db, currentUserRef = null;
-    let userTokens = 0;
-    let userInventoryRaw = []; 
-    let selectedBlookData = null;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+let db;
 
-    try {
-        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-        db = firestoreModule.getFirestore(app);
-    } catch(e) { console.error(e); }
+try {
+    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    db = firestoreModule.getFirestore(app);
+} catch(e) {
+    console.error("Firestore instantiation issue:", e);
+}
 
-    const rarityAssetMap = {
-        "Uncommon": "https://i.postimg.cc/xTvKgWWj/Uncommon.webp",
-        "Rare": "https://i.postimg.cc/SNCG3XY1/Rare.webp",
-        "Epic": "https://i.postimg.cc/bNkRWGSm/Epic.webp",
-        "Legendary": "https://i.postimg.cc/44r5Wvyq/Legendary.webp",
-        "Chroma": "https://i.postimg.cc/xjWR6G8W/Chroma.webp",
-        "Celestial": "https://i.postimg.cc/HWf260nP/Celestial.webp"
-    };
+// Blook standard value tables for selling mechanics
+const sellValueMap = {
+    "Uncommon": 5,
+    "Rare": 15,
+    "Epic": 65,
+    "Legendary": 200,
+    "Chroma": 300,
+    "Celestial": 500,
+    "Mystical": 1000
+};
 
-    const sellValueMap = {
-        "Uncommon": 5, "Rare": 20, "Epic": 75, "Legendary": 200, "Chroma": 300, "Celestial": 1000
-    };
-
-    // BREAKFAST ONLY DATABASE WITH DESIGNER HIGHLIGHT COLORS
-    const breakfastPackData = {
+// Complete Pack Registry Data Schema mapping to cross reference imagery/rarity definitions
+const packsRegistry = {
+    breakfast: {
         name: "Breakfast Pack",
         blooks: [
-            {name:"Toast", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-            {name:"Cereal", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-            {name:"Yogurt", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-            {name:"Breakfast Combo", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-            {name:"Orange Juice", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-            {name:"Milk", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-            {name:"Waffle", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-            {name:"Pancakes", rarity:"Epic", color:"#e91e63", image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-            {name:"French Toast", rarity:"Epic", color:"#e91e63", image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-            {name:"Pizza", rarity:"Legendary", color:"#ffb300", image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-            {name:"Strawberry Milk", rarity:"Chroma", color:"#00e5ff", image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-            {name:"Chocolate Milk", rarity:"Chroma", color:"#00e5ff", image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            {name:"Cereal",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Tomato Soup",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
+            {name:"Yogurt",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
+            {name:"Breakfast Combo",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
+            {name:"Orange Juice",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
+            {name:"Milk",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
+            {name:"Waffle",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
+            {name:"Pancakes",rarity:"Epic",color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
+            {name:"French Toast",rarity:"Epic",color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
+            {name:"Pizza",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
         ]
-    };
+    },
+    medieval: {
+        name: "Medieval Pack",
+        blooks: [
+            {name:"Elf",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
+            {name:"Witch",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
+            {name:"Wizard",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
+            {name:"Fairy",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"}, // fallback placeholder
+            {name:"King Dog",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
+            {name:"Card of Hearts",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"}
+        ]
+    },
+    space: {
+        name: "Space Pack",
+        blooks: [
+            {name:"Earth",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
+            {name:"Meteor",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
+            {name:"Stars",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
+            {name:"Alien",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
+            {name:"Planet",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
+            {name:"UFO",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
+            {name:"Spaceship",rarity:"Epic",color:"red",image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
+            {name:"Astronaut",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
+            {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
+            {name:"Red Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
+            {name:"Orange Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
+            {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
+            {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
+            {name:"Green Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
+            {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
+            {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
+            {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
+            {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
+            {name:"Black Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
+            {name:"Black Hole",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
+            {name:"Space Monitor",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
+            {name:"Rainbow Astronaut",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"}
+        ]
+    },
+    bot: {
+        name: "Bot Pack",
+        blooks: [
+            {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
+            {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/fRKF0W8Y/Lovely-Bot.webp"}
+        ]
+    }
+};
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            try {
-                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-                currentUserRef = firestoreModule.doc(db, "users", user.uid);
-                
-                firestoreModule.onSnapshot(currentUserRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        userTokens = data.tokens || 0;
-                        userInventoryRaw = data.inventory || [];
-                        
-                        document.getElementById('token-counter-value').textContent = userTokens.toLocaleString();
-                        renderInventoryGrid();
-                        refreshInspectionSidebar();
-                    }
-                });
-            } catch (err) { console.error("Snapshot synchronization failure: ", err); }
-        } else {
-            window.location.href = "login.html";
-        }
+// Global UI Pointer Hooks
+const tokenCounterValue = document.getElementById('token-counter-value');
+const inventoryMountNode = document.getElementById('inventory-mount-node');
+const totalBlooksStat = document.getElementById('total-blooks-stat');
+const uniqueBlooksStat = document.getElementById('unique-blooks-stat');
+
+// Modal Elements Hooks
+const sellModal = document.getElementById('sell-modal');
+const sellModalCard = document.getElementById('sell-modal-card');
+const modalBlookName = document.getElementById('modal-blook-name');
+const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
+const modalBlookImage = document.getElementById('modal-blook-image');
+const modalOwnedCount = document.getElementById('modal-owned-count');
+const sellQuantityInput = document.getElementById('sell-quantity-input');
+const totalSellValue = document.getElementById('total-sell-value');
+const closeSellModalBtn = document.getElementById('close-sell-modal-btn');
+const confirmSellBtn = document.getElementById('confirm-sell-btn');
+const sellMinBtn = document.getElementById('sell-min-btn');
+const sellMaxBtn = document.getElementById('sell-max-btn');
+
+let userTokens = 0;
+let userInventoryArray = [];
+let currentUserRef = null;
+let selectedBlookToSell = null;
+
+// Utility helper to scan registry configurations for specific blook stats
+function findBlookDetails(blookName) {
+    for (const key in packsRegistry) {
+        const found = packsRegistry[key].blooks.find(b => b.name === blookName);
+        if (found) return { ...found, packId: key, packName: packsRegistry[key].name };
+    }
+    // Dynamic absolute fallback object construction
+    return { name: blookName, rarity: "Uncommon", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp", packId: "other", packName: "Custom Rewards" };
+}
+
+// Main rendering engine
+function renderInventoryLayout() {
+    if (!userInventoryArray || userInventoryArray.length === 0) {
+        inventoryMountNode.innerHTML = `<div class="empty-state">You don't own any blooks yet! Go buy some packs in the Market!</div>`;
+        totalBlooksStat.textContent = "0";
+        uniqueBlooksStat.textContent = "0";
+        return;
+    }
+
+    totalBlooksStat.textContent = userInventoryArray.length;
+
+    // Tally and group items by original container sets
+    const inventoryTally = {};
+    userInventoryArray.forEach(name => {
+        inventoryTally[name] = (inventoryTally[name] || 0) + 1;
     });
 
-    function renderInventoryGrid() {
-        const mountNode = document.getElementById('packs-collection-mount-node');
-        mountNode.innerHTML = "";
+    uniqueBlooksStat.textContent = Object.keys(inventoryTally).length;
 
-        const quantityCounts = {};
-        userInventoryRaw.forEach(x => quantityCounts[x] = (quantityCounts[x] || 0) + 1);
+    const categorizedPacks = {};
+    Object.keys(inventoryTally).forEach(blookName => {
+        const detailedData = findBlookDetails(blookName);
+        if (!categorizedPacks[detailedData.packId]) {
+            categorizedPacks[detailedData.packId] = {
+                title: detailedData.packName,
+                blooksList: []
+            };
+        }
+        categorizedPacks[detailedData.packId].blooksList.push({
+            ...detailedData,
+            count: inventoryTally[blookName]
+        });
+    });
 
-        let blooksHtml = "";
-        breakfastPackData.blooks.forEach(blook => {
-            const ownedQty = quantityCounts[blook.name] || 0;
-            const isLocked = ownedQty === 0;
-            const isSelected = selectedBlookData && selectedBlookData.name === blook.name;
+    // Empty template layouts
+    inventoryMountNode.innerHTML = "";
 
-            // Generate card color accents based on status
-            const currentBorderColor = isSelected ? '#ffd700' : (isLocked ? 'rgba(255,255,255,0.2)' : blook.color);
+    // Build grid structure outputs
+    for (const packId in categorizedPacks) {
+        const group = categorizedPacks[packId];
+        
+        let blockHtml = `
+            <section class="pack-section">
+                <h2 class="pack-section-title">${group.title}</h2>
+                <div class="blook-grid">
+        `;
 
-            blooksHtml += `
-                <div class="blook-item-box ${isLocked ? 'locked-grey' : ''} ${isSelected ? 'selected-active' : ''}" 
-                     data-name="${blook.name}" 
-                     style="border-color: ${currentBorderColor};">
-                    <img src="${blook.image}" alt="${blook.name}" class="blook-thumbnail">
-                    ${ownedQty > 0 ? `<div class="blook-counter-badge">${ownedQty}</div>` : ''}
+        group.blooksList.forEach(blook => {
+            blockHtml += `
+                <div class="blook-card" data-blookname="${blook.name}" style="border-color: ${blook.color};">
+                    <div class="blook-image-wrapper">
+                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
+                    </div>
+                    <div class="blook-name" style="color: ${blook.color};">${blook.name}</div>
+                    <div class="blook-rarity" style="color: ${blook.color}; opacity: 0.8;">${blook.rarity}</div>
+                    ${blook.count > 1 ? `<div class="quantity-badge">x${blook.count}</div>` : ''}
                 </div>
             `;
         });
 
-        mountNode.innerHTML = `
-            <div class="pack-section-block">
-                <div class="pack-row-title">${breakfastPackData.name}</div>
-                <div class="pack-divider-line"></div>
-                <div class="blooks-row-grid">${blooksHtml}</div>
-            </div>
+        blockHtml += `
+                </div>
+            </section>
         `;
+        inventoryMountNode.innerHTML += blockHtml;
+    }
 
-        // Click listeners
-        document.querySelectorAll('.blook-item-box').forEach(el => {
-            el.addEventListener('click', () => {
-                const name = el.getAttribute('data-name');
-                const foundBlook = breakfastPackData.blooks.find(b => b.name === name);
-                
-                selectedBlookData = foundBlook;
-                renderInventoryGrid(); 
-            });
+    // Attach click events to standard cards
+    document.querySelectorAll('.blook-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const bName = card.getAttribute('data-blookname');
+            const bCount = inventoryTally[bName];
+            const bDetails = findBlookDetails(bName);
+            openSellWindow(bDetails, bCount);
         });
+    });
+}
+
+/* ====================================
+   MODAL ACTIONS INTERACTION CODES
+==================================== */
+function openSellWindow(blook, totalOwned) {
+    selectedBlookToSell = { ...blook, ownedCount: totalOwned };
+    
+    modalBlookName.textContent = blook.name;
+    modalBlookName.style.color = blook.color;
+    modalBlookRarityText.textContent = blook.rarity;
+    modalBlookRarityText.style.color = blook.color;
+    modalBlookImage.src = blook.image;
+    modalOwnedCount.textContent = totalOwned;
+    
+    sellQuantityInput.value = 1;
+    sellQuantityInput.max = totalOwned;
+    
+    recalculateSellPayout();
+
+    sellModal.style.display = "flex";
+    setTimeout(() => {
+        sellModal.style.opacity = "1";
+        sellModalCard.style.transform = "scale(1)";
+    }, 15);
+}
+
+function closeSellWindow() {
+    sellModal.style.opacity = "0";
+    sellModalCard.style.transform = "scale(0.8)";
+    setTimeout(() => {
+        sellModal.style.display = "none";
+        selectedBlookToSell = null;
+    }, 200);
+}
+
+function recalculateSellPayout() {
+    if (!selectedBlookToSell) return;
+    const rate = sellValueMap[selectedBlookToSell.rarity] || 5;
+    let typedAmount = parseInt(sellQuantityInput.value) || 0;
+    
+    // Bounds checking
+    if (typedAmount > selectedBlookToSell.ownedCount) {
+        typedAmount = selectedBlookToSell.ownedCount;
+        sellQuantityInput.value = typedAmount;
+    }
+    if (typedAmount < 1) {
+        typedAmount = 1;
+        sellQuantityInput.value = 1;
     }
 
-    function refreshInspectionSidebar() {
-        const emptyState = document.getElementById('sidebar-empty-message');
-        const contentNode = document.getElementById('sidebar-content-node');
+    totalSellValue.textContent = (typedAmount * rate).toLocaleString();
+}
 
-        if (!selectedBlookData) {
-            emptyState.style.display = "block";
-            contentNode.style.display = "none";
-            return;
+// Input Listener attachments
+sellQuantityInput.addEventListener('input', recalculateSellPayout);
+sellMinBtn.addEventListener('click', () => { sellQuantityInput.value = 1; recalculateSellPayout(); });
+makeMaxAction();
+
+function makeMaxAction() {
+    sellMaxBtn.addEventListener('click', () => { 
+        if(selectedBlookToSell) {
+            sellQuantityInput.value = selectedBlookToSell.ownedCount; 
+            recalculateSellPayout(); 
         }
+    });
+}
 
-        const qtyOwned = userInventoryRaw.filter(x => x === selectedBlookData.name).length;
-        if (qtyOwned === 0) {
-            selectedBlookData = null; 
-            emptyState.style.display = "block";
-            contentNode.style.display = "none";
-            return;
-        }
+closeSellModalBtn.addEventListener('click', closeSellWindow);
 
-        emptyState.style.display = "none";
-        contentNode.style.display = "block";
+// Firestore submission interaction logic
+confirmSellBtn.addEventListener('click', async () => {
+    if (!selectedBlookToSell || !currentUserRef) return;
+    
+    const qtyToSell = parseInt(sellQuantityInput.value) || 0;
+    if (qtyToSell <= 0 || qtyToSell > selectedBlookToSell.ownedCount) return;
 
-        const valSingle = sellValueMap[selectedBlookData.rarity] || 5;
-        const bannerImg = rarityAssetMap[selectedBlookData.rarity] || rarityAssetMap["Uncommon"];
+    const valuePerUnit = sellValueMap[selectedBlookToSell.rarity] || 5;
+    const payoutGained = qtyToSell * valuePerUnit;
 
-        contentNode.innerHTML = `
-            <img src="${selectedBlookData.image}" alt="Preview" class="sidebar-preview-img">
-            <h2 class="sidebar-name">${selectedBlookData.name}</h2>
-            <img src="${bannerImg}" alt="${selectedBlookData.rarity}" class="sidebar-rarity-banner">
-            
-            <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:14px; font-weight:700; font-size:1rem; margin-bottom:20px; text-align:left; border:1px solid rgba(255,255,255,0.1);">
-                <p style="margin-bottom:6px; display:flex; justify-content:space-between;"><span>Owned:</span> <span style="color:#00cc66; font-weight:900;">${qtyOwned}</span></p>
-                <p style="display:flex; justify-content:space-between;"><span>Sell Value:</span> <span style="color:#ffd700; font-weight:900;">${valSingle} Tokens</span></p>
-            </div>
+    try {
+        confirmSellBtn.disabled = true;
+        
+        // Filter elements out up to the chosen quantity removal count
+        let instancesRemoved = 0;
+        const freshUpdatedInventory = [];
+        
+        userInventoryArray.forEach(blookName => {
+            if (blookName === selectedBlookToSell.name && instancesRemoved < qtyToSell) {
+                instancesRemoved++;
+            } else {
+                freshUpdatedInventory.push(blookName);
+            }
+        });
 
-            <div class="action-button-stack">
-                <button class="inventory-btn btn-sell-single" id="action-sell-one">Sell 1 Blook</button>
-                <button class="inventory-btn btn-sell-dupes" id="action-sell-dupes" ${qtyOwned <= 1 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''}>
-                    Sell Duplicates (${qtyOwned - 1})
-                </button>
-            </div>
-        `;
+        userTokens += payoutGained;
+        userInventoryArray = freshUpdatedInventory;
 
-        document.getElementById('action-sell-one').addEventListener('click', () => processSaleTransaction(1));
-        if (qtyOwned > 1) {
-            document.getElementById('action-sell-dupes').addEventListener('click', () => processSaleTransaction(qtyOwned - 1));
-        }
+        // Commit execution payload data sets directly to cloud firestore database rules
+        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await firestoreModule.updateDoc(currentUserRef, {
+            tokens: userTokens,
+            inventory: userInventoryArray
+        });
+
+        tokenCounterValue.textContent = userTokens.toLocaleString();
+        renderInventoryLayout();
+        closeSellWindow();
+    } catch(err) {
+        console.error("Sale operation transaction failed:", err);
+        alert("Transaction failed. Please try again.");
+    } finally {
+        confirmSellBtn.disabled = false;
     }
+});
 
-    async function processSaleTransaction(amountToSell) {
-        if (!selectedBlookData || amountToSell <= 0 || !currentUserRef) return;
-
-        const valSingle = sellValueMap[selectedBlookData.rarity] || 5;
-        const tokensGained = valSingle * amountToSell;
-
-        let updatedInv = [...userInventoryRaw];
-        for (let i = 0; i < amountToSell; i++) {
-            const index = updatedInv.indexOf(selectedBlookData.name);
-            if (index > -1) updatedInv.splice(index, 1);
-        }
-
-        const newTokensValue = userTokens + tokensGained;
-
+/* ====================================
+   INITIAL AUTH STATE LISTENERS
+==================================== */
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
         try {
             const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            await firestoreModule.updateDoc(currentUserRef, {
-                tokens: newTokensValue,
-                inventory: updatedInv
-            });
+            currentUserRef = firestoreModule.doc(db, "users", user.uid);
+            
+            const userSnap = await firestoreModule.getDoc(currentUserRef);
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                userTokens = userData.tokens || 0;
+                userInventoryArray = userData.inventory || [];
+                
+                tokenCounterValue.textContent = userTokens.toLocaleString();
+                renderInventoryLayout();
+            }
         } catch (err) {
-            console.error("Sale update structural transaction failed: ", err);
+            console.error("Failed to load user profile data sets:", err);
         }
+
+        document.getElementById('logout-hud-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = "login.html";
+            });
+        });
+    } else {
+        window.location.href = "login.html";
     }
+});
 </script>
+
 </body>
 </html>
