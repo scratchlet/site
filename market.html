@@ -494,7 +494,6 @@ body{
     display: none;
 }
 
-/* Increased block height and inner padding for enhanced layout gaps */
 .info-blook-card {
     width: 100%;
     height: 100px;
@@ -547,11 +546,66 @@ body{
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Made the badge image systematically larger */
 .info-rarity-badge-img {
     height: 32px;
     width: auto;
     object-fit: contain;
+}
+
+/* ====================================
+   CONFIRMATION CARD INTERFACE
+==================================== */
+.confirm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.confirm-modal-content {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ffcc00;
+    border-radius: 28px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.confirm-pack-img {
+    max-height: 110px;
+    object-fit: contain;
+    margin: 15px auto;
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+.confirm-cost-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #ffd700;
+    background: rgba(0,0,0,0.3);
+    padding: 6px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255,215,0,0.2);
+    margin-bottom: 20px;
+}
+
+.confirm-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }
 
 /* =========================
@@ -713,6 +767,23 @@ body{
     </div>
 </div>
 
+<div class="confirm-modal-overlay" id="confirm-modal">
+    <div class="confirm-modal-content" id="confirm-modal-card">
+        <h2 id="confirm-pack-title" style="font-family:'Titan One'; font-size:1.6rem; color:#fff4d6; text-transform: uppercase;">OPEN PACK?</h2>
+        <img id="confirm-pack-image" src="" alt="Pack Preview" class="confirm-pack-img">
+        
+        <div class="confirm-cost-row">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
+            <span id="confirm-pack-cost">0</span>
+        </div>
+
+        <div class="confirm-btn-group">
+            <button class="btn secondary" id="cancel-open-btn" style="padding:10px 20px;">Cancel</button>
+            <button class="btn primary" id="confirm-open-btn" style="background:linear-gradient(135deg, #ff9b2f, #ff7f11); color:white; padding:10px 24px;">Open</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
         <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
@@ -753,6 +824,15 @@ body{
     const infoCardsContainer = document.getElementById('info-cards-container');
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
 
+    // Confirm Modal Elements
+    const confirmModal = document.getElementById('confirm-modal');
+    const confirmModalCard = document.getElementById('confirm-modal-card');
+    const confirmPackTitle = document.getElementById('confirm-pack-title');
+    const confirmPackImage = document.getElementById('confirm-pack-image');
+    const confirmPackCost = document.getElementById('confirm-pack-cost');
+    const cancelOpenBtn = document.getElementById('cancel-open-btn');
+    const confirmOpenBtn = document.getElementById('confirm-open-btn');
+
     // Reveal Unboxing Modal Elements
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
@@ -766,6 +846,7 @@ body{
     let userTokens = 0;
     let currentUserRef = null;
     let serverTimerInterval = null;
+    let activeSelectedPackId = null;
 
     // Map rarities to corresponding external asset links
     const rarityAssetMap = {
@@ -930,8 +1011,18 @@ body{
         }
     }
 
+    function closeConfirmModal() {
+        confirmModal.style.opacity = "0";
+        confirmModalCard.style.transform = "scale(0.8)";
+        setTimeout(() => {
+            confirmModal.style.display = "none";
+            activeSelectedPackId = null;
+        }, 200);
+    }
+
     function attachPurchaseEventListeners() {
-        document.addEventListener('click', async (e) => {
+        // Trigger verification step instead of unboxing immediately
+        document.addEventListener('click', (e) => {
             if (e.target.closest('.pack-info-toggle-btn')) return;
 
             const cardTarget = e.target.closest('.pack-card');
@@ -941,7 +1032,29 @@ body{
             const targetedPack = packs[packId];
             if (!targetedPack) return;
 
+            activeSelectedPackId = packId;
+            confirmPackTitle.textContent = `Open ${targetedPack.name}?`;
+            confirmPackImage.src = targetedPack.image;
+            confirmPackCost.textContent = targetedPack.cost;
+
+            confirmModal.style.display = "flex";
+            setTimeout(() => {
+                confirmModal.style.opacity = "1";
+                confirmModalCard.style.transform = "scale(1)";
+            }, 15);
+        });
+
+        cancelOpenBtn.addEventListener('click', closeConfirmModal);
+
+        confirmOpenBtn.addEventListener('click', async () => {
+            if (!activeSelectedPackId) return;
+            const targetedPack = packs[activeSelectedPackId];
+            if (!targetedPack) return;
+
             if (userTokens >= targetedPack.cost) {
+                // Instantly hide verification interface
+                closeConfirmModal();
+
                 try {
                     userTokens -= targetedPack.cost;
                     tokenCounterValue.textContent = userTokens.toLocaleString();
@@ -978,6 +1091,7 @@ body{
                 }
             } else {
                 alert(`Insufficient tokens!`);
+                closeConfirmModal();
             }
         });
     }
