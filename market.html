@@ -296,7 +296,7 @@ body{
 ================================= */
 .market-container {
     flex: 1;
-    max-width: 95%; /* Expanded to 95% width so it covers the screen even when zoomed out */
+    max-width: 95%; 
     width: 100%;
     margin: 40px auto;
     padding: 0 30px;
@@ -330,18 +330,17 @@ body{
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-/* Updated to stretch completely across to the left and continue across as packs increase */
 .market-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* Hard-sticks content elements to the left */
+    justify-content: flex-start; 
     align-items: flex-start;
     gap: 25px;
     margin-bottom: 50px;
     width: 100%;
 }
 
-/* Preserved crisp original bounds */
+/* THE PACK CARD IS NOW THE TRIGGER BUTTON */
 .pack-card {
     background: rgba(0, 0, 0, 0.28);
     border: 3px solid rgba(255, 255, 255, 0.15);
@@ -352,12 +351,21 @@ body{
     display: flex;
     flex-direction: column;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pack-card:hover {
     transform: translateY(-5px);
     border-color: #ffcc00;
+    box-shadow: 0 12px 35px rgba(255, 204, 0, 0.15);
+}
+
+/* Clicking scale animation directly applied to the whole card element */
+.pack-card:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .pack-image-holder {
@@ -370,6 +378,7 @@ body{
     background: rgba(255,255,255,0.05);
     border-radius: 14px;
     overflow: hidden;
+    pointer-events: none; /* Passes clicking events directly to the main card layout */
 }
 
 .pack-img {
@@ -384,6 +393,7 @@ body{
     font-size: 1.4rem;
     margin-bottom: 8px;
     color: #fff4d6;
+    pointer-events: none;
 }
 
 .pack-price-row {
@@ -395,6 +405,7 @@ body{
     font-size: 1.2rem;
     color: #ffd700;
     margin-bottom: 18px;
+    pointer-events: none;
 }
 
 .pack-price-row img {
@@ -402,20 +413,21 @@ body{
     height: 22px;
 }
 
+/* Isolated drop down configuration so it doesn't immediately open the pack when checked */
 .pack-info-toggle {
     margin-top: auto;
     background: rgba(0,0,0,0.2);
     border-radius: 10px;
     padding: 10px;
-    cursor: pointer;
     font-weight: 800;
     font-size: 0.85rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    user-select: none;
     transition: background 0.15s;
+    position: relative;
+    z-index: 10; 
 }
 
 .pack-info-toggle:hover {
@@ -434,6 +446,8 @@ body{
     overflow-y: auto;
     text-align: left;
     border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 10;
 }
 
 .probability-row {
@@ -670,8 +684,9 @@ body{
                 `;
             });
 
+            // Rebuilt output so the pack-card node holds data properties natively
             dynamicPacksMountNode.innerHTML = `
-                <div class="pack-card">
+                <div class="pack-card" data-pack-id="${key}">
                     <div class="pack-image-holder">
                         <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
                     </div>
@@ -680,7 +695,6 @@ body{
                         <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
                         <span>${currentPack.cost}</span>
                     </div>
-                    <button class="btn primary pack-purchase-btn" data-pack-id="${key}" style="width: 100%; margin-bottom: 12px; padding: 10px 15px;">Open Pack</button>
                     
                     <div class="pack-info-toggle" id="info-toggle-${key}">
                         <span>View Contents</span>
@@ -697,7 +711,9 @@ body{
             const probList = card.querySelector(`#prob-list-${key}`);
             const arrow = card.querySelector(`#arrow-${key}`);
             
-            toggleBtn.addEventListener('click', () => {
+            // stopPropagation ensures that clicking 'View Contents' won't accidentally trigger an unboxing
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); 
                 if(probList.style.display === "flex") {
                     probList.style.display = "none";
                     arrow.textContent = "expand_more";
@@ -769,10 +785,11 @@ body{
 
     function attachPurchaseEventListeners() {
         document.addEventListener('click', async (e) => {
-            const targetButton = e.target.closest('.pack-purchase-btn');
-            if (!targetButton) return;
+            // Targets the pack card element itself
+            const cardTarget = e.target.closest('.pack-card');
+            if (!cardTarget) return;
 
-            const packId = targetButton.getAttribute('data-pack-id');
+            const packId = cardTarget.getAttribute('data-pack-id');
             const targetedPack = packs[packId];
             if (!targetedPack) return;
 
