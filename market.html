@@ -615,7 +615,7 @@ body{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 1000; 
+    z-index: 990; /* FIXED: Sits directly behind the result card */
     display: none;
     align-items: center;
     justify-content: center;
@@ -636,7 +636,7 @@ body{
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     cursor: default;
-    z-index: 1010; 
+    z-index: 1000; /* FIXED: Placed strictly on top of falling elements */
 }
 
 #reward-display-node {
@@ -655,26 +655,24 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;
-    z-index: 1005; 
+    z-index: 995; /* FIXED: Falls behind the modal card (1000) but in front of dark layout screen (990) */
     top: -80px;
     will-change: transform, opacity;
-    animation: rainFallAnimation cubic-bezier(0.45, 0.05, 0.85, 0.35) forwards;
+    /* FIXED: Using regular linear curve for standard smooth unaccelerated speed falling */
+    animation: rainFallAnimation linear forwards;
 }
 
 @keyframes rainFallAnimation {
     0% {
         transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0.4;
+        opacity: 0;
     }
     15% {
         opacity: 1; 
     }
-    50% {
-        transform: translateY(30vh) translateX(var(--sway)) rotate(var(--rotMid));
-    }
     100% {
-        transform: translateY(115vh) translateX(calc(var(--sway) * 1.6)) rotate(var(--rotEnd));
-        opacity: 0.8;
+        transform: translateY(115vh) translateX(var(--sway)) rotate(var(--rotEnd));
+        opacity: 0.9;
     }
 }
 
@@ -995,14 +993,13 @@ body{
                 rainItem.style.height = `${dimensions}px`;
                 
                 const lateralSway = (Math.random() * 120 - 60) + "px";
-                const midRotation = (Math.random() * 360) + "deg";
                 const endRotation = (Math.random() * 720 + 360) + "deg";
                 
                 rainItem.style.setProperty('--sway', lateralSway);
-                rainItem.style.setProperty('--rotMid', midRotation);
                 rainItem.style.setProperty('--rotEnd', endRotation);
                 
-                const fallDuration = 1.1 + Math.random() * 0.9;
+                // Uniform confetti fluid speed (steady 2 to 3.5 seconds lifetime range)
+                const fallDuration = 2.0 + Math.random() * 1.5;
                 rainItem.style.animationDuration = `${fallDuration}s`;
                 
                 document.body.appendChild(rainItem);
@@ -1095,7 +1092,6 @@ body{
                         rewardModal.style.opacity = "1";
                         modalContainerCard.style.transform = "scale(1)";
                         
-                        // FIXED: Safe dynamic fallback checks if mapping fails
                         const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
                         triggerRainEffect(matchingRarityUrl); 
                     }, 15);
