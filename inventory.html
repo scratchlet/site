@@ -492,7 +492,7 @@ body{
     </div>
 
     <div class="master-inventory-card">
-        <div id="inventory-mount-node" class="blook-grid"></div>
+        <div id="inventory-mount-node"></div>
     </div>
 </main>
 
@@ -527,7 +527,6 @@ body{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -541,7 +540,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+let db;
+
+try {
+    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    db = firestoreModule.getFirestore(app);
+} catch(e) {
+    console.error("Firestore instantiation issue:", e);
+}
 
 const sellValueMap = {
     "Uncommon": 5,
@@ -807,7 +813,8 @@ confirmSellBtn.addEventListener('click', async () => {
 
         userTokens += payoutGained;
 
-        await updateDoc(currentUserRef, {
+        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await firestoreModule.updateDoc(currentUserRef, {
             tokens: userTokens,
             inventory: userInventoryMap
         });
@@ -826,8 +833,10 @@ confirmSellBtn.addEventListener('click', async () => {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
-            currentUserRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(currentUserRef);
+            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            currentUserRef = firestoreModule.doc(db, "users", user.uid);
+            
+            const userSnap = await firestoreModule.getDoc(currentUserRef);
             if (userSnap.exists()) {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
