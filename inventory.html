@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scratchlet - Inventory</title>
+<title>Scratchlet - Breakfast Inventory</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,14 +94,14 @@ body {
 /* COLLECTIBLE CANVAS (LEFT PANEL) */
 .collection-main-panel {
     flex: 1;
-    background: #8b38a3; /* Matched typical Blooket violet theme */
-    border: 4px solid #5d2070;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    background: #8b38a3; 
+    border: 5px solid #5d2070;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 25px;
 }
 .panel-header-row {
     display: flex;
@@ -110,87 +110,96 @@ body {
 }
 .panel-title {
     font-family: "Titan One", cursive;
-    font-size: 2.2rem;
-    text-shadow: 2px 2px 0px #000;
+    font-size: 2.4rem;
+    text-shadow: 3px 3px 0px #000;
 }
 
 /* PACK GROUP ROWS */
 .pack-section-block {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 .pack-row-title {
     font-family: "Titan One", cursive;
-    font-size: 1.6rem;
-    color: #fff4d6;
+    font-size: 1.8rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     letter-spacing: 0.5px;
 }
 .pack-divider-line {
-    height: 3px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 2px;
+    height: 4px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 .blooks-row-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    padding-top: 5px;
+    gap: 18px;
+    padding-top: 10px;
 }
 
-/* INDIVIDUAL BLOOK CARD */
+/* HIGHLY STYLIZED BLOOK CARD */
 .blook-item-box {
     position: relative;
-    width: 75px;
-    height: 85px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    width: 105px;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.3) 100%);
+    border-radius: 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s, box-shadow 0.15s;
-    border: 2px solid transparent;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 0px rgba(0, 0, 0, 0.25);
 }
 .blook-item-box:hover {
-    transform: scale(1.08);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 0px rgba(0,0,0,0.25);
 }
 .blook-item-box.locked-grey {
-    opacity: 0.35;
-    filter: grayscale(0.9);
+    opacity: 0.25;
+    filter: grayscale(1) contrast(0.8);
 }
 .blook-item-box.selected-active {
-    border-color: #ffd700;
-    box-shadow: 0 0 14px #ffd700;
+    border-color: #ffd700 !important;
+    box-shadow: 0 0 18px #ffd700, 0 6px 0px rgba(0,0,0,0.25);
+    transform: scale(1.04) translateY(-2px);
 }
 .blook-thumbnail {
-    width: 82%;
-    height: 82%;
+    width: 80%;
+    height: 80%;
     object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 .blook-counter-badge {
     position: absolute;
-    bottom: -4px;
-    left: -4px;
+    bottom: 8px;
+    left: 8px;
     background: #00cc66;
     color: white;
     font-weight: 900;
-    font-size: 0.75rem;
-    padding: 2px 6px;
-    border-radius: 6px;
-    border: 1px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-size: 0.85rem;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
 }
 
-/* INSPECTION SIDEBAR (RIGHT PANEL) */
+/* INSPECTION SIDEBAR */
 .inspection-sidebar-panel {
-    width: 320px;
+    width: 340px;
     background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
     border: 4px solid #ff9b2f;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -205,44 +214,45 @@ body {
     margin-top: 60px;
 }
 .sidebar-preview-img {
-    max-height: 140px;
+    max-height: 150px;
     object-fit: contain;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
-    margin-bottom: 15px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
+    margin-bottom: 20px;
 }
 .sidebar-name {
     font-family: "Titan One", cursive;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #fff4d6;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 0px #000;
 }
 .sidebar-rarity-banner {
-    max-height: 30px;
+    max-height: 35px;
     width: auto;
     object-fit: contain;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 .action-button-stack {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 .inventory-btn {
     width: 100%;
     font-family: "Nunito", sans-serif;
     font-weight: 900;
-    font-size: 1rem;
-    padding: 12px;
-    border-radius: 12px;
+    font-size: 1.05rem;
+    padding: 14px;
+    border-radius: 14px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
     transition: transform 0.1s, box-shadow 0.1s;
 }
-.inventory-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.2); }
-.inventory-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+.inventory-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
+.inventory-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
 .btn-sell-single { background: linear-gradient(135deg, #ff9b2f, #ff7f11); color: white; }
 .btn-sell-dupes { background: linear-gradient(135deg, #ff4d4d, #cc0000); color: white; }
 
@@ -284,8 +294,8 @@ body {
 
     <div class="inspection-sidebar-panel" id="inspection-panel">
         <div class="sidebar-empty-state" id="sidebar-empty-message">
-            <span class="material-icons" style="font-size: 3rem; margin-bottom: 10px;">touch_app</span>
-            <p>Select a Blook to inspect details or manage collection sales</p>
+            <span class="material-icons" style="font-size: 3.5rem; margin-bottom: 12px; color: #ff9b2f;">touch_app</span>
+            <p>Select a breakfast item to view stats or sell duplicates</p>
         </div>
         <div id="sidebar-content-node" style="display: none; width: 100%;">
             </div>
@@ -310,7 +320,7 @@ body {
     const auth = getAuth(app);
     let db, currentUserRef = null;
     let userTokens = 0;
-    let userInventoryRaw = []; // Holds items as flat array: ["Toast", "Toast", "Cereal"]
+    let userInventoryRaw = []; 
     let selectedBlookData = null;
 
     try {
@@ -324,75 +334,30 @@ body {
         "Epic": "https://i.postimg.cc/bNkRWGSm/Epic.webp",
         "Legendary": "https://i.postimg.cc/44r5Wvyq/Legendary.webp",
         "Chroma": "https://i.postimg.cc/xjWR6G8W/Chroma.webp",
-        "Mystical": "https://i.postimg.cc/9XvpLP0S/Mystical.webp",
         "Celestial": "https://i.postimg.cc/HWf260nP/Celestial.webp"
     };
 
     const sellValueMap = {
-        "Uncommon": 5, "Rare": 20, "Epic": 75, "Legendary": 200, "Chroma": 300, "Celestial": 1000, "Mystical": 2500
+        "Uncommon": 5, "Rare": 20, "Epic": 75, "Legendary": 200, "Chroma": 300, "Celestial": 1000
     };
 
-    // Full database of packs corresponding exactly with your design layout
-    const packDatabase = {
-        medieval: {
-            name: "Medieval Pack",
-            blooks: [
-                {name:"Witch", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/a/a2/Witch.png/revision/latest?cb=20201017004457"},
-                {name:"Wizard", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/9/94/Wizard.png/revision/latest?cb=20201017004513"},
-                {name:"Elf", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/c/cb/Elf.png/revision/latest?cb=20201017004415"},
-                {name:"Fairy", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/c/c2/Fairy.png/revision/latest?cb=20201017004427"},
-                {name:"Slime Monster", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/2/23/SlimeMonster.png/revision/latest?cb=20201017004443"},
-                {name:"Jester", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/0/07/Jester.png/revision/latest?cb=20201017004351"},
-                {name:"Dragon", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/6/6c/Dragon.png/revision/latest?cb=20201017004337"},
-                {name:"Queen", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/4/4c/Queen.png/revision/latest?cb=20201017004403"},
-                {name:"Unicorn", rarity:"Epic", image:"https://vignette.wikia.nocookie.net/blooket/images/c/c5/Unicorn.png/revision/latest?cb=20201017004449"},
-                {name:"King", rarity:"Legendary", image:"https://vignette.wikia.nocookie.net/blooket/images/0/04/King.png/revision/latest?cb=20201017004245"}
-            ]
-        },
-        wonderland: {
-            name: "Wonderland Pack",
-            blooks: [
-                {name:"Two of Spades", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/a/a2/TwoOfSpades.png/revision/latest?cb=20201115183852"},
-                {name:"Eat Me", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/6/69/EatMe.png/revision/latest?cb=20201115183815"},
-                {name:"Drink Me", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/e/ed/DrinkMe.png/revision/latest?cb=20201115183800"},
-                {name:"Alice", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/0/02/Alice.png/revision/latest?cb=20201115183742"},
-                {name:"Queen of Hearts", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/3/30/QueenOfHearts.png/revision/latest?cb=20201115183838"},
-                {name:"Dormouse", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/a/a1/Dormouse.png/revision/latest?cb=20201115183921"},
-                {name:"White Rabbit", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/7/77/WhiteRabbit.png/revision/latest?cb=20201115183907"},
-                {name:"Cheshire Cat", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/2/22/CheshireCat.png/revision/latest?cb=20201115183935"},
-                {name:"Caterpillar", rarity:"Epic", image:"https://vignette.wikia.nocookie.net/blooket/images/1/19/Caterpillar.png/revision/latest?cb=20201115183713"},
-                {name:"Mad Hatter", rarity:"Epic", image:"https://vignette.wikia.nocookie.net/blooket/images/8/87/MadHatter.png/revision/latest?cb=20201115183728"},
-                {name:"King of Hearts", rarity:"Legendary", image:"https://vignette.wikia.nocookie.net/blooket/images/a/a5/KingOfHearts.png/revision/latest?cb=20201115183827"}
-            ]
-        },
-        breakfast: {
-            name: "Breakfast Pack",
-            blooks: [
-                {name:"Toast", rarity:"Uncommon", image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-                {name:"Cereal", rarity:"Uncommon", image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-                {name:"Yogurt", rarity:"Uncommon", image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-                {name:"Breakfast Combo", rarity:"Uncommon", image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-                {name:"Orange Juice", rarity:"Rare", image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-                {name:"Milk", rarity:"Rare", image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-                {name:"Waffle", rarity:"Rare", image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-                {name:"Pancakes", rarity:"Epic", image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-                {name:"French Toast", rarity:"Epic", image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-                {name:"Pizza", rarity:"Legendary", image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"}
-            ]
-        },
-        space: {
-            name: "Space Pack",
-            blooks: [
-                {name:"Earth", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/9/95/Earth.png/revision/latest?cb=20201017001407"},
-                {name:"Meteor", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/4/45/Meteor.png/revision/latest?cb=20201017001438"},
-                {name:"Stars", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/d/df/Stars.png/revision/latest?cb=20201017001452"},
-                {name:"Alien", rarity:"Uncommon", image:"https://vignette.wikia.nocookie.net/blooket/images/0/0a/Alien.png/revision/latest?cb=20201017001353"},
-                {name:"Planet", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/d/d1/Planet.png/revision/latest?cb=20201017001445"},
-                {name:"UFO", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/3/3b/UFO.png/revision/latest?cb=20201017001503"},
-                {name:"Spaceship", rarity:"Rare", image:"https://vignette.wikia.nocookie.net/blooket/images/d/d1/Spaceship.png/revision/latest?cb=20201017001500"},
-                {name:"Astronaut", rarity:"Legendary", image:"https://vignette.wikia.nocookie.net/blooket/images/f/f7/Astronaut.png/revision/latest?cb=20201017001314"}
-            ]
-        }
+    // BREAKFAST ONLY DATABASE WITH DESIGNER HIGHLIGHT COLORS
+    const breakfastPackData = {
+        name: "Breakfast Pack",
+        blooks: [
+            {name:"Toast", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            {name:"Cereal", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Yogurt", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
+            {name:"Breakfast Combo", rarity:"Uncommon", color:"#4CAF50", image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
+            {name:"Orange Juice", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
+            {name:"Milk", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
+            {name:"Waffle", rarity:"Rare", color:"#00a2ff", image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
+            {name:"Pancakes", rarity:"Epic", color:"#e91e63", image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
+            {name:"French Toast", rarity:"Epic", color:"#e91e63", image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
+            {name:"Pizza", rarity:"Legendary", color:"#ffb300", image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk", rarity:"Chroma", color:"#00e5ff", image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk", rarity:"Chroma", color:"#00e5ff", image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+        ]
     };
 
     onAuthStateChanged(auth, async (user) => {
@@ -401,7 +366,6 @@ body {
                 const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
                 currentUserRef = firestoreModule.doc(db, "users", user.uid);
                 
-                // Realtime synchronization listener
                 firestoreModule.onSnapshot(currentUserRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
@@ -413,7 +377,7 @@ body {
                         refreshInspectionSidebar();
                     }
                 });
-            } catch (err) { console.error("Data tracking initialization failed: ", err); }
+            } catch (err) { console.error("Snapshot synchronization failure: ", err); }
         } else {
             window.location.href = "login.html";
         }
@@ -423,46 +387,44 @@ body {
         const mountNode = document.getElementById('packs-collection-mount-node');
         mountNode.innerHTML = "";
 
-        // Calculate quantity totals mapping
         const quantityCounts = {};
         userInventoryRaw.forEach(x => quantityCounts[x] = (quantityCounts[x] || 0) + 1);
 
-        Object.keys(packDatabase).forEach(packKey => {
-            const packData = packDatabase[packKey];
-            
-            let blooksHtml = "";
-            packData.blooks.forEach(blook => {
-                const ownedQty = quantityCounts[blook.name] || 0;
-                const isLocked = ownedQty === 0;
-                const isSelected = selectedBlookData && selectedBlookData.name === blook.name;
+        let blooksHtml = "";
+        breakfastPackData.blooks.forEach(blook => {
+            const ownedQty = quantityCounts[blook.name] || 0;
+            const isLocked = ownedQty === 0;
+            const isSelected = selectedBlookData && selectedBlookData.name === blook.name;
 
-                blooksHtml += `
-                    <div class="blook-item-box ${isLocked ? 'locked-grey' : ''} ${isSelected ? 'selected-active' : ''}" 
-                         data-name="${blook.name}" data-pack="${packKey}">
-                        <img src="${blook.image}" alt="${blook.name}" class="blook-thumbnail">
-                        ${ownedQty > 0 ? `<div class="blook-counter-badge">${ownedQty}</div>` : ''}
-                    </div>
-                `;
-            });
+            // Generate card color accents based on status
+            const currentBorderColor = isSelected ? '#ffd700' : (isLocked ? 'rgba(255,255,255,0.2)' : blook.color);
 
-            mountNode.innerHTML += `
-                <div class="pack-section-block">
-                    <div class="pack-row-title">${packData.name}</div>
-                    <div class="pack-divider-line"></div>
-                    <div class="blooks-row-grid">${blooksHtml}</div>
+            blooksHtml += `
+                <div class="blook-item-box ${isLocked ? 'locked-grey' : ''} ${isSelected ? 'selected-active' : ''}" 
+                     data-name="${blook.name}" 
+                     style="border-color: ${currentBorderColor};">
+                    <img src="${blook.image}" alt="${blook.name}" class="blook-thumbnail">
+                    ${ownedQty > 0 ? `<div class="blook-counter-badge">${ownedQty}</div>` : ''}
                 </div>
             `;
         });
 
-        // Click listeners on blooks
+        mountNode.innerHTML = `
+            <div class="pack-section-block">
+                <div class="pack-row-title">${breakfastPackData.name}</div>
+                <div class="pack-divider-line"></div>
+                <div class="blooks-row-grid">${blooksHtml}</div>
+            </div>
+        `;
+
+        // Click listeners
         document.querySelectorAll('.blook-item-box').forEach(el => {
             el.addEventListener('click', () => {
                 const name = el.getAttribute('data-name');
-                const packKey = el.getAttribute('data-pack');
-                const foundBlook = packDatabase[packKey].blooks.find(b => b.name === name);
+                const foundBlook = breakfastPackData.blooks.find(b => b.name === name);
                 
                 selectedBlookData = foundBlook;
-                renderInventoryGrid(); // Updates active structural highlight borders
+                renderInventoryGrid(); 
             });
         });
     }
@@ -479,7 +441,7 @@ body {
 
         const qtyOwned = userInventoryRaw.filter(x => x === selectedBlookData.name).length;
         if (qtyOwned === 0) {
-            selectedBlookData = null; // Clear if sold out
+            selectedBlookData = null; 
             emptyState.style.display = "block";
             contentNode.style.display = "none";
             return;
@@ -496,14 +458,14 @@ body {
             <h2 class="sidebar-name">${selectedBlookData.name}</h2>
             <img src="${bannerImg}" alt="${selectedBlookData.rarity}" class="sidebar-rarity-banner">
             
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:10px; font-weight:700; font-size:0.95rem; margin-bottom:15px; text-align:left;">
-                <p style="margin-bottom:4px; display:flex; justify-content:space-between;"><span>Owned:</span> <span style="color:#00cc66; font-weight:900;">${qtyOwned}</span></p>
+            <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:14px; font-weight:700; font-size:1rem; margin-bottom:20px; text-align:left; border:1px solid rgba(255,255,255,0.1);">
+                <p style="margin-bottom:6px; display:flex; justify-content:space-between;"><span>Owned:</span> <span style="color:#00cc66; font-weight:900;">${qtyOwned}</span></p>
                 <p style="display:flex; justify-content:space-between;"><span>Sell Value:</span> <span style="color:#ffd700; font-weight:900;">${valSingle} Tokens</span></p>
             </div>
 
             <div class="action-button-stack">
                 <button class="inventory-btn btn-sell-single" id="action-sell-one">Sell 1 Blook</button>
-                <button class="inventory-btn btn-sell-dupes" id="action-sell-dupes" ${qtyOwned <= 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+                <button class="inventory-btn btn-sell-dupes" id="action-sell-dupes" ${qtyOwned <= 1 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''}>
                     Sell Duplicates (${qtyOwned - 1})
                 </button>
             </div>
@@ -521,7 +483,6 @@ body {
         const valSingle = sellValueMap[selectedBlookData.rarity] || 5;
         const tokensGained = valSingle * amountToSell;
 
-        // Splice out requested index counts cleanly from flat dataset
         let updatedInv = [...userInventoryRaw];
         for (let i = 0; i < amountToSell; i++) {
             const index = updatedInv.indexOf(selectedBlookData.name);
@@ -537,7 +498,7 @@ body {
                 inventory: updatedInv
             });
         } catch (err) {
-            console.error("Sale update transaction execution failed: ", err);
+            console.error("Sale update structural transaction failed: ", err);
         }
     }
 </script>
