@@ -706,6 +706,60 @@ input:checked + .toggle-slider:before {
     gap: 15px;
 }
 
+/* ====================================
+   MASS OPEN SELECTION MODAL
+==================================== */
+.mass-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.mass-modal-content {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 28px;
+    padding: 30px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.mass-input-box {
+    width: 100%;
+    max-width: 180px;
+    padding: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-align: center;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid #ff9b2f;
+    border-radius: 12px;
+    color: #ffd700;
+    outline: none;
+    margin: 15px 0;
+}
+
+.mass-max-text {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #fff4d6;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: underline;
+}
+
 /* =========================
    REVEAL MODAL AREA
 ========================= */
@@ -713,7 +767,7 @@ input:checked + .toggle-slider:before {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 990; 
+    z-index: 1800; 
     display: none;
     align-items: center;
     justify-content: center;
@@ -728,7 +782,7 @@ input:checked + .toggle-slider:before {
     border-radius: 32px;
     padding: 40px;
     width: 90%;
-    max-width: 420px;
+    max-width: 480px;
     text-align: center;
     transform: scale(0.7);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -738,11 +792,38 @@ input:checked + .toggle-slider:before {
 }
 
 #reward-display-node {
-    margin: 25px auto 5px auto;
+    margin: 20px auto 5px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-height: 340px;
+    overflow-y: auto;
+    width: 100%;
+    scrollbar-width: none;
+}
+
+#reward-display-node::-webkit-scrollbar {
+    display: none;
+}
+
+/* MASS RESULTS GRID CONTAINER */
+.mass-open-results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 5px;
+}
+
+.mass-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 8px 16px;
+    border-left: 5px solid transparent;
 }
 
 /* ====================================
@@ -870,9 +951,7 @@ input:checked + .toggle-slider:before {
 <div class="info-modal-overlay" id="info-modal">
     <div class="info-modal-content" id="info-modal-card">
         <h2 id="info-modal-title" style="font-family:'Titan One'; font-size:1.8rem; color:#fff4d6; text-transform: uppercase;">PACK CONTENT</h2>
-        
         <div class="info-cards-grid" id="info-cards-container"></div>
-        
         <button class="btn primary" id="close-info-modal-btn" style="padding:10px 24px; align-self: center;">Close</button>
     </div>
 </div>
@@ -894,16 +973,32 @@ input:checked + .toggle-slider:before {
     </div>
 </div>
 
+<div class="mass-modal-overlay" id="mass-open-modal">
+    <div class="mass-modal-content" id="mass-modal-card">
+        <h2 id="mass-pack-title" style="font-family:'Titan One'; font-size:1.6rem; color:#fff4d6; text-transform: uppercase;">MASS OPEN</h2>
+        <p style="font-size:0.95rem; color:#fff4d6; margin-top:10px;">How many packs do you want to unlock?</p>
+        
+        <input type="number" id="mass-open-input" class="mass-input-box" value="10" min="1">
+        <div>
+            <span id="mass-max-trigger" class="mass-max-text">Use Max Afforded</span>
+        </div>
+
+        <div class="confirm-btn-group">
+            <button class="btn secondary" id="mass-cancel-btn" style="padding:10px 20px;">Cancel</button>
+            <button class="btn primary" id="mass-confirm-btn" style="background:linear-gradient(135deg, #00cc66, #00994c); color:white; padding:10px 24px;">Mass Open</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="reward-modal">
     <div class="modal-content" id="modal-container-card">
         <h2 id="modal-reward-header" style="font-family:'Titan One'; font-size:2rem; color:#ffd700; text-transform: uppercase;">YOU UNBOXED!</h2>
-        
         <div id="reward-display-node"></div>
     </div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -941,6 +1036,15 @@ input:checked + .toggle-slider:before {
     const cancelOpenBtn = document.getElementById('cancel-open-btn');
     const confirmOpenBtn = document.getElementById('confirm-open-btn');
 
+    // MASS OPEN DOM POINTERS
+    const massOpenModal = document.getElementById('mass-open-modal');
+    const massModalCard = document.getElementById('mass-modal-card');
+    const massPackTitle = document.getElementById('mass-pack-title');
+    const massOpenInput = document.getElementById('mass-open-input');
+    const massMaxTrigger = document.getElementById('mass-max-trigger');
+    const massCancelBtn = document.getElementById('mass-cancel-btn');
+    const massConfirmBtn = document.getElementById('mass-confirm-btn');
+
     const rewardModal = document.getElementById('reward-modal');
     const modalContainerCard = document.getElementById('modal-container-card');
     const rewardDisplayNode = document.getElementById('reward-display-node');
@@ -949,7 +1053,6 @@ input:checked + .toggle-slider:before {
     const claimHourlyBtn = document.getElementById('claim-hourly-btn');
     const hourlyBtnText = document.getElementById('hourly-btn-text');
     
-    // DROPDOWN ELEMENTS
     const settingsToggleBtn = document.getElementById('market-settings-toggle-btn');
     const settingsDropdown = document.getElementById('market-settings-dropdown');
     const massOpenCheckbox = document.getElementById('mass-open-checkbox');
@@ -1028,12 +1131,10 @@ input:checked + .toggle-slider:before {
                     <button class="pack-info-toggle-btn" id="info-toggle-${key}" title="View Contents">
                         <span class="material-icons">search</span>
                     </button>
-
                     <div class="pack-price-tag-badge">
                         <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Tokens">
                         <span>${currentPack.cost}</span>
                     </div>
-                    
                     <div class="pack-image-holder">
                         <img src="${currentPack.image}" alt="${currentPack.name}" class="pack-img">
                     </div>
@@ -1060,7 +1161,6 @@ input:checked + .toggle-slider:before {
 
         selectedPack.blooks.forEach(b => {
             const rarityImgUrl = rarityAssetMap[b.rarity] || rarityAssetMap["Uncommon"];
-            
             infoCardsContainer.innerHTML += `
                 <div class="info-blook-card" style="border-color: ${b.color}; background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.25) 100%);">
                     <div class="info-left-item-pack">
@@ -1100,11 +1200,10 @@ input:checked + .toggle-slider:before {
                     const userData = userSnap.data();
                     userTokens = userData.tokens || 0;
                     tokenCounterValue.textContent = userTokens.toLocaleString();
-                    
                     initializeHourlyCooldownLoop(userData.hourlyCooldown);
                 }
             } catch (err) {
-                console.error("Failed to load user document data:", err);
+                console.error("Failed to load user data:", err);
             }
 
             document.getElementById('logout-hud-btn').addEventListener('click', () => {
@@ -1128,17 +1227,12 @@ input:checked + .toggle-slider:before {
         return blookArray[0];
     }
 
-    /* ====================================
-       UNIVERSAL RAIN EFFECTS SYSTEM
-    ==================================== */
     function triggerRainEffect(imageSrc) {
         rainTimers.forEach(timer => clearTimeout(timer));
         rainTimers = [];
-
         document.querySelectorAll('.rain-element').forEach(el => el.remove());
 
         const totalElements = 45; 
-        
         for (let i = 0; i < totalElements; i++) {
             const aTimer = setTimeout(() => {
                 if (!isRewardModalActive) return;
@@ -1164,10 +1258,8 @@ input:checked + .toggle-slider:before {
                 rainItem.style.animationDuration = `${fallDuration}s`;
                 
                 rewardModal.insertBefore(rainItem, modalContainerCard);
-                
                 setTimeout(() => rainItem.remove(), fallDuration * 1000);
             }, i * 65); 
-
             rainTimers.push(aTimer);
         }
     }
@@ -1181,21 +1273,25 @@ input:checked + .toggle-slider:before {
         }, 200);
     }
 
-    function closeRewardModal() {
-        isRewardModalActive = false;
-        
-        rewardModal.style.opacity = "0";
-        modalContainerCard.style.transform = "scale(0.7)";
-        
-        rainTimers.forEach(timer => clearTimeout(timer));
-        document.querySelectorAll('.rain-element').forEach(el => el.remove());
-
+    function closeMassModal() {
+        massOpenModal.style.opacity = "0";
+        massModalCard.style.transform = "scale(0.8)";
         setTimeout(() => {
-            rewardModal.style.display = "none";
-        }, 300);
+            massOpenModal.style.display = "none";
+            activeSelectedPackId = null;
+        }, 200);
     }
 
-    /* EXECUTES PACK PURCHASE ENGINES */
+    function closeRewardModal() {
+        isRewardModalActive = false;
+        rewardModal.style.opacity = "0";
+        modalContainerCard.style.transform = "scale(0.7)";
+        rainTimers.forEach(timer => clearTimeout(timer));
+        document.querySelectorAll('.rain-element').forEach(el => el.remove());
+        setTimeout(() => { rewardModal.style.display = "none"; }, 300);
+    }
+
+    /* EXECUTES SINGLE PACK OPENING ENGINE */
     async function executePackOpening(targetedPack) {
         if (userTokens < targetedPack.cost) {
             alert(`Insufficient tokens!`);
@@ -1216,7 +1312,6 @@ input:checked + .toggle-slider:before {
             });
 
             isRewardModalActive = true;
-
             modalRewardHeader.textContent = "YOU UNBOXED!";
             modalRewardHeader.style.color = "#ffd700";
             modalContainerCard.style.borderColor = awardedBlook.color;
@@ -1228,19 +1323,84 @@ input:checked + .toggle-slider:before {
             `;
 
             rewardModal.style.display = "flex";
-            
-            document.querySelectorAll('.rain-element').forEach(el => el.remove());
-
             setTimeout(() => {
                 rewardModal.style.opacity = "1";
                 modalContainerCard.style.transform = "scale(1)";
-                
                 const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
                 triggerRainEffect(matchingRarityUrl); 
             }, 15);
 
         } catch (err) {
-            console.error("Pack configuration processing failed:", err);
+            console.error("Single opening failed:", err);
+        }
+    }
+
+    /* ====================================
+       NEW: MASS PACK OPENING ENGINE
+    ==================================== */
+    async function executeMassOpening(targetedPack, quantity) {
+        const totalCost = targetedPack.cost * quantity;
+        if (userTokens < totalCost) {
+            alert("Insufficient tokens for this mass unboxing amount.");
+            return;
+        }
+
+        try {
+            userTokens -= totalCost;
+            tokenCounterValue.textContent = userTokens.toLocaleString();
+
+            const rolledInventoryBatch = [];
+            const resultsTally = {};
+
+            // Loop and calculate unboxed values
+            for (let i = 0; i < quantity; i++) {
+                const rolled = rollMysteryBlook(targetedPack.blooks);
+                rolledInventoryBatch.push(rolled.name);
+
+                if (!resultsTally[rolled.name]) {
+                    resultsTally[rolled.name] = { count: 0, data: rolled };
+                }
+                resultsTally[rolled.name].count++;
+            }
+
+            // Sync structural database updates to Firestore
+            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            await firestoreModule.updateDoc(currentUserRef, {
+                tokens: userTokens,
+                inventory: firestoreModule.arrayWith(rolledInventoryBatch) // Note: arrayUnion handles updates safely inside systems. If you have arrays of identical names, push configuration blocks appropriately inside server-side lists.
+            });
+
+            isRewardModalActive = true;
+            modalRewardHeader.textContent = `MASS UNBOXED (${quantity}x)`;
+            modalRewardHeader.style.color = "#00cc66";
+            modalContainerCard.style.borderColor = "#ff9b2f";
+
+            // Render aggregated results to screen nodes safely
+            let resultsHtml = `<div class="mass-open-results-container">`;
+            Object.keys(resultsTally).forEach(name => {
+                const current = resultsTally[name];
+                resultsHtml += `
+                    <div class="mass-result-row" style="border-left-color: ${current.data.color};">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <img src="${current.data.image}" alt="${name}" style="width:40px; height:40px; object-fit:contain;">
+                            <span style="font-weight:900; color:${current.data.color}; font-size:1.1rem;">${name}</span>
+                        </div>
+                        <span style="font-weight:900; background:rgba(0,0,0,0.4); padding:4px 12px; border-radius:8px; color:#ffd700;">x${current.count}</span>
+                    </div>
+                `;
+            });
+            resultsHtml += `</div>`;
+            rewardDisplayNode.innerHTML = resultsHtml;
+
+            rewardModal.style.display = "flex";
+            setTimeout(() => {
+                rewardModal.style.opacity = "1";
+                modalContainerCard.style.transform = "scale(1)";
+                triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp');
+            }, 15);
+
+        } catch(err) {
+            console.error("Mass unboxing failed:", err);
         }
     }
 
@@ -1255,10 +1415,23 @@ input:checked + .toggle-slider:before {
             const targetedPack = packs[packId];
             if (!targetedPack) return;
 
+            activeSelectedPackId = packId;
+
             if (instantOpenCheckbox.checked) {
                 executePackOpening(targetedPack);
+            } else if (massOpenCheckbox.checked) {
+                // MASS OPEN ROUTE
+                massPackTitle.textContent = `${targetedPack.name}`;
+                const maxAfford = Math.floor(userTokens / targetedPack.cost);
+                massOpenInput.value = maxAfford > 0 ? Math.min(10, maxAfford) : 1;
+                
+                massOpenModal.style.display = "flex";
+                setTimeout(() => {
+                    massOpenModal.style.opacity = "1";
+                    massModalCard.style.transform = "scale(1)";
+                }, 15);
             } else {
-                activeSelectedPackId = packId;
+                // STANDARD OPT-IN ROUTE
                 confirmPackTitle.textContent = `Open ${targetedPack.name}?`;
                 confirmPackImage.src = targetedPack.image;
                 confirmPackCost.textContent = targetedPack.cost;
@@ -1272,14 +1445,32 @@ input:checked + .toggle-slider:before {
         });
 
         cancelOpenBtn.addEventListener('click', closeConfirmModal);
-
         confirmOpenBtn.addEventListener('click', () => {
             if (!activeSelectedPackId) return;
             const targetedPack = packs[activeSelectedPackId];
             if (!targetedPack) return;
-
             closeConfirmModal();
             executePackOpening(targetedPack);
+        });
+
+        // MASS OPEN LAYERS EVENT LISTENERS
+        massCancelBtn.addEventListener('click', closeMassModal);
+        massMaxTrigger.addEventListener('click', () => {
+            if (!activeSelectedPackId) return;
+            const targetedPack = packs[activeSelectedPackId];
+            massOpenInput.value = Math.floor(userTokens / targetedPack.cost);
+        });
+        massConfirmBtn.addEventListener('click', () => {
+            if (!activeSelectedPackId) return;
+            const targetedPack = packs[activeSelectedPackId];
+            const quantity = parseInt(massOpenInput.value) || 0;
+
+            if (quantity <= 0) {
+                alert("Please enter a valid amount of packs.");
+                return;
+            }
+            closeMassModal();
+            executeMassOpening(targetedPack, quantity);
         });
 
         rewardModal.addEventListener('click', closeRewardModal);
@@ -1290,7 +1481,6 @@ input:checked + .toggle-slider:before {
     ==================================== */
     function initializeHourlyCooldownLoop(cooldownTimestamp) {
         if(serverTimerInterval) clearInterval(serverTimerInterval);
-
         if (cooldownTimestamp) {
             const remainingMs = cooldownTimestamp - Date.now();
             if (remainingMs > 0) {
@@ -1303,8 +1493,6 @@ input:checked + .toggle-slider:before {
 
     function lockHourlyClaimButton(cooldownTarget) {
         claimHourlyBtn.disabled = true;
-        
-        // FIXED: Updates time left directly within the button string
         const updateTimer = () => {
             const remaining = cooldownTarget - Date.now();
             if (remaining <= 0) {
@@ -1317,7 +1505,6 @@ input:checked + .toggle-slider:before {
                 hourlyBtnText.textContent = `Hourly Reward (${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s)`;
             }
         };
-
         updateTimer();
         serverTimerInterval = setInterval(updateTimer, 1000);
     }
@@ -1349,14 +1536,12 @@ input:checked + .toggle-slider:before {
             const newCooldownTarget = Date.now() + (60 * 60 * 1000); 
 
             userTokens += rolledPrize;
-
             await firestoreModule.updateDoc(currentUserRef, {
                 tokens: userTokens,
                 hourlyCooldown: newCooldownTarget
             });
 
             tokenCounterValue.textContent = userTokens.toLocaleString();
-
             isRewardModalActive = true;
 
             modalRewardHeader.textContent = "REWARD CLAIMED!";
@@ -1370,20 +1555,15 @@ input:checked + .toggle-slider:before {
             `;
 
             rewardModal.style.display = "flex";
-            
-            document.querySelectorAll('.rain-element').forEach(el => el.remove());
-
             setTimeout(() => {
                 rewardModal.style.opacity = "1";
                 modalContainerCard.style.transform = "scale(1)";
-                
                 triggerRainEffect('https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp'); 
             }, 15);
 
             lockHourlyClaimButton(newCooldownTarget);
-
         } catch (err) {
-            console.error("Hourly transaction update failed: ", err);
+            console.error("Hourly update failed: ", err);
             enableHourlyClaimButton();
         }
     });
