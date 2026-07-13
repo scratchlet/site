@@ -201,36 +201,6 @@ body{
     color: #ff5252;
 }
 
-/* =========================
-   BUTTONS
-========================= */
-.btn {
-    font-family:"Nunito",sans-serif;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-    letter-spacing:.3px;
-    font-size:0.95rem;
-    text-decoration:none;
-    display:inline-block;
-    padding:12px 24px;
-    border-radius:14px;
-    position: relative;
-    text-align: center;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-}
-
-.secondary {
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.danger {
-    background: linear-gradient(135deg, #ff5252, #c62828);
-    color: white;
-}
-
 /* =================================
    INVENTORY CONTAINER & UNIFIED MASTER CARD
 ================================= */
@@ -273,7 +243,6 @@ body{
     color: #fff4d6;
 }
 
-/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
 .master-inventory-card {
     background: rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.12);
@@ -288,9 +257,7 @@ body{
     gap: 18px;
 }
 
-/* =================================
-   IMAGE BUTTON STATE LAYOUT RULES
-================================= */
+/* BLOOK IMAGE BUTTONS */
 .blook-image-btn {
     background: rgba(0, 0, 0, 0.45);
     border: 3px solid transparent;
@@ -307,7 +274,6 @@ body{
     user-select: none;
 }
 
-/* OWNED ITEMS STYLES */
 .blook-image-btn.owned {
     cursor: pointer;
 }
@@ -318,7 +284,6 @@ body{
     object-fit: contain;
 }
 
-/* NOT OWNED STATE */
 .blook-image-btn.locked {
     border-color: #222222 !important;
     background: rgba(0, 0, 0, 0.7);
@@ -357,14 +322,14 @@ body{
 }
 
 /* ====================================
-   NEW CARD VIEW MODAL INTERFACE (MATCHES REFERENCE IMAGE)
+   EVENED-OUT RECTANGLE CARD MODAL
 ==================================== */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     z-index: 1500;
     display: none;
     align-items: center;
@@ -373,64 +338,61 @@ body{
 
 .card-view-wrapper {
     position: relative;
-    width: 320px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(255,255,255,0.1);
+    width: 300px; /* Uniform width profile */
+    background: #111111;
+    border: 3px solid rgba(255,255,255,0.08);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* Top dynamic gradient area */
+/* Perfect rectangle top section */
 .card-art-section {
     position: relative;
-    height: 380px;
+    height: 330px; 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    /* Default fallback gradient */
-    background: linear-gradient(to bottom, #4f6cf7, #1d2b7d); 
+    padding: 24px;
 }
 
 .card-close-btn {
     position: absolute;
     top: 15px;
     left: 15px;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     border: none;
     color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px; /* Squared clean styling accent */
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
     z-index: 20;
-    transition: background 0.2s;
 }
 .card-close-btn:hover {
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .card-blook-title {
     font-family: 'Titan One', cursive;
-    font-size: 2.2rem;
+    font-size: 2.1rem;
     color: white;
     text-transform: uppercase;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.7), -1px -1px 0px rgba(0,0,0,0.7), 1px -1px 0px rgba(0,0,0,0.7), -1px 1px 0px rgba(0,0,0,0.7);
-    margin-bottom: 20px;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.8);
+    margin-bottom: 25px;
     letter-spacing: 0.5px;
     text-align: center;
     z-index: 10;
 }
 
 .card-image-holder {
-    width: 160px;
-    height: 180px;
+    width: 140px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -441,26 +403,29 @@ body{
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
 }
 
-/* Bottom Actions Control Board */
+/* Perfect rectangle bottom section */
 .card-control-section {
-    background: #111111;
+    background: #141414;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border-top: 4px solid rgba(0,0,0,0.3);
+    border-top: 5px solid rgba(0, 0, 0, 0.4);
 }
 
 .card-count-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
-    color: #aaaaaa;
+    color: #999999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 4px;
 }
 
 .card-count-value {
@@ -469,13 +434,13 @@ body{
     font-size: 1.1rem;
 }
 
+/* Flattened and squared interactive items */
 .card-input-stepper {
     display: flex;
     align-items: center;
-    background: #222222;
-    border-radius: 12px;
-    padding: 4px;
-    border: 1px solid #333333;
+    background: #1e1e1e;
+    padding: 2px;
+    border: 2px solid #2d2d2d;
 }
 
 .stepper-btn {
@@ -483,14 +448,15 @@ body{
     border: none;
     color: #ff9b2f;
     font-family: 'Titan One', cursive;
-    font-size: 1.2rem;
-    width: 40px;
-    height: 40px;
+    font-size: 1.1rem;
+    width: 44px;
+    height: 44px;
     cursor: pointer;
     user-select: none;
 }
 .stepper-btn:hover {
     color: #ffb666;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .card-sell-field {
@@ -505,7 +471,6 @@ body{
     outline: none;
     width: 100%;
 }
-/* Hide built-in arrows */
 .card-sell-field::-webkit-outer-spin-button,
 .card-sell-field::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -516,10 +481,9 @@ body{
     background: #ff9b2f;
     color: white;
     font-family: 'Titan One', cursive;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     padding: 14px;
     border: none;
-    border-radius: 12px;
     cursor: pointer;
     text-transform: uppercase;
     display: flex;
@@ -527,14 +491,13 @@ body{
     justify-content: center;
     gap: 8px;
     box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
-    transition: background 0.1s;
 }
 .card-action-submit-btn:hover {
     background: #ffb666;
 }
 .card-action-submit-btn:disabled {
-    background: #444444 !important;
-    color: #777777;
+    background: #2a2a2a !important;
+    color: #555555;
     cursor: not-allowed;
     box-shadow: none;
 }
@@ -611,7 +574,7 @@ body{
         
         <div class="card-control-section">
             <div class="card-count-row">
-                <span>Quantity Owned</span>
+                <span>Owned</span>
                 <span class="card-count-value" id="modal-owned-count">0</span>
             </div>
             
@@ -668,15 +631,14 @@ const sellValueMap = {
     "Mystical": 1000
 };
 
-// Rarity Background Color Gradients matching standard frames
 const gradientRarityMap = {
-    "Uncommon": "linear-gradient(135deg, #47d647 0%, #1e6b1e 100%)",
-    "Rare": "linear-gradient(135deg, #4f6cf7 0%, #1d2b7d 100%)",
-    "Epic": "linear-gradient(135deg, #e03434 0%, #6b1414 100%)",
-    "Legendary": "linear-gradient(135deg, #fcd33f 0%, #947103 100%)",
-    "Chroma": "linear-gradient(135deg, #2de6e6 0%, #0c6969 100%)",
-    "Celestial": "linear-gradient(135deg, #a44ef5 0%, #46147a 100%)",
-    "Mystical": "linear-gradient(135deg, #f54ebd 0%, #80125a 100%)"
+    "Uncommon": "linear-gradient(to bottom, #47d647 0%, #1e6b1e 100%)",
+    "Rare": "linear-gradient(to bottom, #4f6cf7 0%, #1d2b7d 100%)",
+    "Epic": "linear-gradient(to bottom, #e03434 0%, #6b1414 100%)",
+    "Legendary": "linear-gradient(to bottom, #fcd33f 0%, #947103 100%)",
+    "Chroma": "linear-gradient(to bottom, #2de6e6 0%, #0c6969 100%)",
+    "Celestial": "linear-gradient(to bottom, #a44ef5 0%, #46147a 100%)",
+    "Mystical": "linear-gradient(to bottom, #f54ebd 0%, #80125a 100%)"
 };
 
 const packsRegistry = {
@@ -786,7 +748,6 @@ function getInventoryCounts() {
 function renderInventoryLayout() {
     let totalValidOwnedBlooks = 0;
     let uniqueCollectedCount = 0;
-
     const inventoryMap = getInventoryCounts();
 
     Object.keys(inventoryMap).forEach(name => {
@@ -883,7 +844,6 @@ function openSellWindow(blook, totalOwned) {
     modalBlookImage.src = blook.image;
     modalOwnedCount.textContent = totalOwned;
     
-    // Set dynamic card gradient background based on rarity
     const cardBgGradient = gradientRarityMap[blook.rarity] || "linear-gradient(to bottom, #4f6cf7, #1d2b7d)";
     cardDynamicBg.style.background = cardBgGradient;
     
