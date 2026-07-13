@@ -453,7 +453,7 @@ body{
 }
 
 /* ====================================
-   INFO MODAL STYLES (STRETCHED HORIZONTAL ROW LIST)
+   INFO MODAL STYLES
 ==================================== */
 .info-modal-overlay {
     position: fixed;
@@ -530,12 +530,9 @@ body{
     text-align: left;
 }
 
-.nav-right-group, .info-right-item-pack {
+.info-right-item-pack {
     display: flex;
     align-items: center;
-}
-
-.info-right-item-pack {
     gap: 24px;
 }
 
@@ -618,7 +615,7 @@ body{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 1000; /* Backdrop layer */
+    z-index: 1000; 
     display: none;
     align-items: center;
     justify-content: center;
@@ -639,7 +636,7 @@ body{
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     cursor: default;
-    z-index: 1020; /* Card layers completely above particles */
+    z-index: 1020; 
 }
 
 #reward-display-node {
@@ -658,7 +655,7 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;
-    z-index: 1010; /* Perfect tier: above dark window backdrop, behind result card */
+    z-index: 1010; 
     top: -80px;
     will-change: transform, opacity;
     animation: rainFallAnimation linear forwards;
@@ -786,9 +783,10 @@ body{
 </div>
 
 <script type="module">
+    // FIXED: Corrected Firestore modular distribution paths from 'firebase-auth' to 'firebase-firestore'
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -983,7 +981,7 @@ body{
         
         for (let i = 0; i < totalElements; i++) {
             setTimeout(() => {
-                // Confirm screen wasn't closed early mid-generation
+                // Safeguard: Check if user clicked away early before creating new items
                 if (rewardModal.style.display === "none") return;
 
                 const rainItem = document.createElement('div');
@@ -1028,7 +1026,7 @@ body{
         rewardModal.style.opacity = "0";
         modalContainerCard.style.transform = "scale(0.7)";
         
-        // Wipe away all active particle graphics instantly upon click off
+        // FIXED: Instantly removes all active raining images when modal card closes out
         document.querySelectorAll('.rain-element').forEach(el => el.remove());
 
         setTimeout(() => {
@@ -1095,6 +1093,7 @@ body{
                         rewardModal.style.opacity = "1";
                         modalContainerCard.style.transform = "scale(1)";
                         
+                        // FIXED: Rains custom matching rarity icon instead of basic token item
                         const matchingRarityUrl = rarityAssetMap[awardedBlook.rarity] || rarityAssetMap["Uncommon"];
                         triggerRainEffect(matchingRarityUrl); 
                     }, 15);
