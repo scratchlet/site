@@ -615,7 +615,7 @@ body{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.85);
-    z-index: 990; /* FIXED: Sits directly behind the result card */
+    z-index: 990; 
     display: none;
     align-items: center;
     justify-content: center;
@@ -636,7 +636,7 @@ body{
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     cursor: default;
-    z-index: 1000; /* FIXED: Placed strictly on top of falling elements */
+    z-index: 10; /* FIXED: Strictly layers card over local sibling elements */
 }
 
 #reward-display-node {
@@ -655,10 +655,9 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     pointer-events: none;
-    z-index: 995; /* FIXED: Falls behind the modal card (1000) but in front of dark layout screen (990) */
+    z-index: 5; /* FIXED: Places elements perfectly beneath card (10) but on top of overlay bg */
     top: -80px;
     will-change: transform, opacity;
-    /* FIXED: Using regular linear curve for standard smooth unaccelerated speed falling */
     animation: rainFallAnimation linear forwards;
 }
 
@@ -998,11 +997,12 @@ body{
                 rainItem.style.setProperty('--sway', lateralSway);
                 rainItem.style.setProperty('--rotEnd', endRotation);
                 
-                // Uniform confetti fluid speed (steady 2 to 3.5 seconds lifetime range)
                 const fallDuration = 2.0 + Math.random() * 1.5;
                 rainItem.style.animationDuration = `${fallDuration}s`;
                 
-                document.body.appendChild(rainItem);
+                // FIXED: Inserts element *before* the card modal inside the DOM container.
+                // This forces stacking behind the card regardless of parent context leaks.
+                rewardModal.insertBefore(rainItem, modalContainerCard);
                 
                 setTimeout(() => rainItem.remove(), fallDuration * 1000);
             }, i * 65); 
