@@ -483,8 +483,9 @@ body{
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 12px;
+    gap: 8px;
     margin: 15px 0;
+    flex-wrap: wrap;
 }
 
 .sell-input {
@@ -640,6 +641,7 @@ body{
                 <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
                 <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
                 <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
+                <button class="btn secondary" id="sell-one-left-btn" style="padding: 6px 12px; font-size: 0.85rem; background: #ff5252; color: white; border-color: #ff5252;">One Left</button>
             </div>
 
             <div class="safety-confirm-wrapper" id="safety-warning-box">
@@ -776,6 +778,7 @@ const sellQuantityInput = document.getElementById('sell-quantity-input');
 const confirmSellBtn = document.getElementById('confirm-sell-btn');
 const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
+const sellOneLeftBtn = document.getElementById('sell-one-left-btn');
 
 const safetyWarningBox = document.getElementById('safety-warning-box');
 const safetyBlookNameInput = document.getElementById('safety-blook-name-input');
@@ -894,7 +897,7 @@ function renderRaritiesView(searchQuery) {
 
     rarityOrder.forEach(rarityName => {
         const rarityBlooks = allBlooksFlattened.filter(b => b.rarity === rarityName && b.name.toLowerCase().includes(searchQuery));
-        if (rarityBlocks.length === 0) return;
+        if (rarityBlooks.length === 0) return;
 
         const rarityHeader = document.createElement('h2');
         rarityHeader.style.fontFamily = "'Titan One', cursive";
@@ -1023,6 +1026,17 @@ sellMaxBtn.addEventListener('click', () => {
     if(selectedBlookToSell) {
         sellQuantityInput.value = selectedBlookToSell.ownedCount; 
         recalculateSellPayout(); 
+    }
+});
+
+sellOneLeftBtn.addEventListener('click', () => {
+    if (selectedBlookToSell) {
+        if (selectedBlookToSell.ownedCount > 1) {
+            sellQuantityInput.value = selectedBlookToSell.ownedCount - 1;
+            recalculateSellPayout();
+        } else {
+            alert("You only have 1 copy of this blook! There are no duplicates to sell.");
+        }
     }
 });
 
