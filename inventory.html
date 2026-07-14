@@ -340,7 +340,7 @@ body{
     font-weight: 700;
 }
 
-/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING (With hidden scroll bar) */
+/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
 .master-inventory-card {
     background: rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.12);
@@ -348,18 +348,18 @@ body{
     padding: 35px;
     max-height: 70vh;
     overflow-y: auto;
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    scrollbar-width: none; 
 }
 
 .master-inventory-card::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none; 
 }
 
-/* INCREASED BLOOK GRID UNIT SIZES (From 100px to 135px) */
+/* COMPACT BLOOK GRID UNIT SIZES (Reduced from 135px back down to 80px) */
 .blook-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 15px;
     padding-bottom: 5px;
 }
 
@@ -368,11 +368,11 @@ body{
 ================================= */
 .blook-image-btn {
     background: rgba(0, 0, 0, 0.45);
-    border: 3.5px solid transparent;
-    border-radius: 20px;
+    border: 2px solid transparent;
+    border-radius: 12px;
     aspect-ratio: 1 / 1;
     width: 100%;
-    padding: 14px;
+    padding: 8px;
     cursor: pointer;
     outline: none;
     position: relative;
@@ -384,7 +384,7 @@ body{
 }
 
 .blook-image-btn.owned:hover {
-    transform: scale(1.04);
+    transform: scale(1.05);
     background: rgba(0, 0, 0, 0.55);
 }
 
@@ -417,7 +417,7 @@ body{
 /* LOCK BADGE STYLING OVERLAYED CENTRALLY */
 .lock-overlay-icon {
     position: absolute;
-    font-size: 2.4rem;
+    font-size: 1.5rem;
     color: rgba(255, 255, 255, 0.45);
     pointer-events: none;
     z-index: 5;
@@ -431,16 +431,16 @@ body{
     background: #ff9b2f;
     color: white;
     font-family: 'Titan One', cursive;
-    font-size: 0.95rem;
-    padding: 3px 9px;
+    font-size: 0.75rem;
+    padding: 2px 6px;
     border-radius: 99px;
-    border: 2px solid white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 1.5px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     z-index: 10;
 }
 
 /* ====================================
-   FIXED SIZE HORIZONTAL MODAL LAYOUT (Expanded sizing)
+   FIXED SIZE HORIZONTAL MODAL LAYOUT
 ==================================== */
 .modal-overlay {
     position: fixed;
