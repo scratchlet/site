@@ -359,19 +359,6 @@ body{
     object-fit: contain;
 }
 
-.edit-overlay-hint {
-    position: absolute;
-    bottom: -8px;
-    background: #ff9b2f;
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 99px;
-    border: 1.5px solid white;
-    text-transform: uppercase;
-}
-
 .user-title-badge {
     display: inline-block;
     padding: 4px 12px;
@@ -646,23 +633,28 @@ body{
     color: white;
 }
 
+/* Fixed size blook pfp grid styling */
 .pfp-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
 }
 
+/* Consistent, locked aspect-ratio card layout */
 .pfp-select-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid transparent;
     border-radius: 12px;
-    padding: 8px;
-    aspect-ratio: 1;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s, background-color 0.15s;
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+    transition: transform 0.15s, background-color 0.15s, border-color 0.15s;
 }
 
 .pfp-select-btn:hover {
@@ -676,8 +668,8 @@ body{
 }
 
 .pfp-select-img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
@@ -796,7 +788,6 @@ body{
     <section class="card-container profile-card">
         <div class="avatar-wrapper" id="pfp-avatar-trigger" title="Change Profile Picture">
             <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" class="avatar-img" id="display-pfp-img">
-            <div class="edit-overlay-hint">Change</div>
         </div>
         
         <div>
@@ -873,7 +864,7 @@ body{
             <button class="modal-close-btn" id="close-pfp-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
         </div>
         <p style="margin-top: -10px; margin-bottom: 20px; color: rgba(255,255,255,0.7); font-weight: 700; font-size: 0.9rem;">
-            Only Blooks currently in your inventory will appear here.
+            Select a custom blook from your collection or revert to default.
         </p>
         <div class="pfp-grid" id="pfp-mount-grid">
             </div>
@@ -1077,7 +1068,7 @@ userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModa
 
 // Resolve Blook image path from registry
 function getBlookImgUrl(blookName) {
-    if (!blookName) return DEFAULT_PFP;
+    if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
     const found = allBlooksFlattened.find(b => b.name === blookName);
     return found ? found.image : DEFAULT_PFP;
 }
@@ -1163,33 +1154,44 @@ function updateProfileUI(userData) {
 pfpAvatarTrigger.addEventListener('click', () => {
     pfpMountGrid.innerHTML = "";
     
-    if (ownedBlookNames.length === 0) {
-        pfpMountGrid.innerHTML = `
-            <div style="grid-column: span 4; text-align:center; padding: 20px; color:rgba(255,255,255,0.4); font-weight:700;">
-                You don't own any Blooks yet! Open packs in the market to unlock avatars.
-            </div>
-        `;
-    } else {
-        ownedBlookNames.forEach(bName => {
-            const registryDetails = allBlooksFlattened.find(b => b.name === bName);
-            if (!registryDetails) return;
+    // 1. Create Default Profile Picture Option
+    const defaultBtn = document.createElement('button');
+    const isDefaultActive = (!localUserData.pfp || localUserData.pfp === "default" || localUserData.pfp === DEFAULT_PFP);
+    defaultBtn.className = "pfp-select-btn" + (isDefaultActive ? " active" : "");
+    defaultBtn.innerHTML = `<img src="${DEFAULT_PFP}" class="pfp-select-img" title="Default PFP">`;
+    
+    defaultBtn.addEventListener('click', async () => {
+        try {
+            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            await firestoreModule.updateDoc(userDocRef, { pfp: "default" });
+            pfpModal.style.display = "none";
+        } catch(e) {
+            console.error("Failed to update avatar profile: ", e);
+        }
+    });
+    pfpMountGrid.appendChild(defaultBtn);
 
-            const btn = document.createElement('button');
-            btn.className = "pfp-select-btn" + (localUserData.pfp === bName ? " active" : "");
-            btn.innerHTML = `<img src="${registryDetails.image}" class="pfp-select-img" title="${bName}">`;
-            
-            btn.addEventListener('click', async () => {
-                try {
-                    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-                    await firestoreModule.updateDoc(userDocRef, { pfp: bName });
-                    pfpModal.style.display = "none";
-                } catch(e) {
-                    console.error("Failed to update avatar profile: ", e);
-                }
-            });
-            pfpMountGrid.appendChild(btn);
+    // 2. Append owned blooks
+    ownedBlookNames.forEach(bName => {
+        const registryDetails = allBlooksFlattened.find(b => b.name === bName);
+        if (!registryDetails) return;
+
+        const btn = document.createElement('button');
+        btn.className = "pfp-select-btn" + (localUserData.pfp === bName ? " active" : "");
+        btn.innerHTML = `<img src="${registryDetails.image}" class="pfp-select-img" title="${bName}">`;
+        
+        btn.addEventListener('click', async () => {
+            try {
+                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                await firestoreModule.updateDoc(userDocRef, { pfp: bName });
+                pfpModal.style.display = "none";
+            } catch(e) {
+                console.error("Failed to update avatar profile: ", e);
+            }
         });
-    }
+        pfpMountGrid.appendChild(btn);
+    });
+
     pfpModal.style.display = "flex";
 });
 
