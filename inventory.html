@@ -282,10 +282,25 @@ body{
     min-height: 200px;
 }
 
+/* HORIZONTAL SCROLLABLE ROW FOR CARD CODES */
 .blook-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    display: flex;
+    flex-direction: row;
     gap: 18px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 155, 47, 0.5) rgba(0, 0, 0, 0.1);
+}
+
+.blook-grid::-webkit-scrollbar {
+    display: block;
+    height: 6px;
+}
+
+.blook-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 155, 47, 0.5);
+    border-radius: 99px;
 }
 
 /* =================================
@@ -305,6 +320,7 @@ body{
     align-items: center;
     justify-content: center;
     user-select: none;
+    flex-shrink: 0; /* Prevents compression inside horizontal layout rows */
 }
 
 /* OWNED ITEMS STYLES */
@@ -492,7 +508,7 @@ body{
     </div>
 
     <div class="master-inventory-card">
-        <div id="inventory-mount-node" class="blook-grid"></div>
+        <div id="inventory-mount-node"></div>
     </div>
 </main>
 
@@ -646,7 +662,7 @@ let userTokens = 0;
 let userInventoryMap = {};
 let currentUserRef = null;
 let selectedBlookToSell = null;
-let isInventoryArray = false; // Track database schema format dynamically
+let isInventoryArray = false;
 
 function findBlookDetails(blookName) {
     for (const key in packsRegistry) {
@@ -674,10 +690,7 @@ function renderInventoryLayout() {
     totalBlooksStat.textContent = totalValidOwnedBlooks;
     uniqueBlooksStat.textContent = uniqueCollectedCount;
 
-    // Clear the master node first to completely handle custom layout sections
     inventoryMountNode.innerHTML = "";
-
-    // Change the grid parent to act as a vertical section block container instead of a simple grid
     inventoryMountNode.style.display = "flex";
     inventoryMountNode.style.flexDirection = "column";
     inventoryMountNode.style.gap = "30px";
@@ -685,7 +698,6 @@ function renderInventoryLayout() {
     for (const packKey in packsRegistry) {
         const pack = packsRegistry[packKey];
         
-        // Create Section Header Element
         const packHeader = document.createElement('h2');
         packHeader.style.fontFamily = "'Titan One', cursive";
         packHeader.style.fontSize = "1.4rem";
@@ -696,9 +708,8 @@ function renderInventoryLayout() {
         packHeader.style.letterSpacing = "0.5px";
         packHeader.textContent = pack.name;
 
-        // Create inner grid element specifically for this pack's items
         const packGrid = document.createElement('div');
-        packGrid.className = "blook-grid"; // Retains your CSS styling variables
+        packGrid.className = "blook-grid";
 
         let gridHtml = "";
         pack.blooks.forEach(blook => {
@@ -724,19 +735,16 @@ function renderInventoryLayout() {
 
         packGrid.innerHTML = gridHtml;
 
-        // Create Section Line Separator Element
         const lineSeparator = document.createElement('hr');
         lineSeparator.style.border = "none";
         lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
         lineSeparator.style.marginTop = "25px";
 
-        // Append to core inventory container view
         inventoryMountNode.appendChild(packHeader);
         inventoryMountNode.appendChild(packGrid);
         inventoryMountNode.appendChild(lineSeparator);
     }
 
-    // Clean up the trailing absolute final separating line
     if(inventoryMountNode.lastChild) {
         inventoryMountNode.removeChild(inventoryMountNode.lastChild);
     }
@@ -751,9 +759,6 @@ function renderInventoryLayout() {
     });
 }
 
-/* ====================================
-   MODAL ACTIONS INTERACTION CODES
-==================================== */
 function openSellWindow(blook, totalOwned) {
     selectedBlookToSell = { ...blook, ownedCount: totalOwned };
     
@@ -825,7 +830,6 @@ confirmSellBtn.addEventListener('click', async () => {
 
         userTokens += payoutGained;
 
-        // Build array database value if the schema matches an Array type structure
         let inventoryDataValue;
         if (isInventoryArray) {
             inventoryDataValue = [];
@@ -856,9 +860,6 @@ confirmSellBtn.addEventListener('click', async () => {
     }
 });
 
-/* ====================================
-   INITIAL AUTH STATE LISTENERS
-==================================== */
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
@@ -870,7 +871,6 @@ onAuthStateChanged(auth, async (user) => {
                 const userData = userSnap.data();
                 userTokens = userData.tokens || 0;
                 
-                // Mismatch Handler: Convert database arrays seamlessly into frequency objects
                 const rawInventory = userData.inventory || [];
                 isInventoryArray = Array.isArray(rawInventory);
                 
