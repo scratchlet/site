@@ -597,7 +597,7 @@ body{
     font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
-    border-radius: 99px; /* FIXED CORNERS */
+    border-radius: 99px; 
 }
 
 .user-row-actions {
@@ -829,12 +829,11 @@ body{
         grid-template-columns: 1fr;
         margin: 20px 0;
         gap: 20px;
-        padding: 0; /* Clear out sidebar paddings so grid spans 100% full width */
+        padding: 0; 
     }
     .card-container {
-        border-left: none;
-        border-right: none;
-        border-radius: 0; /* Flatten sides to snap flush edge-to-edge seamlessly matching navbar rules */
+        margin: 0 15px; /* Matches the content width layout constraints of the navbar links */
+        border-radius: 24px; /* Corners stay properly rounded */
     }
 }
 
