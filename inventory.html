@@ -82,6 +82,7 @@ body{
     -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
     mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
     -webkit-mask-size: 126px 126px;
+    mask-size: 126px 126px;
     transform: rotate(15deg);
     filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
 }
@@ -191,14 +192,52 @@ body{
     border: none;
     cursor: pointer;
     position: relative;
+    transition: background 0.15s, transform 0.1s;
 }
 
 .hud-item .material-icons {
     font-size: 1.4rem;
 }
 
+.hud-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
 .hud-item.logout-trigger {
     color: #ff5252;
+}
+
+.hud-item.logout-trigger:hover {
+    background: rgba(255, 82, 82, 0.2);
+}
+
+/* Nametag Tooltip Popups */
+.hud-item::after {
+    content: attr(data-nametag);
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 110;
+}
+
+.hud-item:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 /* =========================
@@ -218,12 +257,27 @@ body{
     position: relative;
     text-align: center;
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
 }
 
 .btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     box-shadow: none;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+    transition: transform 0.04s ease, box-shadow 0.04s ease;
 }
 
 .secondary {
@@ -340,7 +394,7 @@ body{
     font-weight: 700;
 }
 
-/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
+/* SINGLE MASTER CARD CONTAINER */
 .master-inventory-card {
     background: rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.12);
@@ -436,7 +490,7 @@ body{
 }
 
 /* ====================================
-   FIXED SIZE HORIZONTAL MODAL LAYOUT (Height Increased from 380px to 410px)
+   FIXED SIZE HORIZONTAL MODAL LAYOUT
 ==================================== */
 .modal-overlay {
     position: fixed;
@@ -578,18 +632,71 @@ body{
 }
 
 /* ====================================
-   CLEAN RESPONSIVE MOBILE OVERRIDES
+   HOMEPAGE MATCHING RESPONSIVE NAVBAR OVERRIDES
 ==================================== */
-@media(max-width: 640px) {
+@media(max-width:980px) {
     .navbar { 
         padding: 12px 20px; 
-        flex-direction: column; 
-        position: relative;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .nav-left-group {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .logo-link { 
+        width: auto; 
+        text-align: center; 
     }
     
+    .logo { 
+        font-size: 2.2rem; 
+    }
+
+    .nav-right-group {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .hud-badge-bar {
+        max-width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 8px;
+        gap: 4px;
+        border-radius: 25px;
+    }
+
+    .hud-item {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+
+    .hud-item::after {
+        top: auto;
+        bottom: 46px;
+        transform: translateX(-50%) translateY(6px);
+    }
+    
+    .hud-item:hover::after {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media(max-width: 700px) {
     .inventory-container { 
-        padding: 0 15px; 
-        margin: 20px auto;
+        padding: 0 12px; 
+        margin: 15px auto;
     }
     
     .inventory-header {
@@ -679,16 +786,16 @@ body{
         </div>
         
         <div class="hud-badge-bar">
-            <a href="home.html" class="hud-item"><span class="material-icons">home</span></a>
-            <a href="market.html" class="hud-item"><span class="material-icons">storefront</span></a>
-            <a href="inventory.html" class="hud-item"><span class="material-icons">inventory_2</span></a>
-            <a href="stats.html" class="hud-item"><span class="material-icons">leaderboard</span></a>
-            <a href="news.html" class="hud-item"><span class="material-icons">newspaper</span></a>
-            <a href="chat.html" class="hud-item"><span class="material-icons">forum</span></a>
-            <a href="trading.html" class="hud-item"><span class="material-icons">swap_horiz</span></a>
-            <a href="bazar.html" class="hud-item"><span class="material-icons">gavel</span></a>
-            <a href="settings.html" class="hud-item"><span class="material-icons">settings</span></a>
-            <button id="logout-hud-btn" class="hud-item logout-trigger"><span class="material-icons">logout</span></button>
+            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
         </div>
     </div>
 </nav>
