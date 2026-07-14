@@ -640,13 +640,15 @@ body{
     gap: 12px;
 }
 
-/* Consistent, locked aspect-ratio card layout */
+/* Consistent, locked fixed-size card layout */
 .pfp-select-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid transparent;
     border-radius: 12px;
-    width: 100%;
-    aspect-ratio: 1 / 1;
+    width: 90px;
+    height: 90px;
+    min-width: 90px;
+    min-height: 90px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -655,6 +657,7 @@ body{
     padding: 10px;
     overflow: hidden;
     transition: transform 0.15s, background-color 0.15s, border-color 0.15s;
+    margin: 0 auto;
 }
 
 .pfp-select-btn:hover {
@@ -746,6 +749,12 @@ body{
 @media(max-width: 500px) {
     .pfp-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+    .pfp-select-btn {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
     }
 }
 </style>
@@ -863,9 +872,6 @@ body{
             <h2>Select PFP</h2>
             <button class="modal-close-btn" id="close-pfp-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
         </div>
-        <p style="margin-top: -10px; margin-bottom: 20px; color: rgba(255,255,255,0.7); font-weight: 700; font-size: 0.9rem;">
-            Select a custom blook from your collection or revert to default.
-        </p>
         <div class="pfp-grid" id="pfp-mount-grid">
             </div>
     </div>
