@@ -912,6 +912,20 @@ body{
                     </div>
                     <div class="stat-value" id="view-user-blooks">0</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-label-group">
+                        <span class="material-icons">people</span>
+                        <span>Friends</span>
+                    </div>
+                    <div class="stat-value" id="view-user-friends">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label-group">
+                        <span class="material-icons">chat</span>
+                        <span>Messages Sent</span>
+                    </div>
+                    <div class="stat-value" id="view-user-messages">0</div>
+                </div>
             </div>
         </div>
     </div>
@@ -1050,6 +1064,8 @@ const viewUserPfp = document.getElementById('view-user-pfp');
 const viewUserTitle = document.getElementById('view-user-title');
 const viewUserTokens = document.getElementById('view-user-tokens');
 const viewUserBlooks = document.getElementById('view-user-blooks');
+const viewUserFriends = document.getElementById('view-user-friends');
+const viewUserMessages = document.getElementById('view-user-messages');
 
 // Tabs & Friends
 const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1074,14 +1090,16 @@ tabBtns.forEach(btn => {
     });
 });
 
-// Setup User Stats view modal
-function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks) {
+// Setup User Stats view modal with Friends Count and Messages Sent values
+function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks, friendsCount, messagesCount) {
     viewUserModalName.textContent = username;
     viewUserPfp.src = pfpUrl || DEFAULT_PFP;
     viewUserTitle.textContent = title;
     viewUserTitle.className = "user-title-badge " + (title === "Founder" ? "title-founder" : "title-member");
     viewUserTokens.textContent = Number(tokens).toLocaleString();
     viewUserBlooks.textContent = `${uniqueBlooks} / ${totalUniqueBlooksCount}`;
+    viewUserFriends.textContent = Number(friendsCount).toLocaleString();
+    viewUserMessages.textContent = Number(messagesCount).toLocaleString();
     userStatsModal.style.display = "flex";
 }
 closeUserModal.addEventListener('click', () => userStatsModal.style.display = "none");
@@ -1124,6 +1142,7 @@ onAuthStateChanged(auth, async (user) => {
 function updateProfileUI(userData) {
     const username = userData.username || "Player";
     const tokens = userData.tokens || 0;
+    const messagesCount = userData.messagesSent || userData.messages || 0;
     
     // Process inventory
     const rawInv = userData.inventory || [];
@@ -1150,6 +1169,7 @@ function updateProfileUI(userData) {
     statsTokens.textContent = tokens.toLocaleString();
     userDisplayName.textContent = username;
     statsBlooks.textContent = `${uniqueOwned.size} / ${totalUniqueBlooksCount}`;
+    statsMessages.textContent = Number(messagesCount).toLocaleString();
     
     // Assign Title
     const titleText = username === "SuperMemes_64" ? "Founder" : (userData.title || "Member");
@@ -1256,7 +1276,9 @@ async function syncFriendsTabViews(userData) {
                 `;
                 
                 row.querySelector('.view-profile-btn').addEventListener('click', () => {
-                    openUserStatsModal(fData.username, getBlookImgUrl(fData.pfp), title, fData.tokens || 0, uniqueCount);
+                    const friendsCount = fData.friends ? fData.friends.length : 0;
+                    const messagesCount = fData.messagesSent || fData.messages || 0;
+                    openUserStatsModal(fData.username, getBlookImgUrl(fData.pfp), title, fData.tokens || 0, uniqueCount, friendsCount, messagesCount);
                 });
 
                 row.querySelector('.remove-friend-btn').addEventListener('click', async () => {
@@ -1446,7 +1468,9 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
                 `;
 
                 row.querySelector('.view-search-profile').addEventListener('click', () => {
-                    openUserStatsModal(data.username, getBlookImgUrl(data.pfp), title, data.tokens || 0, uniqueCount);
+                    const friendsCount = data.friends ? data.friends.length : 0;
+                    const messagesCount = data.messagesSent || data.messages || 0;
+                    openUserStatsModal(data.username, getBlookImgUrl(data.pfp), title, data.tokens || 0, uniqueCount, friendsCount, messagesCount);
                 });
 
                 const addBtn = row.querySelector('.send-req-search');
