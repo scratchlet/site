@@ -648,7 +648,9 @@ body{
             <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.4rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">BLOOK NAME</h2>
             <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 8px; font-weight: 900; font-size:0.85rem; text-transform: uppercase;">RARITY</div>
             
-            <div style="font-weight: 800; color: #fff4d6; font-size: 1.05rem; margin-bottom: 5px;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
+            <div style="font-weight: 800; color: #fff4d6; font-size: 1.05rem; margin-bottom: 5px;">
+                <span id="modal-sell-fraction" style="color: #ff9b2f;">1 / 1</span> being sell
+            </div>
             
             <div class="sell-calc-row">
                 <button class="btn secondary" id="sell-min-btn" style="padding: 6px 10px; font-size: 0.8rem;">Min</button>
@@ -786,7 +788,7 @@ const sellModalCard = document.getElementById('sell-modal-card');
 const modalBlookName = document.getElementById('modal-blook-name');
 const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
-const modalOwnedCount = document.getElementById('modal-owned-count');
+const modalSellFraction = document.getElementById('modal-sell-fraction');
 const sellQuantityInput = document.getElementById('sell-quantity-input');
 const confirmSellBtn = document.getElementById('confirm-sell-btn');
 const sellMinBtn = document.getElementById('sell-min-btn');
@@ -965,7 +967,6 @@ function openSellWindow(blook, totalOwned) {
     modalBlookRarityText.textContent = blook.rarity;
     modalBlookRarityText.style.color = blook.color;
     modalBlookImage.src = blook.image;
-    modalOwnedCount.textContent = totalOwned;
     
     sellQuantityInput.value = 1;
     sellQuantityInput.max = totalOwned;
@@ -1001,6 +1002,9 @@ function recalculateSellPayout() {
         typedAmount = 1;
         sellQuantityInput.value = 1;
     }
+
+    // Dynamic Fraction String
+    modalSellFraction.textContent = `${typedAmount} / ${selectedBlookToSell.ownedCount}`;
 
     const totalCalculatedPayout = typedAmount * rate;
     confirmSellBtn.innerHTML = `Sell Blook(s) (+${totalCalculatedPayout.toLocaleString()})`;
