@@ -362,62 +362,68 @@ body{
 /* USER TITLE TAG */
 .user-title-badge {
     display: inline-block;
-    padding: 5px 14px;
+    padding: 6px 16px;
     border-radius: 99px;
     font-size: 0.85rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 6px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
     border: none;
     font-family: "Nunito", sans-serif;
     outline: none;
     color: white;
+    position: relative;
+    overflow: hidden;
 }
 
-/* TITLE PRESET BADGE DESIGNS */
+/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
 .title-founder {
-    background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-    background-size: 400% 400%;
-    animation: rainbowShift 6s ease infinite;
+    background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
+    background-size: 300% 300%;
+    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
     color: white;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .title-owner {
-    background: linear-gradient(135deg, #ffd700 0%, #b8860b 50%, #ffd700 100%);
-    background-size: 200% auto;
-    animation: shineEffect 3s linear infinite;
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     color: #fffde6;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    border: 1px solid #ffe680;
+    text-shadow: 0 1px 3px rgba(139, 69, 0, 0.8);
+    border: 1.5px solid #ffe680;
 }
 
 .title-co-owner {
-    background: linear-gradient(135deg, #e6e6e6 0%, #808080 50%, #e6e6e6 100%);
-    background-size: 200% auto;
-    animation: shineEffect 3s linear infinite;
+    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     color: white;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    border: 1px solid #ffffff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    border: 1.5px solid #ffffff;
 }
 
-.title-developer { background: #0077ff; border: 1px solid #3399ff; }
-.title-admin { background: #ff1493; border: 1px solid #ff66b2; }
-.title-artist { background: #d2b48c; color: #3e2723; border: 1px solid #e4d5c3; }
-.title-tester { background: #00ffff; color: #004d4d; border: 1px solid #80ffff; }
-.title-member { background: #ff9b2f; border: 1px solid #ffb870; }
+.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; box-shadow: 0 0 10px rgba(0, 191, 255, 0.4); }
+.title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
+.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid #e4d5c3; }
+.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; font-weight: 900; border: 1px solid #80ffff; }
+.title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
 
-@keyframes rainbowShift {
+@keyframes smoothRainbow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
-
-@keyframes shineEffect {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+@keyframes smoothHue {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+@keyframes luxurySweep {
+    0% { background-position: 200% 0%; }
+    100% { background-position: -200% 0%; }
 }
 
 .stats-list {
@@ -740,12 +746,12 @@ body{
 /* Dual Panel Layouts */
 @media (max-width: 768px) {
     #user-stats-modal .modal-card {
-        height: 80vh !important;
+        height: 85vh !important;
         width: 95% !important;
     }
     #user-modal-grid {
         grid-template-columns: 1fr !important;
-        grid-template-rows: auto 1fr !important;
+        grid-template-rows: auto auto 1fr !important;
         overflow-y: auto !important;
     }
     #view-user-friends-list {
@@ -957,7 +963,7 @@ body{
 <div class="modal-overlay" id="title-modal">
     <div class="modal-card" style="height: 480px;">
         <div class="modal-title-row">
-            <h2>Select Role Title</h2>
+            <h2 id="title-modal-header-text">Select Role Title</h2>
             <button class="modal-close-btn" id="close-title-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
         </div>
         <div class="title-selection-list" id="title-selection-list">
@@ -966,7 +972,7 @@ body{
 </div>
 
 <div class="modal-overlay" id="user-stats-modal">
-    <div class="modal-card" style="width: 750px; max-width: 95%; height: 520px; display: flex; flex-direction: column;">
+    <div class="modal-card" style="width: 750px; max-width: 95%; height: 540px; display: flex; flex-direction: column;">
         <div class="modal-title-row" style="margin-bottom: 15px;">
             <h2 id="view-user-modal-name">User Profile</h2>
             <button class="modal-close-btn" id="close-user-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
@@ -976,7 +982,13 @@ body{
             <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; padding-right: 5px; scrollbar-width: none;">
                 <style>#user-modal-grid > div:first-child::-webkit-scrollbar { display: none; }</style>
                 <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
-                <span id="view-user-title" class="user-title-badge" style="margin-top: 0;">Member</span>
+                
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <span id="view-user-title" class="user-title-badge">Member</span>
+                    <button id="admin-change-title-btn" class="btn primary-btn" style="padding: 4px 10px; font-size: 0.75rem; display: none; border-radius: 8px; margin-top: 2px;">
+                        <span class="material-icons" style="font-size: 0.9rem; vertical-align: middle;">edit</span> Change Title
+                    </button>
+                </div>
                 
                 <div class="stats-list" style="margin-top: 5px; width: 100%;">
                     <div class="stat-item" style="padding: 10px 14px;">
@@ -1159,6 +1171,7 @@ const pfpMountGrid = document.getElementById('pfp-mount-grid');
 const titleModal = document.getElementById('title-modal');
 const closeTitleModal = document.getElementById('close-title-modal');
 const titleSelectionList = document.getElementById('title-selection-list');
+const titleModalHeaderText = document.getElementById('title-modal-header-text');
 
 const userStatsModal = document.getElementById('user-stats-modal');
 const closeUserModal = document.getElementById('close-user-modal');
@@ -1169,6 +1182,7 @@ const viewUserTokens = document.getElementById('view-user-tokens');
 const viewUserBlooks = document.getElementById('view-user-blooks');
 const viewUserMessages = document.getElementById('view-user-messages');
 const viewUserFriendsList = document.getElementById('view-user-friends-list');
+const adminChangeTitleBtn = document.getElementById('admin-change-title-btn');
 
 // Tabs & Friends
 const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1192,7 +1206,7 @@ tabBtns.forEach(btn => {
     });
 });
 
-async function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks, friendsListUids, messagesCount) {
+async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, uniqueBlooks, friendsListUids, messagesCount) {
     viewUserModalName.textContent = username;
     viewUserPfp.src = pfpUrl || DEFAULT_PFP;
     viewUserTitle.textContent = title;
@@ -1201,6 +1215,16 @@ async function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks,
     viewUserBlooks.textContent = `${uniqueBlooks} / ${totalUniqueBlooksCount}`;
     viewUserMessages.textContent = Number(messagesCount).toLocaleString();
     
+    // Check if the current authenticated user is the admin SuperMemes_64
+    if (localUserData && localUserData.username === "SuperMemes_64") {
+        adminChangeTitleBtn.style.display = "inline-block";
+        adminChangeTitleBtn.onclick = () => {
+            openTitleCustomizerModal(targetUid, username);
+        };
+    } else {
+        adminChangeTitleBtn.style.display = "none";
+    }
+
     viewUserFriendsList.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px; font-weight:700;">Loading...</div>`;
     userStatsModal.style.display = "flex";
 
@@ -1315,7 +1339,7 @@ function updateProfileUI(userData) {
     if (username === "SuperMemes_64") {
         userDisplayTitle.style.cursor = "pointer";
         userDisplayTitle.title = "Click to customize role title presets";
-        userDisplayTitle.onclick = openTitleCustomizerModal;
+        userDisplayTitle.onclick = () => openTitleCustomizerModal(currentUserUid, username);
     } else {
         userDisplayTitle.style.cursor = "default";
         userDisplayTitle.title = "";
@@ -1329,10 +1353,17 @@ function updateProfileUI(userData) {
 }
 
 // ----------------------------------------------------
-// TITLE CUSTOMIZER HANDLER
+// TITLE CUSTOMIZER HANDLER (Self & Admin Targeting)
 // ----------------------------------------------------
-function openTitleCustomizerModal() {
+function openTitleCustomizerModal(targetUid, targetUsername) {
     titleSelectionList.innerHTML = "";
+    
+    // Update Header Text to display who is being edited
+    if (targetUid === currentUserUid) {
+        titleModalHeaderText.textContent = "Select Your Title";
+    } else {
+        titleModalHeaderText.textContent = `Edit Title for: ${targetUsername}`;
+    }
     
     titlePresets.forEach(preset => {
         const row = document.createElement('div');
@@ -1344,10 +1375,17 @@ function openTitleCustomizerModal() {
         
         row.addEventListener('click', async () => {
             try {
-                await updateDoc(userDocRef, { title: preset.id });
+                const targetDocRef = doc(db, "users", targetUid);
+                await updateDoc(targetDocRef, { title: preset.id });
                 titleModal.style.display = "none";
+                
+                // If modifying someone else's title, update the profile view badge immediately
+                if (targetUid !== currentUserUid) {
+                    viewUserTitle.textContent = preset.name;
+                    viewUserTitle.className = "user-title-badge " + preset.className;
+                }
             } catch(e) {
-                console.error("Failed to update custom role preset title: ", e);
+                console.error("Failed to update user preset title: ", e);
             }
         });
         titleSelectionList.appendChild(row);
@@ -1449,7 +1487,7 @@ async function syncFriendsTabViews(userData) {
                 row.querySelector('.view-profile-btn').addEventListener('click', () => {
                     const friendListUids = fData.friends || [];
                     const messagesCount = fData.messagesSent || fData.messages || 0;
-                    openUserStatsModal(fData.username, getBlookImgUrl(fData.pfp), currentRoleTitle, fData.tokens || 0, uniqueCount, friendListUids, messagesCount);
+                    openUserStatsModal(friendUid, fData.username, getBlookImgUrl(fData.pfp), currentRoleTitle, fData.tokens || 0, uniqueCount, friendListUids, messagesCount);
                 });
 
                 row.querySelector('.remove-friend-btn').addEventListener('click', async () => {
@@ -1632,7 +1670,7 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
                 row.querySelector('.view-search-profile').addEventListener('click', () => {
                     const friendListUids = data.friends || [];
                     const messagesCount = data.messagesSent || data.messages || 0;
-                    openUserStatsModal(data.username, getBlookImgUrl(data.pfp), currentRoleTitle, data.tokens || 0, uniqueCount, friendListUids, messagesCount);
+                    openUserStatsModal(uid, data.username, getBlookImgUrl(data.pfp), currentRoleTitle, data.tokens || 0, uniqueCount, friendListUids, messagesCount);
                 });
 
                 const addBtn = row.querySelector('.send-req-search');
