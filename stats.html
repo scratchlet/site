@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en)
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -359,7 +359,7 @@ body{
     object-fit: contain;
 }
 
-/* USER TITLE TAG (UPDATED AS BUTTON-READY) */
+/* USER TITLE TAG */
 .user-title-badge {
     display: inline-block;
     padding: 5px 14px;
@@ -458,7 +458,7 @@ body{
 }
 
 /* =========================
-   FRIENDS CARD WITH TABS (RIGHT)
+   FRIENDS CARD WITH TABS
 ========================= */
 .friends-card {
     display: flex;
@@ -554,7 +554,7 @@ body{
     border-color: #ff9b2f;
 }
 
-/* Row elements (Users / Requests / Friends List) */
+/* Row elements */
 .user-row {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -614,7 +614,7 @@ body{
 }
 
 /* =================================
-   MODALS (PFP & STATS VIEW OVERLAYS)
+   MODALS
 ================================= */
 .modal-overlay {
     position: fixed;
@@ -664,7 +664,6 @@ body{
     color: white;
 }
 
-/* Fixed-size, scrollable blook pfp grid styling */
 .pfp-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -713,7 +712,6 @@ body{
     object-fit: contain;
 }
 
-/* Custom Title Option Grid Rows */
 .title-selection-list {
     display: flex;
     flex-direction: column;
@@ -739,7 +737,7 @@ body{
     background: rgba(255,255,255,0.12);
 }
 
-/* Dual Panel Responsive Modal Layouts */
+/* Dual Panel Layouts */
 @media (max-width: 768px) {
     #user-stats-modal .modal-card {
         height: 80vh !important;
@@ -755,9 +753,6 @@ body{
     }
 }
 
-/* ====================================
-   HOMEPAGE MATCHING RESPONSIVE NAVBAR OVERRIDES
-==================================== */
 @media(max-width:980px) {
     .navbar { 
         padding: 12px 20px; 
@@ -1036,10 +1031,7 @@ import {
     query, 
     collection, 
     where 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-// Re-using Firestore parts correctly
-import { } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -1066,7 +1058,6 @@ const titlePresets = [
     { id: "Member", className: "title-member", name: "Member" }
 ];
 
-// Helper to determine the accurate CSS title class suffix mapping
 function getTitleClassName(titleStr) {
     const matched = titlePresets.find(p => p.id.toLowerCase() === String(titleStr).toLowerCase());
     return matched ? matched.className : "title-member";
@@ -1320,11 +1311,10 @@ function updateProfileUI(userData) {
     userDisplayTitle.textContent = currentRoleTitle;
     userDisplayTitle.className = "user-title-badge " + getTitleClassName(currentRoleTitle);
 
-    // Conditional configuration: Enable button properties ONLY if username is SuperMemes_64
+    // Click behavior configurations
     if (username === "SuperMemes_64") {
         userDisplayTitle.style.cursor = "pointer";
         userDisplayTitle.title = "Click to customize role title presets";
-        // Unbind previous elements to avoid duplicate binding attachments
         userDisplayTitle.onclick = openTitleCustomizerModal;
     } else {
         userDisplayTitle.style.cursor = "default";
@@ -1416,7 +1406,7 @@ closePfpModal.addEventListener('click', () => pfpModal.style.display = "none");
 pfpModal.addEventListener('click', (e) => { if (e.target === pfpModal) pfpModal.style.display = "none"; });
 
 // ----------------------------------------------------
-// FRIENDS REALTIME SYSTEMS & TABS
+// FRIENDS REALTIME SYSTEMS
 // ----------------------------------------------------
 async function syncFriendsTabViews(userData) {
     const friends = userData.friends || [];
