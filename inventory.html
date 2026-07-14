@@ -927,51 +927,209 @@ const packsRegistry = {
             {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
         ]
     },
-    medieval: {
-        name: "Medieval Pack",
-        blooks: [
-            {name:"Elf",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
-            {name:"Witch",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
-            {name:"Wizard",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
-            {name:"Fairy",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
-            {name:"King Dog",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
-            {name:"Card of Hearts",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"}
-        ]
-    },
-    space: {
-        name: "Space Pack",
-        blooks: [
-            {name:"Earth",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
-            {name:"Meteor",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
-            {name:"Stars",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
-            {name:"Alien",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
-            {name:"Planet",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
-            {name:"UFO",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
-            {name:"Spaceship",rarity:"Epic",color:"red",image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
-            {name:"Astronaut",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
-            {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
-            {name:"Red Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
-            {name:"Orange Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
-            {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
-            {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
-            {name:"Green Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
-            {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
-            {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
-            {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
-            {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
-            {name:"Black Astronaut",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
-            {name:"Black Hole",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
-            {name:"Space Monitor",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
-            {name:"Rainbow Astronaut",rarity:"Mystical",color:"purple",image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"}
-        ]
-    },
-    bot: {
-        name: "Bot Pack",
-        blooks: [
-            {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
-            {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/fRKF0W8Y/Lovely-Bot.webp"}
-        ]
-    }
+        medieval: {
+            name: "Medieval Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/cLSD4TQQ/Medieval.webp",
+            blooks: [
+                {name:"Elf",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
+                {name:"Witch",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
+                {name:"Wizard",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
+                {name:"Fairy",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/fRNHT5x0/Fairy.webp"},
+                {name:"Slime Monster",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/HkgSs3Qc/Slime-Monster.webp"},
+                {name:"Jester",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/RZBPVGcJ/Jester.webp"},
+                {name:"Dragon",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/sgrnDKpx/Dragon.webp"},
+                {name:"Queen",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/dVYWtn8h/Queen.webp"},
+                {name:"Unicorn",rarity:"Epic",color:"red",chance:5.12,image:"https://i.postimg.cc/52VPNpwj/Unicorn.webp"},
+                {name:"King",rarity:"Legendary",color:"gold",chance:1,image:"https://i.postimg.cc/L8py6vzn/King.webp"},
+                {name:"Master Elf",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/Gp56nwS0/Master-Elf.webp"},
+                {name:"Agent Owl",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/yNb2C4rz/Agent-Owl.webp"},
+                {name:"Wise Owl",rarity:"Celestial",color:"teal",chance:0.025,image:"https://i.postimg.cc/yWqsN84V/Wise-Owl.webp"},
+                {name:"Phantom King",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/QdfkpQvC/Phantom-King.webp"},
+            ]
+        },
+
+        color: {
+            name: "Color Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/WzVn7HKc/Color.webp",
+            blooks: [
+                {name:"Red",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/Hnm2thKG/Red.webp"},
+                {name:"Blue",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/5yJ3mRrh/Blue.webp"},
+                {name:"Green",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/6qK0hmPg/Green.webp"},
+                {name:"Yellow",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/ZnmcLMQX/Yellow.webp"},
+                {name:"Orange",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/D0hgcMNY/Orange.webp"},
+                {name:"Purple",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/kGCcypHp/Purple.webp"},
+                {name:"Pink",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/brPTRB5V/Pink.webp"},
+                {name:"Brown",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/hvnr05Yy/Brown.webp"},
+                {name:"Lime",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/4yG51S0B/Lime.webpp"},
+                {name:"Cyan",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/1XSHKjdM/Cyan.webp"},
+                {name:"White",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/tJb5zMck/White.webp"},
+                {name:"Grey",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/0jvfCB4f/Grey.webp"},
+                {name:"Black",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/hvnr05Y1/Black.webp"},
+                {name:"Copper",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/wMzVkGrc/Copper.webp"},
+                {name:"Silver",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/NFt4xznx/Silver.webp"},
+                {name:"Gold",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/ZnmcLMQP/Gold.webp"},
+                {name:"Rainbow",rarity:"Mystical",color:"purple",chance:0.002,image:"https://i.postimg.cc/G2J4YLyd/Rainbow.webp"},
+            ]
+        },
+
+                wonderland: {
+            name: "Wonderland Pack",
+            cost: 15,
+            image: "https://i.postimg.cc/YSVC9H1k/Wonderland.webp",
+            blooks: [
+                {name:"Two of Spades",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp"},
+                {name:"Eat Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/B6KQPVgs/Eat-Me.webp"},
+                {name:"Drink Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp"},
+                {name:"Alice",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/tTxCnM5H/Alice.webp"},
+                {name:"Queen of Hearts",rarity:"Uncommon",color:"limegreen",chance:14.345,image:"https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp"},
+                {name:"Dromouse",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/xCzTN4Rr/Dormouse.webp"},
+                {name:"White Rabbit",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/wBPjvphx/White-Rabbit.webp"},
+                {name:"Cheshire Cat",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/pTFX56Bw/Cheshire-Cat.webp"},
+                {name:"Mad Hatter",rarity:"Epic",color:"red",chance:3.5,image:"https://i.postimg.cc/nL5hzJvF/Mad-Hatter.webp"},
+                {name:"King of Hearts",rarity:"Legendary",color:"gold",chance:0.7,image:"https://i.postimg.cc/q7YvRT8k/King-of-Hearts.webp"},
+                {name:"Royal Cat",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/yN58dHF7/Royal-Cat.webp"},
+                {name:"King Dog",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
+                {name:"Card of Hearts",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"},
+                
+
+            ]
+        },
+
+            space: {
+            name: "Space Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/C5tgpzKM/Space.webp",
+            blooks: [
+                {name:"Earth",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
+                {name:"Meteor",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
+                {name:"Stars",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
+                {name:"Alien",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
+                {name:"Planet",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
+                {name:"UFO",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
+                {name:"Spaceship",rarity:"Epic",color:"red",chance:4.5,image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
+                {name:"Astronaut",rarity:"Legendary",color:"gold",chance:0.45,image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
+                {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
+                {name:"Red Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
+                {name:"Ornage Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
+                {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
+                {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
+                {name:"Green Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
+                {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
+                {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
+                {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
+                {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
+                {name:"Black Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
+                {name:"Black Hole",rarity:"Chroma",color:"cyan",chance:0.01,image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
+                {name:"Space Monitor",rarity:"Mystical",color:"purple",chance:0.0075,image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
+                {name:"Rainbow Astroanut",rarity:"Mystical",color:"purple",chance:0.0025,image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"},
+
+                
+
+            ]
+        },
+            bot: {
+            name: "Bot Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/W1n9TGPJ/Bot.webp",
+            blooks: [
+                {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
+                {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp"},
+                {name:"Angry Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp"},
+                {name:"Happy Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp"},
+                {name:"Watson",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/jSX8tHrH/Watson.webp"},
+                {name:"Buddy Bot",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp"},
+                {name:"Brainy Bot",rarity:"Epic",color:"red",chance:3.7,image:"https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp"},
+                {name:"Mega Bot",rarity:"Legendary",color:"gold",chance:0.25,image:"https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp"},
+                {name:"Neon Bot",rarity:"Chroma",color:"cyan",chance:0.04,image: ""},
+                {name:"Joyful Bot",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/j21gtvCT/Joyful-Bot.gif"},
+            ]
+        },
+            aquatic: {
+            name: "Aquatic Pack",
+            cost: 20,
+            image: "https://i.postimg.cc/DZC01JmB/Aquatic.webp",
+            blooks: [
+                {name:"Old Boot",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJq6/Old-Boot.webp"},
+                {name:"Jellyfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp"},
+                {name:"Clownfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/63HqC2Tc/Goldfish.webp"},
+                {name:"Frog",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJqP/Frog.webp"},
+                {name:"Crab",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/j582ywC6/Crab.webp"},
+                {name:"Pufferfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/gJMj3XrD/Pufferfish.webp"},
+                {name:"Blobfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/0Qtj7Mrp/Blobfish.webp"},
+                {name:"Octopus",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/50Py8YjC/Octopus.webp"},
+                {name:"Narwhal",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/4d8yp7nH/Narwhal.webp"},
+                {name:"Dolphin",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/W39z0FtJ/Dolphin.webp"},
+                {name:"Baby Shark",rarity: "Legendary",color:"gold",chance:0.497,image:"https://i.postimg.cc/Y9X0QGjG/Baby-Shark.webp"},
+                {name:"Megalodon",rarity: "Legendary",color:"gold",chance:0.199,image:"https://i.postimg.cc/26Hynb33/Megalodon.webp"},
+                {name:"Spring Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/fLWk3jWm/Spring-Frog.webp"},
+                {name:"Lucky Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/qRmq2hgR/Lucky-Frog.webp"},
+                {name:"Lovely Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/k4jGW6DB/Lovely-Frog.webpg"},
+                {name:"Rainbow Narwhal",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/MTZXcbZB/Rainbow-Narwhal.webp"},
+                {name:"Crimson Octopus",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/Tw2hyq2W/Crimson-Octopus.webp"},
+                {name:"Donut Blobfish",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/wvx3tcxm/Donut-Blobfish.webp"},
+                {name:"Rainbow Jellyfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/Y92j4f24/Rainbow-Jellyfish.webp"},
+                {name:"Poison Dart Frog",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp"},
+                {name:"Blizzard Clownfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp"},
+                {name:"Beach",rarity: "Celestial",color:"teal",chance:0.0248,image:"https://i.postimg.cc/sXf1B9fv/Beach.webp"},
+            ]
+        },
+            safari: {
+                name: "Safari Pack",
+                cost: 20,
+                image: "https://i.postimg.cc/g0Ph5FYZ/Safari.webp",
+                blooks: [
+                    {name:"Panda",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/Xvc56HJF/Panda.webp"},
+                    {name:"Sloth",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/pdYjMGTn/Sloth.webp"},
+                    {name:"Tenrec",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/LsBPFCXP/Tenrec.webp"},
+                    {name:"Flamingo",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/43bcRLdH/Flamingo.webp"},
+                    {name:"Zebra",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/ZqhNgtTc/Zebra.webp"},
+                    {name:"Elephant",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/6QNZSJ9h/Elephant.webp"},
+                    {name:"Lemur",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/HLCMKDp9/Lemur.webp"},
+                    {name:"Peacock",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/N0wXVqg8/Peacock.webp"},
+                    {name:"Chameleon",rarity: "Epic",color:"Red",chance:3.48,image:"https://i.postimg.cc/ZqhNgtTF/Chameleon.webp"},
+                    {name:"Lion",rarity: "Legendary",color:"gold",chance:0.46,image:"https://i.postimg.cc/MG8B42W1/Lion.webp"},
+                    {name:"Rainbow Panda",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp"},
+                    {name:"White Peacock",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/xdSm7D0K/White-Peacock.webp"},
+                    {name:"Tiger Zebra",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp"}
+            ]
+        },
+            dino: {
+            name: "Dino Pack",
+            cost: 25,
+            image: "https://i.postimg.cc/15DPH4N9/Dino.webp",
+            blooks: [
+                {name:"Amber",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/bN18Td2q/Ember.webp"},
+                {name:"Dino Egg",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/027xfrJx/Dino-Egg.webp"},
+                {name:"Dino Fossil",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/8PLDHsrG/Dino-Fossil.webp"},
+                {name:"Dino Footprint",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/qBwM63ff/Dino-Footprint.png"},
+                {name:"Stegosaurus",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/GhvrQ9sw/Stegosaurus.webp"},
+                {name:"Velociraptor",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/hPVgrhQk/Velociraptor.webp"},
+                {name:"Brontosaurus",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/8PLDHsf9/Brontosaurus.webp"},
+                {name:"Triceratops",rarity:"Epic",color:"Red",chance:3.7,image:"https://i.postimg.cc/ZK6Zc0vX/Triceratops.webp"},
+                {name:"Tyrannosaurus Rex",rarity:"Legendary",color:"gold",chance:0.3,image:"https://i.postimg.cc/gk3dDrL5/Tyrannosaurusrex.webp"},
+                {name:"Golden Amber",rarity:"Chroma",color:"Cyan",chance:0.07,image:"https://i.postimg.cc/rF5cJzRY/Golden-Ember.webp"}
+            ]
+        },
+            icemonsters: {
+                name: "Ice Monsters Pack",
+                cost: 25,
+                image: "https://i.postimg.cc/XNDKs8vc/Ice-Monsters.png",
+                blooks: [
+                    {name:"Ice Bat",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/63KwJn5M/icebat.png"},
+                    {name:"Ice Bug",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/d0rvx4v7/icebug.png"},
+                    {name:"Ice Elemental",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/jSGtcGV0/iceelemental.png"},
+                    {name:"Rock Monster",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/SxXmWmvf/rockmonster.png"},
+                    {name:"Dink",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/LXVSH5J2/dink.png"},
+                    {name:"Donk",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/BQ7qLjMv/donk.png"},
+                    {name:"Bush Monster",rarity:"Epic",color:"Red",chance:4.5,image:"https://i.postimg.cc/fyBMvysB/bushmonster.png"},
+                    {name:"Yeti",rarity:"Legendary",color:"gold",chance:0.35,image:"https://i.postimg.cc/gk2z2Vy5/yeti.png"},
+                    {name:"Ice Slime",rarity:"Chroma",color:"Cyan",chance:0.08,image:"https://i.postimg.cc/nrHH77yX/iceslime.png"},
+                    {name:"Ice Fossil",rarity:"Chroma",color:"Cyan",chance:0.05,image:"https://i.postimg.cc/sfcfz6W7/frozenfossil.png"},
+                    {name:"Ice Crab",rarity:"Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/RF1SNGDr/icecrab.png"}
+            ]
+        },
 };
 
 const tokenCounterValue = document.getElementById('token-counter-value');
