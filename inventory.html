@@ -220,6 +220,12 @@ body{
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
 }
 
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 .secondary {
     background: rgba(0, 0, 0, 0.3);
     color: white;
@@ -284,23 +290,10 @@ body{
 
 /* PACK BLOOK GRID */
 .blook-grid {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 18px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 155, 47, 0.5) rgba(0, 0, 0, 0.1);
-}
-
-.blook-grid::-webkit-scrollbar {
-    display: block;
-    height: 6px;
-}
-
-.blook-grid::-webkit-scrollbar-thumb {
-    background: rgba(255, 155, 47, 0.5);
-    border-radius: 99px;
+    padding-bottom: 5px;
 }
 
 /* =================================
@@ -310,8 +303,8 @@ body{
     background: rgba(0, 0, 0, 0.45);
     border: 3px solid transparent;
     border-radius: 16px;
-    width: 100px;
-    height: 100px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
     padding: 8px;
     cursor: pointer;
     outline: none;
@@ -320,7 +313,6 @@ body{
     align-items: center;
     justify-content: center;
     user-select: none;
-    flex-shrink: 0;
 }
 
 /* OWNED ITEMS STYLES */
@@ -334,7 +326,7 @@ body{
     object-fit: contain;
 }
 
-/* NOT OWNED STATE - DARK & GRAYSCALE WITH NO CURSOR INTERACTION */
+/* NOT OWNED STATE */
 .blook-image-btn.locked {
     border-color: #222222 !important;
     background: rgba(0, 0, 0, 0.7);
@@ -393,7 +385,7 @@ body{
     border-radius: 28px;
     padding: 30px;
     width: 90%;
-    max-width: 620px; /* Widened to fit side-by-side elements gracefully */
+    max-width: 620px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -453,33 +445,36 @@ body{
     outline: none;
 }
 
-.total-payout-box {
-    display: inline-flex;
-    align-items: center;
+/* SAFETY CONFIRMATION FIELD STYLING */
+.safety-confirm-wrapper {
+    display: none;
+    flex-direction: column;
     gap: 6px;
-    font-size: 1.3rem;
-    font-weight: 900;
-    color: #ffd700;
-    background: rgba(0,0,0,0.35);
-    padding: 6px 16px;
-    border-radius: 99px;
-    border: 1px solid rgba(255,215,0,0.2);
-    margin-bottom: 25px;
-    align-self: flex-start;
+    margin-bottom: 20px;
+    background: rgba(255, 82, 82, 0.1);
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+
+.safety-confirm-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid #ff5252;
+    border-radius: 8px;
+    color: white;
+    outline: none;
 }
 
 .modal-btn-group {
     display: flex;
     justify-content: flex-start;
     gap: 15px;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff4d6;
+    margin-top: 10px;
 }
 
 /* Responsive adjustments */
@@ -487,7 +482,6 @@ body{
     .navbar { padding: 12px 20px; flex-direction: column; }
     .inventory-container { padding: 0 15px; }
     .master-inventory-card { padding: 20px; }
-    /* Revert back to column layout if screen size is small */
     .modal-content {
         flex-direction: column;
         max-width: 420px;
@@ -506,9 +500,6 @@ body{
     }
     .sell-calc-row, .modal-btn-group {
         justify-content: center;
-    }
-    .total-payout-box {
-        align-self: center;
     }
 }
 </style>
@@ -571,7 +562,7 @@ body{
         </div>
 
         <div class="modal-right-panel">
-            <div style="font-weight: 800; color: #fff4d6; font-size: 1.1rem;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
+            <div style="font-weight: 800; color: #fff4d6; font-size: 1.1rem; margin-bottom: 5px;">Quantity Owned: <span id="modal-owned-count" style="color: #ff9b2f;">0</span></div>
             
             <div class="sell-calc-row">
                 <button class="btn secondary" id="sell-min-btn" style="padding: 6px 12px; font-size: 0.85rem;">Min</button>
@@ -579,15 +570,15 @@ body{
                 <button class="btn secondary" id="sell-max-btn" style="padding: 6px 12px; font-size: 0.85rem;">Max</button>
             </div>
 
-            <div style="font-size: 0.9rem; margin-bottom: 6px; font-weight: 700; color: #ffe3b3;">Total Payout:</div>
-            <div class="total-payout-box">
-                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" style="width:20px; height:20px; object-fit:contain;">
-                <span id="total-sell-value">0</span>
+            <div class="safety-confirm-wrapper" id="safety-warning-box">
+                <label for="safety-blook-name-input" style="font-size: 0.82rem; color: #ff8888; font-weight: 800; text-transform: uppercase;">
+                    ⚠️ Warning: You are selling your last copy. Type Blook name to confirm:
+                </label>
+                <input type="text" id="safety-blook-name-input" class="safety-confirm-input" placeholder="Type name here...">
             </div>
             
             <div class="modal-btn-group">
-                <button class="btn secondary" id="close-sell-modal-btn" style="padding:10px 20px;">Cancel</button>
-                <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px;">Sell Blook(s)</button>
+                <button class="btn danger" id="confirm-sell-btn" style="padding:12px 32px; width: 100%;">Sell Blook(s)</button>
             </div>
         </div>
 
@@ -701,16 +692,18 @@ const totalBlooksStat = document.getElementById('total-blooks-stat');
 const uniqueBlooksStat = document.getElementById('unique-blooks-stat');
 
 const sellModal = document.getElementById('sell-modal');
+const sellModalCard = document.getElementById('sell-modal-card');
 const modalBlookName = document.getElementById('modal-blook-name');
 const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
 const modalOwnedCount = document.getElementById('modal-owned-count');
 const sellQuantityInput = document.getElementById('sell-quantity-input');
-const totalSellValue = document.getElementById('total-sell-value');
-const closeSellModalBtn = document.getElementById('close-sell-modal-btn');
 const confirmSellBtn = document.getElementById('confirm-sell-btn');
 const sellMinBtn = document.getElementById('sell-min-btn');
 const sellMaxBtn = document.getElementById('sell-max-btn');
+
+const safetyWarningBox = document.getElementById('safety-warning-box');
+const safetyBlookNameInput = document.getElementById('safety-blook-name-input');
 
 let userTokens = 0;
 let userInventoryMap = {};
@@ -826,6 +819,8 @@ function openSellWindow(blook, totalOwned) {
     sellQuantityInput.value = 1;
     sellQuantityInput.max = totalOwned;
     
+    safetyBlookNameInput.value = "";
+    
     recalculateSellPayout();
     sellModal.style.display = "flex";
 }
@@ -849,10 +844,33 @@ function recalculateSellPayout() {
         sellQuantityInput.value = 1;
     }
 
-    totalSellValue.textContent = (typedAmount * rate).toLocaleString();
+    const totalCalculatedPayout = typedAmount * rate;
+    
+    confirmSellBtn.innerHTML = `Sell Blook(s) (+${totalCalculatedPayout.toLocaleString()})`;
+    
+    if (typedAmount === selectedBlookToSell.ownedCount) {
+        safetyWarningBox.style.display = "flex";
+        if (safetyBlookNameInput.value.trim() === selectedBlookToSell.name) {
+            confirmSellBtn.disabled = false;
+        } else {
+            confirmSellBtn.disabled = true;
+        }
+    } else {
+        safetyWarningBox.style.display = "none";
+        confirmSellBtn.disabled = false;
+    }
 }
 
+// Background click tracking to dismiss modal overlay windows seamlessly
+sellModal.addEventListener('click', (event) => {
+    if (!sellModalCard.contains(event.target)) {
+        closeSellWindow();
+    }
+});
+
 sellQuantityInput.addEventListener('input', recalculateSellPayout);
+safetyBlookNameInput.addEventListener('input', recalculateSellPayout);
+
 sellMinBtn.addEventListener('click', () => { sellQuantityInput.value = 1; recalculateSellPayout(); });
 sellMaxBtn.addEventListener('click', () => { 
     if(selectedBlookToSell) {
@@ -861,13 +879,18 @@ sellMaxBtn.addEventListener('click', () => {
     }
 });
 
-closeSellModalBtn.addEventListener('click', closeSellWindow);
-
 confirmSellBtn.addEventListener('click', async () => {
     if (!selectedBlookToSell || !currentUserRef) return;
     
     const qtyToSell = parseInt(sellQuantityInput.value) || 0;
     if (qtyToSell <= 0 || qtyToSell > selectedBlookToSell.ownedCount) return;
+
+    if (qtyToSell === selectedBlookToSell.ownedCount) {
+        if (safetyBlookNameInput.value.trim() !== selectedBlookToSell.name) {
+            alert("Verification mismatch. Please write the Blook's name correctly.");
+            return;
+        }
+    }
 
     const valuePerUnit = sellValueMap[selectedBlookToSell.rarity] || 5;
     const payoutGained = qtyToSell * valuePerUnit;
@@ -897,8 +920,9 @@ confirmSellBtn.addEventListener('click', async () => {
             inventoryDataValue = userInventoryMap;
         }
 
-        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-        await firestoreModule.updateDoc(currentUserRef, {
+        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+        const firestoreDBModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await firestoreDBModule.updateDoc(currentUserRef, {
             tokens: userTokens,
             inventory: inventoryDataValue
         });
