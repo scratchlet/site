@@ -1049,7 +1049,9 @@ import {
     query, 
     collection, 
     where 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; 
+
+import { } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -1157,6 +1159,7 @@ let currentUserUid = null;
 let userDocRef = null;
 let localUserData = null;
 let ownedBlookNames = [];
+let activeUserModalListener = null; // Unsubscribe container for the active real-time stats view 
 
 tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1168,6 +1171,12 @@ tabBtns.forEach(btn => {
 });
 
 async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, uniqueBlooks, friendsListUids, messagesCount) {
+    // Clean up any active listeners from a previously viewed profile popup
+    if (activeUserModalListener) {
+        activeUserModalListener();
+        activeUserModalListener = null;
+    }
+
     viewUserModalName.textContent = username;
     viewUserPfp.src = pfpUrl || DEFAULT_PFP;
     viewUserTitle.textContent = title;
@@ -1188,6 +1197,24 @@ async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, un
 
     viewUserFriendsList.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px; font-weight:700;">Loading...</div>`;
     userStatsModal.style.display = "flex";
+
+    // Set up real-time listener to instantly capture title updates made by the Founder
+    const targetDocRef = doc(db, "users", targetUid);
+    activeUserModalListener = onSnapshot(targetDocRef, (snap) => {
+        if (snap.exists()) {
+            const data = snap.data();
+            const currentRoleTitle = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
+            
+            // Auto update title, styling, and general metrics instantly
+            viewUserTitle.textContent = currentRoleTitle;
+            viewUserTitle.className = "user-title-badge " + getTitleClassName(currentRoleTitle);
+            viewUserModalName.textContent = data.username || username;
+            viewUserPfp.src = getBlookImgUrl(data.pfp);
+            viewUserTokens.textContent = Number(data.tokens || 0).toLocaleString();
+            viewUserMessages.textContent = Number(data.messagesSent || data.messages || 0).toLocaleString();
+            viewUserBlooks.textContent = `${countUniqueBlooks(data.inventory)} / ${totalUniqueBlooksCount}`;
+        }
+    });
 
     const friendsUids = friendsListUids || [];
     if (friendsUids.length === 0) {
@@ -1229,8 +1256,17 @@ async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, un
     }
 }
 
-closeUserModal.addEventListener('click', () => userStatsModal.style.display = "none");
-userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModal) userStatsModal.style.display = "none"; });
+// Unsubscribe cleanly when user profile modal view is closed
+function closeUserStatsModalPopup() {
+    userStatsModal.style.display = "none";
+    if (activeUserModalListener) {
+        activeUserModalListener();
+        activeUserModalListener = null;
+    }
+}
+
+closeUserModal.addEventListener('click', closeUserStatsModalPopup);
+userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModal) closeUserStatsModalPopup(); });
 
 function getBlookImgUrl(blookName) {
     if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
@@ -1314,12 +1350,11 @@ function updateProfileUI(userData) {
 }
 
 // ----------------------------------------------------
-// TITLE CUSTOMIZER HANDLER (FIXED FOR OTHER USERS)
+// TITLE CUSTOMIZER HANDLER
 // ----------------------------------------------------
 function openTitleCustomizerModal(targetUid, targetUsername) {
     titleSelectionList.innerHTML = "";
     
-    // Update Header Text to display who is being edited
     if (targetUid === currentUserUid) {
         titleModalHeaderText.textContent = "Select Your Title";
     } else {
@@ -1336,16 +1371,9 @@ function openTitleCustomizerModal(targetUid, targetUsername) {
         
         row.addEventListener('click', async () => {
             try {
-                // TARGETS THE DYNAMIC UID INSTEAD OF A HARDCODED REFERENCE
                 const targetDocRef = doc(db, "users", targetUid);
                 await updateDoc(targetDocRef, { title: preset.id });
                 titleModal.style.display = "none";
-                
-                // Update profile popup immediately if modifying another user
-                if (targetUid !== currentUserUid) {
-                    viewUserTitle.textContent = preset.name;
-                    viewUserTitle.className = "user-title-badge " + preset.className;
-                }
             } catch(e) {
                 console.error("Failed to update user preset title: ", e);
             }
