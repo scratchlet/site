@@ -440,21 +440,21 @@ body{
     border: 4px solid #ff9b2f;
     border-radius: 28px;
     padding: 25px 30px;
-    width: 580px; 
-    max-width: 90vw;
-    height: 320px;
+    width: 600px; 
+    max-width: 95vw;
+    height: 330px;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 30px;
+    gap: 25px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.6);
     position: relative;
 }
 
 /* LEFT SIDE: PREVIEW PANEL */
 .modal-left-panel {
-    width: 150px;
+    width: 140px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -474,6 +474,34 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: left;
+}
+
+.modal-header-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+}
+
+.info-badge {
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.info-badge.drop {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+.info-badge.value {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid #ffd700;
+    color: #ffd700;
 }
 
 .modal-blook-preview {
@@ -560,6 +588,9 @@ body{
         height: auto;
         text-align: center;
     }
+    .modal-header-container {
+        justify-content: center;
+    }
     .sell-calc-row {
         justify-content: center;
         flex-wrap: wrap;
@@ -645,7 +676,11 @@ body{
         </div>
 
         <div class="modal-right-panel">
-            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.4rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">BLOOK NAME</h2>
+            <div class="modal-header-container">
+                <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.4rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; margin: 0;">BLOOK NAME</h2>
+                <span id="modal-chance-badge" class="info-badge drop">0%</span>
+                <span id="modal-value-badge" class="info-badge value">0 Value</span>
+            </div>
             <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 12px; font-weight: 900; font-size:0.85rem; text-transform: uppercase;">RARITY</div>
             
             <div class="sell-calc-row">
@@ -703,6 +738,16 @@ const sellValueMap = {
     "Chroma": 300,
     "Celestial": 500,
     "Mystical": 1000
+};
+
+const dropChanceMap = {
+    "Uncommon": "15%",
+    "Rare": "5%",
+    "Epic": "1.5%",
+    "Legendary": "0.3%",
+    "Chroma": "0.05%",
+    "Celestial": "0.01%",
+    "Mystical": "0.005%"
 };
 
 const rarityOrder = ["Mystical", "Celestial", "Chroma", "Legendary", "Epic", "Rare", "Uncommon"];
@@ -784,6 +829,8 @@ const sellModalCard = document.getElementById('sell-modal-card');
 const modalBlookName = document.getElementById('modal-blook-name');
 const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
+const modalChanceBadge = document.getElementById('modal-chance-badge');
+const modalValueBadge = document.getElementById('modal-value-badge');
 const sellQuantityInput = document.getElementById('sell-quantity-input');
 const confirmSellBtn = document.getElementById('confirm-sell-btn');
 const sellMinBtn = document.getElementById('sell-min-btn');
@@ -799,7 +846,7 @@ let currentUserRef = null;
 let selectedBlookToSell = null;
 let isInventoryArray = false;
 let currentViewMode = "packs"; 
-let currentSelectedQty = 1; // Tracks current selected value internally
+let currentSelectedQty = 1;
 
 function findBlookDetails(blookName) {
     for (const key in packsRegistry) {
@@ -964,6 +1011,10 @@ function openSellWindow(blook, totalOwned) {
     modalBlookRarityText.style.color = blook.color;
     modalBlookImage.src = blook.image;
     
+    // Set Drop Chance and Base Value labels
+    modalChanceBadge.textContent = dropChanceMap[blook.rarity] || "---";
+    modalValueBadge.textContent = `${sellValueMap[blook.rarity] || 5} Tokens`;
+
     currentSelectedQty = 1;
     
     if (totalOwned > 1) {
@@ -995,7 +1046,6 @@ function recalculateSellPayout() {
         currentSelectedQty = 1;
     }
 
-    // Embed the fraction format directly into the string input field value
     sellQuantityInput.value = `${currentSelectedQty} / ${selectedBlookToSell.ownedCount}`;
 
     const totalCalculatedPayout = currentSelectedQty * rate;
@@ -1006,11 +1056,9 @@ function recalculateSellPayout() {
     }
 }
 
-// Intercept typing inside the input fraction box
 sellQuantityInput.addEventListener('input', () => {
     if (!selectedBlookToSell) return;
     
-    // Extract only digits from the typed input
     let cleanVal = sellQuantityInput.value.split('/')[0].replace(/\D/g, '');
     let typedNum = parseInt(cleanVal) || 1;
     
@@ -1018,7 +1066,6 @@ sellQuantityInput.addEventListener('input', () => {
     recalculateSellPayout();
 });
 
-// Select text inside when clicking into the field to make updating easy
 sellQuantityInput.addEventListener('click', () => {
     sellQuantityInput.setSelectionRange(0, sellQuantityInput.value.indexOf('/'));
 });
