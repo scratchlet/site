@@ -795,7 +795,7 @@ body{
 <main class="stats-grid">
     <section class="card-container profile-card">
         <div class="avatar-wrapper" id="pfp-avatar-trigger" title="Change Profile Picture">
-            <img src="https://i.postimg.cc/qRTqWD5S/Astronaut.webp" alt="PFP" class="avatar-img" id="display-pfp-img">
+            <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" class="avatar-img" id="display-pfp-img">
             <div class="edit-overlay-hint">Change</div>
         </div>
         
@@ -856,10 +856,10 @@ body{
                 <span class="material-icons">search</span>
                 <input type="text" class="friends-search-input" id="friends-search-input" placeholder="Search usernames...">
             </div>
-            <div id="search-results-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <div id="search-results-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
                 <div class="empty-state">
                     <span class="material-icons">search</span>
-                    <div>Type a exact username and press enter to find users!</div>
+                    <div>Type an exact username and press Enter to find users!</div>
                 </div>
             </div>
         </div>
@@ -888,7 +888,7 @@ body{
         </div>
         
         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 10px;">
-            <img src="https://i.postimg.cc/qRTqWD5S/Astronaut.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
+            <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
             <span id="view-user-title" class="user-title-badge">Member</span>
             
             <div class="stats-list" style="margin-top: 10px;">
@@ -1014,6 +1014,8 @@ for (const key in packsRegistry) {
 }
 const totalUniqueBlooksCount = allBlooksFlattened.length;
 
+const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
+
 // DOM Elements
 const tokenCounterValue = document.getElementById('token-counter-value');
 const userDisplayName = document.getElementById('user-display-name');
@@ -1063,7 +1065,7 @@ tabBtns.forEach(btn => {
 // Setup User Stats view modal
 function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks) {
     viewUserModalName.textContent = username;
-    viewUserPfp.src = pfpUrl || "https://i.postimg.cc/qRTqWD5S/Astronaut.webp";
+    viewUserPfp.src = pfpUrl || DEFAULT_PFP;
     viewUserTitle.textContent = title;
     viewUserTitle.className = "user-title-badge " + (title === "Founder" ? "title-founder" : "title-member");
     viewUserTokens.textContent = Number(tokens).toLocaleString();
@@ -1075,8 +1077,9 @@ userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModa
 
 // Resolve Blook image path from registry
 function getBlookImgUrl(blookName) {
+    if (!blookName) return DEFAULT_PFP;
     const found = allBlooksFlattened.find(b => b.name === blookName);
-    return found ? found.image : "https://i.postimg.cc/qRTqWD5S/Astronaut.webp";
+    return found ? found.image : DEFAULT_PFP;
 }
 
 // ----------------------------------------------------
