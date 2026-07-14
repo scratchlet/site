@@ -263,7 +263,7 @@ body{
 
 .inventory-heading {
     font-family: "Titan One", cursive;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #ffffff;
     text-shadow: 3px 3px 0px #00000050;
     text-transform: uppercase;
@@ -293,7 +293,7 @@ body{
 .inventory-search-bar {
     background: rgba(0, 0, 0, 0.25);
     border: 2px solid rgba(255, 255, 255, 0.15);
-    padding: 10px 14px 10px 38px;
+    padding: 12px 14px 12px 38px;
     border-radius: 14px;
     font-family: "Nunito", sans-serif;
     font-weight: 700;
@@ -308,47 +308,58 @@ body{
     border-color: #ff9b2f;
 }
 
-.view-toggle-container {
-    display: flex;
-    background: rgba(0, 0, 0, 0.25);
+/* CATEGORY SELECTION DROPDOWN */
+.category-dropdown-wrapper {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 14px;
-    padding: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2px 10px;
+    display: flex;
+    align-items: center;
 }
 
-.toggle-btn {
+.inventory-category-select {
     background: transparent;
+    color: white;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    outline: none;
     font-family: "Nunito", sans-serif;
     font-weight: 800;
-    font-size: 0.9rem;
-    padding: 8px 16px;
-    border-radius: 10px;
+    font-size: 0.95rem;
+    padding: 10px 24px 10px 5px;
     cursor: pointer;
-    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
-.toggle-btn.active {
+.inventory-category-select option {
     background: #ff9b2f;
     color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    font-weight: 700;
 }
 
-/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING */
+/* SINGLE MASTER CARD CONTAINER HOLDING EVERYTHING (With hidden scroll bar) */
 .master-inventory-card {
     background: rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.12);
     border-radius: 28px;
-    padding: 30px;
-    min-height: 200px;
+    padding: 35px;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
-/* PACK BLOOK GRID */
+.master-inventory-card::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+/* INCREASED BLOOK GRID UNIT SIZES (From 100px to 135px) */
 .blook-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 22px;
     padding-bottom: 5px;
 }
 
@@ -357,11 +368,11 @@ body{
 ================================= */
 .blook-image-btn {
     background: rgba(0, 0, 0, 0.45);
-    border: 3px solid transparent;
-    border-radius: 16px;
+    border: 3.5px solid transparent;
+    border-radius: 20px;
     aspect-ratio: 1 / 1;
     width: 100%;
-    padding: 8px;
+    padding: 14px;
     cursor: pointer;
     outline: none;
     position: relative;
@@ -369,6 +380,12 @@ body{
     align-items: center;
     justify-content: center;
     user-select: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.blook-image-btn.owned:hover {
+    transform: scale(1.04);
+    background: rgba(0, 0, 0, 0.55);
 }
 
 /* OWNED ITEMS STYLES */
@@ -400,7 +417,7 @@ body{
 /* LOCK BADGE STYLING OVERLAYED CENTRALLY */
 .lock-overlay-icon {
     position: absolute;
-    font-size: 2rem;
+    font-size: 2.4rem;
     color: rgba(255, 255, 255, 0.45);
     pointer-events: none;
     z-index: 5;
@@ -409,21 +426,21 @@ body{
 /* DUPLICATE QUANTITY BADGE */
 .quantity-badge {
     position: absolute;
-    bottom: -6px;
+    bottom: -4px;
     right: -4px;
     background: #ff9b2f;
     color: white;
     font-family: 'Titan One', cursive;
-    font-size: 0.8rem;
-    padding: 2px 7px;
+    font-size: 0.95rem;
+    padding: 3px 9px;
     border-radius: 99px;
     border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     z-index: 10;
 }
 
 /* ====================================
-   FIXED SIZE HORIZONTAL MODAL LAYOUT
+   FIXED SIZE HORIZONTAL MODAL LAYOUT (Expanded sizing)
 ==================================== */
 .modal-overlay {
     position: fixed;
@@ -438,23 +455,23 @@ body{
 .modal-content {
     background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
     border: 4px solid #ff9b2f;
-    border-radius: 28px;
-    padding: 25px 30px;
-    width: 600px; 
+    border-radius: 32px;
+    padding: 30px 40px;
+    width: 680px; 
     max-width: 95vw;
-    height: 330px;
+    height: 380px;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 25px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    gap: 35px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
     position: relative;
 }
 
 /* LEFT SIDE: PREVIEW PANEL */
 .modal-left-panel {
-    width: 140px;
+    width: 180px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -462,7 +479,7 @@ body{
     justify-content: center;
     text-align: center;
     border-right: 2px solid rgba(255, 255, 255, 0.1);
-    padding-right: 15px;
+    padding-right: 25px;
     flex-shrink: 0;
 }
 
@@ -479,14 +496,14 @@ body{
 .modal-badges-container {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .info-badge {
-    padding: 3px 8px;
-    border-radius: 8px;
-    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
     font-weight: 800;
     text-transform: uppercase;
 }
@@ -504,8 +521,8 @@ body{
 }
 
 .modal-blook-preview {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
     object-fit: contain;
     display: block;
 }
@@ -514,20 +531,20 @@ body{
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    margin: 12px 0;
+    gap: 10px;
+    margin: 15px 0;
 }
 
 .sell-input {
-    width: 110px;
-    padding: 6px;
+    width: 130px;
+    padding: 8px;
     font-family: 'Nunito', sans-serif;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 900;
     text-align: center;
     background: rgba(0,0,0,0.4);
     border: 2px solid #ff9b2f;
-    border-radius: 12px;
+    border-radius: 14px;
     color: #ffd700;
     outline: none;
 }
@@ -599,7 +616,7 @@ body{
     }
     .navbar { padding: 12px 20px; flex-direction: column; }
     .inventory-container { padding: 0 15px; }
-    .master-inventory-card { padding: 20px; }
+    .master-inventory-card { padding: 20px; max-height: 60vh; }
     .inventory-header {
         flex-direction: column;
         align-items: flex-start;
@@ -655,9 +672,11 @@ body{
                 <span class="material-icons">search</span>
                 <input type="text" id="inventory-search-input" class="inventory-search-bar" placeholder="Search Blooks...">
             </div>
-            <div class="view-toggle-container">
-                <button id="view-packs-btn" class="toggle-btn active">Packs</button>
-                <button id="view-rarities-btn" class="toggle-btn">Rarities</button>
+            <div class="category-dropdown-wrapper">
+                <select id="inventory-category-select" class="inventory-category-select">
+                    <option value="packs">Packs Category</option>
+                    <option value="rarities">Rarity Category</option>
+                </select>
             </div>
         </div>
     </div>
@@ -675,9 +694,9 @@ body{
         </div>
 
         <div class="modal-right-panel">
-            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; margin: 0;">BLOOK NAME</h2>
+            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.8rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; margin: 0;">BLOOK NAME</h2>
             
-            <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 8px; font-weight: 900; font-size:0.9rem; text-transform: uppercase;">RARITY</div>
+            <div id="modal-blook-rarity-text" style="margin-top: 4px; margin-bottom: 10px; font-weight: 900; font-size:1rem; text-transform: uppercase;">RARITY</div>
             
             <div class="modal-badges-container">
                 <span id="modal-chance-badge" class="info-badge drop">0%</span>
@@ -685,10 +704,10 @@ body{
             </div>
             
             <div class="sell-calc-row">
-                <button class="btn secondary" id="sell-min-btn" style="padding: 6px 10px; font-size: 0.8rem;">Min</button>
+                <button class="btn secondary" id="sell-min-btn" style="padding: 8px 12px; font-size: 0.85rem;">Min</button>
                 <input type="text" id="sell-quantity-input" class="sell-input">
-                <button class="btn secondary" id="sell-max-btn" style="padding: 6px 10px; font-size: 0.8rem;">Max</button>
-                <button class="btn secondary" id="sell-one-left-btn" style="padding: 6px 10px; font-size: 0.8rem; background: #ff5252; color: white; border-color: #ff5252;">One Left</button>
+                <button class="btn secondary" id="sell-max-btn" style="padding: 8px 12px; font-size: 0.85rem;">Max</button>
+                <button class="btn secondary" id="sell-one-left-btn" style="padding: 8px 12px; font-size: 0.85rem; background: #ff5252; color: white; border-color: #ff5252;">One Left</button>
             </div>
 
             <div class="safety-confirm-wrapper" id="safety-warning-box">
@@ -699,7 +718,7 @@ body{
             </div>
             
             <div class="modal-btn-group">
-                <button class="btn danger" id="confirm-sell-btn" style="padding:10px 24px; width: 100%;">Sell Blook(s)</button>
+                <button class="btn danger" id="confirm-sell-btn" style="padding:12px 28px; width: 100%; font-size:1.05rem;">Sell Blook(s)</button>
             </div>
         </div>
 
@@ -822,8 +841,7 @@ const packsRegistry = {
 const tokenCounterValue = document.getElementById('token-counter-value');
 const inventoryMountNode = document.getElementById('inventory-mount-node');
 const inventorySearchInput = document.getElementById('inventory-search-input');
-const viewPacksBtn = document.getElementById('view-packs-btn');
-const viewRaritiesBtn = document.getElementById('view-rarities-btn');
+const inventoryCategorySelect = document.getElementById('inventory-category-select');
 
 const sellModal = document.getElementById('sell-modal');
 const sellModalCard = document.getElementById('sell-modal-card');
@@ -894,10 +912,10 @@ function renderPacksView(searchQuery) {
 
         const packHeader = document.createElement('h2');
         packHeader.style.fontFamily = "'Titan One', cursive";
-        packHeader.style.fontSize = "1.4rem";
+        packHeader.style.fontSize = "1.5rem";
         packHeader.style.color = "#fff4d6";
         packHeader.style.textShadow = "2px 2px 0px rgba(0,0,0,0.4)";
-        packHeader.style.marginBottom = "10px";
+        packHeader.style.marginBottom = "12px";
         packHeader.style.textTransform = "uppercase";
         packHeader.style.letterSpacing = "0.5px";
         packHeader.textContent = pack.name;
@@ -957,10 +975,10 @@ function renderRaritiesView(searchQuery) {
 
         const rarityHeader = document.createElement('h2');
         rarityHeader.style.fontFamily = "'Titan One', cursive";
-        rarityHeader.style.fontSize = "1.4rem";
+        rarityHeader.style.fontSize = "1.5rem";
         rarityHeader.style.color = rarityBlooks[0].color || "#fff4d6";
         rarityHeader.style.textShadow = "2px 2px 0px rgba(0,0,0,0.4)";
-        rarityHeader.style.marginBottom = "10px";
+        rarityHeader.style.marginBottom = "12px";
         rarityHeader.style.textTransform = "uppercase";
         rarityHeader.style.letterSpacing = "0.5px";
         rarityHeader.textContent = rarityName;
@@ -1012,7 +1030,6 @@ function openSellWindow(blook, totalOwned) {
     modalBlookRarityText.style.color = blook.color;
     modalBlookImage.src = blook.image;
     
-    // Set Drop Chance and Base Value labels
     modalChanceBadge.textContent = dropChanceMap[blook.rarity] || "---";
     modalValueBadge.textContent = `${sellValueMap[blook.rarity] || 5} Tokens`;
 
@@ -1073,17 +1090,8 @@ sellQuantityInput.addEventListener('click', () => {
 
 inventorySearchInput.addEventListener('input', renderInventoryLayout);
 
-viewPacksBtn.addEventListener('click', () => {
-    viewPacksBtn.classList.add('active');
-    viewRaritiesBtn.classList.remove('active');
-    currentViewMode = "packs";
-    renderInventoryLayout();
-});
-
-viewRaritiesBtn.addEventListener('click', () => {
-    viewRaritiesBtn.classList.add('active');
-    viewPacksBtn.classList.remove('active');
-    currentViewMode = "rarities";
+inventoryCategorySelect.addEventListener('change', (e) => {
+    currentViewMode = e.target.value;
     renderInventoryLayout();
 });
 
