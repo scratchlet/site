@@ -476,12 +476,11 @@ body{
     text-align: left;
 }
 
-.modal-header-container {
+.modal-badges-container {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 2px;
+    margin-bottom: 12px;
 }
 
 .info-badge {
@@ -588,7 +587,7 @@ body{
         height: auto;
         text-align: center;
     }
-    .modal-header-container {
+    .modal-badges-container {
         justify-content: center;
     }
     .sell-calc-row {
@@ -676,12 +675,14 @@ body{
         </div>
 
         <div class="modal-right-panel">
-            <div class="modal-header-container">
-                <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.4rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; margin: 0;">BLOOK NAME</h2>
+            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.6rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; margin: 0;">BLOOK NAME</h2>
+            
+            <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 8px; font-weight: 900; font-size:0.9rem; text-transform: uppercase;">RARITY</div>
+            
+            <div class="modal-badges-container">
                 <span id="modal-chance-badge" class="info-badge drop">0%</span>
                 <span id="modal-value-badge" class="info-badge value">0 Value</span>
             </div>
-            <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 12px; font-weight: 900; font-size:0.85rem; text-transform: uppercase;">RARITY</div>
             
             <div class="sell-calc-row">
                 <button class="btn secondary" id="sell-min-btn" style="padding: 6px 10px; font-size: 0.8rem;">Min</button>
