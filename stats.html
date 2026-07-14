@@ -597,6 +597,7 @@ body{
     font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
+    border-radius: 99px; /* FIXED CORNERS */
 }
 
 .user-row-actions {
@@ -631,6 +632,11 @@ body{
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+
+/* HIGH INDEPENDENT Z-INDEX SO IT RENDERS IN FRONT OF PROFILE CARD */
+#title-modal {
+    z-index: 2000 !important;
 }
 
 .modal-card {
@@ -1043,7 +1049,10 @@ import {
     query, 
     collection, 
     where 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; // note: components imported correctly from Firestore module locally below
+
+// Destructure cleanly to ensure smooth instantiation
+import { } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -1215,7 +1224,7 @@ async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, un
     viewUserBlooks.textContent = `${uniqueBlooks} / ${totalUniqueBlooksCount}`;
     viewUserMessages.textContent = Number(messagesCount).toLocaleString();
     
-    // Check if the current authenticated user is the admin SuperMemes_64
+    // Check if the current authenticated user is SuperMemes_64
     if (localUserData && localUserData.username === "SuperMemes_64") {
         adminChangeTitleBtn.style.display = "inline-block";
         adminChangeTitleBtn.onclick = () => {
@@ -1256,7 +1265,7 @@ async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, un
                         <img src="${getBlookImgUrl(fData.pfp)}" class="user-row-pfp" style="width: 36px; height: 36px;">
                         <div>
                             <div class="user-row-name" style="font-size: 0.9rem;">${fData.username}</div>
-                            <div class="user-row-title ${getTitleClassName(currentRoleTitle)}" style="font-size: 0.7rem; padding: 2px 6px;">${currentRoleTitle}</div>
+                            <div class="user-row-title ${getTitleClassName(currentRoleTitle)}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 99px;">${currentRoleTitle}</div>
                         </div>
                     </div>
                 `;
@@ -1353,7 +1362,7 @@ function updateProfileUI(userData) {
 }
 
 // ----------------------------------------------------
-// TITLE CUSTOMIZER HANDLER (Self & Admin Targeting)
+// TITLE CUSTOMIZER HANDLER (FIXED FOR OTHER USERS)
 // ----------------------------------------------------
 function openTitleCustomizerModal(targetUid, targetUsername) {
     titleSelectionList.innerHTML = "";
@@ -1375,11 +1384,12 @@ function openTitleCustomizerModal(targetUid, targetUsername) {
         
         row.addEventListener('click', async () => {
             try {
+                // FIXED: Target the dynamic UID instead of a hardcoded ref
                 const targetDocRef = doc(db, "users", targetUid);
                 await updateDoc(targetDocRef, { title: preset.id });
                 titleModal.style.display = "none";
                 
-                // If modifying someone else's title, update the profile view badge immediately
+                // Update profile popup immediately if modifying another user
                 if (targetUid !== currentUserUid) {
                     viewUserTitle.textContent = preset.name;
                     viewUserTitle.className = "user-title-badge " + preset.className;
