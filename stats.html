@@ -920,6 +920,19 @@ body{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    getDoc, 
+    getDocs, 
+    updateDoc, 
+    onSnapshot, 
+    arrayUnion, 
+    arrayRemove, 
+    query, 
+    collection, 
+    where 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -933,14 +946,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-let db;
-
-try {
-    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    db = firestoreModule.getFirestore(app);
-} catch(e) {
-    console.error("Firestore loading failure: ", e);
-}
+const db = getFirestore(app);
 
 // Blook registry mapping to verify ownership/pfp paths
 const packsRegistry = {
@@ -1094,28 +1100,22 @@ function getBlookImgUrl(blookName) {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
-        try {
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
-            userDocRef = doc(db, "users", currentUserUid);
-            
-            // Listen to current user changes
-            const { onSnapshot, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            onSnapshot(doc(db, "users", currentUserUid), (snap) => {
-                if (snap.exists()) {
-                    localUserData = snap.data();
-                    updateProfileUI(localUserData);
-                }
-            });
+        userDocRef = doc(db, "users", currentUserUid);
+        
+        // Listen to current user changes
+        onSnapshot(userDocRef, (snap) => {
+            if (snap.exists()) {
+                localUserData = snap.data();
+                updateProfileUI(localUserData);
+            }
+        });
 
-            // Handle Logout
-            document.getElementById('logout-hud-btn').addEventListener('click', () => {
-                signOut(auth).then(() => {
-                    window.location.href = "login.html";
-                });
+        // Handle Logout
+        document.getElementById('logout-hud-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = "login.html";
             });
-        } catch (err) {
-            console.error("Firestore binding failed: ", err);
-        }
+        });
     } else {
         window.location.href = "login.html";
     }
@@ -1178,8 +1178,7 @@ pfpAvatarTrigger.addEventListener('click', () => {
     
     defaultBtn.addEventListener('click', async () => {
         try {
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            await firestoreModule.updateDoc(userDocRef, { pfp: "default" });
+            await updateDoc(userDocRef, { pfp: "default" });
             pfpModal.style.display = "none";
         } catch(e) {
             console.error("Failed to update avatar profile: ", e);
@@ -1198,8 +1197,7 @@ pfpAvatarTrigger.addEventListener('click', () => {
         
         btn.addEventListener('click', async () => {
             try {
-                const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-                await firestoreModule.updateDoc(userDocRef, { pfp: bName });
+                await updateDoc(userDocRef, { pfp: bName });
                 pfpModal.style.display = "none";
             } catch(e) {
                 console.error("Failed to update avatar profile: ", e);
@@ -1218,8 +1216,6 @@ pfpModal.addEventListener('click', (e) => { if (e.target === pfpModal) pfpModal.
 // FRIENDS REALTIME SYSTEMS & TABS
 // ----------------------------------------------------
 async function syncFriendsTabViews(userData) {
-    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    
     const friends = userData.friends || [];
     const incomingRequests = userData.incomingRequests || [];
     const outgoingRequests = userData.outgoingRequests || [];
@@ -1238,7 +1234,7 @@ async function syncFriendsTabViews(userData) {
         `;
     } else {
         friends.forEach(async (friendUid) => {
-            const fSnap = await firestoreModule.getDoc(firestoreModule.doc(db, "users", friendUid));
+            const fSnap = await getDoc(doc(db, "users", friendUid));
             if (fSnap.exists()) {
                 const fData = fSnap.data();
                 const uniqueCount = countUniqueBlooks(fData.inventory);
@@ -1265,8 +1261,8 @@ async function syncFriendsTabViews(userData) {
 
                 row.querySelector('.remove-friend-btn').addEventListener('click', async () => {
                     if (confirm(`Are you sure you want to remove ${fData.username}?`)) {
-                        await firestoreModule.updateDoc(userDocRef, { friends: firestoreModule.arrayRemove(friendUid) });
-                        await firestoreModule.updateDoc(firestoreModule.doc(db, "users", friendUid), { friends: firestoreModule.arrayRemove(currentUserUid) });
+                        await updateDoc(userDocRef, { friends: arrayRemove(friendUid) });
+                        await updateDoc(doc(db, "users", friendUid), { friends: arrayRemove(currentUserUid) });
                     }
                 });
 
@@ -1286,7 +1282,7 @@ async function syncFriendsTabViews(userData) {
     } else {
         // Incoming Request Cards
         incomingRequests.forEach(async (reqUid) => {
-            const reqSnap = await firestoreModule.getDoc(firestoreModule.doc(db, "users", reqUid));
+            const reqSnap = await getDoc(doc(db, "users", reqUid));
             if (reqSnap.exists()) {
                 const rData = reqSnap.data();
                 const row = document.createElement('div');
@@ -1306,19 +1302,19 @@ async function syncFriendsTabViews(userData) {
                 `;
 
                 row.querySelector('.accept-req-btn').addEventListener('click', async () => {
-                    await firestoreModule.updateDoc(userDocRef, {
-                        incomingRequests: firestoreModule.arrayRemove(reqUid),
-                        friends: firestoreModule.arrayUnion(reqUid)
+                    await updateDoc(userDocRef, {
+                        incomingRequests: arrayRemove(reqUid),
+                        friends: arrayUnion(reqUid)
                     });
-                    await firestoreModule.updateDoc(firestoreModule.doc(db, "users", reqUid), {
-                        outgoingRequests: firestoreModule.arrayRemove(currentUserUid),
-                        friends: firestoreModule.arrayUnion(currentUserUid)
+                    await updateDoc(doc(db, "users", reqUid), {
+                        outgoingRequests: arrayRemove(currentUserUid),
+                        friends: arrayUnion(currentUserUid)
                     });
                 });
 
                 row.querySelector('.decline-req-btn').addEventListener('click', async () => {
-                    await firestoreModule.updateDoc(userDocRef, { incomingRequests: firestoreModule.arrayRemove(reqUid) });
-                    await firestoreModule.updateDoc(firestoreModule.doc(db, "users", reqUid), { outgoingRequests: firestoreModule.arrayRemove(currentUserUid) });
+                    await updateDoc(userDocRef, { incomingRequests: arrayRemove(reqUid) });
+                    await updateDoc(doc(db, "users", reqUid), { outgoingRequests: arrayRemove(currentUserUid) });
                 });
 
                 pendingTab.appendChild(row);
@@ -1327,7 +1323,7 @@ async function syncFriendsTabViews(userData) {
 
         // Outgoing Request Cards
         outgoingRequests.forEach(async (reqUid) => {
-            const reqSnap = await firestoreModule.getDoc(firestoreModule.doc(db, "users", reqUid));
+            const reqSnap = await getDoc(doc(db, "users", reqUid));
             if (reqSnap.exists()) {
                 const rData = reqSnap.data();
                 const row = document.createElement('div');
@@ -1346,8 +1342,8 @@ async function syncFriendsTabViews(userData) {
                 `;
 
                 row.querySelector('.cancel-req-btn').addEventListener('click', async () => {
-                    await firestoreModule.updateDoc(userDocRef, { outgoingRequests: firestoreModule.arrayRemove(reqUid) });
-                    await firestoreModule.updateDoc(firestoreModule.doc(db, "users", reqUid), { incomingRequests: firestoreModule.arrayRemove(currentUserUid) });
+                    await updateDoc(userDocRef, { outgoingRequests: arrayRemove(reqUid) });
+                    await updateDoc(doc(db, "users", reqUid), { incomingRequests: arrayRemove(currentUserUid) });
                 });
 
                 pendingTab.appendChild(row);
@@ -1382,13 +1378,12 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
         searchResultsList.innerHTML = `<div style="text-align:center; padding: 20px; font-weight:700;">Searching...</div>`;
 
         try {
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            const q = firestoreModule.query(
-                firestoreModule.collection(db, "users"),
-                firestoreModule.where("username", "==", queryVal)
+            const q = query(
+                collection(db, "users"),
+                where("username", "==", queryVal)
             );
 
-            const qSnap = await firestoreModule.getDocs(q);
+            const qSnap = await getDocs(q);
             searchResultsList.innerHTML = "";
 
             if (qSnap.empty) {
@@ -1460,8 +1455,8 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
                         try {
                             addBtn.disabled = true;
                             addBtn.textContent = "Sending...";
-                            await firestoreModule.updateDoc(userDocRef, { outgoingRequests: firestoreModule.arrayUnion(uid) });
-                            await firestoreModule.updateDoc(firestoreModule.doc(db, "users", uid), { incomingRequests: firestoreModule.arrayUnion(currentUserUid) });
+                            await updateDoc(userDocRef, { outgoingRequests: arrayUnion(uid) });
+                            await updateDoc(doc(db, "users", uid), { incomingRequests: arrayUnion(currentUserUid) });
                             searchResultsList.innerHTML = `<div style="text-align:center; color:#4caf50; padding:10px; font-weight:800;">Request Sent successfully!</div>`;
                         } catch(e) {
                             console.error(e);
@@ -1472,13 +1467,13 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
                 const acceptSearchBtn = row.querySelector('.accept-search-req');
                 if (acceptSearchBtn) {
                     acceptSearchBtn.addEventListener('click', async () => {
-                        await firestoreModule.updateDoc(userDocRef, {
-                            incomingRequests: firestoreModule.arrayRemove(uid),
-                            friends: firestoreModule.arrayUnion(uid)
+                        await updateDoc(userDocRef, {
+                            incomingRequests: arrayRemove(uid),
+                            friends: arrayUnion(uid)
                         });
-                        await firestoreModule.updateDoc(firestoreModule.doc(db, "users", uid), {
-                            outgoingRequests: firestoreModule.arrayRemove(currentUserUid),
-                            friends: firestoreModule.arrayUnion(currentUserUid)
+                        await updateDoc(doc(db, "users", uid), {
+                            outgoingRequests: arrayRemove(currentUserUid),
+                            friends: arrayUnion(currentUserUid)
                         });
                         searchResultsList.innerHTML = `<div style="text-align:center; color:#4caf50; padding:10px; font-weight:800;">You are now friends!</div>`;
                     });
