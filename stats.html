@@ -827,8 +827,14 @@ body{
 @media(max-width: 820px) {
     .stats-grid {
         grid-template-columns: 1fr;
-        margin: 20px auto;
+        margin: 20px 0;
         gap: 20px;
+        padding: 0; /* Clear out sidebar paddings so grid spans 100% full width */
+    }
+    .card-container {
+        border-left: none;
+        border-right: none;
+        border-radius: 0; /* Flatten sides to snap flush edge-to-edge seamlessly matching navbar rules */
     }
 }
 
