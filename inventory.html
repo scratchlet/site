@@ -909,6 +909,12 @@ const dropChanceMap = {
 const rarityOrder = ["Mystical", "Celestial", "Chroma", "Legendary", "Epic", "Rare", "Uncommon"];
 
 const packsRegistry = {
+    misc: {
+       name: "Miscellaneous Blooks",
+       blooks: [
+            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            ]
+      },
     breakfast: {
         name: "Breakfast Pack",
         blooks: [
@@ -929,8 +935,6 @@ const packsRegistry = {
     },
         medieval: {
             name: "Medieval Pack",
-            cost: 15,
-            image: "https://i.postimg.cc/cLSD4TQQ/Medieval.webp",
             blooks: [
                 {name:"Elf",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
                 {name:"Witch",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
@@ -951,8 +955,6 @@ const packsRegistry = {
 
         color: {
             name: "Color Pack",
-            cost: 15,
-            image: "https://i.postimg.cc/WzVn7HKc/Color.webp",
             blooks: [
                 {name:"Red",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/Hnm2thKG/Red.webp"},
                 {name:"Blue",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/5yJ3mRrh/Blue.webp"},
@@ -976,8 +978,6 @@ const packsRegistry = {
 
                 wonderland: {
             name: "Wonderland Pack",
-            cost: 15,
-            image: "https://i.postimg.cc/YSVC9H1k/Wonderland.webp",
             blooks: [
                 {name:"Two of Spades",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp"},
                 {name:"Eat Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/B6KQPVgs/Eat-Me.webp"},
@@ -999,8 +999,6 @@ const packsRegistry = {
 
             space: {
             name: "Space Pack",
-            cost: 20,
-            image: "https://i.postimg.cc/C5tgpzKM/Space.webp",
             blooks: [
                 {name:"Earth",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
                 {name:"Meteor",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
@@ -1031,8 +1029,6 @@ const packsRegistry = {
         },
             bot: {
             name: "Bot Pack",
-            cost: 20,
-            image: "https://i.postimg.cc/W1n9TGPJ/Bot.webp",
             blooks: [
                 {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
                 {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp"},
@@ -1048,8 +1044,6 @@ const packsRegistry = {
         },
             aquatic: {
             name: "Aquatic Pack",
-            cost: 20,
-            image: "https://i.postimg.cc/DZC01JmB/Aquatic.webp",
             blooks: [
                 {name:"Old Boot",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJq6/Old-Boot.webp"},
                 {name:"Jellyfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp"},
@@ -1077,8 +1071,6 @@ const packsRegistry = {
         },
             safari: {
                 name: "Safari Pack",
-                cost: 20,
-                image: "https://i.postimg.cc/g0Ph5FYZ/Safari.webp",
                 blooks: [
                     {name:"Panda",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/Xvc56HJF/Panda.webp"},
                     {name:"Sloth",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/pdYjMGTn/Sloth.webp"},
@@ -1097,8 +1089,6 @@ const packsRegistry = {
         },
             dino: {
             name: "Dino Pack",
-            cost: 25,
-            image: "https://i.postimg.cc/15DPH4N9/Dino.webp",
             blooks: [
                 {name:"Amber",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/bN18Td2q/Ember.webp"},
                 {name:"Dino Egg",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/027xfrJx/Dino-Egg.webp"},
@@ -1114,8 +1104,6 @@ const packsRegistry = {
         },
             icemonsters: {
                 name: "Ice Monsters Pack",
-                cost: 25,
-                image: "https://i.postimg.cc/XNDKs8vc/Ice-Monsters.png",
                 blooks: [
                     {name:"Ice Bat",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/63KwJn5M/icebat.png"},
                     {name:"Ice Bug",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/d0rvx4v7/icebug.png"},
