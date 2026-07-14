@@ -594,7 +594,7 @@ body{
     padding: 20px;
 }
 
-/* Strictly lock modal card to 500px tall so heights never alter */
+/* Strictly lock modal card to consistent styling */
 .modal-card {
     background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
     border: 4px solid #ff9b2f;
@@ -680,6 +680,22 @@ body{
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* Dual Panel Responsive Modal Layouts */
+@media (max-width: 768px) {
+    #user-stats-modal .modal-card {
+        height: 80vh !important;
+        width: 95% !important;
+    }
+    #user-modal-grid {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr !important;
+        overflow-y: auto !important;
+    }
+    #view-user-friends-list {
+        overflow-y: visible !important;
+    }
 }
 
 /* ====================================
@@ -887,45 +903,49 @@ body{
 </div>
 
 <div class="modal-overlay" id="user-stats-modal">
-    <div class="modal-card" style="width: 450px; height: auto;">
-        <div class="modal-title-row">
+    <div class="modal-card" style="width: 750px; max-width: 95%; height: 520px; display: flex; flex-direction: column;">
+        <div class="modal-title-row" style="margin-bottom: 15px;">
             <h2 id="view-user-modal-name">User Profile</h2>
             <button class="modal-close-btn" id="close-user-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
         </div>
         
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 10px;">
-            <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
-            <span id="view-user-title" class="user-title-badge">Member</span>
-            
-            <div class="stats-list" style="margin-top: 10px;">
-                <div class="stat-item">
-                    <div class="stat-label-group">
-                        <span class="material-icons">toll</span>
-                        <span>Tokens</span>
+        <div id="user-modal-grid" style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 24px; flex: 1; overflow: hidden;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; padding-right: 5px;">
+                <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
+                <span id="view-user-title" class="user-title-badge" style="margin-top: 0;">Member</span>
+                
+                <div class="stats-list" style="margin-top: 5px; width: 100%;">
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">toll</span>
+                            <span>Tokens</span>
+                        </div>
+                        <div class="stat-value" id="view-user-tokens" style="font-size: 1rem;">0</div>
                     </div>
-                    <div class="stat-value" id="view-user-tokens">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label-group">
-                        <span class="material-icons">category</span>
-                        <span>Blooks Owned</span>
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">category</span>
+                            <span>Blooks Owned</span>
+                        </div>
+                        <div class="stat-value" id="view-user-blooks" style="font-size: 1rem;">0</div>
                     </div>
-                    <div class="stat-value" id="view-user-blooks">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label-group">
-                        <span class="material-icons">people</span>
-                        <span>Friends</span>
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">chat</span>
+                            <span>Messages Sent</span>
+                        </div>
+                        <div class="stat-value" id="view-user-messages" style="font-size: 1rem;">0</div>
                     </div>
-                    <div class="stat-value" id="view-user-friends">0</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-label-group">
-                        <span class="material-icons">chat</span>
-                        <span>Messages Sent</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.25); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden;">
+                <div style="font-family: 'Titan One', cursive; font-size: 1.1rem; color: #ff9b2f; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons">people</span>
+                    <span>Friends List</span>
+                </div>
+                <div id="view-user-friends-list" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; padding-right: 5px;">
                     </div>
-                    <div class="stat-value" id="view-user-messages">0</div>
-                </div>
             </div>
         </div>
     </div>
@@ -1064,8 +1084,8 @@ const viewUserPfp = document.getElementById('view-user-pfp');
 const viewUserTitle = document.getElementById('view-user-title');
 const viewUserTokens = document.getElementById('view-user-tokens');
 const viewUserBlooks = document.getElementById('view-user-blooks');
-const viewUserFriends = document.getElementById('view-user-friends');
 const viewUserMessages = document.getElementById('view-user-messages');
+const viewUserFriendsList = document.getElementById('view-user-friends-list');
 
 // Tabs & Friends
 const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1090,18 +1110,69 @@ tabBtns.forEach(btn => {
     });
 });
 
-// Setup User Stats view modal with Friends Count and Messages Sent values
-function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks, friendsCount, messagesCount) {
+// Setup User Stats view modal with Friends list panel on the right
+async function openUserStatsModal(username, pfpUrl, title, tokens, uniqueBlooks, friendsListUids, messagesCount) {
     viewUserModalName.textContent = username;
     viewUserPfp.src = pfpUrl || DEFAULT_PFP;
     viewUserTitle.textContent = title;
     viewUserTitle.className = "user-title-badge " + (title === "Founder" ? "title-founder" : "title-member");
     viewUserTokens.textContent = Number(tokens).toLocaleString();
     viewUserBlooks.textContent = `${uniqueBlooks} / ${totalUniqueBlooksCount}`;
-    viewUserFriends.textContent = Number(friendsCount).toLocaleString();
     viewUserMessages.textContent = Number(messagesCount).toLocaleString();
+    
+    // Reset and load right-side friends collection
+    viewUserFriendsList.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px; font-weight:700;">Loading...</div>`;
     userStatsModal.style.display = "flex";
+
+    const friendsUids = friendsListUids || [];
+    if (friendsUids.length === 0) {
+        viewUserFriendsList.innerHTML = `
+            <div class="empty-state" style="margin: auto;">
+                <span class="material-icons" style="font-size: 2.2rem;">people_outline</span>
+                <div style="font-size: 0.85rem;">No friends added yet.</div>
+            </div>
+        `;
+        return;
+    }
+
+    viewUserFriendsList.innerHTML = "";
+    for (const fUid of friendsUids) {
+        try {
+            const fSnap = await getDoc(doc(db, "users", fUid));
+            if (fSnap.exists()) {
+                const fData = fSnap.data();
+                const titleText = fData.username === "SuperMemes_64" ? "Founder" : (fData.title || "Member");
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.style.padding = "8px 12px";
+                row.style.borderRadius = "12px";
+                row.style.background = "rgba(255, 255, 255, 0.04)";
+                row.innerHTML = `
+                    <div class="user-row-info" style="gap: 8px;">
+                        <img src="${getBlookImgUrl(fData.pfp)}" class="user-row-pfp" style="width: 36px; height: 36px;">
+                        <div>
+                            <div class="user-row-name" style="font-size: 0.9rem;">${fData.username}</div>
+                            <div class="user-row-title" style="font-size: 0.7rem;">${titleText}</div>
+                        </div>
+                    </div>
+                `;
+                viewUserFriendsList.appendChild(row);
+            }
+        } catch (err) {
+            console.error("Error retrieving user's friend detail:", err);
+        }
+    }
+
+    if (viewUserFriendsList.children.length === 0) {
+        viewUserFriendsList.innerHTML = `
+            <div class="empty-state" style="margin: auto;">
+                <span class="material-icons" style="font-size: 2.2rem;">people_outline</span>
+                <div style="font-size: 0.85rem;">No active profiles found.</div>
+            </div>
+        `;
+    }
 }
+
 closeUserModal.addEventListener('click', () => userStatsModal.style.display = "none");
 userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModal) userStatsModal.style.display = "none"; });
 
@@ -1276,9 +1347,9 @@ async function syncFriendsTabViews(userData) {
                 `;
                 
                 row.querySelector('.view-profile-btn').addEventListener('click', () => {
-                    const friendsCount = fData.friends ? fData.friends.length : 0;
+                    const friendListUids = fData.friends || [];
                     const messagesCount = fData.messagesSent || fData.messages || 0;
-                    openUserStatsModal(fData.username, getBlookImgUrl(fData.pfp), title, fData.tokens || 0, uniqueCount, friendsCount, messagesCount);
+                    openUserStatsModal(fData.username, getBlookImgUrl(fData.pfp), title, fData.tokens || 0, uniqueCount, friendListUids, messagesCount);
                 });
 
                 row.querySelector('.remove-friend-btn').addEventListener('click', async () => {
@@ -1468,9 +1539,9 @@ friendsSearchInput.addEventListener('keydown', async (event) => {
                 `;
 
                 row.querySelector('.view-search-profile').addEventListener('click', () => {
-                    const friendsCount = data.friends ? data.friends.length : 0;
+                    const friendListUids = data.friends || [];
                     const messagesCount = data.messagesSent || data.messages || 0;
-                    openUserStatsModal(data.username, getBlookImgUrl(data.pfp), title, data.tokens || 0, uniqueCount, friendsCount, messagesCount);
+                    openUserStatsModal(data.username, getBlookImgUrl(data.pfp), title, data.tokens || 0, uniqueCount, friendListUids, messagesCount);
                 });
 
                 const addBtn = row.querySelector('.send-req-search');
