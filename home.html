@@ -599,7 +599,7 @@ body{
             <button id="edit-changelog-btn" class="btn secondary" style="display:none; padding:6px 14px; border-radius:8px; font-size:0.85rem;">Edit</button>
         </div>
         
-        <div id="log-display-view" class="log-content">Initial launch setup completed successfully. Authenticated navigation routers mapped. Loaded base structural models components.</div>
+        <div id="log-display-view" class="log-content">Loading changelogs...</div>
         
         <div id="admin-editor-box" class="editor-box">
             <textarea id="changelog-input-field" class="editor-textarea" placeholder="Update the changelog information text..."></textarea>
@@ -640,45 +640,62 @@ body{
     const cancelEditBtn = document.getElementById('cancel-edit-btn');
     const saveEditBtn = document.getElementById('save-edit-btn');
 
+    // 1. Initial cached changelog loading
     if(localStorage.getItem('scratchlet_changelog_cache')) {
         logDisplayView.textContent = localStorage.getItem('scratchlet_changelog_cache');
     }
 
-    async function loadUserCoins(user) {
-        const userRef = doc(db, "users", user.uid);
+    // Reference to global changelog in Firestore
+    const changelogDocRef = doc(db, "system", "changelog");
+
+    // Load global changelog live from Firestore
+    async function fetchGlobalChangelog() {
         try {
-            const userSnap = await getDoc(userRef);
-            
-            if (userSnap.exists()) {
-                return userSnap.data().tokens || 0;
+            const snap = await getDoc(changelogDocRef);
+            if(snap.exists() && snap.data().text) {
+                const globalText = snap.data().text;
+                logDisplayView.textContent = globalText;
+                localStorage.setItem('scratchlet_changelog_cache', globalText);
             } else {
-                await setDoc(userRef, {
-                    username: user.displayName || "Player",
-                    tokens: 0,
-                    createdAt: new Date()
-                });
-                return 0;
+                logDisplayView.textContent = "Initial launch setup completed successfully.";
             }
-        } catch (error) {
-            console.error("Error managing coin document state: ", error);
-            return 0;
+        } catch (err) {
+            console.error("Failed to load global changelog: ", err);
         }
     }
+    fetchGlobalChangelog();
 
+    // 2. Auth State Observer with Document Parsing Fixes
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const username = user.displayName || "Player";
+            const userRef = doc(db, "users", user.uid);
+            let username = "Player";
+            let currentTokens = 0;
+
+            try {
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    username = userData.username || user.displayName || "Player";
+                    currentTokens = userData.tokens || 0;
+                } else {
+                    // Create basic document if missing
+                    username = user.displayName || "Player";
+                    await setDoc(userRef, {
+                        username: username,
+                        tokens: 0,
+                        createdAt: new Date()
+                    });
+                }
+            } catch (err) {
+                console.error("Error fetching user data document: ", err);
+            }
+
+            // Welcome user with their real database username
             welcomeTitle.textContent = `Hello ${username}!`;
-            
-            const currentTokens = await loadUserCoins(user);
-            
-            // Seamlessly updates the counter text safely without changing node visibility layout rules
             tokenCounterValue.textContent = currentTokens.toLocaleString();
 
-            document.getElementById('logout-hud-btn').addEventListener('click', () => {
-                signOut(auth).then(() => { window.location.reload(); });
-            });
-
+            // Admin edit check using real username
             if (username === "SuperMemes_64") {
                 editChangelogBtn.style.display = "inline-block";
             } else {
@@ -688,6 +705,13 @@ body{
         } else {
             window.location.href = "login.html";
         }
+    });
+
+    // 3. Setup click listeners safely (outside auth loop)
+    document.getElementById('logout-hud-btn').addEventListener('click', () => {
+        signOut(auth).then(() => { 
+            window.location.href = "login.html"; 
+        });
     });
 
     editChangelogBtn.addEventListener('click', () => {
@@ -703,11 +727,18 @@ body{
         editChangelogBtn.style.display = "inline-block";
     });
 
-    saveEditBtn.addEventListener('click', () => {
+    saveEditBtn.addEventListener('click', async () => {
         const updatedText = changelogInputField.value.trim();
         if(updatedText) {
             logDisplayView.textContent = updatedText;
             localStorage.setItem('scratchlet_changelog_cache', updatedText);
+            
+            // Save globally to Firestore for all players
+            try {
+                await setDoc(changelogDocRef, { text: updatedText }, { merge: true });
+            } catch(e) {
+                console.error("Failed to save changelog globally to Firestore:", e);
+            }
         }
         adminEditorBox.style.display = "none";
         logDisplayView.style.display = "block";
