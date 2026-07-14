@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Stats & Friends</title>
+<title>Scratchlet - Stats</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -475,14 +475,12 @@ body{
     max-height: 500px;
     overflow-y: auto;
     padding-right: 5px;
+    scrollbar-width: none; /* Firefox: Hidden Scroll */
 }
 
+/* Webkit: Hidden Scroll */
 .tab-content-view::-webkit-scrollbar {
-    width: 6px;
-}
-.tab-content-view::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 99px;
+    display: none;
 }
 
 .tab-content-view.active {
@@ -910,7 +908,8 @@ body{
         </div>
         
         <div id="user-modal-grid" style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 24px; flex: 1; overflow: hidden;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; padding-right: 5px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; padding-right: 5px; scrollbar-width: none;">
+                <style>#user-modal-grid > div:first-child::-webkit-scrollbar { display: none; }</style>
                 <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
                 <span id="view-user-title" class="user-title-badge" style="margin-top: 0;">Member</span>
                 
@@ -944,7 +943,8 @@ body{
                     <span class="material-icons">people</span>
                     <span>Friends List</span>
                 </div>
-                <div id="view-user-friends-list" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; padding-right: 5px;">
+                <div id="view-user-friends-list" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; padding-right: 5px; scrollbar-width: none;">
+                    <style>#view-user-friends-list::-webkit-scrollbar { display: none; }</style>
                     </div>
             </div>
         </div>
