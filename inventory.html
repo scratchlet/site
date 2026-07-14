@@ -492,10 +492,10 @@ body{
 }
 
 .sell-input {
-    width: 75px;
+    width: 110px;
     padding: 6px;
     font-family: 'Nunito', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
     text-align: center;
     background: rgba(0,0,0,0.4);
@@ -646,15 +646,11 @@ body{
 
         <div class="modal-right-panel">
             <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.4rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">BLOOK NAME</h2>
-            <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 8px; font-weight: 900; font-size:0.85rem; text-transform: uppercase;">RARITY</div>
-            
-            <div style="font-weight: 800; color: #fff4d6; font-size: 1.05rem; margin-bottom: 5px;">
-                <span id="modal-sell-fraction" style="color: #ff9b2f;">1 / 1</span> being sell
-            </div>
+            <div id="modal-blook-rarity-text" style="margin-top: 2px; margin-bottom: 12px; font-weight: 900; font-size:0.85rem; text-transform: uppercase;">RARITY</div>
             
             <div class="sell-calc-row">
                 <button class="btn secondary" id="sell-min-btn" style="padding: 6px 10px; font-size: 0.8rem;">Min</button>
-                <input type="number" id="sell-quantity-input" class="sell-input" min="1" value="1">
+                <input type="text" id="sell-quantity-input" class="sell-input">
                 <button class="btn secondary" id="sell-max-btn" style="padding: 6px 10px; font-size: 0.8rem;">Max</button>
                 <button class="btn secondary" id="sell-one-left-btn" style="padding: 6px 10px; font-size: 0.8rem; background: #ff5252; color: white; border-color: #ff5252;">One Left</button>
             </div>
@@ -788,7 +784,6 @@ const sellModalCard = document.getElementById('sell-modal-card');
 const modalBlookName = document.getElementById('modal-blook-name');
 const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
 const modalBlookImage = document.getElementById('modal-blook-image');
-const modalSellFraction = document.getElementById('modal-sell-fraction');
 const sellQuantityInput = document.getElementById('sell-quantity-input');
 const confirmSellBtn = document.getElementById('confirm-sell-btn');
 const sellMinBtn = document.getElementById('sell-min-btn');
@@ -804,6 +799,7 @@ let currentUserRef = null;
 let selectedBlookToSell = null;
 let isInventoryArray = false;
 let currentViewMode = "packs"; 
+let currentSelectedQty = 1; // Tracks current selected value internally
 
 function findBlookDetails(blookName) {
     for (const key in packsRegistry) {
@@ -968,8 +964,7 @@ function openSellWindow(blook, totalOwned) {
     modalBlookRarityText.style.color = blook.color;
     modalBlookImage.src = blook.image;
     
-    sellQuantityInput.value = 1;
-    sellQuantityInput.max = totalOwned;
+    currentSelectedQty = 1;
     
     if (totalOwned > 1) {
         sellOneLeftBtn.style.display = "inline-block";
@@ -992,27 +987,41 @@ function closeSellWindow() {
 function recalculateSellPayout() {
     if (!selectedBlookToSell) return;
     const rate = sellValueMap[selectedBlookToSell.rarity] || 5;
-    let typedAmount = parseInt(sellQuantityInput.value) || 0;
     
-    if (typedAmount > selectedBlookToSell.ownedCount) {
-        typedAmount = selectedBlookToSell.ownedCount;
-        sellQuantityInput.value = typedAmount;
+    if (currentSelectedQty > selectedBlookToSell.ownedCount) {
+        currentSelectedQty = selectedBlookToSell.ownedCount;
     }
-    if (typedAmount < 1) {
-        typedAmount = 1;
-        sellQuantityInput.value = 1;
+    if (currentSelectedQty < 1) {
+        currentSelectedQty = 1;
     }
 
-    // Dynamic Fraction String
-    modalSellFraction.textContent = `${typedAmount} / ${selectedBlookToSell.ownedCount}`;
+    // Embed the fraction format directly into the string input field value
+    sellQuantityInput.value = `${currentSelectedQty} / ${selectedBlookToSell.ownedCount}`;
 
-    const totalCalculatedPayout = typedAmount * rate;
+    const totalCalculatedPayout = currentSelectedQty * rate;
     confirmSellBtn.innerHTML = `Sell Blook(s) (+${totalCalculatedPayout.toLocaleString()})`;
     
-    if (typedAmount < selectedBlookToSell.ownedCount) {
+    if (currentSelectedQty < selectedBlookToSell.ownedCount) {
         safetyWarningBox.style.display = "none";
     }
 }
+
+// Intercept typing inside the input fraction box
+sellQuantityInput.addEventListener('input', () => {
+    if (!selectedBlookToSell) return;
+    
+    // Extract only digits from the typed input
+    let cleanVal = sellQuantityInput.value.split('/')[0].replace(/\D/g, '');
+    let typedNum = parseInt(cleanVal) || 1;
+    
+    currentSelectedQty = typedNum;
+    recalculateSellPayout();
+});
+
+// Select text inside when clicking into the field to make updating easy
+sellQuantityInput.addEventListener('click', () => {
+    sellQuantityInput.setSelectionRange(0, sellQuantityInput.value.indexOf('/'));
+});
 
 inventorySearchInput.addEventListener('input', renderInventoryLayout);
 
@@ -1036,12 +1045,10 @@ sellModal.addEventListener('click', (event) => {
     }
 });
 
-sellQuantityInput.addEventListener('input', recalculateSellPayout);
-
-sellMinBtn.addEventListener('click', () => { sellQuantityInput.value = 1; recalculateSellPayout(); });
+sellMinBtn.addEventListener('click', () => { currentSelectedQty = 1; recalculateSellPayout(); });
 sellMaxBtn.addEventListener('click', () => { 
     if(selectedBlookToSell) {
-        sellQuantityInput.value = selectedBlookToSell.ownedCount; 
+        currentSelectedQty = selectedBlookToSell.ownedCount; 
         recalculateSellPayout(); 
     }
 });
@@ -1049,7 +1056,7 @@ sellMaxBtn.addEventListener('click', () => {
 sellOneLeftBtn.addEventListener('click', () => {
     if (selectedBlookToSell) {
         if (selectedBlookToSell.ownedCount > 1) {
-            sellQuantityInput.value = selectedBlookToSell.ownedCount - 1;
+            currentSelectedQty = selectedBlookToSell.ownedCount - 1;
             recalculateSellPayout();
         }
     }
@@ -1058,10 +1065,9 @@ sellOneLeftBtn.addEventListener('click', () => {
 confirmSellBtn.addEventListener('click', async () => {
     if (!selectedBlookToSell || !currentUserRef) return;
     
-    const qtyToSell = parseInt(sellQuantityInput.value) || 0;
-    if (qtyToSell <= 0 || qtyToSell > selectedBlookToSell.ownedCount) return;
+    if (currentSelectedQty <= 0 || currentSelectedQty > selectedBlookToSell.ownedCount) return;
 
-    if (qtyToSell === selectedBlookToSell.ownedCount) {
+    if (currentSelectedQty === selectedBlookToSell.ownedCount) {
         if (safetyWarningBox.style.display !== "flex") {
             safetyWarningBox.style.display = "flex";
             safetyBlookNameInput.focus();
@@ -1074,13 +1080,13 @@ confirmSellBtn.addEventListener('click', async () => {
     }
 
     const valuePerUnit = sellValueMap[selectedBlookToSell.rarity] || 5;
-    const payoutGained = qtyToSell * valuePerUnit;
+    const payoutGained = currentSelectedQty * valuePerUnit;
 
     try {
         confirmSellBtn.disabled = true;
 
         if (userInventoryMap[selectedBlookToSell.name]) {
-            userInventoryMap[selectedBlookToSell.name] -= qtyToSell;
+            userInventoryMap[selectedBlookToSell.name] -= currentSelectedQty;
             if (userInventoryMap[selectedBlookToSell.name] <= 0) {
                 delete userInventoryMap[selectedBlookToSell.name];
             }
