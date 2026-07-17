@@ -244,7 +244,7 @@ body{
 ========================= */
 .chat-wrapper {
     flex: 1;
-    max-width: 900px;
+    max-width: 1100px;
     width: 100%;
     margin: 30px auto;
     padding: 0 20px;
@@ -309,17 +309,56 @@ body{
 }
 
 /* =========================
-   MESSAGES AREA (DISCORD RECTANGLES)
+   SPLIT PANEL LAYOUT
+========================= */
+.chat-body {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    min-height: 0; 
+    margin-bottom: 15px;
+}
+
+.chat-main-area {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+    min-height: 0;
+}
+
+/* =========================
+   CHAT INFO RETENTION BANNER
+========================= */
+.chat-info-banner {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.chat-info-banner .material-icons {
+    font-size: 1.1rem;
+    color: #ffcc00;
+}
+
+/* =========================
+   MESSAGES AREA (RECTANGLE ROWS)
 ========================= */
 .messages-box {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    gap: 8px;
     padding-right: 8px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.2) transparent;
-    margin-bottom: 15px;
 }
 
 .messages-box::-webkit-scrollbar {
@@ -332,32 +371,33 @@ body{
     border-radius: 99px;
 }
 
-/* DISCORD LAYOUT STYLE RULES */
+/* RECTANGLE MSG ROW */
 .msg-row {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
+    gap: 14px;
     width: 100%;
-    padding: 8px 16px;
+    padding: 10px 16px;
     border-radius: 8px;
-    background: transparent;
-    transition: background 0.15s;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.15s, border-color 0.15s;
     animation: fadeInMsg 0.2s ease-out;
 }
 
 .msg-row:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
 }
 
-/* DISCORD MENTION HIGHLIGHT SYSTEM */
+/* ENTIRE ROW HIGHLIGHT ON PING */
 .msg-row.ping-highlight {
-    background: rgba(255, 172, 51, 0.12) !important;
-    border-left: 3.5px solid #ffac33;
-    padding-left: 12.5px; 
+    background: rgba(255, 172, 51, 0.15) !important;
+    border-left: 4px solid #ffac33 !important;
+    border-color: rgba(255, 172, 51, 0.3);
 }
 
 @keyframes fadeInMsg {
-    from { opacity: 0; transform: translateY(4px); }
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -374,7 +414,7 @@ body{
 .msg-content-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
     flex: 1;
 }
 
@@ -396,6 +436,28 @@ body{
     text-decoration: underline;
 }
 
+.msg-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* In-message ping badge decoration */
+.chat-mention-tag {
+    background: rgba(255, 172, 51, 0.35);
+    color: #ffda80;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.chat-mention-tag:hover {
+    background: rgba(255, 172, 51, 0.5);
+    color: #ffffff;
+}
+
 /* Micro badges for roles in chat */
 .user-title-badge {
     display: inline-block;
@@ -409,7 +471,7 @@ body{
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-/* HIGHER-QUALITY BADGE ANIMATIONS */
+/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
 .title-founder {
     background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
     background-size: 300% 300%;
@@ -455,25 +517,120 @@ body{
     100% { background-position: -200% 0%; }
 }
 
-.msg-text-node {
-    font-size: 0.96rem;
-    line-height: 1.5;
-    word-break: break-word;
-    color: rgba(255, 255, 255, 0.95);
+/* =========================
+   PLAYER SIDEBAR LIST
+========================= */
+.player-sidebar {
+    flex: 1.1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-/* INLINE PING STYLING FOR MENTION TEXT */
-.chat-mention-tag {
-    background: rgba(255, 172, 51, 0.25);
-    color: #ffcc66;
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-weight: 700;
-    cursor: pointer;
+.sidebar-title {
+    font-family: "Titan One", sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    text-align: center;
+    color: #ffeed1;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
 }
-.chat-mention-tag:hover {
-    background: rgba(255, 172, 51, 0.4);
-    color: #ffffff;
+
+.player-list-box {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+.player-list-box::-webkit-scrollbar {
+    width: 4px;
+}
+
+.player-list-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+}
+
+/* Player Card Item */
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.player-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(3px);
+}
+
+.player-item-pfp {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.2);
+    padding: 3px;
+    object-fit: contain;
+}
+
+.player-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.player-item-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.player-item-name {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Glowing Presence Status Dot */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.online {
+    background: #39e639;
+    box-shadow: 0 0 6px #39e639;
+}
+
+.status-dot.offline {
+    background: #a0a0a0;
+}
+
+.player-item .user-title-badge {
+    padding: 1px 6px;
+    font-size: 0.6rem;
+    width: fit-content;
 }
 
 .empty-chat {
@@ -617,6 +774,15 @@ body{
     .hud-item:hover::after {
         transform: translateX(-50%) translateY(0);
     }
+
+    /* Stack Player sidebar on mobile */
+    .chat-body {
+        flex-direction: column-reverse;
+    }
+
+    .player-sidebar {
+        max-height: 180px;
+    }
 }
 </style>
 </head>
@@ -667,10 +833,25 @@ body{
             </button>
         </div>
 
-        <div class="messages-box" id="chat-messages">
-            <div class="empty-chat">
-                <span class="material-icons">forum</span>
-                <div>Loading chat room...</div>
+        <div class="chat-body">
+            <div class="chat-main-area">
+                <div class="chat-info-banner">
+                    <span class="material-icons">info</span>
+                    <span>Notice: Messages older than 20 days are automatically cleared to keep the rooms clean.</span>
+                </div>
+
+                <div class="messages-box" id="chat-messages">
+                    <div class="empty-chat">
+                        <span class="material-icons">forum</span>
+                        <div>Loading chat room...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-sidebar">
+                <div class="sidebar-title">Players</div>
+                <div class="player-list-box" id="player-list">
+                    </div>
             </div>
         </div>
 
@@ -772,6 +953,7 @@ const tokenCounterValue = document.getElementById('token-counter-value');
 const messageInput = document.getElementById('message-input');
 const sendBtn = document.getElementById('send-btn');
 const chatMessages = document.getElementById('chat-messages');
+const playerList = document.getElementById('player-list');
 const tabBtns = document.querySelectorAll('.tab-btn');
 
 let currentUserUid = null;
@@ -804,17 +986,30 @@ onAuthStateChanged(auth, async (user) => {
             }
         });
 
-        document.getElementById('logout-hud-btn').addEventListener('click', () => {
+        // Set state to Online on Login
+        await updateDoc(userDocRef, {
+            online: true,
+            lastActive: Date.now()
+        });
+
+        // Handle offline presence when tab is closed/exited
+        window.addEventListener('beforeunload', () => {
+            updateDoc(userDocRef, { online: false });
+        });
+
+        document.getElementById('logout-hud-btn').addEventListener('click', async () => {
+            await updateDoc(userDocRef, { online: false });
             signOut(auth).then(() => { window.location.href = "login.html"; });
         });
 
         setupChatRoom();
+        setupPlayerList();
     } else {
         window.location.href = "login.html";
     }
 });
 
-// Helper to safely check timestamps across fields
+// Helper to safely resolve timestamps across database configurations
 function getTimestampMs(ts) {
     if (!ts) return 0;
     if (typeof ts.toMillis === 'function') return ts.toMillis();
@@ -864,20 +1059,23 @@ function setupChatRoom() {
     });
 }
 
-// Render Discord style structural rows with mention matching configurations
+// Global hook so inline generated HTML tags can invoke input appending
+window.appendMentionFromTag = function(username) {
+    appendPingToInput(username);
+};
+
+// Render whole rectangular block and check client username against contents for highlighted background styling
 function renderMessage(data) {
     const username = data.username || "Player";
     const roleTitle = username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
     const pfpUrl = getBlookImgUrl(data.pfp);
     const textRaw = data.text || "";
 
-    // Determine if the client user is mentioned anywhere inside this document structure
     const currentClientName = (localUserData && localUserData.username) ? localUserData.username : "";
     const isPinged = currentClientName && textRaw.toLowerCase().includes(`@${currentClientName.toLowerCase()}`);
 
     const row = document.createElement('div');
     row.className = `msg-row ${isPinged ? 'ping-highlight' : ''}`;
-    
     row.innerHTML = `
         <img src="${pfpUrl}" class="msg-pfp">
         <div class="msg-content-wrapper">
@@ -885,11 +1083,11 @@ function renderMessage(data) {
                 <span class="msg-username">${username}</span>
                 <span class="user-title-badge ${getTitleClassName(roleTitle)}">${roleTitle}</span>
             </div>
-            <div class="msg-text-node">${parseMentionsHTML(textRaw)}</div>
+            <div class="msg-text">${parseMentionsHTML(textRaw)}</div>
         </div>
     `;
 
-    // Click on a username label to seamlessly draft an instant mention ping
+    // Click on username directly to append draft mention to text inputs
     row.querySelector('.msg-username').addEventListener('click', () => {
         appendPingToInput(username);
     });
@@ -897,7 +1095,54 @@ function renderMessage(data) {
     chatMessages.appendChild(row);
 }
 
-// Appends @username directly onto the layout message field
+// Real-Time Online / Offline Player List listener
+function setupPlayerList() {
+    const playersQuery = collection(db, "users");
+
+    onSnapshot(playersQuery, (snapshot) => {
+        playerList.innerHTML = "";
+        
+        if (snapshot.empty) return;
+
+        // Map and sort: Online users first, then alphabetically
+        const allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+            .sort((a, b) => {
+                const aOnline = a.online === true;
+                const bOnline = b.online === true;
+                if (aOnline !== bOnline) {
+                    return aOnline ? -1 : 1;
+                }
+                return (a.username || "").localeCompare(b.username || "");
+            });
+
+        allUsers.forEach((user) => {
+            const isOnline = user.online === true;
+            const userPfp = getBlookImgUrl(user.pfp);
+            const userTitle = user.username === "SuperMemes_64" ? "Founder" : (user.title || "Member");
+
+            const card = document.createElement('div');
+            card.className = "player-item";
+            card.innerHTML = `
+                <img src="${userPfp}" class="player-item-pfp">
+                <div class="player-item-info">
+                    <div class="player-item-name-row">
+                        <span class="status-dot ${isOnline ? 'online' : 'offline'}"></span>
+                        <span class="player-item-name">${user.username || "Player"}</span>
+                    </div>
+                    <span class="user-title-badge ${getTitleClassName(userTitle)}">${userTitle}</span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                appendPingToInput(user.username || "Player");
+            });
+
+            playerList.appendChild(card);
+        });
+    });
+}
+
+// Append mention to draft box input helper
 function appendPingToInput(targetUser) {
     const currentVal = messageInput.value.trim();
     if (currentVal) {
@@ -908,26 +1153,18 @@ function appendPingToInput(targetUser) {
     messageInput.focus();
 }
 
-// Safely structuralize code text blocks while styling all target @pings beautifully
+// Safely structuralize html symbols while highlighting pings dynamically
 function parseMentionsHTML(str) {
-    if (str === null || str === undefined) return "";
-    
-    // Step 1: Securely render basic escaping transforms
-    let escaped = String(str).replace(/[&<>'"]/g, 
+    if (!str) return "";
+    let escaped = str.replace(/[&<>'"]/g, 
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
-
-    // Step 2: Use regex to capture all instances of @alphanumeric names and stylize them
     return escaped.replace(/@([a-zA-Z0-9_-]+)/g, (match, username) => {
         return `<span class="chat-mention-tag" onclick="window.appendMentionFromTag('${username}')">${match}</span>`;
     });
 }
 
-// Bind to window to allow click tracking inside dynamic HTML injection strings securely
-window.appendMentionFromTag = function(username) {
-    appendPingToInput(username);
-};
-
+// Restored 20-Day-Old Automatic Message Cleanup Routine
 async function cleanOldMessages(channel) {
     try {
         const qClean = query(
@@ -936,17 +1173,20 @@ async function cleanOldMessages(channel) {
         );
         const snap = await getDocs(qClean);
         
-        if (snap.size > 20) {
-            const sortedDocs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-                .sort((a, b) => getTimestampMs(b.timestamp) - getTimestampMs(a.timestamp));
+        const nowMs = Date.now();
+        const conversionTwentyDaysMs = 20 * 24 * 60 * 60 * 1000; // 1,728,000,000 ms
 
-            const docsToDelete = sortedDocs.slice(20);
-            for (const oldDoc of docsToDelete) {
-                await deleteDoc(doc(db, "messages", oldDoc.id));
+        for (const msgDoc of snap.docs) {
+            const data = msgDoc.data();
+            const timestampMs = getTimestampMs(data.timestamp);
+            
+            // Check if the individual message row has lived beyond the 20 day baseline
+            if (nowMs - timestampMs > conversionTwentyDaysMs) {
+                await deleteDoc(doc(db, "messages", msgDoc.id));
             }
         }
     } catch (e) {
-        console.error("Error running old messages cleanup: ", e);
+        console.error("Error running 20-day message retention cleanup: ", e);
     }
 }
 
@@ -971,9 +1211,12 @@ async function handleSendMessage() {
 
         const userDocRef = doc(db, "users", currentUserUid);
         await updateDoc(userDocRef, {
-            messagesSent: increment(1)
+            messagesSent: increment(1),
+            lastActive: Date.now(),
+            online: true
         });
 
+        // Trigger active channel structural analysis
         await cleanOldMessages(currentChannel);
 
     } catch (err) {
