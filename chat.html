@@ -244,7 +244,7 @@ body{
 ========================= */
 .chat-wrapper {
     flex: 1;
-    max-width: 1400px; /* Stretched out around the page, but not connected to edges */
+    max-width: 1400px; 
     width: 100%;
     margin: 30px auto;
     padding: 0 24px;
@@ -472,7 +472,7 @@ body{
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
+/* BADGE ANIMATIONS */
 .title-founder {
     background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
     background-size: 300% 300%;
@@ -664,7 +664,7 @@ body{
     z-index: 105;
     max-height: 200px;
     overflow-y: auto;
-    display: none; /* Controlled via script */
+    display: none; 
     flex-direction: column;
     padding: 8px;
     gap: 4px;
@@ -767,6 +767,9 @@ body{
     color: #ff9b2f;
 }
 
+/* ===================================================
+   RESPONSIVE DESIGN RULES FOR MAXIMUM MOBILE EFFICIENCY
+=================================================== */
 @media(max-width:980px) {
     .navbar { 
         padding: 12px 20px; 
@@ -825,16 +828,96 @@ body{
         transform: translateX(-50%) translateY(0);
     }
 
-    /* Stack Player sidebar on mobile */
-    .chat-body {
-        flex-direction: column-reverse;
+    /* Keep side-by-side flexbox active on mobile so both chat and players are visible simultaneously */
+    .chat-wrapper {
+        padding: 0 10px;
+        margin: 10px auto;
     }
 
-    .player-sidebar {
-        max-height: 180px;
+    .card-container {
+        padding: 12px;
+        height: 82vh; /* Make chat screen frame larger on mobile */
     }
+
+    .chat-body {
+        flex-direction: row; /* Force layout to stay next to each other */
+        gap: 8px;
+    }
+
+    .chat-main-area {
+        flex: 3; /* Give chat most of the room space */
+    }
+
+    /* Mini side layout adjustments for the mobile user feed */
+    .player-sidebar {
+        flex: 1.1; 
+        padding: 6px;
+        border-radius: 10px;
+    }
+
+    .sidebar-title {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+        padding-bottom: 4px;
+    }
+
+    .player-item {
+        padding: 4px 6px;
+        gap: 6px;
+        border-radius: 6px;
+    }
+
+    .player-item-pfp {
+        width: 22px;
+        height: 22px;
+        padding: 1px;
+    }
+
+    .player-item-name {
+        font-size: 0.72rem;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .player-item .user-title-badge {
+        display: none; /* Hide internal titles within lists on mobile to save horizontal space */
+    }
+
+    .msg-row {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .msg-pfp {
+        width: 34px;
+        height: 34px;
+    }
+
+    .msg-username {
+        font-size: 0.85rem;
+    }
+
+    .msg-text {
+        font-size: 0.85rem;
+    }
+
+    .chat-input {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
     .ping-prediction-panel {
-        bottom: 75px;
+        bottom: 60px;
+        left: 12px;
+        right: 12px;
     }
 }
 </style>
@@ -1016,7 +1099,7 @@ let currentUserUid = null;
 let localUserData = null;
 let currentChannel = "global"; 
 let activeChatListener = null;
-let cachedUsersList = []; // Kept up to date for ping autocomplete suggestions
+let cachedUsersList = []; 
 
 // Tab Channel Clicking
 tabBtns.forEach(btn => {
@@ -1043,13 +1126,11 @@ onAuthStateChanged(auth, async (user) => {
             }
         });
 
-        // Set state to Online on Login
         await updateDoc(userDocRef, {
             online: true,
             lastActive: Date.now()
         });
 
-        // Handle offline presence when tab is closed/exited
         window.addEventListener('beforeunload', () => {
             updateDoc(userDocRef, { online: false });
         });
@@ -1067,7 +1148,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Helper to safely resolve timestamps across database configurations
 function getTimestampMs(ts) {
     if (!ts) return 0;
     if (typeof ts.toMillis === 'function') return ts.toMillis();
@@ -1075,7 +1155,6 @@ function getTimestampMs(ts) {
     return Number(ts) || 0;
 }
 
-// Real-Time Chat Listener
 function setupChatRoom() {
     if (activeChatListener) {
         activeChatListener(); 
@@ -1117,12 +1196,10 @@ function setupChatRoom() {
     });
 }
 
-// Global hook so inline generated HTML tags can invoke input appending
 window.appendMentionFromTag = function(username) {
     appendPingToInput(username);
 };
 
-// Render whole rectangular block and check client username against contents for highlighted background styling
 function renderMessage(data) {
     const username = data.username || "Player";
     const roleTitle = username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
@@ -1145,7 +1222,6 @@ function renderMessage(data) {
         </div>
     `;
 
-    // Click on username directly to append draft mention to text inputs
     row.querySelector('.msg-username').addEventListener('click', () => {
         appendPingToInput(username);
     });
@@ -1153,7 +1229,6 @@ function renderMessage(data) {
     chatMessages.appendChild(row);
 }
 
-// Real-Time Online / Offline Player List listener
 function setupPlayerList() {
     const playersQuery = collection(db, "users");
 
@@ -1163,7 +1238,6 @@ function setupPlayerList() {
         
         if (snapshot.empty) return;
 
-        // Map and sort: Online users first, then alphabetically
         const allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
             .sort((a, b) => {
                 const aOnline = a.online === true;
@@ -1179,7 +1253,6 @@ function setupPlayerList() {
             const userPfp = getBlookImgUrl(user.pfp);
             const userTitle = user.username === "SuperMemes_64" ? "Founder" : (user.title || "Member");
 
-            // Save to predictive list cache
             cachedUsersList.push({
                 username: user.username || "Player",
                 pfp: userPfp
@@ -1207,17 +1280,14 @@ function setupPlayerList() {
     });
 }
 
-// Autocomplete Logic for Ping prediction updates
 function setupPredictionTracking() {
     messageInput.addEventListener('input', () => {
         const value = messageInput.value;
         const selectionStart = messageInput.selectionStart;
         
-        // Find the last index of '@' before the current text cursor position
         const lastAtIndex = value.lastIndexOf('@', selectionStart - 1);
         
         if (lastAtIndex !== -1) {
-            // Verify there isn't a space between the '@' symbol and text cursor position
             const textAfterAt = value.substring(lastAtIndex + 1, selectionStart);
             
             if (!textAfterAt.includes(' ')) {
@@ -1229,7 +1299,6 @@ function setupPredictionTracking() {
         hidePredictionPanel();
     });
 
-    // Close prediction panel if user clicks outside of the element space
     document.addEventListener('click', (e) => {
         if (!predictionPanel.contains(e.target) && e.target !== messageInput) {
             hidePredictionPanel();
@@ -1274,7 +1343,6 @@ function hidePredictionPanel() {
     predictionPanel.innerHTML = "";
 }
 
-// Append mention to draft box input helper
 function appendPingToInput(targetUser) {
     const currentVal = messageInput.value.trim();
     if (currentVal) {
@@ -1285,7 +1353,6 @@ function appendPingToInput(targetUser) {
     messageInput.focus();
 }
 
-// Safely structuralize html symbols while highlighting pings dynamically
 function parseMentionsHTML(str) {
     if (!str) return "";
     let escaped = str.replace(/[&<>'"]/g, 
@@ -1296,7 +1363,6 @@ function parseMentionsHTML(str) {
     });
 }
 
-// 20-Day-Old Automatic Message Cleanup Routine
 async function cleanOldMessages(channel) {
     try {
         const qClean = query(
@@ -1358,7 +1424,6 @@ async function handleSendMessage() {
     }
 }
 
-// Event Listeners
 sendBtn.addEventListener('click', handleSendMessage);
 messageInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
