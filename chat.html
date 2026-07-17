@@ -240,14 +240,14 @@ body{
 }
 
 /* =========================
-   CHAT BOX CONTAINER
+   STRETCHED OUT CHAT WRAPPER
 ========================= */
 .chat-wrapper {
     flex: 1;
-    max-width: 1100px;
+    max-width: 1400px; /* Stretched out around the page, but not connected to edges */
     width: 100%;
     margin: 30px auto;
-    padding: 0 20px;
+    padding: 0 24px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -262,8 +262,9 @@ body{
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    height: 70vh;
-    min-height: 500px;
+    height: 75vh;
+    min-height: 550px;
+    position: relative;
 }
 
 /* =========================
@@ -389,11 +390,11 @@ body{
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* ENTIRE ROW HIGHLIGHT ON PING */
+/* WHOLE SENTENCE ROW HIGHLIGHT ON PING */
 .msg-row.ping-highlight {
     background: rgba(255, 172, 51, 0.15) !important;
     border-left: 4px solid #ffac33 !important;
-    border-color: rgba(255, 172, 51, 0.3);
+    border-color: rgba(255, 172, 51, 0.3) !important;
 }
 
 @keyframes fadeInMsg {
@@ -521,7 +522,7 @@ body{
    PLAYER SIDEBAR LIST
 ========================= */
 .player-sidebar {
-    flex: 1.1;
+    flex: 0.9;
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -649,12 +650,61 @@ body{
 }
 
 /* =========================
+   PING PREDICTION AUTOCOMPLETE POPUP
+========================= */
+.ping-prediction-panel {
+    position: absolute;
+    bottom: 80px;
+    left: 24px;
+    right: 24px;
+    background: rgba(18, 18, 18, 0.96);
+    border: 2px solid rgba(255, 155, 47, 0.4);
+    border-radius: 14px;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 105;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none; /* Controlled via script */
+    flex-direction: column;
+    padding: 8px;
+    gap: 4px;
+}
+
+.prediction-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.02);
+    transition: background 0.15s;
+}
+
+.prediction-item:hover {
+    background: rgba(255, 155, 47, 0.2);
+}
+
+.prediction-pfp {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.prediction-name {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: white;
+}
+
+/* =========================
    FOOTER INPUT AREA
 ========================= */
 .chat-input-row {
     display: flex;
     gap: 10px;
     align-items: center;
+    position: relative;
 }
 
 .chat-input {
@@ -783,6 +833,9 @@ body{
     .player-sidebar {
         max-height: 180px;
     }
+    .ping-prediction-panel {
+        bottom: 75px;
+    }
 }
 </style>
 </head>
@@ -855,8 +908,10 @@ body{
             </div>
         </div>
 
+        <div class="ping-prediction-panel" id="prediction-panel"></div>
+
         <div class="chat-input-row">
-            <input type="text" class="chat-input" id="message-input" placeholder="Type a friendly message..." maxlength="120">
+            <input type="text" class="chat-input" id="message-input" placeholder="Type a friendly message..." maxlength="120" autocomplete="off">
             <button class="btn primary-btn" id="send-btn">Send</button>
         </div>
     </section>
@@ -955,11 +1010,13 @@ const sendBtn = document.getElementById('send-btn');
 const chatMessages = document.getElementById('chat-messages');
 const playerList = document.getElementById('player-list');
 const tabBtns = document.querySelectorAll('.tab-btn');
+const predictionPanel = document.getElementById('prediction-panel');
 
 let currentUserUid = null;
 let localUserData = null;
 let currentChannel = "global"; 
 let activeChatListener = null;
+let cachedUsersList = []; // Kept up to date for ping autocomplete suggestions
 
 // Tab Channel Clicking
 tabBtns.forEach(btn => {
@@ -1004,6 +1061,7 @@ onAuthStateChanged(auth, async (user) => {
 
         setupChatRoom();
         setupPlayerList();
+        setupPredictionTracking();
     } else {
         window.location.href = "login.html";
     }
@@ -1101,6 +1159,7 @@ function setupPlayerList() {
 
     onSnapshot(playersQuery, (snapshot) => {
         playerList.innerHTML = "";
+        cachedUsersList = [];
         
         if (snapshot.empty) return;
 
@@ -1119,6 +1178,12 @@ function setupPlayerList() {
             const isOnline = user.online === true;
             const userPfp = getBlookImgUrl(user.pfp);
             const userTitle = user.username === "SuperMemes_64" ? "Founder" : (user.title || "Member");
+
+            // Save to predictive list cache
+            cachedUsersList.push({
+                username: user.username || "Player",
+                pfp: userPfp
+            });
 
             const card = document.createElement('div');
             card.className = "player-item";
@@ -1140,6 +1205,73 @@ function setupPlayerList() {
             playerList.appendChild(card);
         });
     });
+}
+
+// Autocomplete Logic for Ping prediction updates
+function setupPredictionTracking() {
+    messageInput.addEventListener('input', () => {
+        const value = messageInput.value;
+        const selectionStart = messageInput.selectionStart;
+        
+        // Find the last index of '@' before the current text cursor position
+        const lastAtIndex = value.lastIndexOf('@', selectionStart - 1);
+        
+        if (lastAtIndex !== -1) {
+            // Verify there isn't a space between the '@' symbol and text cursor position
+            const textAfterAt = value.substring(lastAtIndex + 1, selectionStart);
+            
+            if (!textAfterAt.includes(' ')) {
+                const filterQuery = textAfterAt.toLowerCase();
+                renderPredictions(filterQuery, lastAtIndex);
+                return;
+            }
+        }
+        hidePredictionPanel();
+    });
+
+    // Close prediction panel if user clicks outside of the element space
+    document.addEventListener('click', (e) => {
+        if (!predictionPanel.contains(e.target) && e.target !== messageInput) {
+            hidePredictionPanel();
+        }
+    });
+}
+
+function renderPredictions(filterQuery, atIndex) {
+    const matches = cachedUsersList.filter(u => u.username.toLowerCase().includes(filterQuery));
+    
+    if (matches.length === 0) {
+        hidePredictionPanel();
+        return;
+    }
+
+    predictionPanel.innerHTML = "";
+    predictionPanel.style.display = "flex";
+
+    matches.forEach(user => {
+        const item = document.createElement('div');
+        item.className = "prediction-item";
+        item.innerHTML = `
+            <img src="${user.pfp}" class="prediction-pfp">
+            <span class="prediction-name">@${user.username}</span>
+        `;
+        
+        item.addEventListener('click', () => {
+            const beforeAt = messageInput.value.substring(0, atIndex);
+            const afterCursor = messageInput.value.substring(messageInput.selectionStart);
+            
+            messageInput.value = beforeAt + `@${user.username} ` + afterCursor;
+            hidePredictionPanel();
+            messageInput.focus();
+        });
+        
+        predictionPanel.appendChild(item);
+    });
+}
+
+function hidePredictionPanel() {
+    predictionPanel.style.display = "none";
+    predictionPanel.innerHTML = "";
 }
 
 // Append mention to draft box input helper
@@ -1164,7 +1296,7 @@ function parseMentionsHTML(str) {
     });
 }
 
-// Restored 20-Day-Old Automatic Message Cleanup Routine
+// 20-Day-Old Automatic Message Cleanup Routine
 async function cleanOldMessages(channel) {
     try {
         const qClean = query(
@@ -1174,13 +1306,12 @@ async function cleanOldMessages(channel) {
         const snap = await getDocs(qClean);
         
         const nowMs = Date.now();
-        const conversionTwentyDaysMs = 20 * 24 * 60 * 60 * 1000; // 1,728,000,000 ms
+        const conversionTwentyDaysMs = 20 * 24 * 60 * 60 * 1000; 
 
         for (const msgDoc of snap.docs) {
             const data = msgDoc.data();
             const timestampMs = getTimestampMs(data.timestamp);
             
-            // Check if the individual message row has lived beyond the 20 day baseline
             if (nowMs - timestampMs > conversionTwentyDaysMs) {
                 await deleteDoc(doc(db, "messages", msgDoc.id));
             }
@@ -1195,6 +1326,7 @@ async function handleSendMessage() {
     if (!textVal || !localUserData) return;
 
     messageInput.value = "";
+    hidePredictionPanel();
     sendBtn.disabled = true;
 
     try {
@@ -1216,7 +1348,6 @@ async function handleSendMessage() {
             online: true
         });
 
-        // Trigger active channel structural analysis
         await cleanOldMessages(currentChannel);
 
     } catch (err) {
@@ -1230,7 +1361,9 @@ async function handleSendMessage() {
 // Event Listeners
 sendBtn.addEventListener('click', handleSendMessage);
 messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSendMessage();
+    if (e.key === 'Enter') {
+        handleSendMessage();
+    }
 });
 </script>
 </body>
