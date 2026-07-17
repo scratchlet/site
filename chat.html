@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -787,7 +786,15 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Real-Time Chat Listener (Fixed: Client-side Sorting to prevent Index requirements)
+// Helper to safely parse any Firestore timestamp format (Objects, numbers, or empty values)
+function getTimestampMs(ts) {
+    if (!ts) return 0;
+    if (typeof ts.toMillis === 'function') return ts.toMillis();
+    if (typeof ts.seconds === 'number') return ts.seconds * 1000;
+    return Number(ts) || 0;
+}
+
+// Real-Time Chat Listener
 function setupChatRoom() {
     if (activeChatListener) {
         activeChatListener(); 
@@ -819,9 +826,9 @@ function setupChatRoom() {
             return;
         }
 
-        // Convert query snapshot to array, sort by timestamp client-side
+        // Convert query snapshot to array, sort by timestamp client-side using robust helper
         const sortedDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-            .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            .sort((a, b) => getTimestampMs(a.timestamp) - getTimestampMs(b.timestamp));
 
         sortedDocs.forEach((data) => {
             renderMessage(data);
@@ -833,7 +840,8 @@ function setupChatRoom() {
 }
 
 function renderMessage(data) {
-    const roleTitle = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
+    const username = data.username || "Player";
+    const roleTitle = username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
     const pfpUrl = getBlookImgUrl(data.pfp);
 
     const row = document.createElement('div');
@@ -842,7 +850,7 @@ function renderMessage(data) {
         <img src="${pfpUrl}" class="msg-pfp">
         <div class="msg-content-wrapper">
             <div class="msg-header">
-                <span class="msg-username">${data.username}</span>
+                <span class="msg-username">${username}</span>
                 <span class="user-title-badge ${getTitleClassName(roleTitle)}">${roleTitle}</span>
             </div>
             <div class="msg-bubble">${escapeHTML(data.text)}</div>
@@ -852,12 +860,13 @@ function renderMessage(data) {
 }
 
 function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
+    if (str === null || str === undefined) return ""; // Crash safety if message text is missing
+    return String(str).replace(/[&<>'"]/g, 
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
 }
 
-// RESTORED: 20 MESSAGE CHAT CLEANER (Fixed: Client-side sorting here as well)
+// RESTORED: 20 MESSAGE CHAT CLEANER
 async function cleanOldMessages(channel) {
     try {
         const qClean = query(
@@ -867,9 +876,9 @@ async function cleanOldMessages(channel) {
         const snap = await getDocs(qClean);
         
         if (snap.size > 20) {
-            // Sort client-side descending to find older messages
+            // Sort client-side descending using robust helper to find older messages
             const sortedDocs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                .sort((a, b) => getTimestampMs(b.timestamp) - getTimestampMs(a.timestamp));
 
             // Keep the first 20 (newest) and delete the rest
             const docsToDelete = sortedDocs.slice(20);
