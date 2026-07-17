@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Chat</title>
+<title>Scratchlet - Stats & Friends</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,16 +240,77 @@ body{
 }
 
 /* =========================
-   CHAT BOX CONTAINER
+   BUTTONS
 ========================= */
-.chat-wrapper {
+.btn {
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:12px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+}
+
+.primary-btn {
+    background: #ffffff;
+    color: #ff9b2f;
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.danger-btn {
+    background: #ff5252;
+    color: white;
+}
+
+.success-btn {
+    background: #4caf50;
+    color: white;
+}
+
+/* =========================
+   DASHBOARD HOUSING
+========================= */
+.stats-grid {
     flex: 1;
-    max-width: 900px;
+    max-width: 1100px;
     width: 100%;
-    margin: 30px auto;
+    margin: 40px auto;
     padding: 0 20px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 30px;
     position: relative;
     z-index: 5;
 }
@@ -258,24 +319,165 @@ body{
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    padding: 24px;
+    padding: 30px;
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    height: 70vh;
-    min-height: 500px;
 }
 
 /* =========================
-   CHANNELS / TABS
+   PROFILE & STATS CARD (LEFT)
 ========================= */
-.chat-tabs-header {
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    cursor: pointer;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.3);
+    border: 3px dashed rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.03);
+    border-color: #ff9b2f;
+}
+
+.avatar-img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+
+/* USER TITLE TAG */
+.user-title-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    border: none;
+    font-family: "Nunito", sans-serif;
+    outline: none;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
+.title-founder {
+    background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
+    background-size: 300% 300%;
+    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.title-owner {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    color: #fffde6;
+    text-shadow: 0 1px 3px rgba(139, 69, 0, 0.8);
+    border: 1.5px solid #ffe680;
+}
+
+.title-co-owner {
+    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    border: 1.5px solid #ffffff;
+}
+
+.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; box-shadow: 0 0 10px rgba(0, 191, 255, 0.4); }
+.title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
+.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid #e4d5c3; }
+.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; font-weight: 900; border: 1px solid #80ffff; }
+.title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
+
+@keyframes smoothRainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes smoothHue {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+@keyframes luxurySweep {
+    0% { background-position: 200% 0%; }
+    100% { background-position: -200% 0%; }
+}
+
+.stats-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.stat-item {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.stat-label-group .material-icons {
+    color: #ffcc00;
+}
+
+.stat-value {
+    font-family: 'Titan One', cursive;
+    font-size: 1.15rem;
+    color: white;
+}
+
+/* =========================
+   FRIENDS CARD WITH TABS
+========================= */
+.friends-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.friends-tabs-header {
     display: flex;
     background: rgba(0,0,0,0.3);
     border-radius: 14px;
     padding: 4px;
     gap: 4px;
-    margin-bottom: 15px;
 }
 
 .tab-btn {
@@ -308,176 +510,44 @@ body{
     box-shadow: 0 4px 10px rgba(255, 155, 47, 0.3);
 }
 
-/* =========================
-   MESSAGES AREA (ALL LEFT)
-========================= */
-.messages-box {
-    flex: 1;
+.tab-content-view {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    min-height: 350px;
+    max-height: 500px;
     overflow-y: auto;
+    padding-right: 5px;
+    scrollbar-width: none;
+}
+
+.tab-content-view::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-content-view.active {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-right: 8px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.2) transparent;
-    margin-bottom: 15px;
 }
 
-.messages-box::-webkit-scrollbar {
-    width: 6px;
-    display: block;
-}
-
-.messages-box::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 99px;
-}
-
-/* MESSAGE ROW */
-.msg-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    animation: fadeInMsg 0.2s ease-out;
-    max-width: 90%;
-    align-self: flex-start; /* All messages aligned to the left */
-}
-
-@keyframes fadeInMsg {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.msg-pfp {
-    width: 42px;
-    height: 42px;
-    object-fit: contain;
-    background: rgba(0,0,0,0.25);
-    border-radius: 10px;
-    padding: 4px;
-    flex-shrink: 0;
-}
-
-.msg-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.msg-header {
+/* Search bar inside search tab */
+.friends-search-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
 }
 
-.msg-username {
-    font-weight: 800;
-    font-size: 0.95rem;
-    color: #ffeed1;
-}
-
-/* Micro badges for roles in chat */
-.user-title-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-size: 0.68rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
-.title-founder {
-    background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
-    background-size: 300% 300%;
-    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.title-owner {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
-    background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    color: #fffde6;
-    text-shadow: 0 1px 2px rgba(139, 69, 0, 0.8);
-    border: 1px solid #ffe680;
-}
-
-.title-co-owner {
-    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
-    background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-    border: 1px solid #ffffff;
-}
-
-.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; }
-.title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
-.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); border: 1px solid #e4d5c3; }
-.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; border: 1px solid #80ffff; }
-.title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
-
-@keyframes smoothRainbow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-@keyframes smoothHue {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
-}
-@keyframes luxurySweep {
-    0% { background-position: 200% 0%; }
-    100% { background-position: -200% 0%; }
-}
-
-.msg-bubble {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 4px 16px 16px 16px;
-    padding: 10px 14px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    word-break: break-word;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.empty-chat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.friends-search-wrapper .material-icons {
+    position: absolute;
+    left: 14px;
     color: rgba(255,255,255,0.4);
-    gap: 10px;
-    margin: auto;
 }
 
-.empty-chat .material-icons {
-    font-size: 3rem;
-}
-
-/* =========================
-   FOOTER INPUT AREA
-========================= */
-.chat-input-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.chat-input {
-    flex: 1;
+.friends-search-input {
+    width: 100%;
     background: rgba(0,0,0,0.35);
     border: 2px solid rgba(255,255,255,0.15);
     border-radius: 14px;
-    padding: 14px 16px;
+    padding: 14px 16px 14px 44px;
     color: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
@@ -486,50 +556,215 @@ body{
     transition: border-color 0.15s;
 }
 
-.chat-input:focus {
+.friends-search-input:focus {
     border-color: #ff9b2f;
 }
 
-/* BUTTONS */
-.btn {
-    font-family:"Nunito",sans-serif;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-    letter-spacing:.3px;
-    font-size:0.95rem;
-    text-decoration:none;
-    display:inline-block;
-    padding:12px 24px;
-    border-radius:12px;
-    position: relative;
+/* Row elements */
+.user-row {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-row-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-row-pfp {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.25);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.user-row-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: white;
+}
+
+.user-row-title {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border-radius: 99px; /* FIXED CORNERS */
+}
+
+.user-row-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+    color: rgba(255,255,255,0.5);
+    gap: 10px;
+    margin: auto 0;
 }
 
-.btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none !important;
-    transform: none !important;
+.empty-state .material-icons {
+    font-size: 3rem;
 }
 
-.btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-    filter: brightness(1.05);
+/* =================================
+   MODALS
+================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.btn:active:not(:disabled) {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-    filter: brightness(0.95);
+/* HIGH INDEPENDENT Z-INDEX SO IT RENDERS IN FRONT OF PROFILE CARD */
+#title-modal {
+    z-index: 2000 !important;
 }
 
-.primary-btn {
-    background: #ffffff;
-    color: #ff9b2f;
+.modal-card {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 32px;
+    padding: 30px;
+    width: 500px; 
+    max-width: 100%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+}
+
+.modal-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.modal-title-row h2 {
+    font-family: 'Titan One', cursive;
+    color: white;
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.modal-close-btn:hover {
+    color: white;
+}
+
+.pfp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-bottom: 10px;
+}
+.pfp-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.pfp-select-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    width: 90px;
+    height: 90px;
+    min-width: 90px;
+    min-height: 90px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+    transition: transform 0.15s, background-color 0.15s, border-color 0.15s;
+    margin: 0 auto;
+}
+
+.pfp-select-btn:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.pfp-select-btn.active {
+    border-color: #ff9b2f;
+    background: rgba(255, 155, 47, 0.15);
+}
+
+.pfp-select-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.title-selection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-bottom: 10px;
+}
+.title-selection-list::-webkit-scrollbar { display: none; }
+
+.title-option-row {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.title-option-row:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+/* =================================
+   RESPONSIVE STYLES & MEDIA QUERIES
+================================= */
+@media (max-width: 768px) {
+    #user-stats-modal .modal-card {
+        height: 85vh !important;
+        width: 95% !important;
+    }
+    #user-modal-grid {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto 1fr !important;
+        overflow-y: auto !important;
+    }
+    #view-user-friends-list {
+        overflow-y: visible !important;
+    }
 }
 
 @media(max-width:980px) {
@@ -590,6 +825,62 @@ body{
         transform: translateX(-50%) translateY(0);
     }
 }
+
+@media(max-width: 820px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
+        gap: 20px;
+    }
+}
+
+@media(max-width: 500px) {
+    .pfp-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .pfp-select-btn {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
+    }
+    .modal-card {
+        height: 450px;
+    }
+}
+
+/* Fix mobile list-row buttons overlapping and squishing */
+@media (max-width: 550px) {
+    .user-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .user-row-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .user-row-actions {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .user-row-actions .btn,
+    .user-row-actions span {
+        flex: 1;
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        display: inline-block;
+        text-align: center;
+    }
+}
 </style>
 </head>
 
@@ -626,32 +917,157 @@ body{
     </div>
 </nav>
 
-<main class="chat-wrapper">
-    <section class="card-container">
-        <div class="chat-tabs-header">
-            <button class="tab-btn active" data-channel="global">
-                <span class="material-icons">public</span>
-                <span>Global Chat</span>
-            </button>
-            <button class="tab-btn" data-channel="trade">
-                <span class="material-icons">swap_horizontal_circle</span>
-                <span>Trade Chat</span>
-            </button>
+<main class="stats-grid">
+    <section class="card-container profile-card">
+        <div class="avatar-wrapper" id="pfp-avatar-trigger" title="Change Profile Picture">
+            <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" class="avatar-img" id="display-pfp-img">
+        </div>
+        
+        <div>
+            <h1 id="user-display-name" style="font-family: 'Titan One', cursive; font-size: 2.2rem; text-shadow: 2px 2px 0 rgba(0,0,0,0.35);">Player</h1>
+            <button id="user-display-title" class="user-title-badge title-member" style="cursor: default;">Member</button>
         </div>
 
-        <div class="messages-box" id="chat-messages">
-            <div class="empty-chat">
-                <span class="material-icons">forum</span>
-                <div>Loading chat room...</div>
+        <div class="stats-list">
+            <div class="stat-item">
+                <div class="stat-label-group">
+                    <span class="material-icons">toll</span>
+                    <span>Tokens</span>
+                </div>
+                <div class="stat-value" id="stats-tokens">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-group">
+                    <span class="material-icons">category</span>
+                    <span>Blooks Collection</span>
+                </div>
+                <div class="stat-value" id="stats-blooks">0 / 0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-group">
+                    <span class="material-icons">chat</span>
+                    <span>Messages Sent</span>
+                </div>
+                <div class="stat-value" id="stats-messages">0</div>
             </div>
         </div>
+    </section>
 
-        <div class="chat-input-row">
-            <input type="text" class="chat-input" id="message-input" placeholder="Type a friendly message..." maxlength="120">
-            <button class="btn primary-btn" id="send-btn">Send</button>
+    <section class="card-container friends-card">
+        <div class="friends-tabs-header">
+            <button class="tab-btn active" data-tab="friends-list-tab">
+                <span class="material-icons">people</span>
+                <span>Friends</span>
+            </button>
+            <button class="tab-btn" data-tab="pending-tab">
+                <span class="material-icons">mark_email_unread</span>
+                <span>Pending</span>
+            </button>
+            <button class="tab-btn" data-tab="search-tab">
+                <span class="material-icons">person_search</span>
+                <span>Search</span>
+            </button>
+        </div>
+
+        <div class="tab-content-view active" id="friends-list-tab">
+            </div>
+
+        <div class="tab-content-view" id="pending-tab">
+            </div>
+
+        <div class="tab-content-view" id="search-tab">
+            <div class="friends-search-wrapper">
+                <span class="material-icons">search</span>
+                <input type="text" class="friends-search-input" id="friends-search-input" placeholder="Search usernames...">
+            </div>
+            <div id="search-results-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                <div class="empty-state">
+                    <span class="material-icons">search</span>
+                    <div>Type an exact username and press Enter to find users!</div>
+                </div>
+            </div>
         </div>
     </section>
 </main>
+
+<div class="modal-overlay" id="pfp-modal">
+    <div class="modal-card">
+        <div class="modal-title-row">
+            <h2>Select PFP</h2>
+            <button class="modal-close-btn" id="close-pfp-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
+        </div>
+        <div class="pfp-grid" id="pfp-mount-grid">
+            </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="title-modal">
+    <div class="modal-card" style="height: 480px;">
+        <div class="modal-title-row">
+            <h2 id="title-modal-header-text">Select Role Title</h2>
+            <button class="modal-close-btn" id="close-title-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
+        </div>
+        <div class="title-selection-list" id="title-selection-list">
+            </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="user-stats-modal">
+    <div class="modal-card" style="width: 750px; max-width: 95%; height: 540px; display: flex; flex-direction: column;">
+        <div class="modal-title-row" style="margin-bottom: 15px;">
+            <h2 id="view-user-modal-name">User Profile</h2>
+            <button class="modal-close-btn" id="close-user-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
+        </div>
+        
+        <div id="user-modal-grid" style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 24px; flex: 1; overflow: hidden;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; padding-right: 5px; scrollbar-width: none;">
+                <style>#user-modal-grid > div:first-child::-webkit-scrollbar { display: none; }</style>
+                <img src="https://i.postimg.cc/GhxMXGvk/User.webp" alt="PFP" id="view-user-pfp" style="width: 110px; height: 110px; object-fit: contain; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px;">
+                
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <span id="view-user-title" class="user-title-badge">Member</span>
+                    <button id="admin-change-title-btn" class="btn primary-btn" style="padding: 4px 10px; font-size: 0.75rem; display: none; border-radius: 8px; margin-top: 2px;">
+                        <span class="material-icons" style="font-size: 0.9rem; vertical-align: middle;">edit</span> Change Title
+                    </button>
+                </div>
+                
+                <div class="stats-list" style="margin-top: 5px; width: 100%;">
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">toll</span>
+                            <span>Tokens</span>
+                        </div>
+                        <div class="stat-value" id="view-user-tokens" style="font-size: 1rem;">0</div>
+                    </div>
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">category</span>
+                            <span>Blooks Owned</span>
+                        </div>
+                        <div class="stat-value" id="view-user-blooks" style="font-size: 1rem;">0</div>
+                    </div>
+                    <div class="stat-item" style="padding: 10px 14px;">
+                        <div class="stat-label-group">
+                            <span class="material-icons">chat</span>
+                            <span>Messages Sent</span>
+                        </div>
+                        <div class="stat-value" id="view-user-messages" style="font-size: 1rem;">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.25); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden;">
+                <div style="font-family: 'Titan One', cursive; font-size: 1.1rem; color: #ff9b2f; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons">people</span>
+                    <span>Friends List</span>
+                </div>
+                <div id="view-user-friends-list" style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; padding-right: 5px; scrollbar-width: none;">
+                    <style>#view-user-friends-list::-webkit-scrollbar { display: none; }</style>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -660,18 +1076,17 @@ import {
     getFirestore, 
     doc, 
     getDoc, 
-    getDocs,
-    addDoc,
-    deleteDoc,
+    getDocs, 
     updateDoc, 
     onSnapshot, 
+    arrayUnion, 
+    arrayRemove, 
     query, 
     collection, 
-    where,
-    orderBy,
-    limit,
-    increment
+    where 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+import { } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -707,21 +1122,22 @@ const packsRegistry = {
     breakfast: {
         name: "Breakfast Pack",
         blooks: [
-            {name:"Toast",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-            {name:"Cereal",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-            {name:"Tomato Soup",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
-            {name:"Yogurt",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-            {name:"Breakfast Combo",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-            {name:"Orange Juice",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-            {name:"Milk",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-            {name:"Waffle",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-            {name:"Pancakes",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-            {name:"French Toast",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-            {name:"Pizza",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-            {name:"Strawberry Milk",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-            {name:"Chocolate Milk",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            {name:"Cereal",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Tomato Soup",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
+            {name:"Yogurt",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
+            {name:"Breakfast Combo",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
+            {name:"Orange Juice",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
+            {name:"Milk",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
+            {name:"Waffle",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
+            {name:"Pancakes",rarity:"Epic",color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
+            {name:"French Toast",rarity:"Epic",color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
+            {name:"Pizza",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
         ]
-    }
+    },
+
 };
 
 let allBlooksFlattened = [];
@@ -732,193 +1148,595 @@ for (const key in packsRegistry) {
         }
     });
 }
+const totalUniqueBlooksCount = allBlooksFlattened.length;
 
 const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
+
+// DOM Elements
+const tokenCounterValue = document.getElementById('token-counter-value');
+const userDisplayName = document.getElementById('user-display-name');
+const userDisplayTitle = document.getElementById('user-display-title');
+const statsTokens = document.getElementById('stats-tokens');
+const statsBlooks = document.getElementById('stats-blooks');
+const statsMessages = document.getElementById('stats-messages');
+const displayPfpImg = document.getElementById('display-pfp-img');
+
+// Modals
+const pfpModal = document.getElementById('pfp-modal');
+const pfpAvatarTrigger = document.getElementById('pfp-avatar-trigger');
+const closePfpModal = document.getElementById('close-pfp-modal');
+const pfpMountGrid = document.getElementById('pfp-mount-grid');
+
+const titleModal = document.getElementById('title-modal');
+const closeTitleModal = document.getElementById('close-title-modal');
+const titleSelectionList = document.getElementById('title-selection-list');
+const titleModalHeaderText = document.getElementById('title-modal-header-text');
+
+const userStatsModal = document.getElementById('user-stats-modal');
+const closeUserModal = document.getElementById('close-user-modal');
+const viewUserModalName = document.getElementById('view-user-modal-name');
+const viewUserPfp = document.getElementById('view-user-pfp');
+const viewUserTitle = document.getElementById('view-user-title');
+const viewUserTokens = document.getElementById('view-user-tokens');
+const viewUserBlooks = document.getElementById('view-user-blooks');
+const viewUserMessages = document.getElementById('view-user-messages');
+const viewUserFriendsList = document.getElementById('view-user-friends-list');
+const adminChangeTitleBtn = document.getElementById('admin-change-title-btn');
+
+// Tabs & Friends
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content-view');
+const friendsListTab = document.getElementById('friends-list-tab');
+const pendingTab = document.getElementById('pending-tab');
+const searchResultsList = document.getElementById('search-results-list');
+const friendsSearchInput = document.getElementById('friends-search-input');
+
+let currentUserUid = null;
+let userDocRef = null;
+let localUserData = null;
+let ownedBlookNames = [];
+let activeUserModalListener = null; // Unsubscribe container for the active real-time stats view 
+
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+    });
+});
+
+async function openUserStatsModal(targetUid, username, pfpUrl, title, tokens, uniqueBlooks, friendsListUids, messagesCount) {
+    // Clean up any active listeners from a previously viewed profile popup
+    if (activeUserModalListener) {
+        activeUserModalListener();
+        activeUserModalListener = null;
+    }
+
+    viewUserModalName.textContent = username;
+    viewUserPfp.src = pfpUrl || DEFAULT_PFP;
+    viewUserTitle.textContent = title;
+    viewUserTitle.className = "user-title-badge " + getTitleClassName(title);
+    viewUserTokens.textContent = Number(tokens).toLocaleString();
+    viewUserBlooks.textContent = `${uniqueBlooks} / ${totalUniqueBlooksCount}`;
+    viewUserMessages.textContent = Number(messagesCount).toLocaleString();
+    
+    // Check if the current authenticated user is SuperMemes_64
+    if (localUserData && localUserData.username === "SuperMemes_64") {
+        adminChangeTitleBtn.style.display = "inline-block";
+        adminChangeTitleBtn.onclick = () => {
+            openTitleCustomizerModal(targetUid, username);
+        };
+    } else {
+        adminChangeTitleBtn.style.display = "none";
+    }
+
+    viewUserFriendsList.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px; font-weight:700;">Loading...</div>`;
+    userStatsModal.style.display = "flex";
+
+    // Set up real-time listener to instantly capture title updates made by the Founder
+    const targetDocRef = doc(db, "users", targetUid);
+    activeUserModalListener = onSnapshot(targetDocRef, (snap) => {
+        if (snap.exists()) {
+            const data = snap.data();
+            const currentRoleTitle = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
+            
+            // Auto update title, styling, and general metrics instantly
+            viewUserTitle.textContent = currentRoleTitle;
+            viewUserTitle.className = "user-title-badge " + getTitleClassName(currentRoleTitle);
+            viewUserModalName.textContent = data.username || username;
+            viewUserPfp.src = getBlookImgUrl(data.pfp);
+            viewUserTokens.textContent = Number(data.tokens || 0).toLocaleString();
+            viewUserMessages.textContent = Number(data.messagesSent || data.messages || 0).toLocaleString();
+            viewUserBlooks.textContent = `${countUniqueBlooks(data.inventory)} / ${totalUniqueBlooksCount}`;
+        }
+    });
+
+    const friendsUids = friendsListUids || [];
+    if (friendsUids.length === 0) {
+        viewUserFriendsList.innerHTML = `
+            <div class="empty-state" style="margin: auto;">
+                <span class="material-icons" style="font-size: 2.2rem;">people_outline</span>
+                <div style="font-size: 0.85rem;">No friends added yet.</div>
+            </div>
+        `;
+        return;
+    }
+
+    viewUserFriendsList.innerHTML = "";
+    for (const fUid of friendsUids) {
+        try {
+            const fSnap = await getDoc(doc(db, "users", fUid));
+            if (fSnap.exists()) {
+                const fData = fSnap.data();
+                const currentRoleTitle = fData.username === "SuperMemes_64" ? "Founder" : (fData.title || "Member");
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.style.padding = "8px 12px";
+                row.style.borderRadius = "12px";
+                row.style.background = "rgba(255, 255, 255, 0.04)";
+                row.innerHTML = `
+                    <div class="user-row-info" style="gap: 8px;">
+                        <img src="${getBlookImgUrl(fData.pfp)}" class="user-row-pfp" style="width: 36px; height: 36px;">
+                        <div>
+                            <div class="user-row-name" style="font-size: 0.9rem;">${fData.username}</div>
+                            <div class="user-row-title ${getTitleClassName(currentRoleTitle)}" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 99px;">${currentRoleTitle}</div>
+                        </div>
+                    </div>
+                `;
+                viewUserFriendsList.appendChild(row);
+            }
+        } catch (err) {
+            console.error("Error retrieving user's friend detail:", err);
+        }
+    }
+}
+
+// Unsubscribe cleanly when user profile modal view is closed
+function closeUserStatsModalPopup() {
+    userStatsModal.style.display = "none";
+    if (activeUserModalListener) {
+        activeUserModalListener();
+        activeUserModalListener = null;
+    }
+}
+
+closeUserModal.addEventListener('click', closeUserStatsModalPopup);
+userStatsModal.addEventListener('click', (e) => { if (e.target === userStatsModal) closeUserStatsModalPopup(); });
+
 function getBlookImgUrl(blookName) {
     if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
     const found = allBlooksFlattened.find(b => b.name === blookName);
     return found ? found.image : DEFAULT_PFP;
 }
 
-// DOM Elements
-const tokenCounterValue = document.getElementById('token-counter-value');
-const messageInput = document.getElementById('message-input');
-const sendBtn = document.getElementById('send-btn');
-const chatMessages = document.getElementById('chat-messages');
-const tabBtns = document.querySelectorAll('.tab-btn');
-
-let currentUserUid = null;
-let localUserData = null;
-let currentChannel = "global"; // Default channel tab
-let activeChatListener = null;
-
-// Tab Channel Clicking
-tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const nextChannel = btn.getAttribute('data-channel');
-        if (nextChannel !== currentChannel) {
-            currentChannel = nextChannel;
-            setupChatRoom();
-        }
-    });
-});
-
+// ----------------------------------------------------
+// DATABASE LOGIC & USER HANDLERS
+// ----------------------------------------------------
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
-        const userDocRef = doc(db, "users", currentUserUid);
+        userDocRef = doc(db, "users", currentUserUid);
         
         onSnapshot(userDocRef, (snap) => {
             if (snap.exists()) {
                 localUserData = snap.data();
-                tokenCounterValue.textContent = (localUserData.tokens || 0).toLocaleString();
+                updateProfileUI(localUserData);
             }
         });
 
         document.getElementById('logout-hud-btn').addEventListener('click', () => {
             signOut(auth).then(() => { window.location.href = "login.html"; });
         });
-
-        setupChatRoom();
     } else {
         window.location.href = "login.html";
     }
 });
 
-// Real-Time Chat Listener
-function setupChatRoom() {
-    if (activeChatListener) {
-        activeChatListener(); // Unsubscribe previous real-time channel
-    }
-
-    chatMessages.innerHTML = `
-        <div class="empty-chat">
-            <span class="material-icons">forum</span>
-            <div>Connecting to ${currentChannel === 'global' ? 'Global' : 'Trade'} Chat...</div>
-        </div>
-    `;
-
-    const chatQuery = query(
-        collection(db, "messages"),
-        where("channel", "==", currentChannel),
-        orderBy("timestamp", "asc")
-    );
-
-    activeChatListener = onSnapshot(chatQuery, (snapshot) => {
-        chatMessages.innerHTML = "";
-        
-        if (snapshot.empty) {
-            chatMessages.innerHTML = `
-                <div class="empty-chat">
-                    <span class="material-icons">chat_bubble_outline</span>
-                    <div>No messages here yet. Be the first to start the conversation!</div>
-                </div>
-            `;
-            return;
-        }
-
-        snapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            renderMessage(data);
+function updateProfileUI(userData) {
+    const username = userData.username || "Player";
+    const tokens = userData.tokens || 0;
+    const messagesCount = userData.messagesSent || userData.messages || 0;
+    
+    const rawInv = userData.inventory || [];
+    const isArray = Array.isArray(rawInv);
+    const uniqueOwned = new Set();
+    
+    ownedBlookNames = [];
+    if (isArray) {
+        rawInv.forEach(bName => {
+            uniqueOwned.add(bName);
+            if (!ownedBlookNames.includes(bName)) ownedBlookNames.push(bName);
         });
-
-        // Instantly scroll chat log to the bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
-}
-
-function renderMessage(data) {
-    const roleTitle = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
-    const pfpUrl = getBlookImgUrl(data.pfp);
-
-    const row = document.createElement('div');
-    row.className = "msg-row";
-    row.innerHTML = `
-        <img src="${pfpUrl}" class="msg-pfp">
-        <div class="msg-content-wrapper">
-            <div class="msg-header">
-                <span class="msg-username">${data.username}</span>
-                <span class="user-title-badge ${getTitleClassName(roleTitle)}">${roleTitle}</span>
-            </div>
-            <div class="msg-bubble">${escapeHTML(data.text)}</div>
-        </div>
-    `;
-    chatMessages.appendChild(row);
-}
-
-function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-    );
-}
-
-// ----------------------------------------------------
-// RESTORED: 20 MESSAGE CHAT CLEANER
-// ----------------------------------------------------
-async function cleanOldMessages(channel) {
-    try {
-        const qClean = query(
-            collection(db, "messages"),
-            where("channel", "==", channel),
-            orderBy("timestamp", "desc")
-        );
-        const snap = await getDocs(qClean);
-        
-        if (snap.size > 20) {
-            // Retrieve any message documents positioned outside of the top 20 newest list
-            const docsToDelete = snap.docs.slice(20);
-            for (const oldDoc of docsToDelete) {
-                await deleteDoc(doc(db, "messages", oldDoc.id));
+    } else {
+        Object.keys(rawInv).forEach(bName => {
+            if (rawInv[bName] > 0) {
+                uniqueOwned.add(bName);
+                ownedBlookNames.push(bName);
             }
+        });
+    }
+
+    tokenCounterValue.textContent = tokens.toLocaleString();
+    statsTokens.textContent = tokens.toLocaleString();
+    userDisplayName.textContent = username;
+    statsBlooks.textContent = `${uniqueOwned.size} / ${totalUniqueBlooksCount}`;
+    statsMessages.textContent = Number(messagesCount).toLocaleString();
+    
+    // Assign Title
+    const currentRoleTitle = username === "SuperMemes_64" ? (userData.title || "Founder") : (userData.title || "Member");
+    userDisplayTitle.textContent = currentRoleTitle;
+    userDisplayTitle.className = "user-title-badge " + getTitleClassName(currentRoleTitle);
+
+    // Click behavior configurations
+    if (username === "SuperMemes_64") {
+        userDisplayTitle.style.cursor = "pointer";
+        userDisplayTitle.title = "Click to customize role title presets";
+        userDisplayTitle.onclick = () => openTitleCustomizerModal(currentUserUid, username);
+    } else {
+        userDisplayTitle.style.cursor = "default";
+        userDisplayTitle.title = "";
+        userDisplayTitle.onclick = null;
+    }
+
+    const resolvedPfpImg = getBlookImgUrl(userData.pfp);
+    displayPfpImg.src = resolvedPfpImg;
+
+    syncFriendsTabViews(userData);
+}
+
+// ----------------------------------------------------
+// TITLE CUSTOMIZER HANDLER
+// ----------------------------------------------------
+function openTitleCustomizerModal(targetUid, targetUsername) {
+    titleSelectionList.innerHTML = "";
+    
+    if (targetUid === currentUserUid) {
+        titleModalHeaderText.textContent = "Select Your Title";
+    } else {
+        titleModalHeaderText.textContent = `Edit Title for: ${targetUsername}`;
+    }
+    
+    titlePresets.forEach(preset => {
+        const row = document.createElement('div');
+        row.className = "title-option-row";
+        row.innerHTML = `
+            <span style="font-weight: 800; font-size: 1.05rem; color: white;">${preset.name}</span>
+            <span class="user-title-badge ${preset.className}" style="margin-top: 0;">${preset.name}</span>
+        `;
+        
+        row.addEventListener('click', async () => {
+            try {
+                const targetDocRef = doc(db, "users", targetUid);
+                await updateDoc(targetDocRef, { title: preset.id });
+                titleModal.style.display = "none";
+            } catch(e) {
+                console.error("Failed to update user preset title: ", e);
+            }
+        });
+        titleSelectionList.appendChild(row);
+    });
+    
+    titleModal.style.display = "flex";
+}
+
+closeTitleModal.addEventListener('click', () => titleModal.style.display = "none");
+titleModal.addEventListener('click', (e) => { if (e.target === titleModal) titleModal.style.display = "none"; });
+
+// ----------------------------------------------------
+// EDIT PROFILE PICTURE POPUP
+// ----------------------------------------------------
+pfpAvatarTrigger.addEventListener('click', () => {
+    pfpMountGrid.innerHTML = "";
+    
+    const defaultBtn = document.createElement('button');
+    const isDefaultActive = (!localUserData.pfp || localUserData.pfp === "default" || localUserData.pfp === DEFAULT_PFP);
+    defaultBtn.className = "pfp-select-btn" + (isDefaultActive ? " active" : "");
+    defaultBtn.innerHTML = `<img src="${DEFAULT_PFP}" class="pfp-select-img" title="Default PFP">`;
+    
+    defaultBtn.addEventListener('click', async () => {
+        try {
+            await updateDoc(userDocRef, { pfp: "default" });
+            pfpModal.style.display = "none";
+        } catch(e) {
+            console.error("Failed to update avatar profile: ", e);
         }
-    } catch (e) {
-        console.error("Error running old messages cleanup: ", e);
+    });
+    pfpMountGrid.appendChild(defaultBtn);
+
+    ownedBlookNames.forEach(bName => {
+        const registryDetails = allBlooksFlattened.find(b => b.name === bName);
+        if (!registryDetails) return;
+
+        const btn = document.createElement('button');
+        btn.className = "pfp-select-btn" + (localUserData.pfp === bName ? " active" : "");
+        btn.innerHTML = `<img src="${registryDetails.image}" class="pfp-select-img" title="${bName}">`;
+        
+        btn.addEventListener('click', async () => {
+            try {
+                await updateDoc(userDocRef, { pfp: bName });
+                pfpModal.style.display = "none";
+            } catch(e) {
+                console.error("Failed to update avatar profile: ", e);
+            }
+        });
+        pfpMountGrid.appendChild(btn);
+    });
+
+    pfpModal.style.display = "flex";
+});
+
+closePfpModal.addEventListener('click', () => pfpModal.style.display = "none");
+pfpModal.addEventListener('click', (e) => { if (e.target === pfpModal) pfpModal.style.display = "none"; });
+
+// ----------------------------------------------------
+// FRIENDS REALTIME SYSTEMS
+// ----------------------------------------------------
+async function syncFriendsTabViews(userData) {
+    const friends = userData.friends || [];
+    const incomingRequests = userData.incomingRequests || [];
+    const outgoingRequests = userData.outgoingRequests || [];
+
+    friendsListTab.innerHTML = "";
+    pendingTab.innerHTML = "";
+
+    if (friends.length === 0) {
+        friendsListTab.innerHTML = `
+            <div class="empty-state">
+                <span class="material-icons">people_outline</span>
+                <div>No friends yet! Search for players to add them.</div>
+            </div>
+        `;
+    } else {
+        friends.forEach(async (friendUid) => {
+            const fSnap = await getDoc(doc(db, "users", friendUid));
+            if (fSnap.exists()) {
+                const fData = fSnap.data();
+                const uniqueCount = countUniqueBlooks(fData.inventory);
+                const currentRoleTitle = fData.username === "SuperMemes_64" ? (fData.title || "Founder") : (fData.title || "Member");
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.innerHTML = `
+                    <div class="user-row-info">
+                        <img src="${getBlookImgUrl(fData.pfp)}" class="user-row-pfp">
+                        <div>
+                            <div class="user-row-name">${fData.username}</div>
+                            <div class="user-row-title ${getTitleClassName(currentRoleTitle)}" style="padding: 2px 8px; border-radius: 99px; display: inline-block; color: white;">${currentRoleTitle}</div>
+                        </div>
+                    </div>
+                    <div class="user-row-actions">
+                        <button class="btn secondary-btn view-profile-btn" style="padding: 8px 12px; font-size: 0.8rem;">View Stats</button>
+                        <button class="btn danger-btn remove-friend-btn" style="padding: 8px 12px; font-size: 0.8rem;">Remove</button>
+                    </div>
+                `;
+                
+                row.querySelector('.view-profile-btn').addEventListener('click', () => {
+                    const friendListUids = fData.friends || [];
+                    const messagesCount = fData.messagesSent || fData.messages || 0;
+                    openUserStatsModal(friendUid, fData.username, getBlookImgUrl(fData.pfp), currentRoleTitle, fData.tokens || 0, uniqueCount, friendListUids, messagesCount);
+                });
+
+                row.querySelector('.remove-friend-btn').addEventListener('click', async () => {
+                    if (confirm(`Are you sure you want to remove ${fData.username}?`)) {
+                        await updateDoc(userDocRef, { friends: arrayRemove(friendUid) });
+                        await updateDoc(doc(db, "users", friendUid), { friends: arrayRemove(currentUserUid) });
+                    }
+                });
+
+                friendsListTab.appendChild(row);
+            }
+        });
+    }
+
+    if (incomingRequests.length === 0 && outgoingRequests.length === 0) {
+        pendingTab.innerHTML = `
+            <div class="empty-state">
+                <span class="material-icons">mail_outline</span>
+                <div>No pending incoming or outgoing invitations.</div>
+            </div>
+        `;
+    } else {
+        incomingRequests.forEach(async (reqUid) => {
+            const reqSnap = await getDoc(doc(db, "users", reqUid));
+            if (reqSnap.exists()) {
+                const rData = reqSnap.data();
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.innerHTML = `
+                    <div class="user-row-info">
+                        <img src="${getBlookImgUrl(rData.pfp)}" class="user-row-pfp">
+                        <div>
+                            <div class="user-row-name">${rData.username}</div>
+                            <div style="font-size:0.75rem; color:#ffdd44; font-weight:800;">INCOMING REQUEST</div>
+                        </div>
+                    </div>
+                    <div class="user-row-actions">
+                        <button class="btn success-btn accept-req-btn" style="padding: 8px 12px; font-size: 0.8rem;">Accept</button>
+                        <button class="btn danger-btn decline-req-btn" style="padding: 8px 12px; font-size: 0.8rem;">Decline</button>
+                    </div>
+                `;
+
+                row.querySelector('.accept-req-btn').addEventListener('click', async () => {
+                    await updateDoc(userDocRef, {
+                        incomingRequests: arrayRemove(reqUid),
+                        friends: arrayUnion(reqUid)
+                    });
+                    await updateDoc(doc(db, "users", reqUid), {
+                        outgoingRequests: arrayRemove(currentUserUid),
+                        friends: arrayUnion(currentUserUid)
+                    });
+                });
+
+                row.querySelector('.decline-req-btn').addEventListener('click', async () => {
+                    await updateDoc(userDocRef, { incomingRequests: arrayRemove(reqUid) });
+                    await updateDoc(doc(db, "users", reqUid), { outgoingRequests: arrayRemove(currentUserUid) });
+                });
+
+                pendingTab.appendChild(row);
+            }
+        });
+
+        outgoingRequests.forEach(async (reqUid) => {
+            const reqSnap = await getDoc(doc(db, "users", reqUid));
+            if (reqSnap.exists()) {
+                const rData = reqSnap.data();
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.innerHTML = `
+                    <div class="user-row-info">
+                        <img src="${getBlookImgUrl(rData.pfp)}" class="user-row-pfp">
+                        <div>
+                            <div class="user-row-name">${rData.username}</div>
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); font-weight:800;">OUTGOING REQUEST</div>
+                        </div>
+                    </div>
+                    <div class="user-row-actions">
+                        <button class="btn danger-btn cancel-req-btn" style="padding: 8px 12px; font-size: 0.8rem;">Cancel</button>
+                    </div>
+                `;
+
+                row.querySelector('.cancel-req-btn').addEventListener('click', async () => {
+                    await updateDoc(userDocRef, { outgoingRequests: arrayRemove(reqUid) });
+                    await updateDoc(doc(db, "users", reqUid), { incomingRequests: arrayRemove(currentUserUid) });
+                });
+
+                pendingTab.appendChild(row);
+            }
+        });
     }
 }
 
-async function handleSendMessage() {
-    const textVal = messageInput.value.trim();
-    if (!textVal || !localUserData) return;
-
-    messageInput.value = "";
-    sendBtn.disabled = true;
-
-    try {
-        const userTitle = localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member");
-
-        // Write the new message directly to Firestore
-        await addDoc(collection(db, "messages"), {
-            username: localUserData.username || "Player",
-            title: userTitle,
-            pfp: localUserData.pfp || "default",
-            text: textVal,
-            channel: currentChannel,
-            timestamp: Date.now()
+function countUniqueBlooks(inventory) {
+    if (!inventory) return 0;
+    const isArray = Array.isArray(inventory);
+    const set = new Set();
+    if (isArray) {
+        inventory.forEach(b => set.add(b));
+    } else {
+        Object.keys(inventory).forEach(b => {
+            if (inventory[b] > 0) set.add(b);
         });
-
-        // Add 1 to total message metrics count
-        const userDocRef = doc(db, "users", currentUserUid);
-        await updateDoc(userDocRef, {
-            messagesSent: increment(1)
-        });
-
-        // Run the background cleanup process to keep only the newest 20 messages
-        await cleanOldMessages(currentChannel);
-
-    } catch (err) {
-        console.error("Failed to send message: ", err);
-    } finally {
-        sendBtn.disabled = false;
-        messageInput.focus();
     }
+    return set.size;
 }
 
-// Event Listeners
-sendBtn.addEventListener('click', handleSendMessage);
-messageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSendMessage();
+// ----------------------------------------------------
+// DATABASE SEARCH LOGIC
+// ----------------------------------------------------
+friendsSearchInput.addEventListener('keydown', async (event) => {
+    if (event.key === 'Enter') {
+        const queryVal = friendsSearchInput.value.trim();
+        if (!queryVal) return;
+        
+        searchResultsList.innerHTML = `<div style="text-align:center; padding: 20px; font-weight:700;">Searching...</div>`;
+
+        try {
+            const q = query(collection(db, "users"), where("username", "==", queryVal));
+            const qSnap = await getDocs(q);
+            searchResultsList.innerHTML = "";
+
+            if (qSnap.empty) {
+                searchResultsList.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-icons">sentiment_dissatisfied</span>
+                        <div>No user found with the username "${queryVal}". Make sure spelling matches exactly!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            qSnap.forEach((docSnap) => {
+                const uid = docSnap.id;
+                const data = docSnap.data();
+                
+                if (uid === currentUserUid) {
+                    searchResultsList.innerHTML = `
+                        <div class="empty-state">
+                            <span class="material-icons">sentiment_satisfied_alt</span>
+                            <div>This is you! You cannot send friend requests to yourself.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const uniqueCount = countUniqueBlooks(data.inventory);
+                const currentRoleTitle = data.username === "SuperMemes_64" ? (data.title || "Founder") : (data.title || "Member");
+
+                const currentFriends = localUserData.friends || [];
+                const outgoingReqs = localUserData.outgoingRequests || [];
+                const incomingReqs = localUserData.incomingRequests || [];
+
+                let actionHtml = "";
+                if (currentFriends.includes(uid)) {
+                    actionHtml = `<span style="color:#4caf50; font-weight:800; font-size:0.9rem;">Already Friends</span>`;
+                } else if (outgoingReqs.includes(uid)) {
+                    actionHtml = `<span style="color:rgba(255,255,255,0.5); font-weight:800; font-size:0.9rem;">Request Sent</span>`;
+                } else if (incomingReqs.includes(uid)) {
+                    actionHtml = `<button class="btn success-btn accept-search-req" style="padding: 8px 12px; font-size: 0.8rem;">Accept Request</button>`;
+                } else {
+                    actionHtml = `<button class="btn primary-btn send-req-search" style="padding: 8px 12px; font-size: 0.8rem;">Add Friend</button>`;
+                }
+
+                const row = document.createElement('div');
+                row.className = "user-row";
+                row.innerHTML = `
+                    <div class="user-row-info">
+                        <img src="${getBlookImgUrl(data.pfp)}" class="user-row-pfp">
+                        <div>
+                            <div class="user-row-name">${data.username}</div>
+                            <div class="user-row-title ${getTitleClassName(currentRoleTitle)}" style="padding: 2px 8px; border-radius: 99px; display: inline-block; color: white;">${currentRoleTitle}</div>
+                        </div>
+                    </div>
+                    <div class="user-row-actions">
+                        <button class="btn secondary-btn view-search-profile" style="padding: 8px 12px; font-size: 0.8rem;">View Stats</button>
+                        ${actionHtml}
+                    </div>
+                `;
+
+                row.querySelector('.view-search-profile').addEventListener('click', () => {
+                    const friendListUids = data.friends || [];
+                    const messagesCount = data.messagesSent || data.messages || 0;
+                    openUserStatsModal(uid, data.username, getBlookImgUrl(data.pfp), currentRoleTitle, data.tokens || 0, uniqueCount, friendListUids, messagesCount);
+                });
+
+                const addBtn = row.querySelector('.send-req-search');
+                if (addBtn) {
+                    addBtn.addEventListener('click', async () => {
+                        try {
+                            addBtn.disabled = true;
+                            addBtn.textContent = "Sending...";
+                            await updateDoc(userDocRef, { outgoingRequests: arrayUnion(uid) });
+                            await updateDoc(doc(db, "users", uid), { incomingRequests: arrayUnion(currentUserUid) });
+                            searchResultsList.innerHTML = `<div style="text-align:center; color:#4caf50; padding:10px; font-weight:800;">Request Sent successfully!</div>`;
+                        } catch(e) {
+                            console.error(e);
+                        }
+                    });
+                }
+
+                const acceptSearchBtn = row.querySelector('.accept-search-req');
+                if (acceptSearchBtn) {
+                    acceptSearchBtn.addEventListener('click', async () => {
+                        await updateDoc(userDocRef, {
+                            incomingRequests: arrayRemove(uid),
+                            friends: arrayUnion(uid)
+                        });
+                        await updateDoc(doc(db, "users", uid), {
+                            outgoingRequests: arrayRemove(currentUserUid),
+                            friends: arrayUnion(currentUserUid)
+                        });
+                        searchResultsList.innerHTML = `<div style="text-align:center; color:#4caf50; padding:10px; font-weight:800;">You are now friends!</div>`;
+                    });
+                }
+
+                searchResultsList.appendChild(row);
+            });
+
+        } catch (e) {
+            console.error("User query action failed: ", e);
+            searchResultsList.innerHTML = `<div style="text-align:center; color:#ff5252; padding: 20px;">Search request failed. Please try again.</div>`;
+        }
+    }
 });
 </script>
 </body>
