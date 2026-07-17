@@ -300,13 +300,13 @@ body{
 }
 
 /* =========================
-   NEWS AREA DESIGN
+   NEWS AREA DESIGN (STRETCHED)
 ========================= */
 .news-header-section {
-    max-width: 850px;
+    max-width: 1150px; /* Stretched out from 850px */
     width: 100%;
     margin: 40px auto 10px auto;
-    padding: 0 20px;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -321,10 +321,10 @@ body{
 
 .news-feed {
     flex: 1;
-    max-width: 850px;
+    max-width: 1150px; /* Stretched out from 850px */
     width: 100%;
     margin: 10px auto 40px auto;
-    padding: 0 20px;
+    padding: 0 24px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -336,7 +336,7 @@ body{
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    padding: 30px;
+    padding: 35px; /* Slightly increased internal spacing for the wider format */
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -381,7 +381,7 @@ body{
 
 .news-banner-img {
     width: 100%;
-    max-height: 320px;
+    max-height: 400px; /* Increased height restriction to scale beautifully with the new wider container */
     object-fit: cover;
     border-radius: 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
