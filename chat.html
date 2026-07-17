@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Chat</title>
+<title>Scratchlet - Chat Room</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -211,6 +211,7 @@ body{
     background: rgba(255, 82, 82, 0.2);
 }
 
+/* Nametag Tooltip Popups */
 .hud-item::after {
     content: attr(data-nametag);
     position: absolute;
@@ -239,200 +240,222 @@ body{
 }
 
 /* =========================
-   MAIN CHAT INTERFACE
+   BUTTONS
+========================= */
+.btn {
+    font-family:"Nunito",sans-serif;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+    letter-spacing:.3px;
+    font-size:0.95rem;
+    text-decoration:none;
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:12px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    filter: brightness(1.05);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    filter: brightness(0.95);
+}
+
+.primary-btn {
+    background: #ffffff;
+    color: #ff9b2f;
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.danger-btn {
+    background: #ff5252;
+    color: white;
+}
+
+.success-btn {
+    background: #4caf50;
+    color: white;
+}
+
+/* =========================
+   CHAT WINDOW HOUSING
 ========================= */
 .chat-container {
     flex: 1;
-    max-width: 1100px;
+    max-width: 1200px;
     width: 100%;
-    margin: 40px auto;
+    margin: 30px auto;
     padding: 0 20px;
     display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 30px;
+    grid-template-columns: 1.2fr 3fr 1fr;
+    gap: 20px;
     position: relative;
     z-index: 5;
+    height: calc(100vh - 160px);
 }
 
 .card-container {
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    padding: 24px;
+    padding: 20px;
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* LEFT PANEL: CHAT CHANNELS & STATS */
-.chat-sidebar {
-    gap: 20px;
-}
-
-.sidebar-section-title {
-    font-family: 'Titan One', cursive;
-    font-size: 1.2rem;
-    color: #ff9b2f;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.channel-list {
+/* Channels Panel (Left) */
+.channels-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .channel-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: white;
-    padding: 12px 16px;
-    border-radius: 14px;
-    font-weight: 800;
-    font-size: 0.95rem;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
-    transition: background 0.15s, border-color 0.15s;
+    gap: 12px;
+    width: 100%;
 }
 
-.channel-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.channel-btn.active {
-    background: #ff9b2f;
-    border-color: #ffb870;
-    box-shadow: 0 4px 12px rgba(255, 155, 47, 0.35);
-}
-
-/* RIGHT PANEL: CHAT BOX */
-.chat-box-card {
-    height: 600px;
-    max-height: 75vh;
-}
-
-.chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-.chat-header-info h2 {
-    font-family: 'Titan One', cursive;
-    font-size: 1.5rem;
-}
-
-.chat-header-info p {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.6);
-    font-weight: 700;
-}
-
-/* MESSAGES HISTORY WINDOW */
-.chat-messages {
+/* Chat Central Panel */
+.chat-messages-wrapper {
     flex: 1;
     overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 8px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding-right: 5px;
+    gap: 14px;
     scrollbar-width: none;
-    margin-bottom: 15px;
 }
 
-.chat-messages::-webkit-scrollbar {
+.chat-messages-wrapper::-webkit-scrollbar {
     display: none;
 }
 
-/* MESSAGE BUBBLES */
-.msg-row {
+.chat-input-bar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.chat-input:focus {
+    border-color: #ff9b2f;
+}
+
+/* Message Styles */
+.message-row {
     display: flex;
     gap: 12px;
     align-items: flex-start;
 }
 
-.msg-pfp {
+.message-pfp {
     width: 42px;
     height: 42px;
     object-fit: contain;
     background: rgba(0,0,0,0.25);
     border-radius: 8px;
     padding: 4px;
-    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.1s;
 }
 
-.msg-content-wrapper {
+.message-pfp:hover {
+    transform: scale(1.05);
+}
+
+.message-content-box {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    max-width: 85%;
 }
 
-.msg-header-meta {
+.message-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
 }
 
-.msg-author {
+.message-username {
     font-weight: 800;
     font-size: 0.95rem;
-    color: #ffdd44;
+    color: #ffcc00;
+    cursor: pointer;
 }
 
-.msg-text-bubble {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 10px 14px;
-    border-radius: 0 16px 16px 16px;
+.message-username:hover {
+    text-decoration: underline;
+}
+
+.message-text {
+    font-weight: 600;
     font-size: 0.95rem;
-    line-height: 1.4;
+    color: white;
     word-break: break-word;
 }
 
-/* If current user sent the message */
-.msg-row.self {
-    flex-direction: row-reverse;
-}
-
-.msg-row.self .msg-text-bubble {
-    background: rgba(255, 155, 47, 0.2);
-    border-color: rgba(255, 155, 47, 0.3);
-    border-radius: 16px 0 16px 16px;
-}
-
-.msg-row.self .msg-header-meta {
-    flex-direction: row-reverse;
-}
-
 /* =========================
-   USER TITLE CSS BADGES
+   USER TITLE BADGES (Copied from stats.html)
 ========================= */
 .user-title-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 99px;
     font-size: 0.7rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    border: none;
+    font-family: "Nunito", sans-serif;
     color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
 }
 
 .title-founder {
     background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
     background-size: 300% 300%;
     animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
@@ -440,6 +463,8 @@ body{
     background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
     background-size: 200% 100%;
     animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    color: #fffde6;
+    text-shadow: 0 1px 3px rgba(139, 69, 0, 0.8);
     border: 1.5px solid #ffe680;
 }
 
@@ -447,13 +472,15 @@ body{
     background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
     background-size: 200% 100%;
     animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     border: 1.5px solid #ffffff;
 }
 
-.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; }
+.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; box-shadow: 0 0 10px rgba(0, 191, 255, 0.4); }
 .title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
-.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); border: 1px solid #e4d5c3; }
-.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; border: 1px solid #80ffff; }
+.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid #e4d5c3; }
+.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; font-weight: 900; border: 1px solid #80ffff; }
 .title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
 
 @keyframes smoothRainbow {
@@ -470,179 +497,83 @@ body{
     100% { background-position: -200% 0%; }
 }
 
-/* =========================
-   CHAT INPUT AREA
-========================= */
-.chat-input-row {
-    display: flex;
-    gap: 12px;
-}
-
-.chat-text-input {
-    flex: 1;
-    background: rgba(0,0,0,0.35);
-    border: 2px solid rgba(255,255,255,0.15);
-    border-radius: 14px;
-    padding: 14px 18px;
-    color: white;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.15s;
-}
-
-.chat-text-input:focus {
-    border-color: #ff9b2f;
-}
-
-/* BUTTONS */
-.btn {
-    font-family:"Nunito",sans-serif;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-    font-size:0.95rem;
-    text-decoration:none;
-    display:inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding:10px 20px;
-    border-radius:12px;
-    position: relative;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none !important;
-    transform: none !important;
-}
-
-.btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-}
-
-.btn:active:not(:disabled) {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-}
-
-.primary-btn {
-    background: #ffffff;
-    color: #ff9b2f;
-}
-
-/* =========================
-   INITIAL PAGE LOAD LOADING SCREEN 
-========================= */
-#screen-loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: #ff9b2f;
-    z-index: 99999;
+/* User List (Right Sidebar) */
+.user-list-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 12px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.user-list-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar-user-row {
+    display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: background 0.1s;
 }
 
-.loading-spinner {
-    width: 60px;
-    height: 60px;
-    border: 6px solid rgba(255,255,255,0.3);
-    border-top: 6px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+.sidebar-user-row:hover {
+    background: rgba(255,255,255,0.08);
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.sidebar-user-pfp {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 2px;
 }
 
-/* =========================
-   RESPONSIVENESS
-========================= */
-@media (max-width: 820px) {
+.sidebar-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-username {
+    font-weight: 800;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+}
+
+/* Loading Layout */
+.loading-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    gap: 10px;
+    color: rgba(255,255,255,0.5);
+}
+
+/* Responsive Media queries */
+@media (max-width: 980px) {
     .chat-container {
         grid-template-columns: 1fr;
-        margin: 20px auto;
-        gap: 20px;
+        height: auto;
     }
-    .chat-box-card {
-        height: 500px;
-    }
-}
-
-@media(max-width:980px) {
-    .navbar { 
-        padding: 12px 20px; 
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-    }
-
-    .nav-left-group {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .logo-link { 
-        width: auto; 
-        text-align: center; 
-    }
-    
-    .logo { 
-        font-size: 2.2rem; 
-    }
-
-    .nav-right-group {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .hud-badge-bar {
-        max-width: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 4px 8px;
-        gap: 4px;
-        border-radius: 25px;
-    }
-
-    .hud-item {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-    }
-
-    .hud-item::after {
-        top: auto;
-        bottom: 46px;
-        transform: translateX(-50%) translateY(6px);
+    .user-list-card {
+        display: none;
     }
 }
 </style>
 </head>
 
 <body>
-
-<div id="screen-loading-overlay">
-    <div class="loading-spinner"></div>
-    <div style="font-family: 'Titan One', cursive; font-size: 1.8rem; color: white;">Connecting to Scratchlet...</div>
-</div>
 
 <div class="bg-base-gradient"></div>
 <div class="bg-moving-grid"></div>
@@ -676,39 +607,37 @@ body{
 </nav>
 
 <main class="chat-container">
-    <section class="card-container chat-sidebar">
-        <div>
-            <div class="sidebar-section-title">
-                <span class="material-icons">chat_bubble</span>
-                <span>Channels</span>
-            </div>
-            <div class="channel-list">
-                <button class="channel-btn active" data-channel="global">
-                    <span class="material-icons">public</span>
-                    <span>Global Chat</span>
-                </button>
-            </div>
+    <section class="card-container">
+        <h2 style="font-family: 'Titan One', cursive; font-size: 1.4rem; margin-bottom: 15px; color: #ff9b2f;">Channels</h2>
+        <div class="channels-list">
+            <button class="btn primary-btn channel-btn" data-channel="global">
+                <span class="material-icons">public</span> Global Chat
+            </button>
+            <button class="btn secondary-btn channel-btn" data-channel="trading">
+                <span class="material-icons">swap_horiz</span> Trading Chat
+            </button>
         </div>
     </section>
 
-    <section class="card-container chat-box-card">
-        <div class="chat-header">
-            <div class="chat-header-info">
-                <h2 id="channel-title-display"># Global Chat</h2>
-                <p id="channel-desc-display">Talk with everyone inside Scratchlet!</p>
+    <section class="card-container">
+        <div class="chat-messages-wrapper" id="chat-messages-area">
+            <div class="loading-box" id="chat-loader">
+                <span class="material-icons" style="font-size: 3rem; animation: spin 2s linear infinite;">sync</span>
+                <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+                <div style="font-family: 'Titan One', cursive; font-size: 1.2rem;">Loading...</div>
             </div>
         </div>
 
-        <div class="chat-messages" id="chat-messages-container">
-            </div>
+        <div class="chat-input-bar">
+            <input type="text" class="chat-input" id="chat-text-input" placeholder="Say something..." autocomplete="off">
+            <button class="btn success-btn" id="chat-send-btn" style="padding: 14px 22px;">Send</button>
+        </div>
+    </section>
 
-        <form class="chat-input-row" id="chat-form">
-            <input type="text" class="chat-text-input" id="chat-message-input" placeholder="Type a message..." autocomplete="off" maxlength="300">
-            <button class="btn primary-btn" id="send-msg-btn" type="submit">
-                <span class="material-icons">send</span>
-                <span>Send</span>
-            </button>
-        </form>
+    <section class="card-container user-list-card">
+        <h2 style="font-family: 'Titan One', cursive; font-size: 1.1rem; margin-bottom: 15px; color: #ff9b2f;">Users</h2>
+        <div class="user-list-wrapper" id="users-sidebar-list">
+            </div>
     </section>
 </main>
 
@@ -718,18 +647,19 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { 
     getFirestore, 
     doc, 
+    getDoc, 
+    getDocs, 
+    addDoc,
     updateDoc, 
     onSnapshot, 
-    collection, 
-    addDoc, 
     query, 
-    orderBy, 
+    collection, 
+    where,
+    orderBy,
     limit,
-    serverTimestamp,
-    increment
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Exact matching config
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
     authDomain: "scratchlet-194bc.firebaseapp.com",
@@ -746,16 +676,15 @@ const db = getFirestore(app);
 
 const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
 
-// Title Styles Matches stats.html presets
 const titlePresets = [
-    { id: "Founder", className: "title-founder" },
-    { id: "Owner", className: "title-owner" },
-    { id: "Co-Owner", className: "title-co-owner" },
-    { id: "Developer", className: "title-developer" },
-    { id: "Admin", className: "title-admin" },
-    { id: "Artist", className: "title-artist" },
-    { id: "Tester", className: "title-tester" },
-    { id: "Member", className: "title-member" }
+    { id: "Founder", className: "title-founder", name: "Founder" },
+    { id: "Owner", className: "title-owner", name: "Owner" },
+    { id: "Co-Owner", className: "title-co-owner", name: "Co-Owner" },
+    { id: "Developer", className: "title-developer", name: "Developer" },
+    { id: "Admin", className: "title-admin", name: "Admin" },
+    { id: "Artist", className: "title-artist", name: "Artist" },
+    { id: "Tester", className: "title-tester", name: "Tester" },
+    { id: "Member", className: "title-member", name: "Member" }
 ];
 
 function getTitleClassName(titleStr) {
@@ -763,22 +692,36 @@ function getTitleClassName(titleStr) {
     return matched ? matched.className : "title-member";
 }
 
-// Registry matching stats.html
-const allBlooksFlattened = [
-    {name:"Toast",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-    {name:"Cereal",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-    {name:"Tomato Soup",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
-    {name:"Yogurt",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-    {name:"Breakfast Combo",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-    {name:"Orange Juice",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-    {name:"Milk",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-    {name:"Waffle",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-    {name:"Pancakes",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-    {name:"French Toast",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-    {name:"Pizza",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-    {name:"Strawberry Milk",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-    {name:"Chocolate Milk",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
-];
+// Blooks list to resolve image paths (Copied register logic from your stats page)
+const packsRegistry = {
+    breakfast: {
+        name: "Breakfast Pack",
+        blooks: [
+            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            {name:"Cereal",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Tomato Soup",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
+            {name:"Yogurt",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
+            {name:"Breakfast Combo",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
+            {name:"Orange Juice",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
+            {name:"Milk",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
+            {name:"Waffle",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
+            {name:"Pancakes",rarity:"Epic",color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
+            {name:"French Toast",rarity:"Epic",color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
+            {name:"Pizza",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+        ]
+    }
+};
+
+let allBlooksFlattened = [];
+for (const key in packsRegistry) {
+    packsRegistry[key].blooks.forEach(b => {
+        if (!allBlooksFlattened.some(existing => existing.name === b.name)) {
+            allBlooksFlattened.push(b);
+        }
+    });
+}
 
 function getBlookImgUrl(blookName) {
     if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
@@ -786,168 +729,198 @@ function getBlookImgUrl(blookName) {
     return found ? found.image : DEFAULT_PFP;
 }
 
-// DOM Components
-const screenLoadingOverlay = document.getElementById('screen-loading-overlay');
+// DOM Cache
 const tokenCounterValue = document.getElementById('token-counter-value');
-const chatMessagesContainer = document.getElementById('chat-messages-container');
-const chatForm = document.getElementById('chat-form');
-const chatMessageInput = document.getElementById('chat-message-input');
-const sendMsgBtn = document.getElementById('send-msg-btn');
-const logoutHudBtn = document.getElementById('logout-hud-btn');
+const chatMessagesArea = document.getElementById('chat-messages-area');
+const chatTextInput = document.getElementById('chat-text-input');
+const chatSendBtn = document.getElementById('chat-send-btn');
+const usersSidebarList = document.getElementById('users-sidebar-list');
+const channelBtns = document.querySelectorAll('.channel-btn');
 
 let currentUserUid = null;
-let userDocRef = null;
 let localUserData = null;
-let activeMessagesUnsubscribe = null;
+let activeChannel = "global";
+let currentUnsubscribe = null;
 
-// ==========================================
-// AUTHENTICATION & LOGIN CHECKS
-// ==========================================
+// Auth Sync
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
-        userDocRef = doc(db, "users", currentUserUid);
         
-        // Real-time local user updates (Tokens, etc)
-        onSnapshot(userDocRef, (snap) => {
+        // Dynamic Token counter sync
+        onSnapshot(doc(db, "users", currentUserUid), (snap) => {
             if (snap.exists()) {
                 localUserData = snap.data();
-                tokenCounterValue.textContent = (localUserData.tokens || 0).toLocaleString();
-                
-                // Hide loader only when we have authenticated and loaded details!
-                if (screenLoadingOverlay) {
-                    screenLoadingOverlay.style.display = 'none';
-                }
+                tokenCounterValue.textContent = Number(localUserData.tokens || 0).toLocaleString();
             }
         });
 
-        // Initialize Chat Messages Loading
-        listenToChat();
+        // Initialize Chat Messages & User Sidebar
+        listenToChannel(activeChannel);
+        listenToActiveUsers();
 
-        // Logout Event Listener
-        logoutHudBtn.addEventListener('click', () => {
+        document.getElementById('logout-hud-btn').addEventListener('click', () => {
             signOut(auth).then(() => { window.location.href = "login.html"; });
         });
     } else {
-        // Stop instant redirect logic if running on local file protocol for layout viewing:
-        if (window.location.protocol === "file:") {
-            alert("Firebase Session was blocked! Please open this folder using Live Server (http://localhost) in VS Code to avoid being kicked out.");
-            screenLoadingOverlay.innerHTML = `<div style="text-align:center; padding: 20px; font-weight:800; color:white;">Running locally via file:// protocol. Local authentication session is blocked by browser safety protocols.<br><br>Please use VS Code's "Live Server" extension to open this.</div>`;
-        } else {
-            window.location.href = "login.html";
-        }
+        window.location.href = "login.html";
     }
 });
 
-// ==========================================
-// REAL-TIME FIRESTORE CHAT RETRIEVAL
-// ==========================================
-function listenToChat() {
-    if (activeMessagesUnsubscribe) activeMessagesUnsubscribe();
+// Switch Channels
+channelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const selected = btn.getAttribute('data-channel');
+        if (selected === activeChannel) return;
 
-    // Query last 75 messages sorted by timestamp
-    const q = query(
-        collection(db, "global_messages"), 
-        orderBy("timestamp", "asc"), 
-        limit(75)
-    );
-
-    activeMessagesUnsubscribe = onSnapshot(q, (snapshot) => {
-        chatMessagesContainer.innerHTML = "";
-        
-        if (snapshot.empty) {
-            chatMessagesContainer.innerHTML = `
-                <div style="text-align: center; color: rgba(255,255,255,0.4); margin: auto; font-weight: 700;">
-                    <span class="material-icons" style="font-size: 3rem; display: block; margin-bottom: 10px;">forum</span>
-                    No messages yet. Say hello to start the conversation!
-                </div>
-            `;
-            return;
-        }
-
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            renderMessage(data);
+        // Visual adjustment
+        channelBtns.forEach(b => {
+            b.classList.remove('primary-btn');
+            b.classList.add('secondary-btn');
         });
+        btn.classList.remove('secondary-btn');
+        btn.classList.add('primary-btn');
 
-        // Auto-scroll to latest message
-        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        activeChannel = selected;
+        listenToChannel(selected);
     });
-}
+});
 
-// Safe string escaping to prevent malicious script injection (XSS)
-function escapeHTML(str) {
-    if (!str) return "";
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+// Load Realtime Channel Messages
+function listenToChannel(channelId) {
+    if (currentUnsubscribe) currentUnsubscribe();
 
-function renderMessage(msg) {
-    const isSelf = msg.uid === currentUserUid;
-    const authorName = msg.username || "Player";
-    const authorTitle = msg.username === "SuperMemes_64" ? "Founder" : (msg.title || "Member");
-    const avatarSrc = getBlookImgUrl(msg.pfp);
-    const textEscaped = escapeHTML(msg.text);
-
-    const row = document.createElement('div');
-    row.className = `msg-row ${isSelf ? 'self' : ''}`;
-    
-    row.innerHTML = `
-        <img src="${avatarSrc}" class="msg-pfp" alt="PFP">
-        <div class="msg-content-wrapper">
-            <div class="msg-header-meta">
-                <span class="msg-author">${authorName}</span>
-                <span class="user-title-badge ${getTitleClassName(authorTitle)}">${authorTitle}</span>
-            </div>
-            <div class="msg-text-bubble">
-                ${textEscaped}
-            </div>
+    // Reset view with standard "Loading" state inside messages window
+    chatMessagesArea.innerHTML = `
+        <div class="loading-box" id="chat-loader">
+            <span class="material-icons" style="font-size: 3rem; animation: spin 2s linear infinite;">sync</span>
+            <div style="font-family: 'Titan One', cursive; font-size: 1.2rem;">Loading...</div>
         </div>
     `;
 
-    chatMessagesContainer.appendChild(row);
+    // Connect real-time message stream (listening to `messages` collection query filter)
+    const q = query(
+        collection(db, "messages"),
+        where("channel", "==", channelId),
+        orderBy("timestamp", "asc"),
+        limit(80)
+    );
+
+    currentUnsubscribe = onSnapshot(q, (snapshot) => {
+        const loader = document.getElementById('chat-loader');
+        if (loader) loader.remove();
+
+        // Save scroll position
+        const shouldScroll = chatMessagesArea.scrollHeight - chatMessagesArea.scrollTop <= chatMessagesArea.clientHeight + 100;
+
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const data = change.doc.data();
+                appendMessage(data);
+            }
+        });
+
+        if (shouldScroll) {
+            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+        }
+    });
 }
 
-// ==========================================
-// SENDING CHAT MESSAGES
-// ==========================================
-chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const textVal = chatMessageInput.value.trim();
-    
-    if (!textVal || !currentUserUid || !localUserData) return;
+function appendMessage(msgData) {
+    const row = document.createElement('div');
+    row.className = "message-row";
 
-    // Temporarily disable form elements to avoid duplicate clicks
-    chatMessageInput.disabled = true;
-    sendMsgBtn.disabled = true;
+    const title = msgData.username === "SuperMemes_64" ? "Founder" : (msgData.title || "Member");
+    const pfpImg = getBlookImgUrl(msgData.pfp);
+
+    row.innerHTML = `
+        <img src="${pfpImg}" class="message-pfp" alt="PFP">
+        <div class="message-content-box">
+            <div class="message-header">
+                <span class="message-username">${msgData.username}</span>
+                <span class="user-title-badge ${getTitleClassName(title)}">${title}</span>
+            </div>
+            <div class="message-text">${escapeHTML(msgData.message)}</div>
+        </div>
+    `;
+
+    // Redirection on profile clicking
+    row.querySelector('.message-pfp').addEventListener('click', () => {
+        window.location.href = `stats.html`; // Redirects seamlessly to Stats & Friends Page
+    });
+    row.querySelector('.message-username').addEventListener('click', () => {
+        window.location.href = `stats.html`;
+    });
+
+    chatMessagesArea.appendChild(row);
+}
+
+// Post message functionality
+async function sendMessage() {
+    const val = chatTextInput.value.trim();
+    if (!val || !localUserData) return;
+
+    chatTextInput.value = "";
 
     try {
-        const authorTitle = localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member");
-        
-        // 1. Add message history document into Firestore
-        await addDoc(collection(db, "global_messages"), {
+        await addDoc(collection(db, "messages"), {
             uid: currentUserUid,
             username: localUserData.username || "Player",
             pfp: localUserData.pfp || "default",
-            title: authorTitle,
-            text: textVal,
+            title: localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member"),
+            message: val,
+            channel: activeChannel,
             timestamp: serverTimestamp()
         });
 
-        // 2. Increment user's dynamic statistical message count
+        // Update sender's messages sent count metric dynamically
+        const userDocRef = doc(db, "users", currentUserUid);
+        const currentCount = Number(localUserData.messagesSent || localUserData.messages || 0);
         await updateDoc(userDocRef, {
-            messagesSent: increment(1),
-            messages: increment(1)
+            messagesSent: currentCount + 1
         });
 
-        chatMessageInput.value = "";
-    } catch (err) {
-        console.error("Failed to post chat message: ", err);
-    } finally {
-        chatMessageInput.disabled = false;
-        sendMsgBtn.disabled = false;
-        chatMessageInput.focus();
+    } catch (e) {
+        console.error("Message could not be saved: ", e);
     }
+}
+
+chatSendBtn.addEventListener('click', sendMessage);
+chatTextInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
 });
+
+// Load Registered System Users Sidebar
+function listenToActiveUsers() {
+    onSnapshot(collection(db, "users"), (snapshot) => {
+        usersSidebarList.innerHTML = "";
+        snapshot.forEach((userDoc) => {
+            const data = userDoc.data();
+            const title = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
+            const pfpImg = getBlookImgUrl(data.pfp);
+
+            const row = document.createElement('div');
+            row.className = "sidebar-user-row";
+            row.innerHTML = `
+                <img src="${pfpImg}" class="sidebar-user-pfp" alt="User">
+                <div class="sidebar-user-info">
+                    <span class="sidebar-username" title="${data.username}">${data.username}</span>
+                    <span class="user-title-badge ${getTitleClassName(title)}" style="font-size: 0.55rem; padding: 2px 5px;">${title}</span>
+                </div>
+            `;
+            
+            row.addEventListener('click', () => {
+                window.location.href = `stats.html`;
+            });
+
+            usersSidebarList.appendChild(row);
+        });
+    });
+}
+
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
 </script>
 </body>
 </html>
