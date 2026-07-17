@@ -303,7 +303,7 @@ body{
    NEWS AREA DESIGN (STRETCHED)
 ========================= */
 .news-header-section {
-    max-width: 1150px; /* Stretched out from 850px */
+    max-width: 1150px;
     width: 100%;
     margin: 40px auto 10px auto;
     padding: 0 24px;
@@ -321,7 +321,7 @@ body{
 
 .news-feed {
     flex: 1;
-    max-width: 1150px; /* Stretched out from 850px */
+    max-width: 1150px;
     width: 100%;
     margin: 10px auto 40px auto;
     padding: 0 24px;
@@ -336,7 +336,7 @@ body{
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    padding: 35px; /* Slightly increased internal spacing for the wider format */
+    padding: 35px;
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -381,7 +381,7 @@ body{
 
 .news-banner-img {
     width: 100%;
-    max-height: 400px; /* Increased height restriction to scale beautifully with the new wider container */
+    max-height: 400px;
     object-fit: cover;
     border-radius: 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -665,7 +665,9 @@ body{
             </div>
             
             <div class="form-group">
-                <label for="news-image">Optional Image URL</label>
+                <label for="news-image-file">Upload Image (Optional)</label>
+                <input type="file" id="news-image-file" class="form-input" accept="image/*">
+                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 4px; font-weight: bold;">Or use an Image URL instead:</div>
                 <input type="url" id="news-image" class="form-input" placeholder="https://example.com/image.png">
             </div>
             
@@ -698,6 +700,7 @@ import {
     orderBy,
     serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -712,6 +715,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // DOM Nodes
 const tokenCounterValue = document.getElementById('token-counter-value');
@@ -724,6 +728,7 @@ const newsForm = document.getElementById('news-form');
 const editDocIdInput = document.getElementById('edit-doc-id');
 const newsTitleInput = document.getElementById('news-title');
 const newsIconInput = document.getElementById('news-icon');
+const newsImageFileInput = document.getElementById('news-image-file');
 const newsImageInput = document.getElementById('news-image');
 const newsBodyInput = document.getElementById('news-body');
 const modalTitleText = document.getElementById('modal-title-text');
@@ -897,6 +902,7 @@ createNewsBtn.addEventListener('click', () => {
     editDocIdInput.value = "";
     newsTitleInput.value = "";
     newsIconInput.value = "campaign";
+    newsImageFileInput.value = "";
     newsImageInput.value = "";
     newsBodyInput.value = "";
     
@@ -909,6 +915,7 @@ function openNewsModalForEdit(docId, data) {
     editDocIdInput.value = docId;
     newsTitleInput.value = data.title || "";
     newsIconInput.value = data.icon || "campaign";
+    newsImageFileInput.value = ""; // Reset file selection on edit opening
     newsImageInput.value = data.image || "";
     newsBodyInput.value = data.content || "";
     
@@ -928,7 +935,7 @@ newsModal.addEventListener('click', (e) => { if (e.target === newsModal) closeNe
 newsForm.addEventListener('submit', async () => {
     const titleVal = newsTitleInput.value.trim();
     const iconVal = newsIconInput.value;
-    const imageVal = newsImageInput.value.trim();
+    let imageVal = newsImageInput.value.trim();
     const bodyVal = newsBodyInput.value.trim();
     const editId = editDocIdInput.value;
 
@@ -940,6 +947,15 @@ newsForm.addEventListener('submit', async () => {
     try {
         submitNewsBtn.disabled = true;
         submitNewsBtn.textContent = "Processing...";
+
+        // If a file is selected, upload it to Storage first
+        const file = newsImageFileInput.files[0];
+        if (file) {
+            submitNewsBtn.textContent = "Uploading image...";
+            const storageRef = ref(storage, `news/${Date.now()}_${file.name}`);
+            const uploadSnapshot = await uploadBytes(storageRef, file);
+            imageVal = await getDownloadURL(uploadSnapshot.ref);
+        }
 
         const payload = {
             title: titleVal,
