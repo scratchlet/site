@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Chat Room</title>
+<title>Scratchlet - Chat</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,8 +240,257 @@ body{
 }
 
 /* =========================
-   BUTTONS
+   CHAT BOX CONTAINER
 ========================= */
+.chat-wrapper {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+}
+
+.card-container {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    min-height: 500px;
+}
+
+/* =========================
+   CHANNELS / TABS
+========================= */
+.chat-tabs-header {
+    display: flex;
+    background: rgba(0,0,0,0.3);
+    border-radius: 14px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 10px;
+    color: rgba(255,255,255,0.6);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+
+.tab-btn.active {
+    background: #ff9b2f;
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 155, 47, 0.3);
+}
+
+/* =========================
+   MESSAGES AREA (ALL LEFT)
+========================= */
+.messages-box {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+    margin-bottom: 15px;
+}
+
+.messages-box::-webkit-scrollbar {
+    width: 6px;
+    display: block;
+}
+
+.messages-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 99px;
+}
+
+/* MESSAGE ROW */
+.msg-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    animation: fadeInMsg 0.2s ease-out;
+    max-width: 90%;
+    align-self: flex-start; /* All messages aligned to the left */
+}
+
+@keyframes fadeInMsg {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-pfp {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.msg-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.msg-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.msg-username {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #ffeed1;
+}
+
+/* Micro badges for roles in chat */
+.user-title-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
+.title-founder {
+    background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
+    background-size: 300% 300%;
+    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.title-owner {
+    background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    color: #fffde6;
+    text-shadow: 0 1px 2px rgba(139, 69, 0, 0.8);
+    border: 1px solid #ffe680;
+}
+
+.title-co-owner {
+    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
+    background-size: 200% 100%;
+    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    border: 1px solid #ffffff;
+}
+
+.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; }
+.title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
+.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); border: 1px solid #e4d5c3; }
+.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; border: 1px solid #80ffff; }
+.title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
+
+@keyframes smoothRainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes smoothHue {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+@keyframes luxurySweep {
+    0% { background-position: 200% 0%; }
+    100% { background-position: -200% 0%; }
+}
+
+.msg-bubble {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px 16px 16px 16px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.empty-chat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    gap: 10px;
+    margin: auto;
+}
+
+.empty-chat .material-icons {
+    font-size: 3rem;
+}
+
+/* =========================
+   FOOTER INPUT AREA
+========================= */
+.chat-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.chat-input:focus {
+    border-color: #ff9b2f;
+}
+
+/* BUTTONS */
 .btn {
     font-family:"Nunito",sans-serif;
     font-weight:900;
@@ -251,7 +500,7 @@ body{
     font-size:0.95rem;
     text-decoration:none;
     display:inline-block;
-    padding:10px 20px;
+    padding:12px 24px;
     border-radius:12px;
     position: relative;
     text-align: center;
@@ -283,291 +532,62 @@ body{
     color: #ff9b2f;
 }
 
-.secondary-btn {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
-}
-
-.danger-btn {
-    background: #ff5252;
-    color: white;
-}
-
-.success-btn {
-    background: #4caf50;
-    color: white;
-}
-
-/* =========================
-   CHAT WINDOW HOUSING
-========================= */
-.chat-container {
-    flex: 1;
-    max-width: 1200px;
-    width: 100%;
-    margin: 30px auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: 1.2fr 3fr 1fr;
-    gap: 20px;
-    position: relative;
-    z-index: 5;
-    height: calc(100vh - 160px);
-}
-
-.card-container {
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 20px;
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-/* Channels Panel (Left) */
-.channels-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.channel-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
-/* Chat Central Panel */
-.chat-messages-wrapper {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    padding-right: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    scrollbar-width: none;
-}
-
-.chat-messages-wrapper::-webkit-scrollbar {
-    display: none;
-}
-
-.chat-input-bar {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.chat-input {
-    flex: 1;
-    background: rgba(0,0,0,0.35);
-    border: 2px solid rgba(255,255,255,0.15);
-    border-radius: 14px;
-    padding: 14px 16px;
-    color: white;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.15s;
-}
-
-.chat-input:focus {
-    border-color: #ff9b2f;
-}
-
-/* Message Styles */
-.message-row {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.message-pfp {
-    width: 42px;
-    height: 42px;
-    object-fit: contain;
-    background: rgba(0,0,0,0.25);
-    border-radius: 8px;
-    padding: 4px;
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-
-.message-pfp:hover {
-    transform: scale(1.05);
-}
-
-.message-content-box {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.message-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.message-username {
-    font-weight: 800;
-    font-size: 0.95rem;
-    color: #ffcc00;
-    cursor: pointer;
-}
-
-.message-username:hover {
-    text-decoration: underline;
-}
-
-.message-text {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: white;
-    word-break: break-word;
-}
-
-/* =========================
-   USER TITLE BADGES (Copied from stats.html)
-========================= */
-.user-title-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 99px;
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-    border: none;
-    font-family: "Nunito", sans-serif;
-    color: white;
-}
-
-.title-founder {
-    background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
-    background-size: 300% 300%;
-    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
-    color: white;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.title-owner {
-    background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
-    background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    color: #fffde6;
-    text-shadow: 0 1px 3px rgba(139, 69, 0, 0.8);
-    border: 1.5px solid #ffe680;
-}
-
-.title-co-owner {
-    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
-    background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    border: 1.5px solid #ffffff;
-}
-
-.title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; box-shadow: 0 0 10px rgba(0, 191, 255, 0.4); }
-.title-admin { background: linear-gradient(135deg, #d81b60, #ff4081); border: 1px solid #ff66b2; }
-.title-artist { background: linear-gradient(135deg, #8d6e63, #d2b48c); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 1px solid #e4d5c3; }
-.title-tester { background: linear-gradient(135deg, #00acc1, #00ffff); color: #004d4d; font-weight: 900; border: 1px solid #80ffff; }
-.title-member { background: linear-gradient(135deg, #ff7f11, #ff9b2f); border: 1px solid #ffb870; }
-
-@keyframes smoothRainbow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-@keyframes smoothHue {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
-}
-@keyframes luxurySweep {
-    0% { background-position: 200% 0%; }
-    100% { background-position: -200% 0%; }
-}
-
-/* User List (Right Sidebar) */
-.user-list-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow-y: auto;
-    scrollbar-width: none;
-}
-
-.user-list-wrapper::-webkit-scrollbar {
-    display: none;
-}
-
-.sidebar-user-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer;
-    transition: background 0.1s;
-}
-
-.sidebar-user-row:hover {
-    background: rgba(255,255,255,0.08);
-}
-
-.sidebar-user-pfp {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-    background: rgba(0,0,0,0.2);
-    border-radius: 6px;
-    padding: 2px;
-}
-
-.sidebar-user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-username {
-    font-weight: 800;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 90px;
-}
-
-/* Loading Layout */
-.loading-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    gap: 10px;
-    color: rgba(255,255,255,0.5);
-}
-
-/* Responsive Media queries */
-@media (max-width: 980px) {
-    .chat-container {
-        grid-template-columns: 1fr;
-        height: auto;
+@media(max-width:980px) {
+    .navbar { 
+        padding: 12px 20px; 
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
     }
-    .user-list-card {
-        display: none;
+
+    .nav-left-group {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .logo-link { 
+        width: auto; 
+        text-align: center; 
+    }
+    
+    .logo { 
+        font-size: 2.2rem; 
+    }
+
+    .nav-right-group {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .hud-badge-bar {
+        max-width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 8px;
+        gap: 4px;
+        border-radius: 25px;
+    }
+
+    .hud-item {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+
+    .hud-item::after {
+        top: auto;
+        bottom: 46px;
+        transform: translateX(-50%) translateY(6px);
+    }
+    
+    .hud-item:hover::after {
+        transform: translateX(-50%) translateY(0);
     }
 }
 </style>
@@ -606,38 +626,30 @@ body{
     </div>
 </nav>
 
-<main class="chat-container">
+<main class="chat-wrapper">
     <section class="card-container">
-        <h2 style="font-family: 'Titan One', cursive; font-size: 1.4rem; margin-bottom: 15px; color: #ff9b2f;">Channels</h2>
-        <div class="channels-list">
-            <button class="btn primary-btn channel-btn" data-channel="global">
-                <span class="material-icons">public</span> Global Chat
+        <div class="chat-tabs-header">
+            <button class="tab-btn active" data-channel="global">
+                <span class="material-icons">public</span>
+                <span>Global Chat</span>
             </button>
-            <button class="btn secondary-btn channel-btn" data-channel="trading">
-                <span class="material-icons">swap_horiz</span> Trading Chat
+            <button class="tab-btn" data-channel="trade">
+                <span class="material-icons">swap_horizontal_circle</span>
+                <span>Trade Chat</span>
             </button>
         </div>
-    </section>
 
-    <section class="card-container">
-        <div class="chat-messages-wrapper" id="chat-messages-area">
-            <div class="loading-box" id="chat-loader">
-                <span class="material-icons" style="font-size: 3rem; animation: spin 2s linear infinite;">sync</span>
-                <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
-                <div style="font-family: 'Titan One', cursive; font-size: 1.2rem;">Loading...</div>
+        <div class="messages-box" id="chat-messages">
+            <div class="empty-chat">
+                <span class="material-icons">forum</span>
+                <div>Loading chat room...</div>
             </div>
         </div>
 
-        <div class="chat-input-bar">
-            <input type="text" class="chat-input" id="chat-text-input" placeholder="Say something..." autocomplete="off">
-            <button class="btn success-btn" id="chat-send-btn" style="padding: 14px 22px;">Send</button>
+        <div class="chat-input-row">
+            <input type="text" class="chat-input" id="message-input" placeholder="Type a friendly message..." maxlength="120">
+            <button class="btn primary-btn" id="send-btn">Send</button>
         </div>
-    </section>
-
-    <section class="card-container user-list-card">
-        <h2 style="font-family: 'Titan One', cursive; font-size: 1.1rem; margin-bottom: 15px; color: #ff9b2f;">Users</h2>
-        <div class="user-list-wrapper" id="users-sidebar-list">
-            </div>
     </section>
 </main>
 
@@ -648,8 +660,9 @@ import {
     getFirestore, 
     doc, 
     getDoc, 
-    getDocs, 
+    getDocs,
     addDoc,
+    deleteDoc,
     updateDoc, 
     onSnapshot, 
     query, 
@@ -657,7 +670,7 @@ import {
     where,
     orderBy,
     limit,
-    serverTimestamp
+    increment
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -673,8 +686,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
 
 const titlePresets = [
     { id: "Founder", className: "title-founder", name: "Founder" },
@@ -692,24 +703,23 @@ function getTitleClassName(titleStr) {
     return matched ? matched.className : "title-member";
 }
 
-// Blooks list to resolve image paths (Copied register logic from your stats page)
 const packsRegistry = {
     breakfast: {
         name: "Breakfast Pack",
         blooks: [
-            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-            {name:"Cereal",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-            {name:"Tomato Soup",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
-            {name:"Yogurt",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-            {name:"Breakfast Combo",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-            {name:"Orange Juice",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-            {name:"Milk",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-            {name:"Waffle",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-            {name:"Pancakes",rarity:"Epic",color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-            {name:"French Toast",rarity:"Epic",color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-            {name:"Pizza",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-            {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-            {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
+            {name:"Toast",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
+            {name:"Cereal",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
+            {name:"Tomato Soup",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
+            {name:"Yogurt",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
+            {name:"Breakfast Combo",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
+            {name:"Orange Juice",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
+            {name:"Milk",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
+            {name:"Waffle",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
+            {name:"Pancakes",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
+            {name:"French Toast",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
+            {name:"Pizza",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
+            {name:"Strawberry Milk",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
+            {name:"Chocolate Milk",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
         ]
     }
 };
@@ -723,204 +733,193 @@ for (const key in packsRegistry) {
     });
 }
 
+const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
 function getBlookImgUrl(blookName) {
     if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
     const found = allBlooksFlattened.find(b => b.name === blookName);
     return found ? found.image : DEFAULT_PFP;
 }
 
-// DOM Cache
+// DOM Elements
 const tokenCounterValue = document.getElementById('token-counter-value');
-const chatMessagesArea = document.getElementById('chat-messages-area');
-const chatTextInput = document.getElementById('chat-text-input');
-const chatSendBtn = document.getElementById('chat-send-btn');
-const usersSidebarList = document.getElementById('users-sidebar-list');
-const channelBtns = document.querySelectorAll('.channel-btn');
+const messageInput = document.getElementById('message-input');
+const sendBtn = document.getElementById('send-btn');
+const chatMessages = document.getElementById('chat-messages');
+const tabBtns = document.querySelectorAll('.tab-btn');
 
 let currentUserUid = null;
 let localUserData = null;
-let activeChannel = "global";
-let currentUnsubscribe = null;
+let currentChannel = "global"; // Default channel tab
+let activeChatListener = null;
 
-// Auth Sync
+// Tab Channel Clicking
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const nextChannel = btn.getAttribute('data-channel');
+        if (nextChannel !== currentChannel) {
+            currentChannel = nextChannel;
+            setupChatRoom();
+        }
+    });
+});
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
+        const userDocRef = doc(db, "users", currentUserUid);
         
-        // Dynamic Token counter sync
-        onSnapshot(doc(db, "users", currentUserUid), (snap) => {
+        onSnapshot(userDocRef, (snap) => {
             if (snap.exists()) {
                 localUserData = snap.data();
-                tokenCounterValue.textContent = Number(localUserData.tokens || 0).toLocaleString();
+                tokenCounterValue.textContent = (localUserData.tokens || 0).toLocaleString();
             }
         });
-
-        // Initialize Chat Messages & User Sidebar
-        listenToChannel(activeChannel);
-        listenToActiveUsers();
 
         document.getElementById('logout-hud-btn').addEventListener('click', () => {
             signOut(auth).then(() => { window.location.href = "login.html"; });
         });
+
+        setupChatRoom();
     } else {
         window.location.href = "login.html";
     }
 });
 
-// Switch Channels
-channelBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const selected = btn.getAttribute('data-channel');
-        if (selected === activeChannel) return;
+// Real-Time Chat Listener
+function setupChatRoom() {
+    if (activeChatListener) {
+        activeChatListener(); // Unsubscribe previous real-time channel
+    }
 
-        // Visual adjustment
-        channelBtns.forEach(b => {
-            b.classList.remove('primary-btn');
-            b.classList.add('secondary-btn');
-        });
-        btn.classList.remove('secondary-btn');
-        btn.classList.add('primary-btn');
-
-        activeChannel = selected;
-        listenToChannel(selected);
-    });
-});
-
-// Load Realtime Channel Messages
-function listenToChannel(channelId) {
-    if (currentUnsubscribe) currentUnsubscribe();
-
-    // Reset view with standard "Loading" state inside messages window
-    chatMessagesArea.innerHTML = `
-        <div class="loading-box" id="chat-loader">
-            <span class="material-icons" style="font-size: 3rem; animation: spin 2s linear infinite;">sync</span>
-            <div style="font-family: 'Titan One', cursive; font-size: 1.2rem;">Loading...</div>
+    chatMessages.innerHTML = `
+        <div class="empty-chat">
+            <span class="material-icons">forum</span>
+            <div>Connecting to ${currentChannel === 'global' ? 'Global' : 'Trade'} Chat...</div>
         </div>
     `;
 
-    // Connect real-time message stream (listening to `messages` collection query filter)
-    const q = query(
+    const chatQuery = query(
         collection(db, "messages"),
-        where("channel", "==", channelId),
-        orderBy("timestamp", "asc"),
-        limit(80)
+        where("channel", "==", currentChannel),
+        orderBy("timestamp", "asc")
     );
 
-    currentUnsubscribe = onSnapshot(q, (snapshot) => {
-        const loader = document.getElementById('chat-loader');
-        if (loader) loader.remove();
-
-        // Save scroll position
-        const shouldScroll = chatMessagesArea.scrollHeight - chatMessagesArea.scrollTop <= chatMessagesArea.clientHeight + 100;
-
-        snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-                const data = change.doc.data();
-                appendMessage(data);
-            }
-        });
-
-        if (shouldScroll) {
-            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
-        }
-    });
-}
-
-function appendMessage(msgData) {
-    const row = document.createElement('div');
-    row.className = "message-row";
-
-    const title = msgData.username === "SuperMemes_64" ? "Founder" : (msgData.title || "Member");
-    const pfpImg = getBlookImgUrl(msgData.pfp);
-
-    row.innerHTML = `
-        <img src="${pfpImg}" class="message-pfp" alt="PFP">
-        <div class="message-content-box">
-            <div class="message-header">
-                <span class="message-username">${msgData.username}</span>
-                <span class="user-title-badge ${getTitleClassName(title)}">${title}</span>
-            </div>
-            <div class="message-text">${escapeHTML(msgData.message)}</div>
-        </div>
-    `;
-
-    // Redirection on profile clicking
-    row.querySelector('.message-pfp').addEventListener('click', () => {
-        window.location.href = `stats.html`; // Redirects seamlessly to Stats & Friends Page
-    });
-    row.querySelector('.message-username').addEventListener('click', () => {
-        window.location.href = `stats.html`;
-    });
-
-    chatMessagesArea.appendChild(row);
-}
-
-// Post message functionality
-async function sendMessage() {
-    const val = chatTextInput.value.trim();
-    if (!val || !localUserData) return;
-
-    chatTextInput.value = "";
-
-    try {
-        await addDoc(collection(db, "messages"), {
-            uid: currentUserUid,
-            username: localUserData.username || "Player",
-            pfp: localUserData.pfp || "default",
-            title: localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member"),
-            message: val,
-            channel: activeChannel,
-            timestamp: serverTimestamp()
-        });
-
-        // Update sender's messages sent count metric dynamically
-        const userDocRef = doc(db, "users", currentUserUid);
-        const currentCount = Number(localUserData.messagesSent || localUserData.messages || 0);
-        await updateDoc(userDocRef, {
-            messagesSent: currentCount + 1
-        });
-
-    } catch (e) {
-        console.error("Message could not be saved: ", e);
-    }
-}
-
-chatSendBtn.addEventListener('click', sendMessage);
-chatTextInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-// Load Registered System Users Sidebar
-function listenToActiveUsers() {
-    onSnapshot(collection(db, "users"), (snapshot) => {
-        usersSidebarList.innerHTML = "";
-        snapshot.forEach((userDoc) => {
-            const data = userDoc.data();
-            const title = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
-            const pfpImg = getBlookImgUrl(data.pfp);
-
-            const row = document.createElement('div');
-            row.className = "sidebar-user-row";
-            row.innerHTML = `
-                <img src="${pfpImg}" class="sidebar-user-pfp" alt="User">
-                <div class="sidebar-user-info">
-                    <span class="sidebar-username" title="${data.username}">${data.username}</span>
-                    <span class="user-title-badge ${getTitleClassName(title)}" style="font-size: 0.55rem; padding: 2px 5px;">${title}</span>
+    activeChatListener = onSnapshot(chatQuery, (snapshot) => {
+        chatMessages.innerHTML = "";
+        
+        if (snapshot.empty) {
+            chatMessages.innerHTML = `
+                <div class="empty-chat">
+                    <span class="material-icons">chat_bubble_outline</span>
+                    <div>No messages here yet. Be the first to start the conversation!</div>
                 </div>
             `;
-            
-            row.addEventListener('click', () => {
-                window.location.href = `stats.html`;
-            });
+            return;
+        }
 
-            usersSidebarList.appendChild(row);
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            renderMessage(data);
         });
+
+        // Instantly scroll chat log to the bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     });
+}
+
+function renderMessage(data) {
+    const roleTitle = data.username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
+    const pfpUrl = getBlookImgUrl(data.pfp);
+
+    const row = document.createElement('div');
+    row.className = "msg-row";
+    row.innerHTML = `
+        <img src="${pfpUrl}" class="msg-pfp">
+        <div class="msg-content-wrapper">
+            <div class="msg-header">
+                <span class="msg-username">${data.username}</span>
+                <span class="user-title-badge ${getTitleClassName(roleTitle)}">${roleTitle}</span>
+            </div>
+            <div class="msg-bubble">${escapeHTML(data.text)}</div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
 }
 
 function escapeHTML(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
 }
+
+// ----------------------------------------------------
+// RESTORED: 20 MESSAGE CHAT CLEANER
+// ----------------------------------------------------
+async function cleanOldMessages(channel) {
+    try {
+        const qClean = query(
+            collection(db, "messages"),
+            where("channel", "==", channel),
+            orderBy("timestamp", "desc")
+        );
+        const snap = await getDocs(qClean);
+        
+        if (snap.size > 20) {
+            // Retrieve any message documents positioned outside of the top 20 newest list
+            const docsToDelete = snap.docs.slice(20);
+            for (const oldDoc of docsToDelete) {
+                await deleteDoc(doc(db, "messages", oldDoc.id));
+            }
+        }
+    } catch (e) {
+        console.error("Error running old messages cleanup: ", e);
+    }
+}
+
+async function handleSendMessage() {
+    const textVal = messageInput.value.trim();
+    if (!textVal || !localUserData) return;
+
+    messageInput.value = "";
+    sendBtn.disabled = true;
+
+    try {
+        const userTitle = localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member");
+
+        // Write the new message directly to Firestore
+        await addDoc(collection(db, "messages"), {
+            username: localUserData.username || "Player",
+            title: userTitle,
+            pfp: localUserData.pfp || "default",
+            text: textVal,
+            channel: currentChannel,
+            timestamp: Date.now()
+        });
+
+        // Add 1 to total message metrics count
+        const userDocRef = doc(db, "users", currentUserUid);
+        await updateDoc(userDocRef, {
+            messagesSent: increment(1)
+        });
+
+        // Run the background cleanup process to keep only the newest 20 messages
+        await cleanOldMessages(currentChannel);
+
+    } catch (err) {
+        console.error("Failed to send message: ", err);
+    } finally {
+        sendBtn.disabled = false;
+        messageInput.focus();
+    }
+}
+
+// Event Listeners
+sendBtn.addEventListener('click', handleSendMessage);
+messageInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleSendMessage();
+});
 </script>
 </body>
 </html>
