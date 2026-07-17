@@ -309,14 +309,13 @@ body{
 }
 
 /* =========================
-   MESSAGES AREA (ALL LEFT)
+   MESSAGES AREA (DISCORD RECTANGLES)
 ========================= */
 .messages-box {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
     padding-right: 8px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.2) transparent;
@@ -333,18 +332,32 @@ body{
     border-radius: 99px;
 }
 
-/* MESSAGE ROW */
+/* DISCORD LAYOUT STYLE RULES */
 .msg-row {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 16px;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: transparent;
+    transition: background 0.15s;
     animation: fadeInMsg 0.2s ease-out;
-    max-width: 90%;
-    align-self: flex-start; /* All messages aligned to the left */
+}
+
+.msg-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* DISCORD MENTION HIGHLIGHT SYSTEM */
+.msg-row.ping-highlight {
+    background: rgba(255, 172, 51, 0.12) !important;
+    border-left: 3.5px solid #ffac33;
+    padding-left: 12.5px; 
 }
 
 @keyframes fadeInMsg {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -353,7 +366,7 @@ body{
     height: 42px;
     object-fit: contain;
     background: rgba(0,0,0,0.25);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 4px;
     flex-shrink: 0;
 }
@@ -361,7 +374,8 @@ body{
 .msg-content-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+    flex: 1;
 }
 
 .msg-header {
@@ -375,6 +389,11 @@ body{
     font-weight: 800;
     font-size: 0.95rem;
     color: #ffeed1;
+    cursor: pointer;
+}
+
+.msg-username:hover {
+    text-decoration: underline;
 }
 
 /* Micro badges for roles in chat */
@@ -390,7 +409,7 @@ body{
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-/* REMADE HIGHER-QUALITY BADGE ANIMATIONS */
+/* HIGHER-QUALITY BADGE ANIMATIONS */
 .title-founder {
     background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
     background-size: 300% 300%;
@@ -436,16 +455,25 @@ body{
     100% { background-position: -200% 0%; }
 }
 
-.msg-bubble {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 4px 16px 16px 16px;
-    padding: 10px 14px;
-    font-size: 0.95rem;
-    line-height: 1.4;
+.msg-text-node {
+    font-size: 0.96rem;
+    line-height: 1.5;
     word-break: break-word;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* INLINE PING STYLING FOR MENTION TEXT */
+.chat-mention-tag {
+    background: rgba(255, 172, 51, 0.25);
+    color: #ffcc66;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.chat-mention-tag:hover {
+    background: rgba(255, 172, 51, 0.4);
+    color: #ffffff;
 }
 
 .empty-chat {
@@ -786,7 +814,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Helper to safely parse any Firestore timestamp format (Objects, numbers, or empty values)
+// Helper to safely check timestamps across fields
 function getTimestampMs(ts) {
     if (!ts) return 0;
     if (typeof ts.toMillis === 'function') return ts.toMillis();
@@ -807,7 +835,6 @@ function setupChatRoom() {
         </div>
     `;
 
-    // Fetch messages filtered only by channel
     const chatQuery = query(
         collection(db, "messages"),
         where("channel", "==", currentChannel)
@@ -826,7 +853,6 @@ function setupChatRoom() {
             return;
         }
 
-        // Convert query snapshot to array, sort by timestamp client-side using robust helper
         const sortedDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
             .sort((a, b) => getTimestampMs(a.timestamp) - getTimestampMs(b.timestamp));
 
@@ -834,18 +860,24 @@ function setupChatRoom() {
             renderMessage(data);
         });
 
-        // Instantly scroll chat log to the bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 }
 
+// Render Discord style structural rows with mention matching configurations
 function renderMessage(data) {
     const username = data.username || "Player";
     const roleTitle = username === "SuperMemes_64" ? "Founder" : (data.title || "Member");
     const pfpUrl = getBlookImgUrl(data.pfp);
+    const textRaw = data.text || "";
+
+    // Determine if the client user is mentioned anywhere inside this document structure
+    const currentClientName = (localUserData && localUserData.username) ? localUserData.username : "";
+    const isPinged = currentClientName && textRaw.toLowerCase().includes(`@${currentClientName.toLowerCase()}`);
 
     const row = document.createElement('div');
-    row.className = "msg-row";
+    row.className = `msg-row ${isPinged ? 'ping-highlight' : ''}`;
+    
     row.innerHTML = `
         <img src="${pfpUrl}" class="msg-pfp">
         <div class="msg-content-wrapper">
@@ -853,20 +885,49 @@ function renderMessage(data) {
                 <span class="msg-username">${username}</span>
                 <span class="user-title-badge ${getTitleClassName(roleTitle)}">${roleTitle}</span>
             </div>
-            <div class="msg-bubble">${escapeHTML(data.text)}</div>
+            <div class="msg-text-node">${parseMentionsHTML(textRaw)}</div>
         </div>
     `;
+
+    // Click on a username label to seamlessly draft an instant mention ping
+    row.querySelector('.msg-username').addEventListener('click', () => {
+        appendPingToInput(username);
+    });
+
     chatMessages.appendChild(row);
 }
 
-function escapeHTML(str) {
-    if (str === null || str === undefined) return ""; // Crash safety if message text is missing
-    return String(str).replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-    );
+// Appends @username directly onto the layout message field
+function appendPingToInput(targetUser) {
+    const currentVal = messageInput.value.trim();
+    if (currentVal) {
+        messageInput.value = currentVal + ` @${targetUser} `;
+    } else {
+        messageInput.value = `@${targetUser} `;
+    }
+    messageInput.focus();
 }
 
-// RESTORED: 20 MESSAGE CHAT CLEANER
+// Safely structuralize code text blocks while styling all target @pings beautifully
+function parseMentionsHTML(str) {
+    if (str === null || str === undefined) return "";
+    
+    // Step 1: Securely render basic escaping transforms
+    let escaped = String(str).replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+
+    // Step 2: Use regex to capture all instances of @alphanumeric names and stylize them
+    return escaped.replace(/@([a-zA-Z0-9_-]+)/g, (match, username) => {
+        return `<span class="chat-mention-tag" onclick="window.appendMentionFromTag('${username}')">${match}</span>`;
+    });
+}
+
+// Bind to window to allow click tracking inside dynamic HTML injection strings securely
+window.appendMentionFromTag = function(username) {
+    appendPingToInput(username);
+};
+
 async function cleanOldMessages(channel) {
     try {
         const qClean = query(
@@ -876,11 +937,9 @@ async function cleanOldMessages(channel) {
         const snap = await getDocs(qClean);
         
         if (snap.size > 20) {
-            // Sort client-side descending using robust helper to find older messages
             const sortedDocs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
                 .sort((a, b) => getTimestampMs(b.timestamp) - getTimestampMs(a.timestamp));
 
-            // Keep the first 20 (newest) and delete the rest
             const docsToDelete = sortedDocs.slice(20);
             for (const oldDoc of docsToDelete) {
                 await deleteDoc(doc(db, "messages", oldDoc.id));
@@ -901,7 +960,6 @@ async function handleSendMessage() {
     try {
         const userTitle = localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member");
 
-        // Write the new message directly to Firestore
         await addDoc(collection(db, "messages"), {
             username: localUserData.username || "Player",
             title: userTitle,
@@ -911,13 +969,11 @@ async function handleSendMessage() {
             timestamp: Date.now()
         });
 
-        // Add 1 to total message metrics count
         const userDocRef = doc(db, "users", currentUserUid);
         await updateDoc(userDocRef, {
             messagesSent: increment(1)
         });
 
-        // Run the background cleanup process to keep only the newest 20 messages
         await cleanOldMessages(currentChannel);
 
     } catch (err) {
