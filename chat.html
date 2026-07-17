@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Chat</title>
+<title>Scratchlet - Chat Channels</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,204 +240,197 @@ body{
 }
 
 /* =========================
-   BUTTONS
+   STRETCHED CHAT HOUSING (1350px width!)
 ========================= */
-.btn {
-    font-family:"Nunito",sans-serif;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-    letter-spacing:.3px;
-    font-size:0.95rem;
-    text-decoration:none;
-    display:inline-block;
-    padding:10px 20px;
-    border-radius:12px;
-    position: relative;
-    text-align: center;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-}
-
-.btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none !important;
-    transform: none !important;
-}
-
-.btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-    filter: brightness(1.05);
-}
-
-.btn:active:not(:disabled) {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-    filter: brightness(0.95);
-}
-
-.primary-btn {
-    background: #ffffff;
-    color: #ff9b2f;
-}
-
-/* =========================
-   CHAT HOUSING
-========================= */
-.chat-wrapper {
+.chat-container-layout {
     flex: 1;
-    max-width: 850px;
-    width: 100%;
-    margin: 40px auto;
-    padding: 0 20px;
+    max-width: 1350px;
+    width: 95%;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: 240px 1fr 280px;
+    gap: 20px;
     position: relative;
     z-index: 5;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-container {
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 24px;
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    height: 70vh;
+    height: calc(100vh - 160px);
     min-height: 500px;
 }
 
-.chat-header {
+.card-container {
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* =========================
+   PANEL 1: CHANNELS SIDEBAR
+========================= */
+.channels-sidebar {
+    gap: 15px;
+}
+
+.sidebar-title {
+    font-family: 'Titan One', cursive;
+    font-size: 1.3rem;
+    color: #ff9b2f;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.channel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.channel-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 15px;
-}
-
-.chat-title {
-    font-family: 'Titan One', cursive;
-    font-size: 1.8rem;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
-}
-
-/* NOTICE BANNER AT TOP OF CHAT BOX */
-.cleanup-banner {
-    background: rgba(255, 82, 82, 0.18);
-    border: 1.5px solid #ff5252;
-    padding: 12px 16px;
-    border-radius: 14px;
+    color: rgba(255,255,255,0.8);
     font-weight: 800;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.1);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.cleanup-banner .material-icons {
-    color: #ff5252;
+.channel-btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: white;
+}
+
+.channel-btn.active {
+    background: #ff9b2f;
+    color: white;
+    border-color: #ffcc00;
+    box-shadow: 0 4px 12px rgba(255, 155, 47, 0.4);
+}
+
+.channel-btn .material-icons {
     font-size: 1.4rem;
 }
 
-/* CHAT FEED CONTAINER */
-.chat-messages-container {
+/* =========================
+   PANEL 2: MAIN CHAT PANEL
+========================= */
+.chat-main-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.chat-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.current-channel-tag {
+    font-family: 'Titan One', cursive;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+}
+
+.messages-scroller {
     flex: 1;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.22);
-    border-radius: 16px;
-    padding: 15px;
+    padding-right: 10px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border: 1px solid rgba(255,255,255,0.06);
     scrollbar-width: none;
 }
 
-.chat-messages-container::-webkit-scrollbar {
+.messages-scroller::-webkit-scrollbar {
     display: none;
 }
 
-/* CHAT MESSAGE ROWS */
-.message-row {
+/* MESSAGE BUBBLES */
+.chat-msg-row {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     padding: 12px 16px;
     display: flex;
     gap: 12px;
-    align-items: flex-start;
-    animation: slideIn 0.15s ease-out;
+    position: relative;
+    max-width: 90%;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.message-pfp {
+.chat-msg-pfp {
     width: 44px;
     height: 44px;
     object-fit: contain;
     background: rgba(0,0,0,0.25);
     border-radius: 8px;
-    padding: 4px;
+    padding: 3px;
     flex-shrink: 0;
 }
 
-.message-sender-name {
+.chat-msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chat-msg-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chat-msg-name {
     font-weight: 800;
     font-size: 1rem;
     color: #ff9b2f;
 }
 
-.message-body {
-    font-size: 1rem;
-    line-height: 1.4;
-    color: white;
-    word-break: break-word;
-}
-
-/* USER TITLE TAGS */
+/* User Badges Matching stats.html */
 .user-title-badge {
-    display: inline-block;
-    padding: 4px 12px;
+    padding: 2px 10px;
     border-radius: 99px;
     font-size: 0.7rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     color: white;
-    font-family: "Nunito", sans-serif;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .title-founder {
     background: linear-gradient(45deg, #ff0055, #ff5500, #ffcc00, #00ff55, #0055ff, #9900ff, #ff0055);
     background-size: 300% 300%;
-    animation: smoothRainbow 4s ease infinite, smoothHue 8s linear infinite;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    animation: smoothRainbow 4s ease infinite;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .title-owner {
     background: linear-gradient(135deg, #b8860b 0%, #ffd700 25%, #fff8dc 50%, #ffd700 75%, #b8860b 100%);
     background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    color: #fffde6;
-    text-shadow: 0 1px 3px rgba(139, 69, 0, 0.8);
-    border: 1.5px solid #ffe680;
+    animation: luxurySweep 2.5s infinite;
+    border: 1px solid #ffe680;
 }
 
 .title-co-owner {
-    background: linear-gradient(135deg, #555 0%, #cccccc 25%, #ffffff 50%, #cccccc 75%, #555 100%);
-    background-size: 200% 100%;
-    animation: luxurySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    border: 1.5px solid #ffffff;
+    background: linear-gradient(135deg, #555, #ffffff, #555);
+    border: 1px solid #ffffff;
 }
 
 .title-developer { background: linear-gradient(135deg, #0055ff, #00bfff); border: 1px solid #3399ff; }
@@ -451,112 +444,191 @@ body{
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
-@keyframes smoothHue {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
-}
 @keyframes luxurySweep {
     0% { background-position: 200% 0%; }
     100% { background-position: -200% 0%; }
 }
 
-/* CHAT CONTROLS */
-.chat-controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+.chat-msg-time {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
 }
 
-.chat-input {
+.chat-msg-text {
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* CHAT INPUT PANEL */
+.chat-input-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+.chat-textarea {
     flex: 1;
-    background: rgba(0,0,0,0.35);
-    border: 2px solid rgba(255,255,255,0.15);
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 14px;
     padding: 14px 18px;
     color: white;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     outline: none;
+    resize: none;
+    height: 52px;
+    max-height: 52px;
     transition: border-color 0.15s;
 }
 
-.chat-input:focus {
+.chat-textarea:focus {
     border-color: #ff9b2f;
 }
 
-.empty-state {
+.send-btn {
+    background: #ff9b2f;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    color: rgba(255,255,255,0.4);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+}
+
+.send-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+/* =========================
+   PANEL 3: PLAYER LIST (ONLINE / OFFLINE)
+========================= */
+.player-list-sidebar {
+    gap: 15px;
+}
+
+.player-list-scroller {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
-    margin: auto;
+    scrollbar-width: none;
 }
 
-.empty-state .material-icons {
-    font-size: 3.5rem;
+.player-list-scroller::-webkit-scrollbar {
+    display: none;
 }
 
-/* RESPONSIVE DESIGN */
-@media(max-width:980px) {
-    .navbar { 
-        padding: 12px 20px; 
-        flex-direction: column;
-        align-items: center;
+.player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 10px 12px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-pfp {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    background: rgba(0,0,0,0.25);
+    border-radius: 6px;
+    padding: 3px;
+}
+
+.player-name-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.player-username {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: white;
+}
+
+/* Status Dot Indicator */
+.player-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.6);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px currentColor;
+}
+
+.status-dot.online {
+    background-color: #4caf50;
+    color: #4caf50;
+}
+
+.status-dot.offline {
+    background-color: #9e9e9e;
+    color: #9e9e9e;
+}
+
+/* =================================
+   RESPONSIVE LAYOUTS
+================================= */
+@media(max-width:1100px) {
+    .chat-container-layout {
+        grid-template-columns: 200px 1fr;
+    }
+    .player-list-sidebar {
+        display: none; /* Hide player panel on medium screens to keep chat big */
+    }
+}
+
+@media(max-width:768px) {
+    .chat-container-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: auto;
+    }
+    .channels-sidebar {
+        flex-direction: row;
+        height: auto;
+    }
+    .channel-list {
+        flex-direction: row;
+    }
+    .channel-btn {
+        flex: 1;
         justify-content: center;
-        gap: 12px;
-    }
-
-    .nav-left-group {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .logo-link { 
-        width: auto; 
-        text-align: center; 
-    }
-    
-    .logo { 
-        font-size: 2.2rem; 
-    }
-
-    .nav-right-group {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .hud-badge-bar {
-        max-width: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 4px 8px;
-        gap: 4px;
-        border-radius: 25px;
-    }
-
-    .hud-item {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-    }
-
-    .hud-item::after {
-        top: auto;
-        bottom: 46px;
-        transform: translateX(-50%) translateY(6px);
-    }
-    
-    .hud-item:hover::after {
-        transform: translateX(-50%) translateY(0);
+        padding: 10px;
     }
 }
 </style>
@@ -595,252 +667,319 @@ body{
     </div>
 </nav>
 
-<main class="chat-wrapper">
-    <div class="card-container">
-        <div class="chat-header">
-            <span class="material-icons" style="font-size: 2.2rem; color: #ff9b2f;">forum</span>
-            <h1 class="chat-title">Global Chat</h1>
+<main class="chat-container-layout">
+    
+    <aside class="card-container channels-sidebar">
+        <h3 class="sidebar-title">Channels</h3>
+        <div class="channel-list">
+            <button class="channel-btn active" data-channel="global">
+                <span class="material-icons">public</span>
+                <span>Global</span>
+            </button>
+            <button class="channel-btn" data-channel="trading">
+                <span class="material-icons">swap_horiz</span>
+                <span>Trading</span>
+            </button>
         </div>
+    </aside>
 
-        <div class="cleanup-banner">
-            <span class="material-icons">history</span>
-            <span>Auto-Refresh Active: Messages older than 20 days are permanently deleted from this chat box.</span>
-        </div>
-
-        <div class="chat-messages-container" id="chat-feed">
-            <div class="empty-state">
-                <span class="material-icons">sync</span>
-                <div>Loading chat messages...</div>
+    <section class="card-container chat-main-card">
+        <div class="chat-header-row">
+            <div class="current-channel-tag" id="current-channel-display">
+                <span class="material-icons">public</span>
+                <span>Global Chat</span>
             </div>
         </div>
 
-        <div class="chat-controls">
-            <input type="text" class="chat-input" id="chat-message-input" placeholder="Say something friendly..." autocomplete="off">
-            <button class="btn primary-btn" id="send-chat-btn">Send</button>
-        </div>
-    </div>
+        <div class="messages-scroller" id="chat-scroller">
+            </div>
+
+        <form class="chat-input-bar" id="chat-input-form">
+            <textarea class="chat-textarea" id="chat-text-input" placeholder="Type a message..." maxlength="150" required></textarea>
+            <button class="send-btn" type="submit" id="submit-msg-btn">
+                <span class="material-icons">send</span>
+            </button>
+        </form>
+    </section>
+
+    <aside class="card-container player-list-sidebar">
+        <h3 class="sidebar-title">Players</h3>
+        <div class="player-list-scroller" id="player-list-container">
+            </div>
+    </aside>
+
 </main>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { 
-    getFirestore, 
-    doc, 
-    getDoc, 
-    getDocs,
-    updateDoc, 
-    onSnapshot, 
-    query, 
-    collection, 
-    where,
-    addDoc,
-    deleteDoc,
-    orderBy,
-    Timestamp 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    getFirestore, doc, getDoc, updateDoc, setDoc, collection, 
+    addDoc, onSnapshot, query, orderBy, limit, getDocs, deleteDoc, Timestamp 
+} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
+// TODO: Replace with your actual project's credentials
 const firebaseConfig = {
-    apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
-    authDomain: "scratchlet-194bc.firebaseapp.com",
-    projectId: "scratchlet-194bc",
-    storageBucket: "scratchlet-194bc.firebasestorage.app",
-    messagingSenderId: "480952290764",
-    appId: "1:480952290764:web:0be65205e0b3ff2db16169",
-    measurementId: "G-2T6GS8Y9VN"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-const titlePresets = [
-    { id: "Founder", className: "title-founder" },
-    { id: "Owner", className: "title-owner" },
-    { id: "Co-Owner", className: "title-co-owner" },
-    { id: "Developer", className: "title-developer" },
-    { id: "Admin", className: "title-admin" },
-    { id: "Artist", className: "title-artist" },
-    { id: "Tester", className: "title-tester" },
-    { id: "Member", className: "title-member" }
-];
-
-function getTitleClassName(titleStr) {
-    const matched = titlePresets.find(p => p.id.toLowerCase() === String(titleStr).toLowerCase());
-    return matched ? matched.className : "title-member";
-}
-
-const DEFAULT_PFP = "https://i.postimg.cc/GhxMXGvk/User.webp";
-
-// Flattened registry of Blooks (for profile pictures)
-const packsRegistry = {
-    breakfast: [
-        {name:"Toast", image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-        {name:"Cereal", image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-        {name:"Tomato Soup", image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
-        {name:"Yogurt", image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-        {name:"Breakfast Combo", image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-        {name:"Orange Juice", image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-        {name:"Milk", image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-        {name:"Waffle", image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-        {name:"Pancakes", image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-        {name:"French Toast", image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-        {name:"Pizza", image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-        {name:"Strawberry Milk", image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-        {name:"Chocolate Milk", image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
-    ]
-};
-
-let allBlooksFlattened = [];
-packsRegistry.breakfast.forEach(b => {
-    allBlooksFlattened.push(b);
-});
-
-function getBlookImgUrl(blookName) {
-    if (!blookName || blookName === "default" || blookName === DEFAULT_PFP) return DEFAULT_PFP;
-    const found = allBlooksFlattened.find(b => b.name === blookName);
-    return found ? found.image : DEFAULT_PFP;
-}
-
-// DOM Elements
-const tokenCounterValue = document.getElementById('token-counter-value');
-const chatFeed = document.getElementById('chat-feed');
-const chatMessageInput = document.getElementById('chat-message-input');
-const sendChatBtn = document.getElementById('send-chat-btn');
-
+// State Variables
 let currentUserUid = null;
-let userDocRef = null;
-let localUserData = null;
-let chatListenerUnsubscribe = null;
+let userData = null;
+let currentChannel = "global"; // "global" or "trading"
+let currentChatUnsubscribe = null;
 
-// Auth Observer
+const tokenCounter = document.getElementById('token-counter-value');
+const logoutBtn = document.getElementById('logout-hud-btn');
+const chatScroller = document.getElementById('chat-scroller');
+const msgForm = document.getElementById('chat-input-form');
+const msgTextInput = document.getElementById('chat-text-input');
+const channelBtns = document.querySelectorAll('.channel-btn');
+const currentChannelDisplay = document.getElementById('current-channel-display');
+const playerListContainer = document.getElementById('player-list-container');
+
+// Establish status updates on user session visibility change
+async function setUserOnlineStatus(isOnline) {
+    if (currentUserUid) {
+        try {
+            await updateDoc(doc(db, "users", currentUserUid), {
+                online: isOnline,
+                lastActive: Timestamp.now()
+            });
+        } catch(e) {
+            console.warn("Failed to update status: ", e);
+        }
+    }
+}
+
+// User sign-in detection
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
-        userDocRef = doc(db, "users", currentUserUid);
-
-        // Fetch User Data real-time
-        onSnapshot(userDocRef, (snap) => {
+        
+        // Listen to Current User Details
+        onSnapshot(doc(db, "users", user.uid), (snap) => {
             if (snap.exists()) {
-                localUserData = snap.data();
-                tokenCounterValue.textContent = Number(localUserData.tokens || 0).toLocaleString();
+                userData = snap.data();
+                tokenCounter.innerText = userData.tokens ? userData.tokens.toLocaleString() : 0;
             }
         });
 
-        // Trigger 20-Day Auto Delete Cleanup immediately on page launch
-        await deleteOldMessages();
+        // Set User Status to Online
+        await setUserOnlineStatus(true);
+        
+        // Load Real-time Data
+        initChatListener();
+        initPlayerListListener();
 
-        // Start listening to the global chat box
-        listenToChat();
-
-        document.getElementById('logout-hud-btn').addEventListener('click', () => {
-            signOut(auth).then(() => { window.location.href = "login.html"; });
-        });
     } else {
         window.location.href = "login.html";
     }
 });
 
-// ----------------------------------------------------
-// 20-DAY MESSAGE AUTO-DELETE CLEANUP ROUTINE
-// ----------------------------------------------------
-async function deleteOldMessages() {
-    const twentyDaysAgo = new Date();
-    twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 20);
-    const firestoreDateCutoff = Timestamp.fromDate(twentyDaysAgo);
-
-    try {
-        const q = query(collection(db, "messages"), where("timestamp", "<", firestoreDateCutoff));
-        const querySnapshot = await getDocs(q);
-        
-        querySnapshot.forEach(async (documentDoc) => {
-            await deleteDoc(doc(db, "messages", documentDoc.id));
-        });
-    } catch (e) {
-        console.error("Failed to execute old messages auto-clean: ", e);
+// Window/Tab Visibility triggers
+window.addEventListener('beforeunload', () => {
+    setUserOnlineStatus(false);
+});
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        setUserOnlineStatus(true);
+    } else {
+        setUserOnlineStatus(false);
     }
-}
+});
 
-// ----------------------------------------------------
-// REAL-TIME CHAT ENGINE
-// ----------------------------------------------------
-function listenToChat() {
-    if (chatListenerUnsubscribe) chatListenerUnsubscribe();
+// Logout implementation
+logoutBtn.addEventListener('click', async () => {
+    await setUserOnlineStatus(false);
+    await signOut(auth);
+    window.location.href = "login.html";
+});
 
-    const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
-    
-    chatListenerUnsubscribe = onSnapshot(q, (snapshot) => {
-        chatFeed.innerHTML = "";
-        
-        if (snapshot.empty) {
-            chatFeed.innerHTML = `
-                <div class="empty-state">
-                    <span class="material-icons">forum</span>
-                    <div>No messages in global chat yet. Say hello to get started!</div>
-                </div>
-            `;
-            return;
+// Handle Channel Changes
+channelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const selectedChannel = btn.dataset.channel;
+        if (selectedChannel === currentChannel) return;
+
+        // Visual Active Swap
+        channelBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        currentChannel = selectedChannel;
+
+        // Swap display icon and name
+        if (currentChannel === "global") {
+            currentChannelDisplay.innerHTML = `<span class="material-icons">public</span><span>Global Chat</span>`;
+        } else {
+            currentChannelDisplay.innerHTML = `<span class="material-icons">swap_horiz</span><span>Trading Chat</span>`;
         }
 
-        snapshot.forEach((messageDoc) => {
-            const data = messageDoc.data();
-            const messageRow = document.createElement('div');
-            messageRow.className = "message-row";
-            
-            const badgeClass = getTitleClassName(data.senderTitle);
+        // Re-subscribe with client-side filter active
+        initChatListener();
+    });
+});
 
-            messageRow.innerHTML = `
-                <img src="${getBlookImgUrl(data.senderPfp)}" class="message-pfp" alt="Avatar">
-                <div style="flex: 1; word-break: break-word;">
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
-                        <span class="message-sender-name">${data.senderName}</span>
-                        <span class="user-title-badge ${badgeClass}">${data.senderTitle || "Member"}</span>
+// Real-time Chat Listener with Safe Client Filtering (Avoids Firestore Compound Index errors!)
+function initChatListener() {
+    if (currentChatUnsubscribe) {
+        currentChatUnsubscribe();
+    }
+
+    const messagesQuery = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+
+    currentChatUnsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        chatScroller.innerHTML = "";
+
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            
+            // Client-side Channel filtering (defaults unspecified legacy logs to "global")
+            const msgChannel = data.channel || "global";
+            if (msgChannel !== currentChannel) return;
+
+            // Timestamp handling
+            const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
+
+            const msgRow = document.createElement('div');
+            msgRow.className = "chat-msg-row";
+
+            // Class matching badges on stats.html
+            const roleClass = data.userTitle ? `title-${data.userTitle.toLowerCase().replace(/\s+/g, '-')}` : "title-member";
+
+            msgRow.innerHTML = `
+                <img src="${data.userPfp || 'https://i.postimg.cc/GhxMXGvk/User.webp'}" alt="PFP" class="chat-msg-pfp">
+                <div class="chat-msg-body">
+                    <div class="chat-msg-meta">
+                        <span class="chat-msg-name">${data.username || "Anonymous"}</span>
+                        <span class="user-title-badge ${roleClass}">${data.userTitle || "Member"}</span>
+                        <span class="chat-msg-time">${dateStr}</span>
                     </div>
-                    <div class="message-body">${data.text}</div>
+                    <div class="chat-msg-text">${escapeHTML(data.message)}</div>
                 </div>
             `;
-            chatFeed.appendChild(messageRow);
+            chatScroller.appendChild(msgRow);
         });
 
-        // Keep chat scrolled to the bottom on new messages
-        chatFeed.scrollTop = chatFeed.scrollHeight;
+        // Scroll instantly to bottom 
+        chatScroller.scrollTop = chatScroller.scrollHeight;
     });
 }
 
-// Send Message Logic
-async function sendChatMessage() {
-    const textVal = chatMessageInput.value.trim();
-    if (!textVal || !currentUserUid || !localUserData) return;
+// Real-time Dynamic Player List
+function initPlayerListListener() {
+    onSnapshot(collection(db, "users"), (snapshot) => {
+        playerListContainer.innerHTML = "";
+        
+        let players = [];
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            players.push({
+                uid: docSnap.id,
+                username: data.username || "Player",
+                userPfp: data.userPfp || "https://i.postimg.cc/GhxMXGvk/User.webp",
+                userTitle: data.title || "Member",
+                online: !!data.online
+            });
+        });
 
-    chatMessageInput.value = "";
-    
+        // Sort online players first, then alphabetically
+        players.sort((a, b) => {
+            if (a.online === b.online) {
+                return a.username.localeCompare(b.username);
+            }
+            return a.online ? -1 : 1;
+        });
+
+        players.forEach(player => {
+            const row = document.createElement('div');
+            row.className = "player-row";
+
+            const statusClass = player.online ? "online" : "offline";
+            const statusText = player.online ? "Online" : "Offline";
+
+            row.innerHTML = `
+                <div class="player-info">
+                    <img src="${player.userPfp}" alt="PFP" class="player-pfp">
+                    <div class="player-name-col">
+                        <span class="player-username">${player.username}</span>
+                        <span class="player-status-indicator">
+                            <span class="status-dot ${statusClass}"></span>
+                            ${statusText}
+                        </span>
+                    </div>
+                </div>
+            `;
+            playerListContainer.appendChild(row);
+        });
+    });
+}
+
+// Submit Messages
+msgForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msgText = msgTextInput.value.trim();
+    if (!msgText || !userData) return;
+
+    msgTextInput.value = "";
+
     try {
-        const currentTitle = localUserData.username === "SuperMemes_64" ? "Founder" : (localUserData.title || "Member");
         await addDoc(collection(db, "messages"), {
-            text: textVal,
-            senderUid: currentUserUid,
-            senderName: localUserData.username || "Player",
-            senderPfp: localUserData.pfp || "default",
-            senderTitle: currentTitle,
+            userId: currentUserUid,
+            username: userData.username || "Player",
+            userPfp: userData.userPfp || "https://i.postimg.cc/GhxMXGvk/User.webp",
+            userTitle: userData.title || "Member",
+            message: msgText,
+            channel: currentChannel, // Saves active channel metadata
             timestamp: Timestamp.now()
         });
 
-        // Increment the total count of messages sent on user's profile
-        const currentMsgCount = localUserData.messagesSent || localUserData.messages || 0;
+        // Increment stats message count
+        const userDocRef = doc(db, "users", currentUserUid);
         await updateDoc(userDocRef, {
-            messagesSent: currentMsgCount + 1
+            messagesSent: (userData.messagesSent || 0) + 1
         });
+
+        // Background Cleanup Routine to prevent database reads overflow
+        deleteOldMessages();
+
+    } catch (e) {
+        console.error("Message delivery failed: ", e);
+    }
+});
+
+// Cleans historical limits (maintains fresh logs)
+async function deleteOldMessages() {
+    try {
+        const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
+        const snap = await getDocs(q);
+        if (snap.size > 50) {
+            // Delete messages older than the top 50
+            const docsToDelete = snap.docs.slice(50);
+            for (let d of docsToDelete) {
+                await deleteDoc(doc(db, "messages", d.id));
+            }
+        }
     } catch(e) {
-        console.error("Error writing message: ", e);
+        console.warn("Clean routine error: ", e);
     }
 }
 
-sendChatBtn.addEventListener('click', sendChatMessage);
-chatMessageInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        sendChatMessage();
-    }
-});
+// Helper: Escape HTML to avoid security injection
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
 </script>
 </body>
 </html>
