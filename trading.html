@@ -11,37 +11,22 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <style>
-        /* =======================================
-           GLOBAL STYLES & HIDE SCROLLBARS
-        ======================================= */
-        * {
+        /* Reset and Font Inheritance */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Nunito", sans-serif;
         }
-
-        html, body {
-            scrollbar-width: none; 
-        }
-
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
+        
         body {
             color: white;
-            overflow-x: hidden;
             min-height: 100vh;
-            background: #ff9b2f;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
+            overflow-x: hidden;
         }
-
-        /* =======================================
-           BACKGROUND FIXED CANVAS LAYERS
-        ======================================= */
+        
+        /* BACKGROUND LAYERS */
         .bg-base-gradient {
             position: fixed;
             inset: 0;
@@ -98,9 +83,7 @@
             transform: rotate(15deg);
         }
 
-        /* =======================================
-           STICKY STABILIZED NAVIGATION HUD
-        ======================================= */
+        /* NAVIGATION BAR */
         .navbar {
             position: sticky;
             top: 0;
@@ -140,7 +123,7 @@
             align-items: center;
         }
 
-        /* COIN BADGES */
+        /* COIN COUNTER BADGE */
         .coin-counter {
             display: flex;
             align-items: center;
@@ -166,7 +149,7 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
-        /* HUD BAR SHORTCUTS */
+        /* HUD Symbol Bar */
         .hud-badge-bar {
             display: flex;
             align-items: center;
@@ -238,68 +221,41 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* =======================================
-           STANDARDIZED BUTTON SELECTION STYLES
-        ======================================= */
-        .btn {
-            font-family: "Nunito", sans-serif;
-            font-weight: 900;
-            border: none;
-            cursor: pointer;
-            letter-spacing: .3px;
+        /* BUTTON STYLING SYSTEMS */
+        .action-btn {
+            font-weight: 800;
             font-size: 0.95rem;
-            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 12px;
-            position: relative;
-            text-align: center;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+            gap: 6px;
+            transition: transform 0.12s, filter 0.12s;
         }
+        .action-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+        .action-btn:active { transform: scale(0.98); }
+        
+        .btn-orange {
+            background: #ff7f11;
+            box-shadow: 0 4px #d35400;
+        }
+        .btn-orange:active { box-shadow: 0 1px #d35400; transform: translateY(3px) scale(0.98); }
 
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none !important;
-            transform: none !important;
+        .btn-green {
+            background: #2ecc71;
+            box-shadow: 0 4px #27ae60;
         }
+        .btn-green:active { box-shadow: 0 1px #27ae60; transform: translateY(3px) scale(0.98); }
 
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-            filter: brightness(1.05);
+        .btn-red {
+            background: #e74c3c;
+            box-shadow: 0 4px #c0392b;
         }
-
-        .btn:active:not(:disabled) {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-            filter: brightness(0.95);
-        }
-
-        .primary-btn {
-            background: #ffffff;
-            color: #ff9b2f;
-        }
-
-        .secondary-btn {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
-        }
-
-        .danger-btn {
-            background: #ff5252;
-            color: white;
-        }
-
-        .success-btn {
-            background: #4caf50;
-            color: white;
-        }
+        .btn-red:active { box-shadow: 0 1px #c0392b; transform: translateY(3px) scale(0.98); }
 
         .btn-sm {
             padding: 6px 14px;
@@ -307,27 +263,26 @@
             border-radius: 8px;
         }
 
-        /* =======================================
-           MAIN TRADING WRAPPER PANELS
-        ======================================= */
+        /* CONTAINER GENERAL */
         .container {
-            max-width: 1150px;
-            width: 100%;
-            margin: 40px auto 25px auto;
-            padding: 0 24px;
+            width: 98%;
+            max-width: 1750px;
+            margin: auto;
+            padding: 25px;
             position: relative;
             z-index: 5;
         }
-
+        
         .big-trading-card {
-            background: rgba(0, 0, 0, 0.28);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             width: 100%;
         }
-
+        
         .trading-header {
             display: flex;
             justify-content: space-between;
@@ -338,24 +293,23 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 20px;
         }
-
+        
         .trading-title {
-            font-family: 'Titan One', cursive;
-            font-size: 2.5rem;
-            text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
+            font-family: "Titan One", cursive;
+            font-size: 2rem;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        /* INBOX TABS STYLING */
+        /* INBOX TABS NAVIGATION */
         .mailbox-tabs {
             display: flex;
             gap: 10px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 20px;
         }
-
+        
         .tab-link {
             background: transparent;
             border: none;
@@ -367,7 +321,7 @@
             position: relative;
             transition: color 0.2s;
         }
-
+        
         .tab-link:hover { color: white; }
         .tab-link.active { color: #fff1d0; }
         .tab-link.active::after {
@@ -377,7 +331,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: #ffffff;
+            background: #ff7f11;
             border-radius: 4px;
         }
 
@@ -388,8 +342,8 @@
         }
 
         .pane-card {
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             padding: 20px;
             display: flex;
@@ -397,40 +351,37 @@
             gap: 15px;
         }
 
-        /* =======================================
-           MODAL PANEL STYLING (MATCHES NEWS POPUP)
-        ======================================= */
+        /* MODAL OVERLAY STYLING */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1500;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 100;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
+        
         .modal-overlay.active { display: flex; }
 
         .modal-card {
-            background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
-            border: 4px solid #ff9b2f;
-            border-radius: 32px;
-            padding: 30px;
-            width: 950px;
-            max-width: 100%;
-            height: auto;
-            max-height: 90vh;
+            background: linear-gradient(135deg, #4a1c00 0%, #2b1000 100%);
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 950px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             gap: 20px;
             position: relative;
+            max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.6);
-            scrollbar-width: none;
         }
-        .modal-card::-webkit-scrollbar { display: none; }
-
+        
         .modal-close-btn {
             position: absolute;
             top: 20px;
@@ -451,37 +402,38 @@
 
         .trade-input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.35);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 12px;
             font-weight: 700;
             color: white;
             outline: none;
         }
-        .trade-input:focus { border-color: #ff9b2f; }
+        .trade-input:focus { border-color: rgba(255,255,255,0.6); }
 
         .recipient-status-box {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .partner-avatar-frame {
-            width: 38px;
-            height: 38px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
             display: none;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
         .partner-avatar-frame img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .recipient-status {
@@ -491,10 +443,10 @@
             border-radius: 8px;
             display: none;
         }
-        .status-success { background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; }
-        .status-error { background: rgba(255, 82, 82, 0.2); border: 1px solid #ff5252; color: #ff5252; }
+        .status-success { background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71; }
+        .status-error { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #e74c3c; }
 
-        /* BASKETS & INVENTORY PLACEMENTS */
+        /* BUILD BASKETS */
         .basket-zone {
             background: rgba(0, 0, 0, 0.25);
             border: 2px dashed rgba(255, 255, 255, 0.15);
@@ -513,14 +465,14 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.2);
             padding: 10px;
             border-radius: 12px;
-            scrollbar-width: none;
         }
-        .inventory-scroll-box::-webkit-scrollbar { display: none; }
+        .inventory-scroll-box::-webkit-scrollbar { width: 6px; }
+        .inventory-scroll-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
-        /* BLOOK CHIP DISPLAY NODES */
+        /* BLOOK CHIPS WITH STACKING BADGE AND DYNAMIC RARITY BORDER */
         .blook-item-node {
             width: 60px;
             height: 60px;
@@ -552,7 +504,7 @@
             z-index: 2;
         }
 
-        /* MAIL CONTAINER RECORDS */
+        /* TRADE MAILBOX ELEMENT CARDS */
         .mailbox-scroll-container {
             display: flex;
             flex-direction: column;
@@ -560,13 +512,30 @@
             max-height: 640px;
             overflow-y: auto;
             padding-right: 8px;
-            scrollbar-width: none;
         }
-        .mailbox-scroll-container::-webkit-scrollbar { display: none; }
+        
+        .mailbox-scroll-container::-webkit-scrollbar { 
+            width: 10px; 
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-track { 
+            background: rgba(143, 50, 0, 0.3); 
+            border-radius: 10px;
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.25); 
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
 
         .mail-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             padding: 20px;
             display: flex;
@@ -574,7 +543,6 @@
             gap: 15px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
-
         .mail-header {
             display: flex;
             justify-content: space-between;
@@ -585,21 +553,18 @@
             border-bottom: 2px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
-
         .mail-exchange-view {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-
         .exchange-box {
             background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 12px;
             min-height: 110px;
         }
-
         .exchange-title {
             font-family: "Titan One", cursive;
             font-size: 0.9rem;
@@ -608,13 +573,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .exchange-column {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-
         .token-badge-display {
             background: rgba(255, 199, 106, 0.2);
             border: 1px solid #ffc76a;
@@ -629,22 +592,22 @@
             margin-bottom: 8px;
             width: fit-content;
         }
-
         .mail-actions {
             display: flex;
             gap: 12px;
             margin-top: 5px;
         }
+        .mail-actions .action-btn { flex: 1; }
 
-        /* HISTORY TAGS */
+        /* HISTORY LEDGER OVERRIDES */
         .history-tag {
             font-size: 0.85rem;
             padding: 4px 12px;
             border-radius: 6px;
             font-weight: 900;
         }
-        .tag-accepted { background: #4caf50; color: white; }
-        .tag-declined { background: #ff5252; color: white; }
+        .tag-accepted { background: #2ecc71; color: white; }
+        .tag-declined { background: #e74c3c; color: white; }
         .tag-canceled { background: #7f8c8d; color: white; }
         
         .modal-columns-grid {
@@ -657,12 +620,9 @@
             .modal-columns-grid { grid-template-columns: 1fr; }
         }
 
-        /* =======================================
-           RESPONSIVE LAYOUT DESIGN MEDIA QUERIES
-        ======================================= */
-        @media(max-width: 980px) {
-            .navbar { 
-                padding: 12px 20px; 
+        @media(max-width:980px) {
+            .navbar {
+                padding: 12px 20px;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
@@ -674,8 +634,13 @@
                 flex-wrap: wrap;
                 gap: 10px;
             }
-            .logo-link { width: auto; text-align: center; }
-            .logo { font-size: 2.2rem; }
+            .logo-link {
+                width: auto;
+                text-align: center;
+            }
+            .logo {
+                font-size: 2.2rem;
+            }
             .nav-right-group {
                 width: 100%;
                 justify-content: center;
@@ -702,26 +667,15 @@
                 transform: translateX(-50%) translateY(6px);
             }
             .hud-item:hover::after {
-                opacity: 1;
                 transform: translateX(-50%) translateY(0);
             }
         }
 
-        @media(max-width: 700px) {
+        @media(max-width:700px) {
             .container { padding: 15px; }
-            .big-trading-card { padding: 20px; }
-            .trading-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: center;
-                text-align: center;
-            }
-            .trading-title {
-                font-size: 2rem;
-            }
-            .mail-exchange-view {
-                grid-template-columns: 1fr;
-            }
+            .big-trading-card { padding: 15px; }
+            .trading-title { font-size: 1.5rem; }
+            .mail-exchange-view { grid-template-columns: 1fr; }
             .mail-header { font-size: 1rem; flex-wrap: wrap; }
         }
     </style>
@@ -751,7 +705,7 @@
             <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
             <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
             <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
-            <a href="trading.html" class="hud-item" data-nametag="Trading" style="background: rgba(255, 255, 255, 0.15);"><span class="material-icons">swap_horiz</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
             <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
             <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
             <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
@@ -767,7 +721,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                 <div style="font-weight: 800; opacity: 0.8;" id="myUsernameDisplay">Your Username: Loading...</div>
-                <button class="btn primary-btn btn-sm" id="openTradeModalBtn">
+                <button class="action-btn btn-orange btn-sm" id="openTradeModalBtn">
                     <span class="material-icons">add_box</span> Create Trade Request
                 </button>
             </div>
@@ -799,9 +753,9 @@
             <span class="material-icons" style="font-size: 1.8rem;">rate_review</span> Create Trade Request
         </div>
         
-        <div class="input-group" style="max-width: 600px;">
+        <div class="input-group" style="max-width: 650px; flex-wrap: wrap;">
             <input type="text" class="trade-input" id="recipientInput" placeholder="Recipient username...">
-            <button class="btn secondary-btn btn-sm" id="verifyUserBtn">Check User</button>
+            <button class="action-btn btn-orange btn-sm" id="verifyUserBtn">Check User</button>
             <div class="recipient-status-box">
                 <div class="partner-avatar-frame" id="partnerAvatarFrame">
                     <img id="partnerAvatarImg" src="">
@@ -837,7 +791,7 @@
             </div>
         </div>
 
-        <button class="btn primary-btn" id="sendMailOfferBtn" style="width:100%; margin-top:5px; font-size: 1.1rem; padding: 14px;">
+        <button class="action-btn btn-orange" id="sendMailOfferBtn" style="width:100%; margin-top:5px; font-size: 1.1rem; padding: 14px;">
             <span class="material-icons">send</span> Send Trade Offer
         </button>
     </div>
@@ -890,81 +844,115 @@
         "Pizza": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/bwWD2TY0/Pizza.webp" },
         "Strawberry Milk": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp" },
         "Chocolate Milk": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp" },
-        "Elf": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/9F4P2QhG/Elf.webp" },
-        "Witch": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/6pD5y5gq/Witch.webp" },
-        "Wizard": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pT45j3q5/Wizard.webp" },
-        "Fairly": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Kj6V2Dqy/Fairly.webp" },
-        "Slime": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/fW0N6x7B/Slime.webp" },
-        "Werewolf": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/k47tV4n4/Werewolf.webp" },
-        "Ghost": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/76j7m2bW/Ghost.webp" },
-        "Zombie": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/gJ0zX7nC/Zombie.webp" },
-        "Unicorn": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/g0K5t4j5/Unicorn.webp" },
-        "Dragon": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/4N5V6X7b/Dragon.webp" },
-        "Drakness Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/V6CL0VRz/Darkness-Slime.webp" },
-        "Light Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/B6KQPVgs/Light-Slime.webp" },
-        "Rainbow Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/0Qw2KBfv/Rainbow-Slime.webp" },
-        "Earth Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/tTxCnM5H/Earth-Slime.webp" },
-        "Fire Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/sXhDGNcC/Fire-Slime.webp" },
-        "Water Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/HLCMKDp9/Water-Slime.webp" },
-        "God Slime": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/N0wXVqg8/God-Slime.webp" },
-        "Old Man": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Old-Man.webp" },
-        "Spies": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Spies.webp" },
-        "Farmer": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/LsBPFCXP/Farmer.webp" },
-        "Chef": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/43bcRLdH/Chef.webp" },
-        "Doctor": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/ZqhNgtTc/Doctor.webp" },
-        "Cop": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/6QNZSJ9h/Cop.webp" },
-        "Astronaut": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Astronaut.webp" },
-        "Agent": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/Agent.webp" },
-        "Knight": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Knight.webp" },
-        "King": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/King.webp" },
-        "Queen": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Queen.webp" },
-        "Red Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/3wHG65KG/Red-Astronaut.webp" },
-        "Orange Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/D0hgcMNY/Orange.webp" },
-        "Purple Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/kGCcypHp/Purple.webp" },
-        "Pink Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/brPTRB5V/Pink.webp" },
-        "Brown Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/hvnr05Yy/Brown.webp" },
-        "Lime Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/4yG51S0B/Lime.webp" },
-        "Cyan Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/1XSHKjdM/Cyan.webp" },
-        "White Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/tJb5zMck/White.webp" },
-        "Grey Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/0jvfCB4f/Grey.webp" },
-        "Black Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/hvnr05Y1/Black.webp" },
-        "Copper Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wMzVkGrc/Copper.webp" },
-        "Silver Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/NFt4xznx/Silver.webp" },
-        "Gold Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/ZnmcLMQP/Gold.webp" },
-        "Rainbow Astronaut": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/G2J4YLyd/Rainbow.webp" },
+        "Elf": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/WbN1x9QK/Elf.webp" },
+        "Witch": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/V6CL0VRz/Witch.webp" },
+        "Wizard": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/B6KQPVgs/Wizard.webp" },
+        "Vampire": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/0Qw2KBfv/Vampire.webp" },
+        "Werewolf": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/tTxCnM5H/Werewolf.webp" },
+        "Zombie": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/Zombie.webp" },
+        "Ghost": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/Ghost.webp" },
+        "Mummy": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/Mummy.webp" },
+        "Pumpkin": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/sXhDGNcC/Pumpkin.webp" },
+        "Frankenstein": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/sXhDGNcC/Frankenstein.webp" },
+        "Dracula": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/sXhDGNcC/Dracula.webp" },
+        "Spooky Ghost": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/sXhDGNcC/Spooky-Ghost.webp" },
+        "Red": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/d0wX5Y2y/Red.webp" },
+        "Blue": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/kG8fHpHp/Blue.webp" },
+        "Green": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/brP1B5V/Green.webp" },
+        "Yellow": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/hvnr5Yy/Yellow.webp" },
+        "Orange": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/D0hgcMNY/Orange.webp" },
+        "Purple": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/kGCcypHp/Purple.webp" },
+        "Pink": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/brPTRB5V/Pink.webp" },
+        "Brown": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/hvnr05Yy/Brown.webp" },
+        "Lime": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/4yG51S0B/Lime.webpp" },
+        "Cyan": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/1XSHKjdM/Cyan.webp" },
+        "White": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/tJb5zMck/White.webp" },
+        "Grey": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/0jvfCB4f/Grey.webp" },
+        "Black": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/hvnr05Y1/Black.webp" },
+        "Copper": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wMzVkGrc/Copper.webp" },
+        "Silver": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/NFt4xznx/Silver.webp" },
+        "Gold": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/ZnmcLMQP/Gold.webp" },
+        "Rainbow": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/G2J4YLyd/Rainbow.webp" },
         "Two of Spades": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp" },
         "Eat Me": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/B6KQPVgs/Eat-Me.webp" },
         "Drink Me": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp" },
         "Alice": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/tTxCnM5H/Alice.webp" },
         "Queen of Hearts": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp" },
-        "Dormouse": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Dormouse.webp" },
-        "White Rabbit": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/White-Rabbit.webp" },
-        "Cheshire Cat": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/ZqhNgtTF/Cheshire-Cat.webp" },
-        "Mad Hatter": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/MG8B42W1/Mad-Hatter.webp" },
-        "King of Hearts": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/King-of-Hearts.webp" },
-        "Caterpillar": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Caterpillar.webp" }
+        "Dromouse": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/Dromouse.webp" },
+        "Mad Hatter": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/Mad-Hatter.webp" },
+        "March Hare": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sXhDGNcC/March-Hare.webp" },
+        "White Rabbit": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/sXhDGNcC/White-Rabbit.webp" },
+        "Caterpillar": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/sXhDGNcC/Caterpillar.webp" },
+        "Cheshire Cat": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/sXhDGNcC/Cheshire-Cat.webp" },
+        "King of Hearts": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/sXhDGNcC/King-of-Hearts.webp" },
+        "Earth": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/7ZVBw3yg/Earth.webp" },
+        "Meteor": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/W1n9TGPk/Meteor.webp" },
+        "Stars": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/W1n9TGPk/Stars.webp" },
+        "Alien": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/W1n9TGPk/Alien.webp" },
+        "Planet": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/W1n9TGPk/Planet.webp" },
+        "UFO": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/W1n9TGPk/UFO.webp" },
+        "Spaceship": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/W1n9TGPk/Spaceship.webp" },
+        "Astronaut": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/W1n9TGPk/Astronaut.webp" },
+        "Pink Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k58D1PfH/Pink-Astronaut.webp" },
+        "Yellow Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/LXp5GQbV/Yellow-Astronaut.webp" },
+        "Orange Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/XJbqt1z2/Orange-Astronaut.webp" },
+        "Lime Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp" },
+        "Green Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp" },
+        "Cyan Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp" },
+        "Blue Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp" },
+        "Purple Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp" },
+        "Brown Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp" },
+        "Black Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp" },
+        "Black Hole": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/43tnLRBF/Black-Hole.webp" },
+        "Space Monitor": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/vBghSBCL/Space-Monitor.webp" },
+        "Rainbow Astroanut": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp" },
+        "Lil Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp" },
+        "Lovely Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp" },
+        "Angry Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp" },
+        "Happy Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp" },
+        "Watson": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/jSX8tHrH/Watson.webp" },
+        "Buddy Bot": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp" },
+        "Brainy Bot": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp" },
+        "Mega Bot": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp" },
+        "Master Bot": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/W1n9TGPk/Master-Bot.webp" },
+        "Ghost Bot": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/W1n9TGPk/Ghost-Bot.webp" },
+        "Blook Bot": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/W1n9TGPk/Blook-Bot.webp" },
+        "Frog": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/HxWjJ4Wc/Frog.webp" },
+        "Clownfish": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/vB8D1L8x/Clownfish.webp" },
+        "Crab": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/sXf1B9fv/Crab.webp" },
+        "Sea Otter": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/sXf1B9fv/Sea-Otter.webp" },
+        "Jellyfish": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/sXf1B9fv/Jellyfish.webp" },
+        "Dolphin": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/6QNZSJ9h/Dolphin.webp" },
+        "Shark": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Shark.webp" },
+        "Octopus": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/Octopus.webp" },
+        "Narwhal": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Narwhal.webp" },
+        "Baby Penguin": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Baby-Penguin.webp" },
+        "Megalodon": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Megalodon.webp" },
+        "Poison Dart Frog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp" },
+        "Blizzard Clownfish": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp" },
+        "Beach": { rarity: "Celestial", color: "teal", image: "https://i.postimg.cc/sXf1B9fv/Beach.webp" },
+        "Panda": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Xvc56HJF/Panda.webp" },
+        "Sloth": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Sloth.webp" },
+        "Tenrec": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/LsBPFCXP/Tenrec.webp" },
+        "Flamingo": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/43bcRLdH/Flamingo.webp" },
+        "Zebra": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/ZqhNgtTc/Zebra.webp" },
+        "Elephant": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/6QNZSJ9h/Elephant.webp" },
+        "Lemur": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Lemur.webp" },
+        "Peacock": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/Peacock.webp" },
+        "Chameleon": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Chameleon.webp" },
+        "Lion": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Lion.webp" },
+        "Rainbow Panda": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp" },
+        "White Peacock": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/xdSm7D0K/White-Peacock.webp" },
+        "Tiger Zebra": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp" },
+        "Amber": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/bN18Td2q/Ember.webp" },
+        "Dino Egg": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/bN18Td2q/Dino-Egg.webp" }
     };
 
     function getBlookData(name) {
-        return blookRegistry[name] || { rarity: "Custom", color: "#ffffff", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+        return blookRegistry[name] || { rarity: "Common", color: "rgba(255,255,255,0.4)", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
     }
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            loadUserData();
-            listenForMailCenter();
-            createSquares();
-        } else {
-            location.href = "login.html";
-        }
-    });
-
-    document.getElementById("logout-hud-btn").onclick = async () => {
-        await signOut(auth);
-        location.href = "login.html";
-    };
-
+    // Modal view handlers
     const tradeModalOverlay = document.getElementById("tradeModalOverlay");
     document.getElementById("openTradeModalBtn").onclick = () => {
         resetTradeModalState();
@@ -974,18 +962,32 @@
         tradeModalOverlay.classList.remove("active");
     };
 
-    document.getElementById("tabReceivedBtn").onclick = () => switchTab("received");
-    document.getElementById("tabSentBtn").onclick = () => switchTab("sent");
-    document.getElementById("tabHistoryBtn").onclick = () => switchTab("history");
+    // Navigation Tabs setup
+    document.getElementById("tabReceivedBtn").onclick = (e) => switchActiveTab(e.target, "received");
+    document.getElementById("tabSentBtn").onclick = (e) => switchActiveTab(e.target, "sent");
+    document.getElementById("tabHistoryBtn").onclick = (e) => switchActiveTab(e.target, "history");
 
-    function switchTab(tab) {
-        currentTab = tab;
-        document.querySelectorAll(".tab-link").forEach(b => b.classList.remove("active"));
-        if(tab === "received") document.getElementById("tabReceivedBtn").classList.add("active");
-        if(tab === "sent") document.getElementById("tabSentBtn").classList.add("active");
-        if(tab === "history") document.getElementById("tabHistoryBtn").classList.add("active");
+    function switchActiveTab(btnNode, targetTab) {
+        document.querySelectorAll(".tab-link").forEach(x => x.classList.remove("active"));
+        btnNode.classList.add("active");
+        currentTab = targetTab;
         listenForMailCenter();
     }
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            loadUserData();
+            listenForMailCenter();
+        } else {
+            location.href = "login.html";
+        }
+    });
+
+    document.getElementById("logout-hud-btn").onclick = async () => {
+        await signOut(auth);
+        location.href = "login.html";
+    };
 
     function resetTradeModalState() {
         verifiedPartnerUid = null;
@@ -1028,6 +1030,7 @@
         const statusEl = document.getElementById("recipientStatus");
         const avatarFrame = document.getElementById("partnerAvatarFrame");
         const avatarImg = document.getElementById("partnerAvatarImg");
+        
         if (!recipientName) return alert("Enter a username to check.");
         
         if (recipientName.toLowerCase() === myUsername.toLowerCase()) {
@@ -1038,6 +1041,12 @@
             verifiedPartnerUid = null;
             return;
         }
+
+        statusEl.className = "recipient-status";
+        statusEl.style.background = "rgba(255,255,255,0.1)";
+        statusEl.style.color = "white";
+        statusEl.innerText = "Searching...";
+        statusEl.style.display = "inline-block";
 
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("username", "==", recipientName));
@@ -1055,22 +1064,22 @@
             return;
         }
 
-        const targetDoc = querySnapshot.docs[0];
-        verifiedPartnerUid = targetDoc.id;
-        const pData = targetDoc.data();
-        partnerLiveTokens = pData.tokens || 0;
-        partnerLiveInventory = Array.isArray(pData.inventory) ? pData.inventory : [];
-
+        const targetUserDoc = querySnapshot.docs[0];
+        const targetUserData = targetUserDoc.data();
+        
+        verifiedPartnerUid = targetUserDoc.id;
+        partnerLiveTokens = targetUserData.tokens !== undefined ? targetUserData.tokens : 0;
+        partnerLiveInventory = Array.isArray(targetUserData.inventory) ? targetUserData.inventory : [];
+        
+        // Dynamic fetch of PFP (avatar falls back to standard tab icon if empty)
+        const userPfp = targetUserData.pfp || 'https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp';
+        
+        avatarImg.src = userPfp;
+        avatarFrame.style.display = "inline-flex";
+        
         statusEl.className = "recipient-status status-success";
-        statusEl.innerText = "Ready!";
+        statusEl.innerHTML = `Found! (${partnerLiveTokens} 🪙)`;
         statusEl.style.display = "inline-block";
-
-        if (pData.avatar) {
-            avatarImg.src = pData.avatar;
-            avatarFrame.style.display = "inline-flex";
-        } else {
-            avatarFrame.style.display = "none";
-        }
 
         renderReceivingInventoryPool();
     };
@@ -1079,12 +1088,13 @@
         const poolContainer = document.getElementById("givingInventoryPool");
         poolContainer.innerHTML = "";
         if (inventory.length === 0) {
-            poolContainer.innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">No blocks available.</div>`;
+            poolContainer.innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">You have no Blooks to distribute.</div>`;
             return;
         }
         const frequencyMap = {};
-        inventory.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
-        
+        inventory.forEach(blook => {
+            frequencyMap[blook] = (frequencyMap[blook] || 0) + 1;
+        });
         Object.keys(frequencyMap).forEach(name => {
             const chosenCount = itemsToGive.filter(n => n === name).length;
             const availableQty = frequencyMap[name] - chosenCount;
@@ -1107,7 +1117,9 @@
         const basket = document.getElementById("givingBasket");
         basket.innerHTML = "";
         const counts = {};
-        itemsToGive.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+        itemsToGive.forEach(x => {
+            counts[x] = (counts[x] || 0) + 1;
+        });
         Object.keys(counts).forEach(name => {
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
@@ -1133,8 +1145,9 @@
             return;
         }
         const frequencyMap = {};
-        partnerLiveInventory.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
-        
+        partnerLiveInventory.forEach(blook => {
+            frequencyMap[blook] = (frequencyMap[blook] || 0) + 1;
+        });
         Object.keys(frequencyMap).forEach(name => {
             const chosenCount = itemsToRequest.filter(n => n === name).length;
             const availableQty = frequencyMap[name] - chosenCount;
@@ -1157,7 +1170,9 @@
         const basket = document.getElementById("receivingBasket");
         basket.innerHTML = "";
         const counts = {};
-        itemsToRequest.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+        itemsToRequest.forEach(x => {
+            counts[x] = (counts[x] || 0) + 1;
+        });
         Object.keys(counts).forEach(name => {
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
@@ -1172,15 +1187,19 @@
             };
             basket.appendChild(node);
         });
-        if(verifiedPartnerUid) renderReceivingInventoryPool();
+        renderReceivingInventoryPool();
     }
 
     document.getElementById("sendMailOfferBtn").onclick = async () => {
-        if (!verifiedPartnerUid) return alert("Verify the recipient username first.");
+        if (!verifiedPartnerUid) {
+            return alert("You must verify a valid recipient username first!");
+        }
         const tokensToGive = parseInt(document.getElementById("giveTokensInput").value) || 0;
         const tokensToRequest = parseInt(document.getElementById("receiveTokensInput").value) || 0;
-        
-        if (tokensToGive < 0 || tokensToRequest < 0) return alert("Values cannot be negative.");
+
+        if (tokensToGive < 0 || tokensToRequest < 0) {
+            return alert("Token configuration fields cannot accept negative integer variables.");
+        }
         if (itemsToGive.length === 0 && itemsToRequest.length === 0 && tokensToGive <= 0 && tokensToRequest <= 0) {
             return alert("Your trade proposal cannot be empty.");
         }
@@ -1211,7 +1230,9 @@
     function getStackedBlocksHtml(blookArray) {
         if(!blookArray) return '';
         const counts = {};
-        blookArray.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+        blookArray.forEach(x => {
+            counts[x] = (counts[x] || 0) + 1;
+        });
         return Object.keys(counts).map(name => {
             const bInfo = getBlookData(name);
             return `<div class="blook-item-node" style="border-color: ${bInfo.color}; --rarity-shadow: ${bInfo.color};"> <img src="${bInfo.image}"> ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''} </div>`;
@@ -1237,42 +1258,43 @@
                     if(!records.some(r => r.id === d.id)) records.push({id: d.id, ...d.data()});
                 });
                 records.sort((a,b) => (b.resolvedAt || 0) - (a.resolvedAt || 0));
-
+                
                 if(records.length === 0) {
                     container.innerHTML = `<div style="opacity: 0.5; padding: 30px; text-align: center; font-weight: 700;">No historic trade entries found.</div>`;
                     return;
                 }
-
+                
                 records.forEach(log => {
                     const card = document.createElement("div");
                     card.className = "mail-card";
                     let statusClass = "tag-canceled";
                     if(log.status === "ACCEPTED") statusClass = "tag-accepted";
                     if(log.status === "DECLINED") statusClass = "tag-declined";
-
-                    const isOutbound = log.senderUid === currentUser.uid;
-                    const headerTxt = isOutbound ? `Sent to ${log.recipientUsername}` : `Received from ${log.senderUsername}`;
-
-                    let leftNodes = getStackedBlocksHtml(log.giving);
-                    let rightNodes = getStackedBlocksHtml(log.receiving);
+                    
+                    let directionText = log.senderUid === currentUser.uid ? `Outbound to ${log.recipientUsername}` : `Inbound from ${log.senderUsername}`;
+                    let givingNodesHtml = getStackedBlocksHtml(log.giving);
+                    let receivingNodesHtml = getStackedBlocksHtml(log.receiving);
+                    const tG = log.givingTokens || 0;
+                    const tR = log.receivingTokens || 0;
 
                     card.innerHTML = `
                         <div class="mail-header">
-                            <span>${headerTxt}</span>
+                            <span>${directionText}</span>
                             <span class="history-tag ${statusClass}">${log.status}</span>
                         </div>
                         <div class="mail-exchange-view">
                             <div class="exchange-box">
-                                <div class="exchange-title">${isOutbound ? 'You Gave' : 'You Got'}</div>
-                                ${log.givingTokens > 0 ? `<div class="token-badge-display">🪙 ${log.givingTokens} Tokens</div>` : ''}
-                                <div class="exchange-column">${leftNodes || (log.givingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
+                                <div class="exchange-title">Sent Items / Tokens</div>
+                                ${tG > 0 ? `<div class="token-badge-display">🪙 ${tG} Tokens</div>` : ''}
+                                <div class="exchange-column">${givingNodesHtml || (tG > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                             <div class="exchange-box">
-                                <div class="exchange-title">${isOutbound ? 'You Got' : 'You Gave'}</div>
-                                ${log.receivingTokens > 0 ? `<div class="token-badge-display">🪙 ${log.receivingTokens} Tokens</div>` : ''}
-                                <div class="exchange-column">${rightNodes || (log.receivingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
+                                <div class="exchange-title">Received Items / Tokens</div>
+                                ${tR > 0 ? `<div class="token-badge-display">🪙 ${tR} Tokens</div>` : ''}
+                                <div class="exchange-column">${receivingNodesHtml || (tR > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                         </div>
+                        <div style="font-size:0.75rem; opacity:0.6; text-align:right;">Resolved: ${new Date(log.resolvedAt).toLocaleString()}</div>
                     `;
                     container.appendChild(card);
                 });
@@ -1289,7 +1311,6 @@
                 container.innerHTML = `<div style="opacity: 0.5; padding: 30px; text-align: center; font-weight: 700;">No offers inside this section.</div>`;
                 return;
             }
-
             snapshot.forEach((docSnap) => {
                 const mail = docSnap.data();
                 const mailId = docSnap.id;
@@ -1316,8 +1337,8 @@
                             </div>
                         </div>
                         <div class="mail-actions">
-                            <button class="btn success-btn btn-sm" id="accept_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">check</span> Accept</button>
-                            <button class="btn danger-btn btn-sm" id="decline_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">close</span> Decline</button>
+                            <button class="action-btn btn-green btn-sm" id="accept_mail_${mailId}"><span class="material-icons" style="font-size:18px;">check</span> Accept</button>
+                            <button class="action-btn btn-red btn-sm" id="decline_mail_${mailId}"><span class="material-icons" style="font-size:18px;">close</span> Decline</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -1339,7 +1360,7 @@
                             </div>
                         </div>
                         <div class="mail-actions">
-                            <button class="btn danger-btn btn-sm" id="cancel_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">delete_forever</span> Cancel Request</button>
+                            <button class="action-btn btn-red btn-sm" id="cancel_mail_${mailId}"><span class="material-icons" style="font-size:18px;">delete_forever</span> Retract Offer</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -1347,6 +1368,20 @@
                 }
             });
         });
+    }
+
+    async function archiveAndRemoveMail(mailId, mailData, statusString) {
+        try {
+            await addDoc(collection(db, "trade_history"), {
+                ...mailData,
+                status: statusString,
+                resolvedAt: Date.now()
+            });
+            await deleteDoc(doc(db, "trade_mail", mailId));
+            if(statusString === "CANCELED") alert("Trade proposal effectively revoked.");
+        } catch(err) {
+            alert("Error processing history step: " + err.message);
+        }
     }
 
     async function acceptMailOffer(mailId, mail) {
@@ -1366,7 +1401,10 @@
         }
 
         const myFreq = {};
-        liveMyInventory.forEach(blook => { myFreq[blook] = (myFreq[blook] || 0) + 1; });
+        liveMyInventory.forEach(blook => {
+            myFreq[blook] = (myFreq[blook] || 0) + 1;
+        });
+
         const myMissing = [];
         mail.receiving.forEach(item => {
             if (myFreq[item] && myFreq[item] > 0) {
@@ -1394,69 +1432,51 @@
         let liveSenderInventory = Array.isArray(senderData.inventory) ? senderData.inventory : [];
 
         if (mailGivingTokens > liveSenderTokens) {
-            alert("Canceled. Offering partner no longer possesses the required tokens.");
+            alert("Acceptance failed. Sender no longer features enough tokens.");
             await archiveAndRemoveMail(mailId, mail, "CANCELED");
             return;
         }
 
         const sFreq = {};
-        liveSenderInventory.forEach(blook => { sFreq[blook] = (sFreq[blook] || 0) + 1; });
+        liveSenderInventory.forEach(b => { sFreq[b] = (sFreq[b] || 0) + 1; });
+        
         const sMissing = [];
-        mail.giving.forEach(item => {
-            if (sFreq[item] && sFreq[item] > 0) {
-                sFreq[item]--;
+        mail.giving.forEach(it => {
+            if (sFreq[it] && sFreq[it] > 0) {
+                sFreq[it]--;
             } else {
-                sMissing.push(item);
+                sMissing.push(it);
             }
         });
 
         if (sMissing.length > 0) {
-            alert("Canceled. Request sender no longer holds items offered.");
+            alert("Acceptance failed. Sender no longer has the offered items inside their live collection.");
             await archiveAndRemoveMail(mailId, mail, "CANCELED");
             return;
         }
 
-        // Apply mutations
+        // Processing transaction adjustments
         liveMyTokens = liveMyTokens - mailReceivingTokens + mailGivingTokens;
-        mail.receiving.forEach(x => {
-            const index = liveMyInventory.indexOf(x);
+        mail.receiving.forEach(item => {
+            const index = liveMyInventory.indexOf(item);
             if (index > -1) liveMyInventory.splice(index, 1);
         });
-        mail.giving.forEach(x => liveMyInventory.push(x));
+        mail.giving.forEach(item => liveMyInventory.push(item));
 
         liveSenderTokens = liveSenderTokens - mailGivingTokens + mailReceivingTokens;
-        mail.giving.forEach(x => {
-            const index = liveSenderInventory.indexOf(x);
+        mail.giving.forEach(item => {
+            const index = liveSenderInventory.indexOf(item);
             if (index > -1) liveSenderInventory.splice(index, 1);
         });
-        mail.receiving.forEach(x => liveSenderInventory.push(x));
+        mail.receiving.forEach(item => liveSenderInventory.push(item));
 
+        // Submit matching sync operations to backend
         await updateDoc(myDocRef, { tokens: liveMyTokens, inventory: liveMyInventory });
         await updateDoc(senderDocRef, { tokens: liveSenderTokens, inventory: liveSenderInventory });
         await archiveAndRemoveMail(mailId, mail, "ACCEPTED");
 
         alert("Trade successfully approved!");
         loadUserData();
-    }
-
-    async function archiveAndRemoveMail(mailId, mail, endStatus) {
-        try {
-            await addDoc(collection(db, "trade_history"), {
-                senderUid: mail.senderUid,
-                senderUsername: mail.senderUsername,
-                recipientUid: mail.recipientUid,
-                recipientUsername: mail.recipientUsername,
-                giving: mail.giving || [],
-                receiving: mail.receiving || [],
-                givingTokens: mail.givingTokens || 0,
-                receivingTokens: mail.receivingTokens || 0,
-                status: endStatus,
-                resolvedAt: Date.now()
-            });
-            await deleteDoc(doc(db, "trade_mail", mailId));
-        } catch(e) {
-            console.error("Error archiving trade card logic: ", e);
-        }
     }
 
     function createSquares() {
@@ -1487,11 +1507,13 @@
             @keyframes floatSquare {
                 0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.3; }
                 50% { transform: translateY(-40px) rotate(180deg) scale(1.2); opacity: 0.7; }
-                100% { transform: translateY(0) rotate(360deg) scale(1); opacity: 0.3; }
+                100% { transform: translateY(-80px) rotate(360deg) scale(1); opacity: 0.3; }
             }
         `;
         document.head.appendChild(styleSheet);
     }
+
+    createSquares();
 </script>
 </body>
 </html>
