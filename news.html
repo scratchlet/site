@@ -300,7 +300,7 @@ body{
 }
 
 /* =========================
-   NEWS AREA DESIGN (FIXED TALL LENGTH)
+   NEWS AREA DESIGN (STRETCHED & FIXED SIZE BOUNDS)
 ========================= */
 .news-header-section {
     max-width: 1150px;
@@ -343,8 +343,8 @@ body{
     gap: 15px;
     transition: transform 0.2s ease;
     
-    /* Strict ceiling limitation locks maximum structural card height */
-    max-height: 720px; 
+    /* Strict size limits locks maximum structural card height */
+    max-height: 720px;
 }
 
 .news-card-header {
@@ -385,8 +385,7 @@ body{
 
 .news-banner-img {
     width: 100%;
-    max-height: 400px; /* Restored classic layout dimensions */
-    object-fit: contain; /* Displays full image composition layout safely */
+    max-height: 380px;
     background: rgba(0, 0, 0, 0.15);
     border-radius: 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -399,14 +398,14 @@ body{
     color: rgba(255, 255, 255, 0.95);
     white-space: pre-wrap;
     
-    /* Isolates text layout vertical overflow to an inner container scrollbar */
-    overflow-y: auto; 
+    /* Isolates text layer overflow to an internal container scroll bar */
+    overflow-y: auto;
     padding-right: 8px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-/* Webkit configurations for custom card body text track scrollbar */
+/* Custom internal card text scroll configurations */
 .news-card-body::-webkit-scrollbar {
     width: 6px;
     display: block;
@@ -465,7 +464,7 @@ body{
     width: 550px; 
     max-width: 100%;
     height: auto;
-    max-height: 90vh;
+    max-height: 95vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 15px 50px rgba(0,0,0,0.6);
@@ -502,11 +501,8 @@ body{
     gap: 14px;
     overflow-y: auto;
     padding-right: 5px;
-    scrollbar-width: none;
-}
-
-.admin-form::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
 .form-group {
@@ -540,7 +536,7 @@ body{
 }
 
 .form-textarea {
-    height: 120px;
+    height: 110px;
     resize: none;
 }
 
@@ -696,6 +692,14 @@ body{
                 <div style="font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 4px; font-weight: bold;">Or use an Image URL instead:</div>
                 <input type="url" id="news-image" class="form-input" placeholder="https://example.com/image.png">
             </div>
+
+            <div class="form-group">
+                <label for="news-image-fit">Image Presentation Style</label>
+                <select id="news-image-fit" class="form-select">
+                    <option value="cover">Crop Full Width (Cover Stretched)</option>
+                    <option value="contain">Fit Full Image (Contain Entire View)</option>
+                </select>
+            </div>
             
             <div class="form-group">
                 <label for="news-body">Content Body</label>
@@ -756,6 +760,7 @@ const newsTitleInput = document.getElementById('news-title');
 const newsIconInput = document.getElementById('news-icon');
 const newsImageFileInput = document.getElementById('news-image-file');
 const newsImageInput = document.getElementById('news-image');
+const newsImageFitInput = document.getElementById('news-image-fit');
 const newsBodyInput = document.getElementById('news-body');
 const modalTitleText = document.getElementById('modal-title-text');
 const submitNewsBtn = document.getElementById('submit-news-btn');
@@ -857,9 +862,11 @@ function bindRealtimeNewsFeed() {
             const card = document.createElement('article');
             card.className = "news-card";
 
+            // Optional Image with customizable Presentation Option Fit Style
             let imageHtml = "";
             if (data.image && data.image.trim() !== "") {
-                imageHtml = `<img src="${encodeURI(data.image)}" alt="News Image" class="news-banner-img" onerror="this.style.display='none';">`;
+                const fitStyle = data.imageFit === "contain" ? "contain" : "cover";
+                imageHtml = `<img src="${encodeURI(data.image)}" alt="News Image" class="news-banner-img" style="object-fit: ${fitStyle};" onerror="this.style.display='none';">`;
             }
 
             let adminActionsHtml = "";
@@ -923,6 +930,7 @@ createNewsBtn.addEventListener('click', () => {
     newsIconInput.value = "campaign";
     newsImageFileInput.value = "";
     newsImageInput.value = "";
+    newsImageFitInput.value = "cover";
     newsBodyInput.value = "";
     
     modalTitleText.textContent = "Publish Announcement";
@@ -936,6 +944,7 @@ function openNewsModalForEdit(docId, data) {
     newsIconInput.value = data.icon || "campaign";
     newsImageFileInput.value = ""; 
     newsImageInput.value = data.image || "";
+    newsImageFitInput.value = data.imageFit || "cover";
     newsBodyInput.value = data.content || "";
     
     modalTitleText.textContent = "Edit Announcement";
@@ -954,6 +963,7 @@ newsForm.addEventListener('submit', async () => {
     const titleVal = newsTitleInput.value.trim();
     const iconVal = newsIconInput.value;
     let imageVal = newsImageInput.value.trim();
+    const imageFitVal = newsImageFitInput.value;
     const bodyVal = newsBodyInput.value.trim();
     const editId = editDocIdInput.value;
 
@@ -978,6 +988,7 @@ newsForm.addEventListener('submit', async () => {
             title: titleVal,
             icon: iconVal,
             image: imageVal,
+            imageFit: imageFitVal,
             content: bodyVal,
             timestamp: serverTimestamp()
         };
