@@ -240,14 +240,14 @@ body{
 }
 
 /* =========================
-   TRADE PANEL MAIN WORKSPACE
+   TRADE PANEL MAIN WORKSPACE (RESTYLED LIKE STATS CARD)
 ========================= */
 .trade-wrapper {
     flex: 1;
-    max-width: 1200px;
+    max-width: 1100px;
     width: 100%;
     margin: 40px auto;
-    padding: 0 24px;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -255,13 +255,11 @@ body{
 }
 
 .trade-card {
-    background: rgba(255, 255, 255, 0.12);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 28px;
-    padding: 32px;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     min-height: 520px;
@@ -272,7 +270,7 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     gap: 20px;
 }
 
@@ -291,7 +289,7 @@ body{
     font-family: "Titan One", sans-serif;
     font-size: 2.2rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
 }
 
 .trade-meta-actions {
@@ -315,53 +313,52 @@ body{
     font-weight: 900;
 }
 
-/* NAVIGATION NAVIGATION TABS */
+/* REFRESHED SUB TAB CONTROLS (RESTYLED LIKE FRIENDS TABS) */
 .trade-nav-bar {
     display: flex;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0,0,0,0.3);
+    border-radius: 14px;
+    padding: 4px;
+    gap: 4px;
     margin-bottom: 24px;
-    gap: 30px;
 }
 
 .trade-nav-item {
+    flex: 1;
     background: transparent;
     border: none;
     outline: none;
     cursor: pointer;
-    font-family: "Titan One", sans-serif;
-    font-size: 1.15rem;
-    color: rgba(255, 255, 255, 0.6);
-    padding-bottom: 12px;
-    position: relative;
-    transition: color 0.15s;
-    letter-spacing: 0.3px;
+    padding: 12px 10px;
+    color: rgba(255,255,255,0.6);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.2px;
 }
 
 .trade-nav-item:hover {
     color: white;
+    background: rgba(255,255,255,0.05);
 }
 
 .trade-nav-item.active {
+    background: #ff9b2f;
     color: white;
-}
-
-.trade-nav-item.active::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: #ff7f11;
-    border-radius: 99px;
-    box-shadow: 0 -2px 8px #ff7f11;
+    box-shadow: 0 4px 10px rgba(255, 155, 47, 0.3);
 }
 
 /* INNER SHELF PANELS CONTAINER */
 .trade-display-shelf {
     flex: 1;
     background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 18px;
     padding: 40px 24px;
     display: flex;
@@ -393,14 +390,14 @@ body{
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.5);
     gap: 14px;
     margin: auto;
     max-width: 400px;
 }
 
 .shelf-empty-state .material-icons {
-    font-size: 3.5rem;
+    font-size: 3rem;
     color: rgba(255, 255, 255, 0.35);
 }
 
@@ -475,7 +472,7 @@ body{
         margin: 15px auto;
     }
     .trade-card {
-        padding: 16px;
+        padding: 20px;
     }
     .trade-header-row {
         flex-direction: column;
@@ -490,11 +487,8 @@ body{
         font-size: 1.8rem;
     }
     .trade-nav-bar {
-        gap: 15px;
-    }
-    .trade-nav-item {
-        font-size: 0.95rem;
-        padding-bottom: 8px;
+        flex-direction: column;
+        border-radius: 18px;
     }
 }
 </style>
@@ -551,9 +545,18 @@ body{
         </div>
 
         <div class="trade-nav-bar">
-            <button class="trade-nav-item active" data-target="received-panel">Received Offers</button>
-            <button class="trade-nav-item" data-target="sent-panel">Sent Offers</button>
-            <button class="trade-nav-item" data-target="history-panel">History Log</button>
+            <button class="trade-nav-item active" data-target="received-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">mail_outline</span>
+                <span>Received Offers</span>
+            </button>
+            <button class="trade-nav-item" data-target="sent-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">outbound</span>
+                <span>Sent Offers</span>
+            </button>
+            <button class="trade-nav-item" data-target="history-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">history</span>
+                <span>History Log</span>
+            </button>
         </div>
 
         <div class="trade-display-shelf">
