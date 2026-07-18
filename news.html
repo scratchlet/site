@@ -19,13 +19,10 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: "Nunito", sans-serif;
 }
 
 html, body {
     scrollbar-width: none; 
-    height: 100vh;
-    overflow: hidden; /* Prevents the whole page from scrolling */
 }
 
 ::-webkit-scrollbar {
@@ -33,10 +30,10 @@ html, body {
 }
 
 body{
-    font-family:"Nunito", sans-serif;
+    font-family:"Nunito",sans-serif;
     color:white;
-    overflow: hidden;
-    height:100vh;
+    overflow-x:hidden;
+    min-height:100vh;
     background: #ff9b2f;
     position: relative;
     display: flex;
@@ -119,7 +116,6 @@ body{
     box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
     z-index: 100;
     gap: 15px;
-    flex-shrink: 0;
 }
 
 .nav-left-group {
@@ -134,7 +130,7 @@ body{
 }
 
 .logo{
-    font-family:"Titan One", cursive;
+    font-family:"Titan One",cursive;
     font-size:2.5rem;
     color:white;
 }
@@ -169,7 +165,6 @@ body{
     color: #ffd700;
     font-size: 1.05rem;
     text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    font-weight: 900;
 }
 
 /* HUD Symbol Bar */
@@ -248,7 +243,7 @@ body{
    BUTTONS
 ========================= */
 .btn {
-    font-family:"Nunito", sans-serif;
+    font-family:"Nunito",sans-serif;
     font-weight:900;
     border:none;
     cursor:pointer;
@@ -305,18 +300,17 @@ body{
 }
 
 /* =========================
-   NEWS AREA DESIGN (STRETCHED & SCROLL PROTECTED)
+   NEWS AREA DESIGN (FIXED SIZE CARDS)
 ========================= */
 .news-header-section {
-    max-width: 1550px;
+    max-width: 1150px;
     width: 100%;
-    margin: 30px auto 10px auto;
-    padding: 0 40px;
+    margin: 40px auto 10px auto;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 5;
-    flex-shrink: 0;
 }
 
 .news-header-title {
@@ -327,27 +321,15 @@ body{
 
 .news-feed {
     flex: 1;
-    max-width: 1550px;
+    max-width: 1150px;
     width: 100%;
-    margin: 10px auto 30px auto;
-    padding: 0 40px;
+    margin: 10px auto 40px auto;
+    padding: 0 24px;
     display: flex;
     flex-direction: column;
     gap: 25px;
     position: relative;
     z-index: 5;
-    overflow-y: auto; /* Feed container takes the scrolling layout, page background remains completely fixed */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-}
-
-.news-feed::-webkit-scrollbar {
-    display: block;
-    width: 6px;
-}
-.news-feed::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 10px;
 }
 
 .news-card {
@@ -359,8 +341,10 @@ body{
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 100%;
-    flex-shrink: 0; /* Ensures cards maintain their own bounds layout */
+    transition: transform 0.2s ease;
+    
+    /* Lock structural card boundaries */
+    max-height: 580px; 
 }
 
 .news-card-header {
@@ -368,6 +352,7 @@ body{
     justify-content: space-between;
     align-items: flex-start;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .news-card-title-group {
@@ -398,33 +383,14 @@ body{
     white-space: nowrap;
 }
 
-/* Dynamic Image Sizing Classes */
 .news-banner-img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain; /* Prevents image clipping - view entire layout safely */
+    background: rgba(0, 0, 0, 0.15);
     border-radius: 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
-    object-fit: cover;
-    display: block;
-}
-
-.news-banner-img.img-sz-small {
-    max-width: 200px;
-    max-height: 140px;
-    object-fit: contain;
-    align-self: flex-start;
-}
-
-.news-banner-img.img-sz-medium {
-    max-width: 500px;
-    max-height: 260px;
-    width: 100%;
-    object-fit: cover;
-    align-self: flex-start;
-}
-
-.news-banner-img.img-sz-large {
-    width: 100%;
-    max-height: 420px;
-    object-fit: cover;
+    flex-shrink: 0;
 }
 
 .news-card-body {
@@ -432,20 +398,21 @@ body{
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.95);
     white-space: pre-wrap;
-    font-weight: 600;
-    max-height: 250px;
-    overflow-y: auto; /* Handles text overflows purely isolated within the card */
+    
+    /* Isolate description text vertical overflow scrolling internally */
+    overflow-y: auto; 
     padding-right: 8px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
+/* Webkit configuration for the inner description body scrollbar */
 .news-card-body::-webkit-scrollbar {
-    display: block;
     width: 6px;
+    display: block;
 }
 .news-card-body::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
 }
 
@@ -454,6 +421,7 @@ body{
     gap: 10px;
     justify-content: flex-end;
     margin-top: 10px;
+    flex-shrink: 0;
 }
 
 /* Empty View State */
@@ -497,7 +465,7 @@ body{
     width: 550px; 
     max-width: 100%;
     height: auto;
-    max-height: 95vh;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 15px 50px rgba(0,0,0,0.6);
@@ -534,8 +502,11 @@ body{
     gap: 14px;
     overflow-y: auto;
     padding-right: 5px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-width: none;
+}
+
+.admin-form::-webkit-scrollbar {
+    display: none;
 }
 
 .form-group {
@@ -564,59 +535,18 @@ body{
     transition: border-color 0.15s;
 }
 
-.form-input::placeholder, .form-textarea::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-    font-family: 'Nunito', sans-serif;
-}
-
 .form-input:focus, .form-textarea:focus, .form-select:focus {
     border-color: #ff9b2f;
 }
 
 .form-textarea {
-    height: 110px;
+    height: 120px;
     resize: none;
 }
 
 .form-select option {
     background: #110800;
     color: white;
-}
-
-/* SIZE TAB BUTTONS SETUP */
-.size-tabs-container {
-    display: flex;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 12px;
-    padding: 4px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    gap: 4px;
-}
-
-.size-tab-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    padding: 8px 12px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-
-.size-tab-btn:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.size-tab-btn.active {
-    background: #ff9b2f;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Overrides */
@@ -670,10 +600,6 @@ body{
         align-items: center;
         text-align: center;
         margin-top: 25px;
-        padding: 0 20px;
-    }
-    .news-feed {
-        padding: 0 20px;
     }
     .news-card-header {
         flex-direction: column;
@@ -683,9 +609,8 @@ body{
     .news-card-date {
         align-self: flex-start;
     }
-    .news-banner-img.img-sz-medium, .news-banner-img.img-sz-small {
-        max-width: 100%;
-        align-self: stretch;
+    .news-card {
+        max-height: 520px;
     }
 }
 </style>
@@ -771,15 +696,6 @@ body{
                 <div style="font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 4px; font-weight: bold;">Or use an Image URL instead:</div>
                 <input type="url" id="news-image" class="form-input" placeholder="https://example.com/image.png">
             </div>
-
-            <div class="form-group">
-                <label>Display Image Size</label>
-                <div class="size-tabs-container" id="image-size-tabs">
-                    <button type="button" class="size-tab-btn" data-size="small">Small</button>
-                    <button type="button" class="size-tab-btn active" data-size="medium">Medium</button>
-                    <button type="button" class="size-tab-btn" data-size="large">Large</button>
-                </div>
-            </div>
             
             <div class="form-group">
                 <label for="news-body">Content Body</label>
@@ -843,32 +759,10 @@ const newsImageInput = document.getElementById('news-image');
 const newsBodyInput = document.getElementById('news-body');
 const modalTitleText = document.getElementById('modal-title-text');
 const submitNewsBtn = document.getElementById('submit-news-btn');
-const sizeTabsContainer = document.getElementById('image-size-tabs');
 
 let currentUserUid = null;
 let userDocRef = null;
 let isFounder = false;
-let chosenImageSize = "medium"; 
-
-// Setup event listeners for tab buttons
-sizeTabsContainer.querySelectorAll('.size-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        sizeTabsContainer.querySelectorAll('.size-tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        chosenImageSize = btn.getAttribute('data-size');
-    });
-});
-
-function setSizeTabActive(sizeValue) {
-    chosenImageSize = sizeValue || "medium";
-    sizeTabsContainer.querySelectorAll('.size-tab-btn').forEach(b => {
-        if(b.getAttribute('data-size') === chosenImageSize) {
-            b.classList.add('active');
-        } else {
-            b.classList.remove('active');
-        }
-    });
-}
 
 // ----------------------------------------------------
 // AUTH & TOKEN REALTIME SYNCRONIZATION
@@ -965,8 +859,7 @@ function bindRealtimeNewsFeed() {
 
             let imageHtml = "";
             if (data.image && data.image.trim() !== "") {
-                const sizeClass = "img-sz-" + (data.imageSize || "medium");
-                imageHtml = `<img src="${encodeURI(data.image)}" alt="News Image" class="news-banner-img ${sizeClass}" onerror="this.style.display='none';">`;
+                imageHtml = `<img src="${encodeURI(data.image)}" alt="News Image" class="news-banner-img" onerror="this.style.display='none';">`;
             }
 
             let adminActionsHtml = "";
@@ -1031,7 +924,6 @@ createNewsBtn.addEventListener('click', () => {
     newsImageFileInput.value = "";
     newsImageInput.value = "";
     newsBodyInput.value = "";
-    setSizeTabActive("medium");
     
     modalTitleText.textContent = "Publish Announcement";
     submitNewsBtn.textContent = "Publish Announcement";
@@ -1045,7 +937,6 @@ function openNewsModalForEdit(docId, data) {
     newsImageFileInput.value = ""; 
     newsImageInput.value = data.image || "";
     newsBodyInput.value = data.content || "";
-    setSizeTabActive(data.imageSize || "medium");
     
     modalTitleText.textContent = "Edit Announcement";
     submitNewsBtn.textContent = "Save Changes";
@@ -1087,7 +978,6 @@ newsForm.addEventListener('submit', async () => {
             title: titleVal,
             icon: iconVal,
             image: imageVal,
-            imageSize: chosenImageSize,
             content: bodyVal,
             timestamp: serverTimestamp()
         };
