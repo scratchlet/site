@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scratchlet - Inventory</title>
+<title>Scratchlet - Trade Center</title>
 <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,6 @@ body{
     min-height:100vh;
     background: #ff9b2f;
     position: relative;
-    
     display: flex;
     flex-direction: column;
 }
@@ -241,257 +240,284 @@ body{
 }
 
 /* =========================
-   BUTTONS
+   TRADE PANEL MAIN WORKSPACE
 ========================= */
+.trade-wrapper {
+    flex: 1;
+    max-width: 1100px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+}
+
+.trade-card {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    min-height: 520px;
+}
+
+/* HEADER COMPONENT */
+.trade-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+
+.trade-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.trade-title-group .material-icons {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+.trade-main-title {
+    font-family: "Titan One", sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+}
+
+.trade-meta-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-identity-badge {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-identity-badge span {
+    color: #ffe099;
+    font-weight: 900;
+}
+
+/* REFRESHED SUB TAB CONTROLS */
+.trade-nav-bar {
+    display: flex;
+    background: rgba(0,0,0,0.3);
+    border-radius: 14px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 24px;
+}
+
+.trade-nav-item {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 10px;
+    color: rgba(255,255,255,0.6);
+    font-family: "Nunito", sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.2px;
+}
+
+.trade-nav-item:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+
+.trade-nav-item.active {
+    background: #ff9b2f;
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 155, 47, 0.3);
+}
+
+/* INNER SHELF PANELS CONTAINER */
+.trade-display-shelf {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+}
+
+.shelf-panel {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 15px;
+}
+
+.shelf-panel.active {
+    display: flex;
+    animation: shelfFade 0.25s ease-out;
+}
+
+@keyframes shelfFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ROW DESIGN FOR TRADES */
+.trade-row {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.trade-row-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+}
+
+.trade-user-name {
+    font-weight: 800;
+    color: white;
+    font-size: 1.05rem;
+}
+
+.trade-items-exchange {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.exchange-side {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.blook-trade-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.trade-row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+/* EMPTY GENERIC PANEL VIEW */
+.shelf-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    gap: 14px;
+    margin: auto;
+    max-width: 400px;
+}
+
+.shelf-empty-state .material-icons {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.shelf-empty-text {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.2px;
+}
+
+/* ACTION BUTTONS */
 .btn {
     font-family:"Nunito",sans-serif;
     font-weight:900;
     border:none;
     cursor:pointer;
-    letter-spacing:.3px;
+    letter-spacing:.5px;
     font-size:0.95rem;
     text-decoration:none;
-    display:inline-block;
-    padding:12px 24px;
-    border-radius:14px;
+    display:inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 12px;
     position: relative;
     text-align: center;
     box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transform: translateY(0);
     transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
 }
 
-.btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-.btn:hover:not(:disabled) {
+.btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 0 rgba(0,0,0,0.18);
     filter: brightness(1.05);
 }
 
-.btn:active:not(:disabled) {
+.btn:active {
     transform: translateY(3px);
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
     filter: brightness(0.95);
-    transition: transform 0.04s ease, box-shadow 0.04s ease;
 }
 
-.secondary {
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
+.action-orange-btn { background: #ff7f11; color: white; box-shadow: 0 4px 0 #b35300; }
+.action-orange-btn:hover { box-shadow: 0 6px 0 #b35300; }
+.action-orange-btn:active { box-shadow: 0 1px 0 #b35300; }
 
-.danger {
-    background: linear-gradient(135deg, #ff5252, #c62828);
-    color: white;
-}
+.success-btn { background: #4caf50; color: white; box-shadow: 0 4px 0 #2e6930; }
+.success-btn:hover { box-shadow: 0 6px 0 #2e6930; }
+.success-btn:active { box-shadow: 0 1px 0 #2e6930; }
 
-/* =================================
-   INVENTORY CONTROLS & STRUCTURE
-================================= */
-.inventory-container {
-    flex: 1;
-    max-width: 95%; 
-    width: 100%;
-    margin: 40px auto;
-    padding: 0 30px;
-    position: relative;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
+.danger-btn { background: #ff5252; color: white; box-shadow: 0 4px 0 #b33939; }
+.danger-btn:hover { box-shadow: 0 6px 0 #b33939; }
+.danger-btn:active { box-shadow: 0 1px 0 #b33939; }
 
-.inventory-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+.secondary-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
 
-.inventory-heading {
-    font-family: "Titan One", cursive;
-    font-size: 2.2rem;
-    color: #ffffff;
-    text-shadow: 3px 3px 0px #00000050;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.inventory-controls-group {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.search-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.search-input-wrapper .material-icons {
-    position: absolute;
-    left: 12px;
-    color: rgba(255,255,255,0.5);
-    font-size: 1.2rem;
-}
-
-.inventory-search-bar {
-    background: rgba(0, 0, 0, 0.25);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    padding: 12px 14px 12px 38px;
-    border-radius: 14px;
-    font-family: "Nunito", sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: white;
-    outline: none;
-    min-width: 220px;
-    transition: border-color 0.2s;
-}
-
-.inventory-search-bar:focus {
-    border-color: #ff9b2f;
-}
-
-/* CATEGORY SELECTION DROPDOWN */
-.category-dropdown-wrapper {
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 14px;
-    padding: 2px 10px;
-    display: flex;
-    align-items: center;
-}
-
-.inventory-category-select {
-    background: transparent;
-    color: white;
-    border: none;
-    outline: none;
-    font-family: "Nunito", sans-serif;
-    font-weight: 800;
-    font-size: 0.95rem;
-    padding: 10px 24px 10px 5px;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right center;
-}
-
-.inventory-category-select option {
-    background: #ff9b2f;
-    color: white;
-    font-weight: 700;
-}
-
-/* SINGLE MASTER CARD CONTAINER */
-.master-inventory-card {
-    background: rgba(0, 0, 0, 0.25);
-    border: 3px solid rgba(255, 255, 255, 0.12);
-    border-radius: 28px;
-    padding: 35px;
-    max-height: 70vh;
-    overflow-y: auto;
-    scrollbar-width: none; 
-}
-
-.master-inventory-card::-webkit-scrollbar {
-    display: none; 
-}
-
-/* COMPACT BLOOK GRID UNIT SIZES */
-.blook-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 15px;
-    padding-bottom: 5px;
-}
-
-/* =================================
-   IMAGE BUTTON STATE LAYOUT RULES
-================================= */
-.blook-image-btn {
-    background: rgba(0, 0, 0, 0.45);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    padding: 8px;
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-.blook-image-btn.owned:hover {
-    transform: scale(1.05);
-    background: rgba(0, 0, 0, 0.55);
-}
-
-.blook-image-btn.owned {
-    cursor: pointer;
-}
-
-.blook-image-btn.owned .blook-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.blook-image-btn.locked {
-    border-color: #222222 !important;
-    background: rgba(0, 0, 0, 0.7);
-    cursor: default;
-}
-
-.blook-image-btn.locked .blook-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    opacity: 0.25;
-    filter: grayscale(100%) brightness(50%);
-}
-
-.lock-overlay-icon {
-    position: absolute;
-    font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.45);
-    pointer-events: none;
-    z-index: 5;
-}
-
-.quantity-badge {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    background: #ff9b2f;
-    color: white;
-    font-family: 'Titan One', cursive;
-    font-size: 0.75rem;
-    padding: 2px 6px;
-    border-radius: 99px;
-    border: 1.5px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    z-index: 10;
-}
-
-/* ====================================
-   FIXED SIZE HORIZONTAL MODAL LAYOUT
-==================================== */
+/* MODALS */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -503,265 +529,152 @@ body{
     padding: 20px;
 }
 
-.modal-content {
+.modal-card {
     background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
     border: 4px solid #ff9b2f;
     border-radius: 32px;
-    padding: 30px 40px;
+    padding: 24px;
     width: 680px; 
     max-width: 100%;
-    height: 410px;
-    overflow: hidden;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 35px;
+    flex-direction: column;
     box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+    gap: 16px;
+}
+
+.modal-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title-row h2 {
+    font-family: 'Titan One', cursive;
+    color: white;
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+}
+
+.modal-search-wrapper {
     position: relative;
-}
-
-/* LEFT SIDE: PREVIEW PANEL */
-.modal-left-panel {
-    width: 180px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-right: 2px solid rgba(255, 255, 255, 0.1);
-    padding-right: 25px;
-    flex-shrink: 0;
-}
-
-/* RIGHT SIDE: CONTROL PANEL */
-.modal-right-panel {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
-}
-
-.modal-badges-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
+}
+.modal-search-wrapper .material-icons {
+    position: absolute;
+    left: 14px;
+    color: rgba(255,255,255,0.4);
+}
+.modal-search-input {
+    width: 100%;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 12px 16px 12px 44px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    outline: none;
 }
 
-.info-badge {
-    padding: 4px 12px;
-    border-radius: 10px;
-    font-size: 0.85rem;
+.inventory-selector-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.inventory-box {
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inventory-box-title {
     font-weight: 800;
+    font-size: 0.9rem;
+    color: #ff9b2f;
     text-transform: uppercase;
 }
 
-.info-badge.drop {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #ffffff;
+.items-scroller {
+    height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.info-badge.value {
-    background: rgba(255, 215, 0, 0.15);
-    border: 1px solid #ffd700;
-    color: #ffd700;
-}
-
-.modal-blook-preview {
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-    display: block;
-}
-
-.sell-calc-row {
+.select-item-row {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 8px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    margin: 15px 0;
-}
-
-.sell-input {
-    width: 130px;
-    padding: 8px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 900;
-    text-align: center;
-    background: rgba(0,0,0,0.4);
-    border: 2px solid #ff9b2f;
-    border-radius: 14px;
-    color: #ffd700;
-    outline: none;
-}
-
-/* SAFETY CONFIRMATION FIELD STYLING */
-.safety-confirm-wrapper {
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 15px;
-    background: rgba(255, 82, 82, 0.1);
-    border: 1px solid rgba(255, 82, 82, 0.3);
-    padding: 8px 12px;
-    border-radius: 12px;
-}
-
-.safety-confirm-input {
-    width: 100%;
-    padding: 6px 10px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
+    justify-content: space-between;
     font-size: 0.9rem;
-    background: rgba(0,0,0,0.5);
-    border: 2px solid #ff5252;
-    border-radius: 8px;
-    color: white;
-    outline: none;
+    cursor: pointer;
+}
+.select-item-row:hover {
+    background: rgba(255,255,255,0.1);
+}
+.select-item-row.selected {
+    background: rgba(255,155,47,0.2);
+    border: 1px solid #ff9b2f;
 }
 
-.modal-btn-group {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 5px;
-}
-
-/* ====================================
-   HOMEPAGE MATCHING RESPONSIVE NAVBAR OVERRIDES
-==================================== */
-@media(max-width:980px) {
+/* RESPONSIVE DESIGN INTERFACE SPECIFICATIONS */
+@media(max-width: 900px) {
     .navbar { 
         padding: 12px 20px; 
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
         gap: 12px;
     }
-
-    .nav-left-group {
+    .nav-left-group, .nav-right-group {
         width: 100%;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 10px;
     }
-
-    .logo-link { 
-        width: auto; 
-        text-align: center; 
-    }
-    
-    .logo { 
-        font-size: 2.2rem; 
-    }
-
-    .nav-right-group {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
     .hud-badge-bar {
-        max-width: 100%;
-        flex-wrap: nowrap;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         padding: 4px 8px;
-        gap: 4px;
-        border-radius: 25px;
     }
-
-    .hud-item {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-    }
-
-    .hud-item::after {
-        top: auto;
-        bottom: 46px;
-        transform: translateX(-50%) translateY(6px);
-    }
-    
-    .hud-item:hover::after {
-        transform: translateX(-50%) translateY(0);
-    }
-}
-
-@media(max-width: 700px) {
-    .inventory-container { 
-        padding: 0 12px; 
+    .trade-wrapper {
+        padding: 0 12px;
         margin: 15px auto;
     }
-    
-    .inventory-header {
+    .trade-card {
+        padding: 20px;
+    }
+    .trade-header-row {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        align-items: flex-start;
+        gap: 14px;
     }
-    
-    .inventory-controls-group {
+    .trade-meta-actions {
         width: 100%;
-        justify-content: center;
+        justify-content: space-between;
     }
-    
-    .inventory-search-bar {
-        min-width: 100%;
+    .trade-main-title {
+        font-size: 1.8rem;
     }
-
-    .master-inventory-card { 
-        padding: 20px 15px; 
-        max-height: 60vh; 
-        border-radius: 20px;
-    }
-
-    /* Fixed Height issues on Mobile by utilizing auto layout with scroll safety */
-    .modal-content {
+    .trade-nav-bar {
         flex-direction: column;
-        width: 350px;
-        height: auto;
-        max-height: 90vh;
-        overflow-y: auto;
-        gap: 20px;
-        padding: 25px 20px;
+        border-radius: 18px;
     }
-    
-    .modal-left-panel {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        padding-right: 0;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        padding-bottom: 15px;
+    .trade-items-exchange {
+        grid-template-columns: 1fr;
     }
-    
-    .modal-right-panel {
-        width: 100%;
-        height: auto;
-        text-align: center;
-    }
-    
-    .modal-badges-container {
-        justify-content: center;
-    }
-    
-    .sell-calc-row {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .modal-btn-group {
-        justify-content: center;
-    }
-
-    #modal-blook-name {
-        max-width: 100% !important;
-        text-align: center;
+    .inventory-selector-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -800,70 +713,113 @@ body{
     </div>
 </nav>
 
-<main class="inventory-container">
-    <div class="inventory-header">
-        <h1 class="inventory-heading">My Blooks</h1>
-        <div class="inventory-controls-group">
-            <div class="search-input-wrapper">
-                <span class="material-icons">search</span>
-                <input type="text" id="inventory-search-input" class="inventory-search-bar" placeholder="Search Blooks...">
+<main class="trade-wrapper">
+    <section class="trade-card">
+        
+        <div class="trade-header-row">
+            <div class="trade-title-group">
+                <span class="material-icons">swap_horiz</span>
+                <h1 class="trade-main-title">Trade Center</h1>
             </div>
-            <div class="category-dropdown-wrapper">
-                <select id="inventory-category-select" class="inventory-category-select">
-                    <option value="packs">Packs Category</option>
-                    <option value="rarities">Rarity Category</option>
-                </select>
+            <div class="trade-meta-actions">
+                <div class="user-identity-badge">Your Username: <span id="identity-placeholder">Loading...</span></div>
+                <button class="btn action-orange-btn" id="create-trade-btn">
+                    <span class="material-icons">add</span>
+                    <span>Create Trade Request</span>
+                </button>
             </div>
         </div>
-    </div>
 
-    <div class="master-inventory-card">
-        <div id="inventory-mount-node"></div>
-    </div>
+        <div class="trade-nav-bar">
+            <button class="trade-nav-item active" data-target="received-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">mail_outline</span>
+                <span>Received Offers</span>
+            </button>
+            <button class="trade-nav-item" data-target="sent-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">outbound</span>
+                <span>Sent Offers</span>
+            </button>
+            <button class="trade-nav-item" data-target="history-panel">
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">history</span>
+                <span>History Log</span>
+            </button>
+        </div>
+
+        <div class="trade-display-shelf">
+            
+            <div class="shelf-panel active" id="received-panel">
+                <div class="shelf-empty-state">
+                    <span class="material-icons">mail_outline</span>
+                    <div class="shelf-empty-text">No offers inside this section.</div>
+                </div>
+            </div>
+
+            <div class="shelf-panel" id="sent-panel">
+                <div class="shelf-empty-state">
+                    <span class="material-icons">outbound</span>
+                    <div class="shelf-empty-text">You haven't dispatched any trade proposals yet.</div>
+                </div>
+            </div>
+
+            <div class="shelf-panel" id="history-panel">
+                <div class="shelf-empty-state">
+                    <span class="material-icons">history</span>
+                    <div class="shelf-empty-text">Your finalized transaction transcripts appear blank.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
 </main>
 
-<div class="modal-overlay" id="sell-modal">
-    <div class="modal-content" id="sell-modal-card">
+<div class="modal-overlay" id="create-trade-modal">
+    <div class="modal-card">
+        <div class="modal-title-row">
+            <h2>Propose Trade</h2>
+            <button class="modal-close-btn" id="close-trade-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
+        </div>
         
-        <div class="modal-left-panel">
-            <img id="modal-blook-image" src="" alt="Blook Preview" class="modal-blook-preview">
+        <div class="modal-search-wrapper">
+            <span class="material-icons">search</span>
+            <input type="text" class="modal-search-input" id="target-username-input" placeholder="Type exact recipient username...">
         </div>
 
-        <div class="modal-right-panel">
-            <h2 id="modal-blook-name" style="font-family:'Titan One'; font-size:1.8rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; margin: 0;">BLOOK NAME</h2>
-            
-            <div id="modal-blook-rarity-text" style="margin-top: 4px; margin-bottom: 10px; font-weight: 900; font-size:1rem; text-transform: uppercase;">RARITY</div>
-            
-            <div class="modal-badges-container">
-                <span id="modal-chance-badge" class="info-badge drop">0%</span>
-                <span id="modal-value-badge" class="info-badge value">0 Value</span>
+        <div class="inventory-selector-grid">
+            <div class="inventory-box">
+                <div class="inventory-box-title">Your Offer (Select Blook)</div>
+                <div class="items-scroller" id="my-inventory-scroller"></div>
             </div>
-            
-            <div class="sell-calc-row">
-                <button class="btn secondary" id="sell-min-btn" style="padding: 8px 12px; font-size: 0.85rem;">Min</button>
-                <input type="text" id="sell-quantity-input" class="sell-input">
-                <button class="btn secondary" id="sell-max-btn" style="padding: 8px 12px; font-size: 0.85rem;">Max</button>
-                <button class="btn secondary" id="sell-one-left-btn" style="padding: 8px 12px; font-size: 0.85rem; background: #ff5252; color: white; border-color: #ff5252;">One Left</button>
-            </div>
-
-            <div class="safety-confirm-wrapper" id="safety-warning-box">
-                <label for="safety-blook-name-input" style="font-size: 0.75rem; color: #ff8888; font-weight: 800; text-transform: uppercase;">
-                    Type Blook name to confirm
-                </label>
-                <input type="text" id="safety-blook-name-input" class="safety-confirm-input" placeholder="Type name here...">
-            </div>
-            
-            <div class="modal-btn-group">
-                <button class="btn danger" id="confirm-sell-btn" style="padding:12px 28px; width: 100%; font-size:1.05rem;">Sell Blook(s)</button>
+            <div class="inventory-box">
+                <div class="inventory-box-title">Their Request (Select Blook)</div>
+                <div class="items-scroller" id="their-inventory-scroller">
+                    <div style="text-align:center; padding:20px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Enter exact username above to scan inventory...</div>
+                </div>
             </div>
         </div>
 
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+            <button class="btn secondary-btn" id="cancel-proposal-btn">Cancel</button>
+            <button class="btn action-orange-btn" id="submit-trade-btn">Send Proposal</button>
+        </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    onSnapshot,
+    updateDoc,
+    getDoc,
+    collection,
+    addDoc,
+    query,
+    where,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
@@ -877,627 +833,322 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-let db;
+const db = getFirestore(app);
 
-try {
-    const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    db = firestoreModule.getFirestore(app);
-} catch(e) {
-    console.error("Firestore instantiation issue:", e);
-}
-
-const sellValueMap = {
-    "Common": 2,
-    "Uncommon": 5,
-    "Rare": 15,
-    "Epic": 65,
-    "Legendary": 200,
-    "Chroma": 300,
-    "Celestial": 500,
-    "Mystical": 1000
-};
-
-const dropChanceMap = {
-    "Uncommon": "---",
-    "Rare": "---",
-    "Epic": "---",
-    "Legendary": "---",
-    "Chroma": "---",
-    "Celestial": "---",
-    "Mystical": "---"
-};
-
-const rarityOrder = ["Mystical", "Celestial", "Chroma", "Legendary", "Epic", "Rare", "Uncommon","Common"];
-
-const packsRegistry = {
-    misc: {
-       name: "Miscellaneous Blooks",
-       blooks: [
-            {name:"Placeholder",rarity:"Common",color:"grey",image:"https://blacket.org/content/blooks/Placeholder%20Blook.webp"},
-            ]
-      },
-    breakfast: {
-        name: "Breakfast Pack",
-        blooks: [
-            {name:"Toast",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/Qdw9WbN1/Toast.webp"},
-            {name:"Cereal",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/KzD5x4SH/Cereal.webp"},
-            {name:"Tomato Soup",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp"},
-            {name:"Yogurt",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/RZy6nRCH/Yougurt.webp"},
-            {name:"Breakfast Combo",rarity:"Uncommon",color:"limegreen",image:"https://i.postimg.cc/0NS6GwrD/Breakfast-Combo.webp"},
-            {name:"Orange Juice",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/jjfW67Cw/Orange-Juice.webp"},
-            {name:"Milk",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/xdmkGzqb/Milk.webp"},
-            {name:"Waffle",rarity:"Rare",color:"blue",image:"https://i.postimg.cc/JzvDBq7j/Waffle.webp"},
-            {name:"Pancakes",rarity:"Epic",color:"red",image:"https://i.postimg.cc/d0C7RyDZ/Pancakes.webp"},
-            {name:"French Toast",rarity:"Epic",color:"red",image:"https://i.postimg.cc/jjfW67Cf/French-Toast.webp"},
-            {name:"Pizza",rarity:"Legendary",color:"gold",image:"https://i.postimg.cc/bwWD2TY0/Pizza.webp"},
-            {name:"Strawberry Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp"},
-            {name:"Chocolate Milk",rarity:"Chroma",color:"cyan",image:"https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp"}
-        ]
-    },
-        medieval: {
-            name: "Medieval Pack",
-            blooks: [
-                {name:"Elf",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/Z5SfKjrN/Elf.webp"},
-                {name:"Witch",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/4xg8Nwzp/Witch.webp"},
-                {name:"Wizard",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/L8py6vzL/Wizard.webp"},
-                {name:"Fairy",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/fRNHT5x0/Fairy.webp"},
-                {name:"Slime Monster",rarity:"Uncommon",color:"limegreen",chance:13.4,image:"https://i.postimg.cc/HkgSs3Qc/Slime-Monster.webp"},
-                {name:"Jester",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/RZBPVGcJ/Jester.webp"},
-                {name:"Dragon",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/sgrnDKpx/Dragon.webp"},
-                {name:"Queen",rarity:"Rare",color:"blue",chance:8.9,image:"https://i.postimg.cc/dVYWtn8h/Queen.webp"},
-                {name:"Unicorn",rarity:"Epic",color:"red",chance:5.12,image:"https://i.postimg.cc/52VPNpwj/Unicorn.webp"},
-                {name:"King",rarity:"Legendary",color:"gold",chance:1,image:"https://i.postimg.cc/L8py6vzn/King.webp"},
-                {name:"Master Elf",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/Gp56nwS0/Master-Elf.webp"},
-                {name:"Agent Owl",rarity:"Chroma",color:"cyan",chance:0.075,image:"https://i.postimg.cc/yNb2C4rz/Agent-Owl.webp"},
-                {name:"Wise Owl",rarity:"Celestial",color:"teal",chance:0.025,image:"https://i.postimg.cc/yWqsN84V/Wise-Owl.webp"},
-                {name:"Phantom King",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/QdfkpQvC/Phantom-King.webp"},
-            ]
-        },
-
-        color: {
-            name: "Color Pack",
-            blooks: [
-                {name:"Red",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/Hnm2thKG/Red.webp"},
-                {name:"Blue",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/5yJ3mRrh/Blue.webp"},
-                {name:"Green",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/6qK0hmPg/Green.webp"},
-                {name:"Yellow",rarity:"Uncommon",color:"limegreen",chance:16.327,image:"https://i.postimg.cc/ZnmcLMQX/Yellow.webp"},
-                {name:"Orange",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/D0hgcMNY/Orange.webp"},
-                {name:"Purple",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/kGCcypHp/Purple.webp"},
-                {name:"Pink",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/brPTRB5V/Pink.webp"},
-                {name:"Brown",rarity:"Rare",color:"blue",chance:6.184,image:"https://i.postimg.cc/hvnr05Yy/Brown.webp"},
-                {name:"Lime",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/4yG51S0B/Lime.webpp"},
-                {name:"Cyan",rarity:"Epic",color:"red",chance:4.453,image:"https://i.postimg.cc/1XSHKjdM/Cyan.webp"},
-                {name:"White",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/tJb5zMck/White.webp"},
-                {name:"Grey",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/0jvfCB4f/Grey.webp"},
-                {name:"Black",rarity:"Legendary",color:"gold",chance:0.313,image:"https://i.postimg.cc/hvnr05Y1/Black.webp"},
-                {name:"Copper",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/wMzVkGrc/Copper.webp"},
-                {name:"Silver",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/NFt4xznx/Silver.webp"},
-                {name:"Gold",rarity:"Chroma",color:"cyan",chance:0.02,image:"https://i.postimg.cc/ZnmcLMQP/Gold.webp"},
-                {name:"Rainbow",rarity:"Mystical",color:"purple",chance:0.002,image:"https://i.postimg.cc/G2J4YLyd/Rainbow.webp"},
-            ]
-        },
-
-                wonderland: {
-            name: "Wonderland Pack",
-            blooks: [
-                {name:"Two of Spades",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp"},
-                {name:"Eat Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/B6KQPVgs/Eat-Me.webp"},
-                {name:"Drink Me",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp"},
-                {name:"Alice",rarity:"Uncommon",color:"limegreen",chance:14.35,image:"https://i.postimg.cc/tTxCnM5H/Alice.webp"},
-                {name:"Queen of Hearts",rarity:"Uncommon",color:"limegreen",chance:14.345,image:"https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp"},
-                {name:"Dromouse",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/xCzTN4Rr/Dormouse.webp"},
-                {name:"White Rabbit",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/wBPjvphx/White-Rabbit.webp"},
-                {name:"Cheshire Cat",rarity:"Rare",color:"blue",chance:8,image:"https://i.postimg.cc/pTFX56Bw/Cheshire-Cat.webp"},
-                {name:"Mad Hatter",rarity:"Epic",color:"red",chance:3.5,image:"https://i.postimg.cc/nL5hzJvF/Mad-Hatter.webp"},
-                {name:"King of Hearts",rarity:"Legendary",color:"gold",chance:0.7,image:"https://i.postimg.cc/q7YvRT8k/King-of-Hearts.webp"},
-                {name:"Royal Cat",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/yN58dHF7/Royal-Cat.webp"},
-                {name:"King Dog",rarity:"Chroma",color:"cyan",chance:0.025,image:"https://i.postimg.cc/mrqgDsQB/King-Dog.webp"},
-                {name:"Card of Hearts",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp"},
-                
-
-            ]
-        },
-
-            space: {
-            name: "Space Pack",
-            blooks: [
-                {name:"Earth",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/85ScxXYN/Earth.webp"},
-                {name:"Meteor",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/RFBh2pYm/Meteor.webp"},
-                {name:"Stars",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/pTHr3cSM/Stars.webp"},
-                {name:"Alien",rarity:"Uncommon",color:"limegreen",chance:18.62,image:"https://i.postimg.cc/bJhr4VBK/Alien.webp"},
-                {name:"Planet",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/Kz2jCpWX/Planet.webp"},
-                {name:"UFO",rarity:"Rare",color:"blue",chance:10,image:"https://i.postimg.cc/26Dyg9Kg/UFO.webp"},
-                {name:"Spaceship",rarity:"Epic",color:"red",chance:4.5,image:"https://i.postimg.cc/RFBh2pD8/Spaceship.webp"},
-                {name:"Astronaut",rarity:"Legendary",color:"gold",chance:0.45,image:"https://i.postimg.cc/qRTqWD5S/Astronaut.webp"},
-                {name:"Pink Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp"},
-                {name:"Red Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp"},
-                {name:"Ornage Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp"},
-                {name:"Yellow Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp"},
-                {name:"Lime Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp"},
-                {name:"Green Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp"},
-                {name:"Cyan Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp"},
-                {name:"Blue Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp"},
-                {name:"Purple Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp"},
-                {name:"Brown Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp"},
-                {name:"Black Astronaut",rarity:"Chroma",color:"cyan",chance:0.05,image:"https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp"},
-                {name:"Black Hole",rarity:"Chroma",color:"cyan",chance:0.01,image:"https://i.postimg.cc/43tnLRBF/Black-Hole.webp"},
-                {name:"Space Monitor",rarity:"Mystical",color:"purple",chance:0.0075,image:"https://i.postimg.cc/vBghSBCL/Space-Monitor.webp"},
-                {name:"Rainbow Astroanut",rarity:"Mystical",color:"purple",chance:0.0025,image:"https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp"},
-
-                
-
-            ]
-        },
-            bot: {
-            name: "Bot Pack",
-            blooks: [
-                {name:"Lil Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp"},
-                {name:"Lovely Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp"},
-                {name:"Angry Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp"},
-                {name:"Happy Bot",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp"},
-                {name:"Watson",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/jSX8tHrH/Watson.webp"},
-                {name:"Buddy Bot",rarity:"Rare",color:"blue",chance:9,image:"https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp"},
-                {name:"Brainy Bot",rarity:"Epic",color:"red",chance:3.7,image:"https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp"},
-                {name:"Mega Bot",rarity:"Legendary",color:"gold",chance:0.25,image:"https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp"},
-                {name:"Neon Bot",rarity:"Chroma",color:"cyan",chance:0.04,image: "https://i.postimg.cc/zGwwZRtf/Neon-Bot.webp"},
-                {name:"Joyful Bot",rarity:"Mystical",color:"purple",chance:0.005,image:"https://i.postimg.cc/j21gtvCT/Joyful-Bot.gif"},
-            ]
-        },
-            aquatic: {
-            name: "Aquatic Pack",
-            blooks: [
-                {name:"Old Boot",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJq6/Old-Boot.webp"},
-                {name:"Jellyfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp"},
-                {name:"Clownfish",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/63HqC2Tc/Goldfish.webp"},
-                {name:"Frog",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/xCs8LJqP/Frog.webp"},
-                {name:"Crab",rarity:"Uncommon",color:"limegreen",chance:14.9,image:"https://i.postimg.cc/j582ywC6/Crab.webp"},
-                {name:"Pufferfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/gJMj3XrD/Pufferfish.webp"},
-                {name:"Blobfish",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/0Qtj7Mrp/Blobfish.webp"},
-                {name:"Octopus",rarity:"Rare",color:"Blue",chance:6.06,image:"https://i.postimg.cc/50Py8YjC/Octopus.webp"},
-                {name:"Narwhal",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/4d8yp7nH/Narwhal.webp"},
-                {name:"Dolphin",rarity:"Epic",color:"Red",chance:2.98,image:"https://i.postimg.cc/W39z0FtJ/Dolphin.webp"},
-                {name:"Baby Shark",rarity: "Legendary",color:"gold",chance:0.497,image:"https://i.postimg.cc/Y9X0QGjG/Baby-Shark.webp"},
-                {name:"Megalodon",rarity: "Legendary",color:"gold",chance:0.199,image:"https://i.postimg.cc/26Hynb33/Megalodon.webp"},
-                {name:"Spring Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/fLWk3jWm/Spring-Frog.webp"},
-                {name:"Lucky Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/qRmq2hgR/Lucky-Frog.webp"},
-                {name:"Lovely Frog",rarity: "Chroma",color:"Cyan",chance:0.0795,image:"https://i.postimg.cc/k4jGW6DB/Lovely-Frog.webpg"},
-                {name:"Rainbow Narwhal",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/MTZXcbZB/Rainbow-Narwhal.webp"},
-                {name:"Crimson Octopus",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/Tw2hyq2W/Crimson-Octopus.webp"},
-                {name:"Donut Blobfish",rarity: "Chroma",color:"Cyan",chance:0.0596,image:"https://i.postimg.cc/wvx3tcxm/Donut-Blobfish.webp"},
-                {name:"Rainbow Jellyfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/Y92j4f24/Rainbow-Jellyfish.webp"},
-                {name:"Poison Dart Frog",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp"},
-                {name:"Blizzard Clownfish",rarity: "Chroma",color:"Cyan",chance:0.0397,image:"https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp"},
-                {name:"Beach",rarity: "Celestial",color:"teal",chance:0.0248,image:"https://i.postimg.cc/sXf1B9fv/Beach.webp"},
-            ]
-        },
-            safari: {
-                name: "Safari Pack",
-                blooks: [
-                    {name:"Panda",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/Xvc56HJF/Panda.webp"},
-                    {name:"Sloth",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/pdYjMGTn/Sloth.webp"},
-                    {name:"Tenrec",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/LsBPFCXP/Tenrec.webp"},
-                    {name:"Flamingo",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/43bcRLdH/Flamingo.webp"},
-                    {name:"Zebra",rarity: "Uncommon",color:"limegreen",chance:15,image:"https://i.postimg.cc/ZqhNgtTc/Zebra.webp"},
-                    {name:"Elephant",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/6QNZSJ9h/Elephant.webp"},
-                    {name:"Lemur",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/HLCMKDp9/Lemur.webp"},
-                    {name:"Peacock",rarity: "Rare",color:"Blue",chance:7,image:"https://i.postimg.cc/N0wXVqg8/Peacock.webp"},
-                    {name:"Chameleon",rarity: "Epic",color:"Red",chance:3.48,image:"https://i.postimg.cc/ZqhNgtTF/Chameleon.webp"},
-                    {name:"Lion",rarity: "Legendary",color:"gold",chance:0.46,image:"https://i.postimg.cc/MG8B42W1/Lion.webp"},
-                    {name:"Rainbow Panda",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp"},
-                    {name:"White Peacock",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/xdSm7D0K/White-Peacock.webp"},
-                    {name:"Tiger Zebra",rarity: "Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp"}
-            ]
-        },
-            dino: {
-            name: "Dino Pack",
-            blooks: [
-                {name:"Amber",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/bN18Td2q/Ember.webp"},
-                {name:"Dino Egg",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/027xfrJx/Dino-Egg.webp"},
-                {name:"Dino Fossil",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/8PLDHsrG/Dino-Fossil.webp"},
-                {name:"Dino Footprint",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/qBwM63ff/Dino-Footprint.png"},
-                {name:"Stegosaurus",rarity:"Uncommon",color:"limegreen",chance:15.58,image:"https://i.postimg.cc/GhvrQ9sw/Stegosaurus.webp"},
-                {name:"Velociraptor",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/hPVgrhQk/Velociraptor.webp"},
-                {name:"Brontosaurus",rarity:"Rare",color:"Blue",chance:9,image:"https://i.postimg.cc/8PLDHsf9/Brontosaurus.webp"},
-                {name:"Triceratops",rarity:"Epic",color:"Red",chance:3.7,image:"https://i.postimg.cc/ZK6Zc0vX/Triceratops.webp"},
-                {name:"Tyrannosaurus Rex",rarity:"Legendary",color:"gold",chance:0.3,image:"https://i.postimg.cc/gk3dDrL5/Tyrannosaurusrex.webp"},
-                {name:"Golden Amber",rarity:"Chroma",color:"Cyan",chance:0.07,image:"https://i.postimg.cc/rF5cJzRY/Golden-Ember.webp"}
-            ]
-        },
-            icemonsters: {
-                name: "Ice Monsters Pack",
-                blooks: [
-                    {name:"Ice Bat",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/63KwJn5M/icebat.png"},
-                    {name:"Ice Bug",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/d0rvx4v7/icebug.png"},
-                    {name:"Ice Elemental",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/jSGtcGV0/iceelemental.png"},
-                    {name:"Rock Monster",rarity:"Uncommon",color:"limegreen",chance:19.5,image:"https://i.postimg.cc/SxXmWmvf/rockmonster.png"},
-                    {name:"Dink",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/LXVSH5J2/dink.png"},
-                    {name:"Donk",rarity:"Rare",color:"Blue",chance:8.5,image:"https://i.postimg.cc/BQ7qLjMv/donk.png"},
-                    {name:"Bush Monster",rarity:"Epic",color:"Red",chance:4.5,image:"https://i.postimg.cc/fyBMvysB/bushmonster.png"},
-                    {name:"Yeti",rarity:"Legendary",color:"gold",chance:0.35,image:"https://i.postimg.cc/gk2z2Vy5/yeti.png"},
-                    {name:"Ice Slime",rarity:"Chroma",color:"Cyan",chance:0.08,image:"https://i.postimg.cc/nrHH77yX/iceslime.png"},
-                    {name:"Ice Fossil",rarity:"Chroma",color:"Cyan",chance:0.05,image:"https://i.postimg.cc/sfcfz6W7/frozenfossil.png"},
-                    {name:"Ice Crab",rarity:"Chroma",color:"Cyan",chance:0.02,image:"https://i.postimg.cc/RF1SNGDr/icecrab.png"}
-            ]
-        },
-};
-
+// DOM Elements
 const tokenCounterValue = document.getElementById('token-counter-value');
-const inventoryMountNode = document.getElementById('inventory-mount-node');
-const inventorySearchInput = document.getElementById('inventory-search-input');
-const inventoryCategorySelect = document.getElementById('inventory-category-select');
+const identityPlaceholder = document.getElementById('identity-placeholder');
+const tradeNavItems = document.querySelectorAll('.trade-nav-item');
+const shelfPanels = document.querySelectorAll('.shelf-panel');
 
-const sellModal = document.getElementById('sell-modal');
-const sellModalCard = document.getElementById('sell-modal-card');
-const modalBlookName = document.getElementById('modal-blook-name');
-const modalBlookRarityText = document.getElementById('modal-blook-rarity-text');
-const modalBlookImage = document.getElementById('modal-blook-image');
-const modalChanceBadge = document.getElementById('modal-chance-badge');
-const modalValueBadge = document.getElementById('modal-value-badge');
-const sellQuantityInput = document.getElementById('sell-quantity-input');
-const confirmSellBtn = document.getElementById('confirm-sell-btn');
-const sellMinBtn = document.getElementById('sell-min-btn');
-const sellMaxBtn = document.getElementById('sell-max-btn');
-const sellOneLeftBtn = document.getElementById('sell-one-left-btn');
+const createTradeBtn = document.getElementById('create-trade-btn');
+const createTradeModal = document.getElementById('create-trade-modal');
+const closeTradeModal = document.getElementById('close-trade-modal');
+const cancelProposalBtn = document.getElementById('cancel-proposal-btn');
+const submitTradeBtn = document.getElementById('submit-trade-btn');
 
-const safetyWarningBox = document.getElementById('safety-warning-box');
-const safetyBlookNameInput = document.getElementById('safety-blook-name-input');
+const targetUsernameInput = document.getElementById('target-username-input');
+const myInventoryScroller = document.getElementById('my-inventory-scroller');
+const theirInventoryScroller = document.getElementById('their-inventory-scroller');
 
-let userTokens = 0;
-let userInventoryMap = {};
-let currentUserRef = null;
-let selectedBlookToSell = null;
-let isInventoryArray = false;
-let currentViewMode = "packs"; 
-let currentSelectedQty = 1;
+let currentUserUid = null;
+let currentUsername = "";
+let myBlooks = {};
+let targetUserUid = null;
 
-function findBlookDetails(blookName) {
-    for (const key in packsRegistry) {
-        const found = packsRegistry[key].blooks.find(b => b.name === blookName);
-        if (found) return { ...found, packId: key, packName: packsRegistry[key].name };
-    }
-    return null;
-}
+let selectedMyBlook = null;
+let selectedTheirBlook = null;
 
-function renderInventoryLayout() {
-    inventoryMountNode.innerHTML = "";
-    inventoryMountNode.style.display = "flex";
-    inventoryMountNode.style.flexDirection = "column";
-    inventoryMountNode.style.gap = "30px";
-
-    const searchQuery = inventorySearchInput.value.toLowerCase().trim();
-
-    if (currentViewMode === "packs") {
-        renderPacksView(searchQuery);
-    } else {
-        renderRaritiesView(searchQuery);
-    }
-
-    if(inventoryMountNode.lastChild) {
-        inventoryMountNode.removeChild(inventoryMountNode.lastChild);
-    }
-
-    document.querySelectorAll('.blook-image-btn.owned').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const bName = btn.getAttribute('data-blookname');
-            const bCount = userInventoryMap[bName] || 0;
-            const bDetails = findBlookDetails(bName);
-            openSellWindow(bDetails, bCount);
-        });
+// Tab Switcher Setup
+tradeNavItems.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tradeNavItems.forEach(t => t.classList.remove('active'));
+        shelfPanels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.getAttribute('data-target')).classList.add('active');
     });
-}
-
-function renderPacksView(searchQuery) {
-    for (const packKey in packsRegistry) {
-        const pack = packsRegistry[packKey];
-        
-        const visibleBlooks = pack.blooks.filter(blook => blook.name.toLowerCase().includes(searchQuery));
-        if (visibleBlooks.length === 0 && searchQuery !== "") continue;
-
-        const packHeader = document.createElement('h2');
-        packHeader.style.fontFamily = "'Titan One', cursive";
-        packHeader.style.fontSize = "1.5rem";
-        packHeader.style.color = "#fff4d6";
-        packHeader.style.textShadow = "2px 2px 0px rgba(0,0,0,0.4)";
-        packHeader.style.marginBottom = "12px";
-        packHeader.style.textTransform = "uppercase";
-        packHeader.style.letterSpacing = "0.5px";
-        packHeader.textContent = pack.name;
-
-        const packGrid = document.createElement('div');
-        packGrid.className = "blook-grid";
-
-        let gridHtml = "";
-        pack.blooks.forEach(blook => {
-            if (!blook.name.toLowerCase().includes(searchQuery)) return;
-            const count = userInventoryMap[blook.name] || 0;
-            const isOwned = count > 0;
-
-            if (isOwned) {
-                gridHtml += `
-                    <button class="blook-image-btn owned" data-blookname="${blook.name}" style="border-color: ${blook.color};" title="${blook.name} (${blook.rarity}) - Owned: ${count}">
-                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
-                        ${count > 1 ? `<div class="quantity-badge">x${count}</div>` : ''}
-                    </button>
-                `;
-            } else {
-                gridHtml += `
-                    <button class="blook-image-btn locked" title="${blook.name} (${blook.rarity}) - Locked">
-                        <span class="material-icons lock-overlay-icon">lock</span>
-                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
-                    </button>
-                `;
-            }
-        });
-
-        packGrid.innerHTML = gridHtml;
-
-        const lineSeparator = document.createElement('hr');
-        lineSeparator.style.border = "none";
-        lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
-        lineSeparator.style.marginTop = "25px";
-
-        inventoryMountNode.appendChild(packHeader);
-        inventoryMountNode.appendChild(packGrid);
-        inventoryMountNode.appendChild(lineSeparator);
-    }
-}
-
-function renderRaritiesView(searchQuery) {
-    let allBlooksFlattened = [];
-    for (const key in packsRegistry) {
-        packsRegistry[key].blooks.forEach(b => {
-            if (!allBlooksFlattened.some(existing => existing.name === b.name)) {
-                allBlooksFlattened.push(b);
-            }
-        });
-    }
-
-    rarityOrder.forEach(rarityName => {
-        const rarityBlooks = allBlooksFlattened.filter(b => b.rarity === rarityName && b.name.toLowerCase().includes(searchQuery));
-        if (rarityBlooks.length === 0) return;
-
-        const rarityHeader = document.createElement('h2');
-        rarityHeader.style.fontFamily = "'Titan One', cursive";
-        rarityHeader.style.fontSize = "1.5rem";
-        rarityHeader.style.color = rarityBlooks[0].color || "#fff4d6";
-        rarityHeader.style.textShadow = "2px 2px 0px rgba(0,0,0,0.4)";
-        rarityHeader.style.marginBottom = "12px";
-        rarityHeader.style.textTransform = "uppercase";
-        rarityHeader.style.letterSpacing = "0.5px";
-        rarityHeader.textContent = rarityName;
-
-        const rarityGrid = document.createElement('div');
-        rarityGrid.className = "blook-grid";
-
-        let gridHtml = "";
-        rarityBlooks.forEach(blook => {
-            const count = userInventoryMap[blook.name] || 0;
-            const isOwned = count > 0;
-
-            if (isOwned) {
-                gridHtml += `
-                    <button class="blook-image-btn owned" data-blookname="${blook.name}" style="border-color: ${blook.color};" title="${blook.name} (${blook.rarity}) - Owned: ${count}">
-                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
-                        ${count > 1 ? `<div class="quantity-badge">x${count}</div>` : ''}
-                    </button>
-                `;
-            } else {
-                gridHtml += `
-                    <button class="blook-image-btn locked" title="${blook.name} (${blook.rarity}) - Locked">
-                        <span class="material-icons lock-overlay-icon">lock</span>
-                        <img src="${blook.image}" alt="${blook.name}" class="blook-img">
-                    </button>
-                `;
-            }
-        });
-
-        rarityGrid.innerHTML = gridHtml;
-
-        const lineSeparator = document.createElement('hr');
-        lineSeparator.style.border = "none";
-        lineSeparator.style.borderTop = "2px solid rgba(255, 255, 255, 0.15)";
-        lineSeparator.style.marginTop = "25px";
-
-        inventoryMountNode.appendChild(rarityHeader);
-        inventoryMountNode.appendChild(rarityGrid);
-        inventoryMountNode.appendChild(lineSeparator);
-    });
-}
-
-function openSellWindow(blook, totalOwned) {
-    selectedBlookToSell = { ...blook, ownedCount: totalOwned };
-    
-    modalBlookName.textContent = blook.name;
-    modalBlookName.style.color = blook.color;
-    modalBlookRarityText.textContent = blook.rarity;
-    modalBlookRarityText.style.color = blook.color;
-    modalBlookImage.src = blook.image;
-    
-    modalChanceBadge.textContent = dropChanceMap[blook.rarity] || "---";
-    modalValueBadge.textContent = `${sellValueMap[blook.rarity] || 5} Tokens`;
-
-    currentSelectedQty = 1;
-    
-    if (totalOwned > 1) {
-        sellOneLeftBtn.style.display = "inline-block";
-    } else {
-        sellOneLeftBtn.style.display = "none";
-    }
-
-    safetyBlookNameInput.value = "";
-    safetyWarningBox.style.display = "none";
-    
-    recalculateSellPayout();
-    sellModal.style.display = "flex";
-}
-
-function closeSellWindow() {
-    sellModal.style.display = "none";
-    selectedBlookToSell = null;
-}
-
-function recalculateSellPayout() {
-    if (!selectedBlookToSell) return;
-    const rate = sellValueMap[selectedBlookToSell.rarity] || 5;
-    
-    if (currentSelectedQty > selectedBlookToSell.ownedCount) {
-        currentSelectedQty = selectedBlookToSell.ownedCount;
-    }
-    if (currentSelectedQty < 1) {
-        currentSelectedQty = 1;
-    }
-
-    sellQuantityInput.value = `${currentSelectedQty} / ${selectedBlookToSell.ownedCount}`;
-
-    const totalCalculatedPayout = currentSelectedQty * rate;
-    confirmSellBtn.innerHTML = `Sell Blook(s) (+${totalCalculatedPayout.toLocaleString()})`;
-    
-    if (currentSelectedQty < selectedBlookToSell.ownedCount) {
-        safetyWarningBox.style.display = "none";
-    }
-}
-
-sellQuantityInput.addEventListener('input', () => {
-    if (!selectedBlookToSell) return;
-    
-    let cleanVal = sellQuantityInput.value.split('/')[0].replace(/\D/g, '');
-    let typedNum = parseInt(cleanVal) || 1;
-    
-    currentSelectedQty = typedNum;
-    recalculateSellPayout();
 });
 
-sellQuantityInput.addEventListener('click', () => {
-    sellQuantityInput.setSelectionRange(0, sellQuantityInput.value.indexOf('/'));
+// Modal Dialog Toggles
+createTradeBtn.addEventListener('click', () => {
+    createTradeModal.style.display = 'flex';
+    populateMyInventory();
 });
+const closeModal = () => {
+    createTradeModal.style.display = 'none';
+    targetUsernameInput.value = "";
+    theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:20px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Enter exact username above to scan inventory...</div>`;
+    selectedMyBlook = null;
+    selectedTheirBlook = null;
+    targetUserUid = null;
+};
+closeTradeModal.addEventListener('click', closeModal);
+cancelProposalBtn.addEventListener('click', closeModal);
 
-inventorySearchInput.addEventListener('input', renderInventoryLayout);
-
-inventoryCategorySelect.addEventListener('change', (e) => {
-    currentViewMode = e.target.value;
-    renderInventoryLayout();
-});
-
-sellModal.addEventListener('click', (event) => {
-    if (!sellModalCard.contains(event.target)) {
-        closeSellWindow();
+function populateMyInventory() {
+    myInventoryScroller.innerHTML = "";
+    if (!myBlooks || Object.keys(myBlooks).length === 0) {
+        myInventoryScroller.innerHTML = `<div style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.85rem; padding:10px;">Your inventory is empty</div>`;
+        return;
     }
-});
-
-sellMinBtn.addEventListener('click', () => { currentSelectedQty = 1; recalculateSellPayout(); });
-sellMaxBtn.addEventListener('click', () => { 
-    if(selectedBlookToSell) {
-        currentSelectedQty = selectedBlookToSell.ownedCount; 
-        recalculateSellPayout(); 
-    }
-});
-
-sellOneLeftBtn.addEventListener('click', () => {
-    if (selectedBlookToSell) {
-        if (selectedBlookToSell.ownedCount > 1) {
-            currentSelectedQty = selectedBlookToSell.ownedCount - 1;
-            recalculateSellPayout();
-        }
-    }
-});
-
-confirmSellBtn.addEventListener('click', async () => {
-    if (!selectedBlookToSell || !currentUserRef) return;
-    
-    if (currentSelectedQty <= 0 || currentSelectedQty > selectedBlookToSell.ownedCount) return;
-
-    if (currentSelectedQty === selectedBlookToSell.ownedCount) {
-        if (safetyWarningBox.style.display !== "flex") {
-            safetyWarningBox.style.display = "flex";
-            safetyBlookNameInput.focus();
-            return;
-        }
-        if (safetyBlookNameInput.value.trim() !== selectedBlookToSell.name) {
-            alert("Verification mismatch. Please write the Blook's name correctly.");
-            return;
-        }
-    }
-
-    const valuePerUnit = sellValueMap[selectedBlookToSell.rarity] || 5;
-    const payoutGained = currentSelectedQty * valuePerUnit;
-
-    try {
-        confirmSellBtn.disabled = true;
-
-        if (userInventoryMap[selectedBlookToSell.name]) {
-            userInventoryMap[selectedBlookToSell.name] -= currentSelectedQty;
-            if (userInventoryMap[selectedBlookToSell.name] <= 0) {
-                delete userInventoryMap[selectedBlookToSell.name];
-            }
-        }
-
-        userTokens += payoutGained;
-
-        let inventoryDataValue;
-        if (isInventoryArray) {
-            inventoryDataValue = [];
-            Object.keys(userInventoryMap).forEach(blookName => {
-                const count = userInventoryMap[blookName];
-                for (let i = 0; i < count; i++) {
-                    inventoryDataValue.push(blookName);
-                }
+    Object.keys(myBlooks).forEach(blookName => {
+        if (myBlooks[blookName] > 0) {
+            const row = document.createElement('div');
+            row.className = "select-item-row";
+            row.innerHTML = `<span>${blookName}</span><span style="opacity:0.6">x${myBlooks[blookName]}</span>`;
+            row.addEventListener('click', () => {
+                document.querySelectorAll('#my-inventory-scroller .select-item-row').forEach(el => el.classList.remove('selected'));
+                row.classList.add('selected');
+                selectedMyBlook = blookName;
             });
-        } else {
-            inventoryDataValue = userInventoryMap;
+            myInventoryScroller.appendChild(row);
         }
+    });
+}
 
-        const firestoreDBModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-        await firestoreDBModule.updateDoc(currentUserRef, {
-            tokens: userTokens,
-            inventory: inventoryDataValue
+// Search Recipient Input Checker
+let typingTimer;
+targetUsernameInput.addEventListener('input', () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(async () => {
+        const value = targetUsernameInput.value.trim();
+        if (!value) return;
+        
+        theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:rgba(255,255,255,0.5); font-size:0.85rem;">Searching player...</div>`;
+        
+        const q = query(collection(db, "users"), where("username_lowercase", "==", value.toLowerCase()));
+        const snap = await getDocs(q);
+        
+        if (snap.empty) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:#ff5252; font-size:0.85rem;">Player not found. Use exact username!</div>`;
+            targetUserUid = null;
+            return;
+        }
+        
+        const targetDoc = snap.docs[0];
+        if (targetDoc.id === currentUserUid) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:#ff5252; font-size:0.85rem;">You cannot trade with yourself!</div>`;
+            targetUserUid = null;
+            return;
+        }
+        
+        targetUserUid = targetDoc.id;
+        const targetData = targetDoc.data();
+        const targetBlocks = targetData.blooks || {};
+        
+        theirInventoryScroller.innerHTML = "";
+        const validBlooks = Object.keys(targetBlocks).filter(name => targetBlocks[name] > 0);
+        
+        if (validBlocks.length === 0) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.85rem; padding:10px;">Player has no available items</div>`;
+            return;
+        }
+        
+        validBlocks.forEach(blookName => {
+            const row = document.createElement('div');
+            row.className = "select-item-row";
+            row.innerHTML = `<span>${blookName}</span><span style="opacity:0.6">x${targetBlocks[blookName]}</span>`;
+            row.addEventListener('click', () => {
+                document.querySelectorAll('#their-inventory-scroller .select-item-row').forEach(el => el.classList.remove('selected'));
+                row.classList.add('selected');
+                selectedTheirBlook = blookName;
+            });
+            theirInventoryScroller.appendChild(row);
         });
+        
+    }, 400);
+});
 
-        tokenCounterValue.textContent = userTokens.toLocaleString();
-        renderInventoryLayout();
-        closeSellWindow();
-    } catch(err) {
-        console.error("Sale operation transaction failed:", err);
-        alert("Transaction failed. Please try again.");
-    } finally {
-        confirmSellBtn.disabled = false;
+// Submit proposal handler
+submitTradeBtn.addEventListener('click', async () => {
+    if (!targetUserUid || !selectedMyBlook || !selectedTheirBlook) {
+        alert("Please specify a valid destination player and select items for exchange on both sides!");
+        return;
+    }
+    
+    try {
+        await addDoc(collection(db, "trades"), {
+            senderUid: currentUserUid,
+            senderName: currentUsername,
+            receiverUid: targetUserUid,
+            receiverName: targetUsernameInput.value.trim(),
+            senderOffer: [selectedMyBlook],
+            receiverOffer: [selectedTheirBlook],
+            status: "pending",
+            timestamp: Date.now()
+        });
+        alert("Trade proposal successfully submitted!");
+        closeModal();
+    } catch(e) {
+        console.error(e);
+        alert("Failed to create offer.");
     }
 });
 
+// Sync real-time trade documents feeds
+function startTradesListener() {
+    const q = query(collection(db, "trades"));
+    onSnapshot(q, (snapshot) => {
+        const recPanel = document.getElementById('received-panel');
+        const sentPanel = document.getElementById('sent-panel');
+        const histPanel = document.getElementById('history-panel');
+        
+        let recCount = 0, sentCount = 0, histCount = 0;
+        
+        let recHTML = "", sentHTML = "", histHTML = "";
+        
+        snapshot.forEach(docSnap => {
+            const trade = docSnap.data();
+            const id = docSnap.id;
+            
+            const itemHTML = `
+                <div class="trade-row">
+                    <div class="trade-row-meta">
+                        <span>ID: ${id.substring(0,6)}...</span>
+                        <span>Status: <strong style="color:${trade.status === 'accepted' ? '#4caf50' : trade.status === 'declined' ? '#ff5252' : '#ff9b2f'}">${trade.status.toUpperCase()}</strong></span>
+                    </div>
+                    <div class="trade-items-exchange">
+                        <div class="exchange-side">
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); width:100%; font-weight:800; margin-bottom:4px;">${trade.senderName} OFFERS:</div>
+                            ${trade.senderOffer.map(b => `<div class="blook-trade-badge"><span class="material-icons" style="font-size:0.9rem; color:#ffcc00">category</span>${b}</div>`).join('')}
+                        </div>
+                        <div style="display:flex; align-items:center; justify-content:center;"><span class="material-icons" style="color:rgba(255,255,255,0.4)">swap_horiz</span></div>
+                        <div class="exchange-side">
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); width:100%; font-weight:800; margin-bottom:4px;">${trade.receiverName} REQUESTS:</div>
+                            ${trade.receiverOffer.map(b => `<div class="blook-trade-badge"><span class="material-icons" style="font-size:0.9rem; color:#ffcc00">category</span>${b}</div>`).join('')}
+                        </div>
+                    </div>
+            `;
+            
+            if (trade.status === 'pending') {
+                if (trade.receiverUid === currentUserUid) {
+                    recCount++;
+                    recHTML += itemHTML + `
+                        <div class="trade-row-actions">
+                            <button class="btn danger-btn data-action-decline" data-id="${id}">Decline</button>
+                            <button class="btn success-btn data-action-accept" data-id="${id}">Accept Offer</button>
+                        </div></div>`;
+                } else if (trade.senderUid === currentUserUid) {
+                    sentCount++;
+                    sentHTML += itemHTML + `
+                        <div class="trade-row-actions">
+                            <button class="btn secondary-btn data-action-cancel" data-id="${id}">Cancel Request</button>
+                        </div></div>`;
+                }
+            } else {
+                // Completed historical logs
+                if (trade.senderUid === currentUserUid || trade.receiverUid === currentUserUid) {
+                    histCount++;
+                    histHTML += itemHTML + `</div>`;
+                }
+            }
+        });
+        
+        if (recCount > 0) recPanel.innerHTML = recHTML;
+        else recPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">mail_outline</span><div class="shelf-empty-text">No active offers inside this section.</div></div>`;
+        
+        if (sentCount > 0) sentPanel.innerHTML = sentHTML;
+        else sentPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">outbound</span><div class="shelf-empty-text">You haven't dispatched any trade proposals yet.</div></div>`;
+        
+        if (histCount > 0) histPanel.innerHTML = histHTML;
+        else histPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">history</span><div class="shelf-empty-text">Your finalized transaction transcripts appear blank.</div></div>`;
+        
+        attachTradeActionListeners();
+    });
+}
+
+function attachTradeActionListeners() {
+    document.querySelectorAll('.data-action-decline').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            await updateDoc(doc(db, "trades", id), { status: "declined" });
+        });
+    });
+    document.querySelectorAll('.data-action-cancel').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            await updateDoc(doc(db, "trades", id), { status: "cancelled" });
+        });
+    });
+    document.querySelectorAll('.data-action-accept').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            try {
+                const tradeRef = doc(db, "trades", id);
+                const tradeSnap = await getDoc(tradeRef);
+                if (!tradeSnap.exists()) return;
+                const trade = tradeSnap.data();
+                
+                // Fetch dynamic atomic balances check
+                const senderDocRef = doc(db, "users", trade.senderUid);
+                const receiverDocRef = doc(db, "users", trade.receiverUid);
+                
+                const sSnap = await getDoc(senderDocRef);
+                const rSnap = await getDoc(receiverDocRef);
+                
+                if (!sSnap.exists() || !rSnap.exists()) return;
+                
+                const sBlooks = sSnap.data().blooks || {};
+                const rBlooks = rSnap.data().blooks || {};
+                
+                const itemOffered = trade.senderOffer[0];
+                const itemRequested = trade.receiverOffer[0];
+                
+                if ((sBlooks[itemOffered] || 0) < 1 || (rBlooks[itemRequested] || 0) < 1) {
+                    alert("Transaction error: One of the players no longer holds the items involved in this request!");
+                    await updateDoc(tradeRef, { status: "expired" });
+                    return;
+                }
+                
+                // Process cross transfer mutations
+                sBlooks[itemOffered] = (sBlooks[itemOffered] || 0) - 1;
+                sBlooks[itemRequested] = (sBlooks[itemRequested] || 0) + 1;
+                
+                rBlooks[itemRequested] = (rBlooks[itemRequested] || 0) - 1;
+                rBlooks[itemOffered] = (rBlooks[itemOffered] || 0) + 1;
+                
+                await updateDoc(senderDocRef, { blooks: sBlooks });
+                await updateDoc(receiverDocRef, { blooks: rBlooks });
+                await updateDoc(tradeRef, { status: "accepted" });
+                
+                alert("Trade accepted and items successfully transferred!");
+            } catch(e) {
+                console.error(e);
+                alert("Failed processing item settlement exchange rules.");
+            }
+        });
+    });
+}
+
+// Authentication Handling State
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        try {
-            const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            currentUserRef = firestoreModule.doc(db, "users", user.uid);
-            
-            const userSnap = await firestoreModule.getDoc(currentUserRef);
-            if (userSnap.exists()) {
-                const userData = userSnap.data();
-                userTokens = userData.tokens || 0;
+        currentUserUid = user.uid;
+        const userDocRef = doc(db, "users", currentUserUid);
                 
-                const rawInventory = userData.inventory || [];
-                isInventoryArray = Array.isArray(rawInventory);
-                
-                userInventoryMap = {};
-                if (isInventoryArray) {
-                    rawInventory.forEach(blookName => {
-                        userInventoryMap[blookName] = (userInventoryMap[blookName] || 0) + 1;
-                    });
-                } else {
-                    userInventoryMap = rawInventory;
-                }
-                
-                tokenCounterValue.textContent = userTokens.toLocaleString();
-                renderInventoryLayout();
+        onSnapshot(userDocRef, (snap) => {
+            if (snap.exists()) {
+                const localUserData = snap.data();
+                myBlooks = localUserData.blooks || {};
+                currentUsername = localUserData.username || "Player";
+                tokenCounterValue.textContent = (localUserData.tokens || 0).toLocaleString();
+                identityPlaceholder.textContent = String(currentUsername).toUpperCase();
             }
-        } catch (err) {
-            console.error("Failed to load user profile data sets:", err);
-        }
-
-        document.getElementById('logout-hud-btn').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "login.html";
-            });
         });
+
+        // Set online status
+        await updateDoc(userDocRef, {
+            online: true,
+            lastActive: Date.now()
+        });
+
+        startTradesListener();
+
+        document.getElementById('logout-hud-btn').addEventListener('click', async () => {
+            await updateDoc(userDocRef, { online: false });
+            signOut(auth).then(() => { window.location.href = "login.html"; });
+        });
+
     } else {
         window.location.href = "login.html";
     }
