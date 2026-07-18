@@ -30,7 +30,7 @@ html, body {
 }
 
 body{
-    font-family:"Nunito",sans-serif;
+    font-family:\"Nunito\",sans-serif;
     color:white;
     overflow-x:hidden;
     min-height:100vh;
@@ -300,13 +300,13 @@ body{
 }
 
 /* =========================
-   NEWS AREA DESIGN (STRETCHED)
+   NEWS AREA DESIGN (STRETCHED & EXPANDED)
 ========================= */
 .news-header-section {
-    max-width: 1150px;
+    max-width: 1550px; /* Stretched from 1150px to allow wide layout */
     width: 100%;
     margin: 40px auto 10px auto;
-    padding: 0 24px;
+    padding: 0 40px; /* Added padding to ensure safety buffer away from screen bounds */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -321,10 +321,10 @@ body{
 
 .news-feed {
     flex: 1;
-    max-width: 1150px;
+    max-width: 1550px; /* Stretched container width significantly */
     width: 100%;
     margin: 10px auto 40px auto;
-    padding: 0 24px;
+    padding: 0 40px; /* Ensures cards do not touch the screen sides on large monitors */
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -342,6 +342,7 @@ body{
     flex-direction: column;
     gap: 15px;
     transition: transform 0.2s ease;
+    width: 100%;
 }
 
 .news-card-header {
@@ -380,11 +381,13 @@ body{
 }
 
 .news-banner-img {
-    width: 100%;
+    max-width: 100%;
+    width: auto;
     max-height: 400px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
+    align-self: flex-start;
 }
 
 .news-card-body {
@@ -392,6 +395,25 @@ body{
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.95);
     white-space: pre-wrap;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.news-card-body::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+}
+
+.news-card-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.news-card-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
 }
 
 .news-card-actions {
@@ -408,7 +430,7 @@ body{
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,0.6);
     gap: 15px;
     padding: 60px 20px;
     background: rgba(0, 0, 0, 0.2);
@@ -577,6 +599,10 @@ body{
         align-items: center;
         text-align: center;
         margin-top: 25px;
+        padding: 0 20px;
+    }
+    .news-feed {
+        padding: 0 20px;
     }
     .news-card-header {
         flex-direction: column;
@@ -781,11 +807,9 @@ onAuthStateChanged(auth, async (user) => {
 // ----------------------------------------------------
 async function cleanOldNews() {
     try {
-        // Calculate the date exactly 3 months ago from today
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
-        // Fetch any news items older than 3 months
         const oldNewsQuery = query(
             collection(db, "news"),
             where("timestamp", "<", threeMonthsAgo)
@@ -824,7 +848,6 @@ function bindRealtimeNewsFeed() {
             const data = docSnap.data();
             const docId = docSnap.id;
             
-            // Format dates
             let dateStr = "Recently";
             if (data.timestamp) {
                 const dateObj = data.timestamp.toDate();
@@ -834,13 +857,11 @@ function bindRealtimeNewsFeed() {
             const card = document.createElement('article');
             card.className = "news-card";
 
-            // Optional Image HTML
             let imageHtml = "";
             if (data.image && data.image.trim() !== "") {
                 imageHtml = `<img src="${encodeURI(data.image)}" alt="News Image" class="news-banner-img" onerror="this.style.display='none';">`;
             }
 
-            // Founder Actions
             let adminActionsHtml = "";
             if (isFounder) {
                 adminActionsHtml = `
@@ -868,7 +889,6 @@ function bindRealtimeNewsFeed() {
                 ${adminActionsHtml}
             `;
 
-            // Bind Founder Edit/Delete actions
             if (isFounder) {
                 card.querySelector('.edit-btn').addEventListener('click', () => {
                     openNewsModalForEdit(docId, data);
@@ -898,7 +918,6 @@ function escapeHTML(str) {
 // NEWS CREATION & EDITING MODAL (SUPERMEMES_64)
 // ----------------------------------------------------
 createNewsBtn.addEventListener('click', () => {
-    // Reset Form for Creation Mode
     editDocIdInput.value = "";
     newsTitleInput.value = "";
     newsIconInput.value = "campaign";
@@ -915,7 +934,7 @@ function openNewsModalForEdit(docId, data) {
     editDocIdInput.value = docId;
     newsTitleInput.value = data.title || "";
     newsIconInput.value = data.icon || "campaign";
-    newsImageFileInput.value = ""; // Reset file selection on edit opening
+    newsImageFileInput.value = ""; 
     newsImageInput.value = data.image || "";
     newsBodyInput.value = data.content || "";
     
@@ -931,7 +950,6 @@ function closeNewsModalPopup() {
 closeNewsModal.addEventListener('click', closeNewsModalPopup);
 newsModal.addEventListener('click', (e) => { if (e.target === newsModal) closeNewsModalPopup(); });
 
-// Form submission handler
 newsForm.addEventListener('submit', async () => {
     const titleVal = newsTitleInput.value.trim();
     const iconVal = newsIconInput.value;
@@ -948,7 +966,6 @@ newsForm.addEventListener('submit', async () => {
         submitNewsBtn.disabled = true;
         submitNewsBtn.textContent = "Processing...";
 
-        // If a file is selected, upload it to Storage first
         const file = newsImageFileInput.files[0];
         if (file) {
             submitNewsBtn.textContent = "Uploading image...";
@@ -966,10 +983,8 @@ newsForm.addEventListener('submit', async () => {
         };
 
         if (editId) {
-            // Update mode
             await updateDoc(doc(db, "news", editId), payload);
         } else {
-            // Create mode
             await addDoc(collection(db, "news"), payload);
         }
 
