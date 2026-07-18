@@ -11,157 +11,295 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <style>
-        /* Reset and Font Inheritance */
-        *, *::before, *::after {
+        /* =======================================
+           GLOBAL STYLES & HIDE SCROLLBARS
+        ======================================= */
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Nunito", sans-serif;
         }
-        
+
+        html, body {
+            scrollbar-width: none; 
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         body {
             color: white;
-            min-height: 100vh;
-            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
             overflow-x: hidden;
+            min-height: 100vh;
+            background: #ff9b2f;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
-        
-        /* BACKGROUND FLOATING SQUARES */
-        .background {
+
+        /* =======================================
+           BACKGROUND FIXED CANVAS LAYERS
+        ======================================= */
+        .bg-base-gradient {
             position: fixed;
             inset: 0;
+            z-index: -3;
+            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
+        }
+
+        .bg-moving-grid {
+            position: fixed;
+            top: -50vh;
+            left: -50vw;
+            width: 200vw;
+            height: 200vh;
+            z-index: -2;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+            background-size: 126px 126px;
+            background-position: 63px 0px;
+            will-change: transform;
+            animation: scrollTiltedTopRight 8s linear infinite;
+        }
+
+        @keyframes scrollTiltedTopRight {
+            from { transform: rotate(15deg) translate3d(0px, 0px, 0px); }
+            to { transform: rotate(15deg) translate3d(126px, -126px, 0px); }
+        }
+
+        .bg-static-squares {
+            position: fixed;
+            top: -50vh;
+            left: -50vw;
+            width: 200vw;
+            height: 200vh;
             z-index: -1;
-            overflow: hidden;
+            pointer-events: none;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+            -webkit-mask-size: 126px 126px;
+            mask-size: 126px 126px;
+            transform: rotate(15deg);
+            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
         }
-        
-        .square {
-            position: absolute;
-            border: 2px solid rgba(255, 255, 255, .35);
-            background: rgba(255, 255, 255, .12);
-            animation: fall linear infinite;
-            top: -150px;
+
+        .bg-stroke-overlay {
+            position: fixed;
+            top: -50vh;
+            left: -50vw;
+            width: 200vw;
+            height: 200vh;
+            z-index: -1;
+            pointer-events: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+            background-size: 126px 126px;
+            transform: rotate(15deg);
         }
-        
-        @keyframes fall {
-            from { transform: translateY(0); }
-            to { transform: translateY(130vh) rotate(360deg); }
-        }
-        
-        /* NAVIGATION BAR */
+
+        /* =======================================
+           STICKY STABILIZED NAVIGATION HUD
+        ======================================= */
         .navbar {
-            height: 70px;
+            position: sticky;
+            top: 0;
+            min-height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 30px;
-            background: #ff7f11;
-            box-shadow: inset 0 -6px rgba(0,0,0,.2);
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            padding: 10px 30px;
+            background: rgba(255, 127, 17, 0.94);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
+            z-index: 100;
+            gap: 15px;
         }
-        
+
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
         .logo {
             font-family: "Titan One", cursive;
             font-size: 2.5rem;
-            flex-shrink: 0;
-        }
-        
-        .minibar {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: #8f3200;
-            padding: 6px 12px;
-            border-radius: 16px;
-            box-shadow: inset 0 -4px rgba(0,0,0,.3), 0 4px 10px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.05);
+            color: white;
         }
 
-        .minibar-coins {
-            font-weight: 900;
-            font-size: 0.95rem;
-            padding-right: 12px;
-            margin-right: 8px;
-            border-right: 2px solid rgba(255, 255, 255, 0.15);
+        .nav-right-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* COIN BADGES */
+        .coin-counter {
             display: flex;
             align-items: center;
-            gap: 4px;
-            color: #fff4d6;
+            gap: 6px;
+            font-weight: 900;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 6px 14px;
+            border-radius: 99px;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-        
+
+        .coin-icon {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+        }
+
+        .coin-amount {
+            color: #ffd700;
+            font-size: 1.05rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* HUD BAR SHORTCUTS */
+        .hud-badge-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 99px;
+            padding: 6px 12px;
+            gap: 8px;
+        }
+
+        .hud-item {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        .hud-item .material-icons {
+            font-size: 1.4rem;
+        }
+
+        .hud-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .hud-item.logout-trigger {
+            color: #ff5252;
+        }
+
+        .hud-item.logout-trigger:hover {
+            background: rgba(255, 82, 82, 0.2);
+        }
+
+        /* Nametag Tooltip Popups */
+        .hud-item::after {
+            content: attr(data-nametag);
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-family: "Nunito", sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 110;
+        }
+
+        .hud-item:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* =======================================
+           STANDARDIZED BUTTON SELECTION STYLES
+        ======================================= */
         .btn {
+            font-family: "Nunito", sans-serif;
             font-weight: 900;
             border: none;
             cursor: pointer;
             letter-spacing: .3px;
-            font-size: 0.85rem;
-            transition: transform .12s ease, box-shadow .12s ease;
+            font-size: 0.95rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-        
-        .minibar-btn {
-            width: 38px;
-            height: 38px;
-            padding: 0;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            color: rgba(255, 255, 255, 0.89);
-            border-radius: 50%;
-            transition: transform 0.15s ease, color 0.15s ease;
-        }
-        
-        .minibar-btn:hover, .minibar-btn.active {
-            transform: scale(1.1) !important;
-            color: #fff4d6 !important;
-        }
-        
-        .minibar-btn:active { transform: scale(0.95) !important; }
-        .minibar-btn .material-icons { font-size: 22px; }
-        
-        #logoutBtn.minibar-btn { color: #ffc76a; }
-        #logoutBtn.minibar-btn:hover { color: white; }
-
-        /* BUTTON STYLING SYSTEMS */
-        .action-btn {
-            font-weight: 800;
-            font-size: 0.95rem;
+            gap: 8px;
             padding: 10px 20px;
             border-radius: 12px;
-            border: none;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+            filter: brightness(1.05);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+            filter: brightness(0.95);
+        }
+
+        .primary-btn {
+            background: #ffffff;
+            color: #ff9b2f;
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: transform 0.12s, filter 0.12s;
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
         }
-        .action-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .action-btn:active { transform: scale(0.98); }
-        
-        .btn-orange {
-            background: #ff7f11;
-            box-shadow: 0 4px #d35400;
-        }
-        .btn-orange:active { box-shadow: 0 1px #d35400; transform: translateY(3px) scale(0.98); }
 
-        .btn-green {
-            background: #2ecc71;
-            box-shadow: 0 4px #27ae60;
+        .danger-btn {
+            background: #ff5252;
+            color: white;
         }
-        .btn-green:active { box-shadow: 0 1px #27ae60; transform: translateY(3px) scale(0.98); }
 
-        .btn-red {
-            background: #e74c3c;
-            box-shadow: 0 4px #c0392b;
+        .success-btn {
+            background: #4caf50;
+            color: white;
         }
-        .btn-red:active { box-shadow: 0 1px #c0392b; transform: translateY(3px) scale(0.98); }
 
         .btn-sm {
             padding: 6px 14px;
@@ -169,25 +307,27 @@
             border-radius: 8px;
         }
 
-        /* CONTAINER GENERAL */
+        /* =======================================
+           MAIN TRADING WRAPPER PANELS
+        ======================================= */
         .container {
-            max-width: 95%;
-            margin: auto;
-            padding: 25px;
+            max-width: 1150px;
+            width: 100%;
+            margin: 40px auto 25px auto;
+            padding: 0 24px;
             position: relative;
             z-index: 5;
         }
-        
+
         .big-trading-card {
-            background: rgba(255, 255, 255, 0.08);
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
-            padding: 30px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
             width: 100%;
         }
-        
+
         .trading-header {
             display: flex;
             justify-content: space-between;
@@ -198,23 +338,24 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 20px;
         }
-        
+
         .trading-title {
-            font-family: "Titan One", cursive;
-            font-size: 2rem;
+            font-family: 'Titan One', cursive;
+            font-size: 2.5rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        /* INBOX TABS NAVIGATION */
+        /* INBOX TABS STYLING */
         .mailbox-tabs {
             display: flex;
             gap: 10px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 20px;
         }
-        
+
         .tab-link {
             background: transparent;
             border: none;
@@ -226,7 +367,7 @@
             position: relative;
             transition: color 0.2s;
         }
-        
+
         .tab-link:hover { color: white; }
         .tab-link.active { color: #fff1d0; }
         .tab-link.active::after {
@@ -236,7 +377,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: #ff7f11;
+            background: #ffffff;
             border-radius: 4px;
         }
 
@@ -247,8 +388,8 @@
         }
 
         .pane-card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 20px;
             display: flex;
@@ -256,37 +397,40 @@
             gap: 15px;
         }
 
-        /* MODAL OVERLAY STYLING */
+        /* =======================================
+           MODAL PANEL STYLING (MATCHES NEWS POPUP)
+        ======================================= */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1500;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-        
         .modal-overlay.active { display: flex; }
 
         .modal-card {
-            background: linear-gradient(135deg, #4a1c00 0%, #2b1000 100%);
-            border: 3px solid rgba(255, 255, 255, 0.25);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 950px;
-            padding: 25px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+            border: 4px solid #ff9b2f;
+            border-radius: 32px;
+            padding: 30px;
+            width: 950px;
+            max-width: 100%;
+            height: auto;
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
             gap: 20px;
             position: relative;
-            max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+            scrollbar-width: none;
         }
-        
+        .modal-card::-webkit-scrollbar { display: none; }
+
         .modal-close-btn {
             position: absolute;
             top: 20px;
@@ -307,15 +451,15 @@
 
         .trade-input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.35);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 12px;
             font-weight: 700;
             color: white;
             outline: none;
         }
-        .trade-input:focus { border-color: rgba(255,255,255,0.6); }
+        .trade-input:focus { border-color: #ff9b2f; }
 
         .recipient-status-box {
             display: inline-flex;
@@ -347,10 +491,10 @@
             border-radius: 8px;
             display: none;
         }
-        .status-success { background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71; }
-        .status-error { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #e74c3c; }
+        .status-success { background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; }
+        .status-error { background: rgba(255, 82, 82, 0.2); border: 1px solid #ff5252; color: #ff5252; }
 
-        /* BUILD BASKETS */
+        /* BASKETS & INVENTORY PLACEMENTS */
         .basket-zone {
             background: rgba(0, 0, 0, 0.25);
             border: 2px dashed rgba(255, 255, 255, 0.15);
@@ -369,19 +513,19 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             padding: 10px;
             border-radius: 12px;
+            scrollbar-width: none;
         }
-        .inventory-scroll-box::-webkit-scrollbar { width: 6px; }
-        .inventory-scroll-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .inventory-scroll-box::-webkit-scrollbar { display: none; }
 
-        /* BLOOK CHIPS WITH STACKING BADGE AND DYNAMIC RARITY BORDER */
+        /* BLOOK CHIP DISPLAY NODES */
         .blook-item-node {
             width: 60px;
             height: 60px;
             background: rgba(255, 255, 255, 0.08);
-            border: 2px solid rgba(255, 255, 255, 0.2); /* Default fallback */
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             position: relative;
             display: flex;
@@ -408,7 +552,7 @@
             z-index: 2;
         }
 
-        /* TRADE MAILBOX ELEMENT CARDS */
+        /* MAIL CONTAINER RECORDS */
         .mailbox-scroll-container {
             display: flex;
             flex-direction: column;
@@ -416,30 +560,13 @@
             max-height: 640px;
             overflow-y: auto;
             padding-right: 8px;
+            scrollbar-width: none;
         }
-        
-        .mailbox-scroll-container::-webkit-scrollbar { 
-            width: 10px; 
-        }
-        .mailbox-scroll-container::-webkit-scrollbar-track { 
-            background: rgba(143, 50, 0, 0.3); 
-            border-radius: 10px;
-        }
-        .mailbox-scroll-container::-webkit-scrollbar-thumb { 
-            background: rgba(255, 255, 255, 0.25); 
-            border-radius: 10px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-        .mailbox-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
+        .mailbox-scroll-container::-webkit-scrollbar { display: none; }
 
         .mail-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
             padding: 20px;
             display: flex;
@@ -447,6 +574,7 @@
             gap: 15px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
+
         .mail-header {
             display: flex;
             justify-content: space-between;
@@ -457,18 +585,21 @@
             border-bottom: 2px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
+
         .mail-exchange-view {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
+
         .exchange-box {
             background: rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 12px;
             min-height: 110px;
         }
+
         .exchange-title {
             font-family: "Titan One", cursive;
             font-size: 0.9rem;
@@ -477,11 +608,13 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .exchange-column {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .token-badge-display {
             background: rgba(255, 199, 106, 0.2);
             border: 1px solid #ffc76a;
@@ -496,22 +629,22 @@
             margin-bottom: 8px;
             width: fit-content;
         }
+
         .mail-actions {
             display: flex;
             gap: 12px;
             margin-top: 5px;
         }
-        .mail-actions .action-btn { flex: 1; }
 
-        /* HISTORY LEDGER OVERRIDES */
+        /* HISTORY TAGS */
         .history-tag {
             font-size: 0.85rem;
             padding: 4px 12px;
             border-radius: 6px;
             font-weight: 900;
         }
-        .tag-accepted { background: #2ecc71; color: white; }
-        .tag-declined { background: #e74c3c; color: white; }
+        .tag-accepted { background: #4caf50; color: white; }
+        .tag-declined { background: #ff5252; color: white; }
         .tag-canceled { background: #7f8c8d; color: white; }
         
         .modal-columns-grid {
@@ -523,25 +656,106 @@
         @media (max-width: 768px) {
             .modal-columns-grid { grid-template-columns: 1fr; }
         }
+
+        /* =======================================
+           RESPONSIVE LAYOUT DESIGN MEDIA QUERIES
+        ======================================= */
+        @media(max-width: 980px) {
+            .navbar { 
+                padding: 12px 20px; 
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-left-group {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .logo-link { width: auto; text-align: center; }
+            .logo { font-size: 2.2rem; }
+            .nav-right-group {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .hud-badge-bar {
+                max-width: 100%;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px 8px;
+                gap: 4px;
+                border-radius: 25px;
+            }
+            .hud-item {
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+            }
+            .hud-item::after {
+                top: auto;
+                bottom: 46px;
+                transform: translateX(-50%) translateY(6px);
+            }
+            .hud-item:hover::after {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media(max-width: 700px) {
+            .container { padding: 15px; }
+            .big-trading-card { padding: 20px; }
+            .trading-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+                text-align: center;
+            }
+            .trading-title {
+                font-size: 2rem;
+            }
+            .mail-exchange-view {
+                grid-template-columns: 1fr;
+            }
+            .mail-header { font-size: 1rem; flex-wrap: wrap; }
+        }
     </style>
 </head>
 <body>
 
-<div class="background"></div>
+<div class="bg-base-gradient"></div>
+<div class="bg-moving-grid"></div>
+<div class="bg-static-squares"></div>
+<div class="bg-stroke-overlay"></div>
 
 <nav class="navbar">
-    <div class="logo">Scratchlet</div>
-    <div class="minibar">
-        <div class="minibar-coins">🪙 <span id="coinCount">0</span></div>
-        <a href="home.html" class="btn minibar-btn"><span class="material-icons">home</span></a>
-        <a href="market.html" class="btn minibar-btn"><span class="material-icons">store</span></a>
-        <a href="inventory.html" class="btn minibar-btn"><span class="material-icons">inventory_2</span></a>
-        <a href="stats.html" class="btn minibar-btn"><span class="material-icons">bar_chart</span></a>
-        <a href="news.html" class="btn minibar-btn"><span class="material-icons">article</span></a>
-        <a href="chat.html" class="btn minibar-btn"><span class="material-icons">chat</span></a>
-        <a href="settings.html" class="btn minibar-btn"><span class="material-icons">settings</span></a>
-        <a href="trading.html" class="btn minibar-btn active"><span class="material-icons">swap_horiz</span></a>
-        <button id="logoutBtn" class="btn minibar-btn"><span class="material-icons">logout</span></button>
+    <div class="nav-left-group">
+        <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
+    </div>
+    
+    <div class="nav-right-group">
+        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
+            <span id="token-counter-value" class="coin-amount">0</span>
+        </div>
+        
+        <div class="hud-badge-bar">
+            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading" style="background: rgba(255, 255, 255, 0.15);"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
+        </div>
     </div>
 </nav>
 
@@ -553,7 +767,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                 <div style="font-weight: 800; opacity: 0.8;" id="myUsernameDisplay">Your Username: Loading...</div>
-                <button class="action-btn btn-orange btn-sm" id="openTradeModalBtn">
+                <button class="btn primary-btn btn-sm" id="openTradeModalBtn">
                     <span class="material-icons">add_box</span> Create Trade Request
                 </button>
             </div>
@@ -587,7 +801,7 @@
         
         <div class="input-group" style="max-width: 600px;">
             <input type="text" class="trade-input" id="recipientInput" placeholder="Recipient username...">
-            <button class="action-btn btn-orange btn-sm" id="verifyUserBtn">Check User</button>
+            <button class="btn secondary-btn btn-sm" id="verifyUserBtn">Check User</button>
             <div class="recipient-status-box">
                 <div class="partner-avatar-frame" id="partnerAvatarFrame">
                     <img id="partnerAvatarImg" src="">
@@ -623,33 +837,33 @@
             </div>
         </div>
 
-        <button class="action-btn btn-orange" id="sendMailOfferBtn" style="width:100%; margin-top:5px; font-size: 1.1rem; padding: 14px;">
+        <button class="btn primary-btn" id="sendMailOfferBtn" style="width:100%; margin-top:5px; font-size: 1.1rem; padding: 14px;">
             <span class="material-icons">send</span> Send Trade Offer
         </button>
     </div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {  
-        apiKey: "AIzaSyBzyszqkVPOn_Zbs0eacE1KQccYsTxul1E",  
-        authDomain: "scratchlet-ss.firebaseapp.com",  
-        projectId: "scratchlet-ss",  
-        storageBucket: "scratchlet-ss.firebasestorage.app",  
-        messagingSenderId: "265174756634",  
-        appId: "1:265174756634:web:a4c40ae00434f077e090a3",  
-        measurementId: "G-7B7B6VXYJX"
+    const firebaseConfig = {
+        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+        authDomain: "scratchlet-194bc.firebaseapp.com",
+        projectId: "scratchlet-194bc",
+        storageBucket: "scratchlet-194bc.firebasestorage.app",
+        messagingSenderId: "480952290764",
+        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+        measurementId: "G-2T6GS8Y9VN"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let coins = 0;
-    let ownedBlocks = []; 
+    let tokens = 0;
+    let inventory = []; 
     let myUsername = "";
     let currentUser = null;
 
@@ -658,12 +872,11 @@
     let currentTab = "received";
 
     let verifiedPartnerUid = null;
-    let partnerLiveCoins = 0;
-    let partnerLiveBlocks = [];
+    let partnerLiveTokens = 0;
+    let partnerLiveInventory = [];
 
-    // Complete synced Blook Registry explicitly tracking rarity changes, spellings, and image references
+    // Complete synced Blook Registry
     const blookRegistry = {
-        // --- Breakfast Pack ---
         "Toast": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Qdw9WbN1/Toast.webp" },
         "Cereal": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/KzD5x4SH/Cereal.webp" },
         "Tomato Soup": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp" },
@@ -677,204 +890,107 @@
         "Pizza": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/bwWD2TY0/Pizza.webp" },
         "Strawberry Milk": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wjZysVxQ/Strawberry-Milk.webp" },
         "Chocolate Milk": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/cJ3K7n6Y/Chocolate-Milk.webp" },
-        
-        // --- Medieval Pack ---
-        "Elf": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Z5SfKjrN/Elf.webp" },
-        "Witch": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/4xg8Nwzp/Witch.webp" },
-        "Wizard": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/L8py6vzL/Wizard.webp" },
-        "Fairy": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/fRNHT5x0/Fairy.webp" },
-        "Slime Monster": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/HkgSs3Qc/Slime-Monster.webp" },
-        "Jester": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/RZBPVGcJ/Jester.webp" },
-        "Dragon": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/sgrnDKpx/Dragon.webp" },
-        "Queen": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/dVYWtn8h/Queen.webp" },
-        "Unicorn": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/52VPNpwj/Unicorn.webp" },
-        "King": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/L8py6vzn/King.webp" },
-        "Master Elf": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/Gp56nwS0/Master-Elf.webp" },
-        "Agent Owl": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/yNb2C4rz/Agent-Owl.webp" },
-        "Wise Owl": { rarity: "Celestial", color: "teal", image: "https://i.postimg.cc/yWqsN84V/Wise-Owl.webp" },
-        "Phantom King": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/QdfkpQvC/Phantom-King.webp" },
-        
-        // --- Color Pack ---
-        "Red": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Hnm2thKG/Red.webp" },
-        "Blue": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/5yJ3mRrh/Blue.webp" },
-        "Green": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/6qK0hmPg/Green.webp" },
-        "Yellow": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/ZnmcLMQX/Yellow.webp" },
-        "Orange": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/D0hgcMNY/Orange.webp" },
-        "Purple": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/kGCcypHp/Purple.webp" },
-        "Pink": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/brPTRB5V/Pink.webp" },
-        "Brown": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/hvnr05Yy/Brown.webp" },
-        "Lime": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/4yG51S0B/Lime.webpp" },
-        "Cyan": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/1XSHKjdM/Cyan.webp" },
-        "White": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/tJb5zMck/White.webp" },
-        "Grey": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/0jvfCB4f/Grey.webp" },
-        "Black": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/hvnr05Y1/Black.webp" },
-        "Copper": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wMzVkGrc/Copper.webp" },
-        "Silver": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/NFt4xznx/Silver.webp" },
-        "Gold": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/ZnmcLMQP/Gold.webp" },
-        "Rainbow": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/G2J4YLyd/Rainbow.webp" },
-        
-        // --- Wonderland Pack ---
+        "Elf": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/9F4P2QhG/Elf.webp" },
+        "Witch": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/6pD5y5gq/Witch.webp" },
+        "Wizard": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pT45j3q5/Wizard.webp" },
+        "Fairly": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Kj6V2Dqy/Fairly.webp" },
+        "Slime": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/fW0N6x7B/Slime.webp" },
+        "Werewolf": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/k47tV4n4/Werewolf.webp" },
+        "Ghost": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/76j7m2bW/Ghost.webp" },
+        "Zombie": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/gJ0zX7nC/Zombie.webp" },
+        "Unicorn": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/g0K5t4j5/Unicorn.webp" },
+        "Dragon": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/4N5V6X7b/Dragon.webp" },
+        "Drakness Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/V6CL0VRz/Darkness-Slime.webp" },
+        "Light Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/B6KQPVgs/Light-Slime.webp" },
+        "Rainbow Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/0Qw2KBfv/Rainbow-Slime.webp" },
+        "Earth Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/tTxCnM5H/Earth-Slime.webp" },
+        "Fire Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/sXhDGNcC/Fire-Slime.webp" },
+        "Water Slime": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/HLCMKDp9/Water-Slime.webp" },
+        "God Slime": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/N0wXVqg8/God-Slime.webp" },
+        "Old Man": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Old-Man.webp" },
+        "Spies": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Spies.webp" },
+        "Farmer": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/LsBPFCXP/Farmer.webp" },
+        "Chef": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/43bcRLdH/Chef.webp" },
+        "Doctor": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/ZqhNgtTc/Doctor.webp" },
+        "Cop": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/6QNZSJ9h/Cop.webp" },
+        "Astronaut": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Astronaut.webp" },
+        "Agent": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/Agent.webp" },
+        "Knight": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Knight.webp" },
+        "King": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/King.webp" },
+        "Queen": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Queen.webp" },
+        "Red Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/3wHG65KG/Red-Astronaut.webp" },
+        "Orange Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/D0hgcMNY/Orange.webp" },
+        "Purple Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/kGCcypHp/Purple.webp" },
+        "Pink Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/brPTRB5V/Pink.webp" },
+        "Brown Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/hvnr05Yy/Brown.webp" },
+        "Lime Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/4yG51S0B/Lime.webp" },
+        "Cyan Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/1XSHKjdM/Cyan.webp" },
+        "White Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/tJb5zMck/White.webp" },
+        "Grey Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/0jvfCB4f/Grey.webp" },
+        "Black Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/hvnr05Y1/Black.webp" },
+        "Copper Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wMzVkGrc/Copper.webp" },
+        "Silver Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/NFt4xznx/Silver.webp" },
+        "Gold Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/ZnmcLMQP/Gold.webp" },
+        "Rainbow Astronaut": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/G2J4YLyd/Rainbow.webp" },
         "Two of Spades": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/V6CL0VRz/Two-of-Spades.webp" },
         "Eat Me": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/B6KQPVgs/Eat-Me.webp" },
         "Drink Me": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/0Qw2KBfv/Drink-Me.webp" },
         "Alice": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/tTxCnM5H/Alice.webp" },
         "Queen of Hearts": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/sXhDGNcC/Queen-of-Hearts.webp" },
-        "Dromouse": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/xCzTN4Rr/Dormouse.webp" },
-        "White Rabbit": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/wBPjvphx/White-Rabbit.webp" },
-        "Cheshire Cat": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/pTFX56Bw/Cheshire-Cat.webp" },
-        "Mad Hatter": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/nL5hzJvF/Mad-Hatter.webp" },
-        "King of Hearts": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/q7YvRT8k/King-of-Hearts.webp" },
-        "Royal Cat": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/yN58dHF7/Royal-Cat.webp" },
-        "King Dog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/mrqgDsQB/King-Dog.webp" },
-        "Card of Hearts": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/PxwrvR4f/Card-of-Heart.webp" },
-        
-        // --- Space Pack ---
-        "Earth": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/85ScxXYN/Earth.webp" },
-        "Meteor": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/RFBh2pYm/Meteor.webp" },
-        "Stars": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pTHr3cSM/Stars.webp" },
-        "Alien": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/bJhr4VBK/Alien.webp" },
-        "Planet": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/Kz2jCpWX/Planet.webp" },
-        "UFO": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/26Dyg9Kg/UFO.webp" },
-        "Spaceship": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/RFBh2pD8/Spaceship.webp" },
-        "Astronaut": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/qRTqWD5S/Astronaut.webp" },
-        "Pink Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/GpY97nqg/Pink-Astronaut.webp" },
-        "Red Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/5tvj7WnP/Red-Astronaut.webp" },
-        "Ornage Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/nL7MRf0R/Orange-Astronaut.webp" },
-        "Yellow Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/XJbqt1zk/Yellow-Astronaut.webp" },
-        "Lime Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k58D1PfH/Lime-Astronaut.webp" },
-        "Green Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/LXp5GQbV/Green-Astronaut.webp" },
-        "Cyan Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/XJbqt1z2/Cyan-Astronaut.webp" },
-        "Blue Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/9Mh0sgng/Blue-Astronaut.webp" },
-        "Purple Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/JnL0SY2d/Purple-Astronaut.webp" },
-        "Brown Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/cHSCPkbb/Brown-Astronaut.webp" },
-        "Black Astronaut": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/C1g59rQ2/Black-Astronaut.webp" },
-        "Black Hole": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/43tnLRBF/Black-Hole.webp" },
-        "Space Monitor": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/vBghSBCL/Space-Monitor.webp" },
-        "Rainbow Astroanut": { rarity: "Mystical", color: "purple", image: "https://i.postimg.cc/XqSw-0n4r/Rainbow-Astronaut.webp" },
-
-        "Lil Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/MpDsq78Y/Lil-Bot.webp" },
-        "Lovely Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/fRKHDchf/Lovely-Bot.webp" },
-        "Angry Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/cLmD0RNM/Angry-Bot.webp" },
-        "Happy Bot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/8zHyNRVd/Happy-Bot.webp" },
-        "Watson": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/jSX8tHrH/Watson.webp" },
-        "Buddy Bot": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/y8Pfsmz9/Buddy-Bot.webp" },
-        "Brainy Bot": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/7ZVBw3yg/Brainy-Bot.webp" },
-        "Mega Bot": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/W1n9TGPk/Mega-Bot.webp" },
-        "Ultra Bot": { rarity:"Chroma",color:"cyan",image: "https://i.postimg.cc/Fz10p5vX/Ultra-Bot.png"},
-
-        "Old Boot": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/xCs8LJq6/Old-Boot.webp" },
-        "Jellyfish": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Y9X0QGj8/Jellyfish.webp" },
-        "Clownfish": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/63HqC2Tc/Goldfish.webp" },
-        "Frog": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/xCs8LJqP/Frog.webp" },
-        "Crab": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/j582ywC6/Crab.webp" },
-        "Pufferfish": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/gJMj3XrD/Pufferfish.webp" },
-        "Blobfish": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/0Qtj7Mrp/Blobfish.webp" },
-        "Octopus": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/50Py8YjC/Octopus.webp" },
-        "Narwhal": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/4d8yp7nH/Narwhal.webp" },
-        "Dolphin": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/W39z0FtJ/Dolphin.webp" },
-        "Baby Shark": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/Y9X0QGjG/Baby-Shark.webp" },
-        "Megalodon": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/26Hynb33/Megalodon.webp" },
-        "Spring Frog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/fLWk3jWm/Spring-Frog.webp" },
-        "Lucky Frog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/qRmq2hgR/Lucky-Frog.webp" },
-        "Lovely Frog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k4jGW6DB/Lovely-Frog.webpg" },
-        "Rainbow Narwhal": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/MTZXcbZB/Rainbow-Narwhal.webp" },
-        "Crimson Octopus": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/Tw2hyq2W/Crimson-Octopus.webp" },
-        "Donut Blobfish": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/wvx3tcxm/Donut-Blobfish.webp" },
-        "Rainbow Jellyfish": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/Y92j4f24/Rainbow-Jellyfish.webp" },
-        "Poison Dart Frog": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/HxWjJ4Wc/Poison-Dart-Frog.webp" },
-        "Blizzard Clownfish": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/vB8D1L8x/Blizzard-Clownfish.webp" },
-        "Beach": { rarity: "Celestial", color: "teal", image: "https://i.postimg.cc/sXf1B9fv/Beach.webp" },
-
-        "Panda": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Xvc56HJF/Panda.webp" },
-        "Sloth": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/pdYjMGTn/Sloth.webp" },
-        "Tenrec": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/LsBPFCXP/Tenrec.webp" },
-        "Flamingo": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/43bcRLdH/Flamingo.webp" },
-        "Zebra": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/ZqhNgtTc/Zebra.webp" },
-        "Elephant": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/6QNZSJ9h/Elephant.webp" },
-        "Lemur": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Lemur.webp" },
-        "Peacock": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/Peacock.webp" },
-        "Chameleon": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZqhNgtTF/Chameleon.webp" },
-        "Lion": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Lion.webp" },
-        "Rainbow Panda": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/3wHG65KG/Rainbow-Panda.webp" },
-        "White Peacock": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/xdSm7D0K/White-Peacock.webp" },
-        "Tiger Zebra": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/k5dSZ3n8/Tiger-Zebra.webp" },
-
-        "Amber": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/bN18Td2q/Ember.webp" },
-        "Dino Egg": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/027xfrJx/Dino-Egg.webp" },
-        "Dino Fossil": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/8PLDHsrG/Dino-Fossil.webp" },
-        "Dino Footprint": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/qBwM63ff/Dino-Footprint.png" },
-        "Stegosaurus": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/GhvrQ9sw/Stegosaurus.webp" },
-        "Velociraptor": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/hPVgrhQk/Velociraptor.webp" },
-        "Brontosaurus": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/8PLDHsf9/Brontosaurus.webp" },
-        "Triceratops": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/ZK6Zc0vX/Triceratops.webp" },
-        "Tyrannosaurus Rex": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/gk3dDrL5/Tyrannosaurusrex.webp" },
-        "Golden Amber": { rarity: "Chroma", color: "cyan", image: "https://i.postimg.cc/rF5cJzRY/Golden-Ember.webp" }
-
+        "Dormouse": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/HLCMKDp9/Dormouse.webp" },
+        "White Rabbit": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/N0wXVqg8/White-Rabbit.webp" },
+        "Cheshire Cat": { rarity: "Rare", color: "blue", image: "https://i.postimg.cc/ZqhNgtTF/Cheshire-Cat.webp" },
+        "Mad Hatter": { rarity: "Epic", color: "red", image: "https://i.postimg.cc/MG8B42W1/Mad-Hatter.webp" },
+        "King of Hearts": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/King-of-Hearts.webp" },
+        "Caterpillar": { rarity: "Legendary", color: "gold", image: "https://i.postimg.cc/MG8B42W1/Caterpillar.webp" }
     };
-    
-    const FALLBACK_IMAGE = "https://i.postimg.cc/9fZwBPpg/Placeholder.png";
 
     function getBlookData(name) {
-        return blookRegistry[name] || { rarity: "Common", color: "rgba(255,255,255,0.2)", image: FALLBACK_IMAGE };
+        return blookRegistry[name] || { rarity: "Custom", color: "#ffffff", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
     }
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            loadUserData();
+            listenForMailCenter();
+            createSquares();
+        } else {
+            location.href = "login.html";
+        }
+    });
+
+    document.getElementById("logout-hud-btn").onclick = async () => {
+        await signOut(auth);
+        location.href = "login.html";
+    };
 
     const tradeModalOverlay = document.getElementById("tradeModalOverlay");
     document.getElementById("openTradeModalBtn").onclick = () => {
         resetTradeModalState();
         tradeModalOverlay.classList.add("active");
     };
-    document.getElementById("closeTradeModalBtn").onclick = () => tradeModalOverlay.classList.remove("active");
+    document.getElementById("closeTradeModalBtn").onclick = () => {
+        tradeModalOverlay.classList.remove("active");
+    };
 
-    const tabReceivedBtn = document.getElementById("tabReceivedBtn");
-    const tabSentBtn = document.getElementById("tabSentBtn");
-    const tabHistoryBtn = document.getElementById("tabHistoryBtn");
+    document.getElementById("tabReceivedBtn").onclick = () => switchTab("received");
+    document.getElementById("tabSentBtn").onclick = () => switchTab("sent");
+    document.getElementById("tabHistoryBtn").onclick = () => switchTab("history");
 
-    function clearTabs() {
-        tabReceivedBtn.classList.remove("active");
-        tabSentBtn.classList.remove("active");
-        tabHistoryBtn.classList.remove("active");
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll(".tab-link").forEach(b => b.classList.remove("active"));
+        if(tab === "received") document.getElementById("tabReceivedBtn").classList.add("active");
+        if(tab === "sent") document.getElementById("tabSentBtn").classList.add("active");
+        if(tab === "history") document.getElementById("tabHistoryBtn").classList.add("active");
+        listenForMailCenter();
     }
-
-    tabReceivedBtn.onclick = () => {
-        currentTab = "received";
-        clearTabs();
-        tabReceivedBtn.classList.add("active");
-        listenForMailCenter();
-    };
-
-    tabSentBtn.onclick = () => {
-        currentTab = "sent";
-        clearTabs();
-        tabSentBtn.classList.add("active");
-        listenForMailCenter();
-    };
-
-    tabHistoryBtn.onclick = () => {
-        currentTab = "history";
-        clearTabs();
-        tabHistoryBtn.classList.add("active");
-        listenForMailCenter();
-    };
-
-    onAuthStateChanged(auth, async (user) => {  
-        if (!user) {    
-            location.href = "login.html";  
-        } else {    
-            currentUser = user;    
-            await loadUserData();  
-            listenForMailCenter();
-        }
-    });
-
-    document.getElementById("logoutBtn").onclick = async () => {  
-        await signOut(auth);    
-        location.href = "login.html";  
-    };
 
     function resetTradeModalState() {
         verifiedPartnerUid = null;
-        partnerLiveCoins = 0;
-        partnerLiveBlocks = [];
+        partnerLiveTokens = 0;
+        partnerLiveInventory = [];
         itemsToGive = [];
         itemsToRequest = [];
         document.getElementById("recipientInput").value = "";
@@ -887,17 +1003,22 @@
         renderReceivingBasket();
     }
 
-    async function loadUserData() {    
-        if (!currentUser) return;        
-        const userDocRef = doc(db, "users", currentUser.uid);        
-        const userSnapshot = await getDoc(userDocRef);                
-        if (userSnapshot.exists()) {            
-            const data = userSnapshot.data();            
-            coins = data.coins !== undefined ? data.coins : 0;            
-            ownedBlocks = Array.isArray(data.ownedBlocks) ? data.ownedBlocks : [];        
+    async function loadUserData() {
+        if (!currentUser) return;
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const userSnapshot = await getDoc(userDocRef);
+        if (userSnapshot.exists()) {
+            const data = userSnapshot.data();
+            tokens = data.tokens !== undefined ? data.tokens : 0;
+            inventory = Array.isArray(data.inventory) ? data.inventory : [];
             myUsername = data.username || "Unknown Blooker";
-        }        
-        document.getElementById("coinCount").innerText = coins;
+        } else {
+            await setDoc(userDocRef, { username: currentUser.displayName || "Player", tokens: 0, inventory: [], createdAt: new Date() });
+            tokens = 0;
+            inventory = [];
+            myUsername = currentUser.displayName || "Player";
+        }
+        document.getElementById("token-counter-value").innerText = tokens;
         document.getElementById("myUsernameDisplay").innerText = "Your Username: " + myUsername;
         renderGivingInventoryPool();
     }
@@ -907,8 +1028,8 @@
         const statusEl = document.getElementById("recipientStatus");
         const avatarFrame = document.getElementById("partnerAvatarFrame");
         const avatarImg = document.getElementById("partnerAvatarImg");
-
         if (!recipientName) return alert("Enter a username to check.");
+        
         if (recipientName.toLowerCase() === myUsername.toLowerCase()) {
             statusEl.className = "recipient-status status-error";
             statusEl.innerText = "Can't trade with yourself!";
@@ -921,49 +1042,53 @@
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("username", "==", recipientName));
         const querySnapshot = await getDocs(q);
-
+        
         if (querySnapshot.empty) {
             statusEl.className = "recipient-status status-error";
             statusEl.innerText = "User not found";
             statusEl.style.display = "inline-block";
             avatarFrame.style.display = "none";
             verifiedPartnerUid = null;
-            partnerLiveCoins = 0;
-            partnerLiveBlocks = [];
+            partnerLiveTokens = 0;
+            partnerLiveInventory = [];
             document.getElementById("receivingInventoryPool").innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">Verify a recipient username to view their collection...</div>`;
-        } else {
-            const partnerDoc = querySnapshot.docs[0];
-            verifiedPartnerUid = partnerDoc.id;
-            const pData = partnerDoc.data();
-            partnerLiveCoins = pData.coins !== undefined ? pData.coins : 0;
-            partnerLiveBlocks = Array.isArray(pData.ownedBlocks) ? pData.ownedBlocks : [];
-
-            const targetPfpName = pData.blookPfp || pData.pfp || "Toast";
-            avatarImg.src = getBlookData(targetPfpName).image;
-            avatarFrame.style.display = "inline-flex";
-            avatarFrame.style.borderColor = getBlookData(targetPfpName).color;
-
-            statusEl.className = "recipient-status status-success";
-            statusEl.innerText = `Valid (🪙 ${partnerLiveCoins})`;
-            statusEl.style.display = "inline-block";
-            
-            renderReceivingInventoryPool();
+            return;
         }
-        renderReceivingBasket();
+
+        const targetDoc = querySnapshot.docs[0];
+        verifiedPartnerUid = targetDoc.id;
+        const pData = targetDoc.data();
+        partnerLiveTokens = pData.tokens || 0;
+        partnerLiveInventory = Array.isArray(pData.inventory) ? pData.inventory : [];
+
+        statusEl.className = "recipient-status status-success";
+        statusEl.innerText = "Ready!";
+        statusEl.style.display = "inline-block";
+
+        if (pData.avatar) {
+            avatarImg.src = pData.avatar;
+            avatarFrame.style.display = "inline-flex";
+        } else {
+            avatarFrame.style.display = "none";
+        }
+
+        renderReceivingInventoryPool();
     };
 
     function renderGivingInventoryPool() {
         const poolContainer = document.getElementById("givingInventoryPool");
         poolContainer.innerHTML = "";
-        
+        if (inventory.length === 0) {
+            poolContainer.innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">No blocks available.</div>`;
+            return;
+        }
         const frequencyMap = {};
-        ownedBlocks.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
-
+        inventory.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
+        
         Object.keys(frequencyMap).forEach(name => {
             const chosenCount = itemsToGive.filter(n => n === name).length;
             const availableQty = frequencyMap[name] - chosenCount;
             if (availableQty <= 0) return;
-
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
             node.className = "blook-item-node";
@@ -981,18 +1106,15 @@
     function renderGivingBaskets() {
         const basket = document.getElementById("givingBasket");
         basket.innerHTML = "";
-        
         const counts = {};
         itemsToGive.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
-
         Object.keys(counts).forEach(name => {
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
             node.className = "blook-item-node";
             node.style.borderColor = bInfo.color;
             node.style.setProperty('--rarity-shadow', bInfo.color);
-            node.innerHTML = `<img src="${bInfo.image}">
-                             ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''}`;
+            node.innerHTML = `<img src="${bInfo.image}"> ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''}`;
             node.onclick = () => {
                 const idx = itemsToGive.indexOf(name);
                 if (idx > -1) itemsToGive.splice(idx, 1);
@@ -1006,20 +1128,17 @@
     function renderReceivingInventoryPool() {
         const poolContainer = document.getElementById("receivingInventoryPool");
         poolContainer.innerHTML = "";
-
-        if (partnerLiveBlocks.length === 0) {
+        if (partnerLiveInventory.length === 0) {
             poolContainer.innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">This user has no Blooks in their collection.</div>`;
             return;
         }
-
         const frequencyMap = {};
-        partnerLiveBlocks.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
-
+        partnerLiveInventory.forEach(blook => { frequencyMap[blook] = (frequencyMap[blook] || 0) + 1; });
+        
         Object.keys(frequencyMap).forEach(name => {
             const chosenCount = itemsToRequest.filter(n => n === name).length;
             const availableQty = frequencyMap[name] - chosenCount;
             if (availableQty <= 0) return;
-
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
             node.className = "blook-item-node";
@@ -1037,18 +1156,15 @@
     function renderReceivingBasket() {
         const basket = document.getElementById("receivingBasket");
         basket.innerHTML = "";
-
         const counts = {};
         itemsToRequest.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
-
         Object.keys(counts).forEach(name => {
             const bInfo = getBlookData(name);
             const node = document.createElement("div");
             node.className = "blook-item-node";
             node.style.borderColor = bInfo.color;
             node.style.setProperty('--rarity-shadow', bInfo.color);
-            node.innerHTML = `<img src="${bInfo.image}">
-                             ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''}`;
+            node.innerHTML = `<img src="${bInfo.image}"> ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''}`;
             node.onclick = () => {
                 const idx = itemsToRequest.indexOf(name);
                 if (idx > -1) itemsToRequest.splice(idx, 1);
@@ -1056,27 +1172,23 @@
             };
             basket.appendChild(node);
         });
-        if (verifiedPartnerUid) {
-            renderReceivingInventoryPool();
-        }
+        if(verifiedPartnerUid) renderReceivingInventoryPool();
     }
 
     document.getElementById("sendMailOfferBtn").onclick = async () => {
-        if (!verifiedPartnerUid) return alert("Verify a valid user profile first.");
-
+        if (!verifiedPartnerUid) return alert("Verify the recipient username first.");
         const tokensToGive = parseInt(document.getElementById("giveTokensInput").value) || 0;
         const tokensToRequest = parseInt(document.getElementById("receiveTokensInput").value) || 0;
         
+        if (tokensToGive < 0 || tokensToRequest < 0) return alert("Values cannot be negative.");
         if (itemsToGive.length === 0 && itemsToRequest.length === 0 && tokensToGive <= 0 && tokensToRequest <= 0) {
             return alert("Your trade proposal cannot be empty.");
         }
-
-        if (tokensToGive > coins) {
-            return alert(`Insufficient tokens! You only have ${coins}.`);
+        if (tokensToGive > tokens) {
+            return alert(`Insufficient tokens! You only have ${tokens}.`);
         }
-
-        if (tokensToRequest > partnerLiveCoins) {
-            return alert(`Invalid parameters. Requested recipient has only ${partnerLiveCoins} tokens.`);
+        if (tokensToRequest > partnerLiveTokens) {
+            return alert(`Invalid parameters. Requested recipient has only ${partnerLiveTokens} tokens.`);
         }
 
         await addDoc(collection(db, "trade_mail"), {
@@ -1100,21 +1212,15 @@
         if(!blookArray) return '';
         const counts = {};
         blookArray.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
-        
         return Object.keys(counts).map(name => {
             const bInfo = getBlookData(name);
-            return `<div class="blook-item-node" style="border-color: ${bInfo.color}; --rarity-shadow: ${bInfo.color};">
-                <img src="${bInfo.image}">
-                ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''}
-            </div>`;
+            return `<div class="blook-item-node" style="border-color: ${bInfo.color}; --rarity-shadow: ${bInfo.color};"> <img src="${bInfo.image}"> ${counts[name] > 1 ? `<div class="blook-item-badge">x${counts[name]}</div>` : ''} </div>`;
         }).join('');
     }
 
     let unbindSnapshot = null;
-
     function listenForMailCenter() {
         if (unbindSnapshot) unbindSnapshot();
-
         const container = document.getElementById("mailboxContainer");
         container.innerHTML = `<div style="opacity: 0.5; padding: 30px; text-align: center; font-weight: 700;">Loading...</div>`;
 
@@ -1122,7 +1228,7 @@
             const historyRef = collection(db, "trade_history");
             let q1 = query(historyRef, where("senderUid", "==", currentUser.uid));
             let q2 = query(historyRef, where("recipientUid", "==", currentUser.uid));
-
+            
             Promise.all([getDocs(q1), getDocs(q2)]).then(([snap1, snap2]) => {
                 container.innerHTML = "";
                 let records = [];
@@ -1130,7 +1236,6 @@
                 snap2.forEach(d => {
                     if(!records.some(r => r.id === d.id)) records.push({id: d.id, ...d.data()});
                 });
-
                 records.sort((a,b) => (b.resolvedAt || 0) - (a.resolvedAt || 0));
 
                 if(records.length === 0) {
@@ -1141,31 +1246,31 @@
                 records.forEach(log => {
                     const card = document.createElement("div");
                     card.className = "mail-card";
-
                     let statusClass = "tag-canceled";
                     if(log.status === "ACCEPTED") statusClass = "tag-accepted";
                     if(log.status === "DECLINED") statusClass = "tag-declined";
 
-                    let dateStr = log.resolvedAt ? new Date(log.resolvedAt).toLocaleString() : "Unknown date";
-                    let gNodesHtml = getStackedBlocksHtml(log.giving);
-                    let rNodesHtml = getStackedBlocksHtml(log.receiving);
+                    const isOutbound = log.senderUid === currentUser.uid;
+                    const headerTxt = isOutbound ? `Sent to ${log.recipientUsername}` : `Received from ${log.senderUsername}`;
+
+                    let leftNodes = getStackedBlocksHtml(log.giving);
+                    let rightNodes = getStackedBlocksHtml(log.receiving);
 
                     card.innerHTML = `
                         <div class="mail-header">
-                            <span>${log.senderUsername} ➔ ${log.recipientUsername}</span>
+                            <span>${headerTxt}</span>
                             <span class="history-tag ${statusClass}">${log.status}</span>
                         </div>
-                        <div style="font-size:0.8rem; opacity:0.6; margin-top:-10px; margin-bottom:5px;">Processed: ${dateStr}</div>
                         <div class="mail-exchange-view">
                             <div class="exchange-box">
-                                <div class="exchange-title">${log.senderUsername} Sent</div>
+                                <div class="exchange-title">${isOutbound ? 'You Gave' : 'You Got'}</div>
                                 ${log.givingTokens > 0 ? `<div class="token-badge-display">🪙 ${log.givingTokens} Tokens</div>` : ''}
-                                <div class="exchange-column">${gNodesHtml || (log.givingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
+                                <div class="exchange-column">${leftNodes || (log.givingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                             <div class="exchange-box">
-                                <div class="exchange-title">${log.recipientUsername} Sent</div>
+                                <div class="exchange-title">${isOutbound ? 'You Got' : 'You Gave'}</div>
                                 ${log.receivingTokens > 0 ? `<div class="token-badge-display">🪙 ${log.receivingTokens} Tokens</div>` : ''}
-                                <div class="exchange-column">${rNodesHtml || (log.receivingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
+                                <div class="exchange-column">${rightNodes || (log.receivingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                         </div>
                     `;
@@ -1176,13 +1281,10 @@
         }
 
         const mailboxRef = collection(db, "trade_mail");
-        let q = (currentTab === "received") 
-            ? query(mailboxRef, where("recipientUid", "==", currentUser.uid))
-            : query(mailboxRef, where("senderUid", "==", currentUser.uid));
-
+        let q = (currentTab === "received") ? query(mailboxRef, where("recipientUid", "==", currentUser.uid)) : query(mailboxRef, where("senderUid", "==", currentUser.uid));
+        
         unbindSnapshot = onSnapshot(q, (snapshot) => {
             container.innerHTML = "";
-
             if (snapshot.empty) {
                 container.innerHTML = `<div style="opacity: 0.5; padding: 30px; text-align: center; font-weight: 700;">No offers inside this section.</div>`;
                 return;
@@ -1193,10 +1295,8 @@
                 const mailId = docSnap.id;
                 const card = document.createElement("div");
                 card.className = "mail-card";
-
                 const mailGivingTokens = mail.givingTokens || 0;
                 const mailReceivingTokens = mail.receivingTokens || 0;
-
                 let givingNodesHtml = getStackedBlocksHtml(mail.giving);
                 let receivingNodesHtml = getStackedBlocksHtml(mail.receiving);
 
@@ -1216,8 +1316,8 @@
                             </div>
                         </div>
                         <div class="mail-actions">
-                            <button class="action-btn btn-green btn-sm" id="accept_mail_${mailId}"><span class="material-icons" style="font-size:18px;">check</span> Accept</button>
-                            <button class="action-btn btn-red btn-sm" id="decline_mail_${mailId}"><span class="material-icons" style="font-size:18px;">close</span> Decline</button>
+                            <button class="btn success-btn btn-sm" id="accept_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">check</span> Accept</button>
+                            <button class="btn danger-btn btn-sm" id="decline_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">close</span> Decline</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -1228,18 +1328,18 @@
                         <div class="mail-header"><span>Outbound Offer to ${mail.recipientUsername}</span></div>
                         <div class="mail-exchange-view">
                             <div class="exchange-box">
-                                <div class="exchange-title">They Get</div>
+                                <div class="exchange-title">You Give</div>
                                 ${mailGivingTokens > 0 ? `<div class="token-badge-display">🪙 ${mailGivingTokens} Tokens</div>` : ''}
                                 <div class="exchange-column">${givingNodesHtml || (mailGivingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                             <div class="exchange-box">
-                                <div class="exchange-title">They Give</div>
+                                <div class="exchange-title">You Request</div>
                                 ${mailReceivingTokens > 0 ? `<div class="token-badge-display">🪙 ${mailReceivingTokens} Tokens</div>` : ''}
                                 <div class="exchange-column">${receivingNodesHtml || (mailReceivingTokens > 0 ? '' : '<span style="font-size:0.85rem;opacity:0.5;">Nothing</span>')}</div>
                             </div>
                         </div>
                         <div class="mail-actions">
-                            <button class="action-btn btn-red btn-sm" id="cancel_mail_${mailId}"><span class="material-icons" style="font-size:18px;">delete_forever</span> Cancel Trade Offer</button>
+                            <button class="btn danger-btn btn-sm" id="cancel_mail_${mailId}" style="flex:1;"><span class="material-icons" style="font-size:18px;">delete_forever</span> Cancel Request</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -1247,27 +1347,6 @@
                 }
             });
         });
-    }
-
-    async function archiveAndRemoveMail(mailId, mail, statusText) {
-        try {
-            await addDoc(collection(db, "trade_history"), {
-                senderUid: mail.senderUid,
-                senderUsername: mail.senderUsername,
-                recipientUid: mail.recipientUid,
-                recipientUsername: mail.recipientUsername,
-                giving: mail.giving || [],
-                receiving: mail.receiving || [],
-                givingTokens: mail.givingTokens || 0,
-                receivingTokens: mail.receivingTokens || 0,
-                status: statusText,
-                resolvedAt: Date.now()
-            });
-            await deleteDoc(doc(db, "trade_mail", mailId));
-            if(currentTab === "history") listenForMailCenter();
-        } catch(e) {
-            console.error(e);
-        }
     }
 
     async function acceptMailOffer(mailId, mail) {
@@ -1278,20 +1357,25 @@
         const mySnap = await getDoc(myDocRef);
         if (!mySnap.exists()) return alert("Your profile was not found.");
         
-        let liveMyCoins = mySnap.data().coins !== undefined ? mySnap.data().coins : 0;
-        let liveMyBlocks = Array.isArray(mySnap.data().ownedBlocks) ? mySnap.data().ownedBlocks : [];
+        let liveMyTokens = mySnap.data().tokens !== undefined ? mySnap.data().tokens : 0;
+        let liveMyInventory = Array.isArray(mySnap.data().inventory) ? mySnap.data().inventory : [];
 
-        if (mailReceivingTokens > liveMyCoins) {
+        if (mailReceivingTokens > liveMyTokens) {
             alert(`Canceled. You no longer have the required ${mailReceivingTokens} tokens.`);
             return;
         }
 
         const myFreq = {};
-        liveMyBlocks.forEach(blook => { myFreq[blook] = (myFreq[blook] || 0) + 1; });
+        liveMyInventory.forEach(blook => { myFreq[blook] = (myFreq[blook] || 0) + 1; });
         const myMissing = [];
         mail.receiving.forEach(item => {
-            if (myFreq[item] && myFreq[item] > 0) { myFreq[item]--; } else { myMissing.push(item); }
+            if (myFreq[item] && myFreq[item] > 0) {
+                myFreq[item]--;
+            } else {
+                myMissing.push(item);
+            }
         });
+
         if (myMissing.length > 0) {
             alert(`Canceled. You lack the items: ${myMissing.join(', ')}`);
             return;
@@ -1306,71 +1390,108 @@
         }
 
         const senderData = senderSnap.data();
-        let senderCoins = senderData.coins !== undefined ? senderData.coins : 0;
-        let senderBlocks = Array.isArray(senderData.ownedBlocks) ? senderData.ownedBlocks : [];
-        
-        if (mailGivingTokens > senderCoins) {
-            alert("Sender no longer has the offered tokens.");
+        let liveSenderTokens = senderData.tokens !== undefined ? senderData.tokens : 0;
+        let liveSenderInventory = Array.isArray(senderData.inventory) ? senderData.inventory : [];
+
+        if (mailGivingTokens > liveSenderTokens) {
+            alert("Canceled. Offering partner no longer possesses the required tokens.");
             await archiveAndRemoveMail(mailId, mail, "CANCELED");
             return;
         }
 
-        const senderFreq = {};
-        senderBlocks.forEach(blook => { senderFreq[blook] = (senderFreq[blook] || 0) + 1; });
-        const senderMissing = [];
+        const sFreq = {};
+        liveSenderInventory.forEach(blook => { sFreq[blook] = (sFreq[blook] || 0) + 1; });
+        const sMissing = [];
         mail.giving.forEach(item => {
-            if (senderFreq[item] && senderFreq[item] > 0) { senderFreq[item]--; } else { senderMissing.push(item); }
+            if (sFreq[item] && sFreq[item] > 0) {
+                sFreq[item]--;
+            } else {
+                sMissing.push(item);
+            }
         });
 
-        if (senderMissing.length > 0) {
-            alert("Sender no longer possesses the assets offered.");
+        if (sMissing.length > 0) {
+            alert("Canceled. Request sender no longer holds items offered.");
             await archiveAndRemoveMail(mailId, mail, "CANCELED");
             return;
         }
 
-        mail.receiving.forEach(item => {
-            const idx = liveMyBlocks.indexOf(item);
-            if (idx > -1) liveMyBlocks.splice(idx, 1);
-            senderBlocks.push(item);
+        // Apply mutations
+        liveMyTokens = liveMyTokens - mailReceivingTokens + mailGivingTokens;
+        mail.receiving.forEach(x => {
+            const index = liveMyInventory.indexOf(x);
+            if (index > -1) liveMyInventory.splice(index, 1);
         });
+        mail.giving.forEach(x => liveMyInventory.push(x));
 
-        mail.giving.forEach(item => {
-            const idx = senderBlocks.indexOf(item);
-            if (idx > -1) senderBlocks.splice(idx, 1);
-            liveMyBlocks.push(item);
+        liveSenderTokens = liveSenderTokens - mailGivingTokens + mailReceivingTokens;
+        mail.giving.forEach(x => {
+            const index = liveSenderInventory.indexOf(x);
+            if (index > -1) liveSenderInventory.splice(index, 1);
         });
+        mail.receiving.forEach(x => liveSenderInventory.push(x));
 
-        liveMyCoins = liveMyCoins - mailReceivingTokens + mailGivingTokens;
-        senderCoins = senderCoins - mailGivingTokens + mailReceivingTokens;
-
-        await setDoc(myDocRef, { ownedBlocks: liveMyBlocks, coins: liveMyCoins }, { merge: true });
-        await setDoc(senderDocRef, { ownedBlocks: senderBlocks, coins: senderCoins }, { merge: true });
-        
+        await updateDoc(myDocRef, { tokens: liveMyTokens, inventory: liveMyInventory });
+        await updateDoc(senderDocRef, { tokens: liveSenderTokens, inventory: liveSenderInventory });
         await archiveAndRemoveMail(mailId, mail, "ACCEPTED");
 
         alert("Trade successfully approved!");
         loadUserData();
     }
 
+    async function archiveAndRemoveMail(mailId, mail, endStatus) {
+        try {
+            await addDoc(collection(db, "trade_history"), {
+                senderUid: mail.senderUid,
+                senderUsername: mail.senderUsername,
+                recipientUid: mail.recipientUid,
+                recipientUsername: mail.recipientUsername,
+                giving: mail.giving || [],
+                receiving: mail.receiving || [],
+                givingTokens: mail.givingTokens || 0,
+                receivingTokens: mail.receivingTokens || 0,
+                status: endStatus,
+                resolvedAt: Date.now()
+            });
+            await deleteDoc(doc(db, "trade_mail", mailId));
+        } catch(e) {
+            console.error("Error archiving trade card logic: ", e);
+        }
+    }
+
     function createSquares() {
-        const bg = document.querySelector(".background");
+        const bg = document.querySelector(".bg-base-gradient");
         if (!bg) return;
-        bg.innerHTML = "";
-        for (let i = 0; i < 60; i++) { 
-            const s = document.createElement("div"); 
-            s.className = "square"; 
-            s.style.left = Math.random() * 100 + "%"; 
-            const size = Math.random() * 25 + 10; 
-            s.style.width = size + "px"; 
-            s.style.height = size + "px"; 
-            s.style.top = (Math.random() * -100) - 50 + "px";
-            s.style.animationDelay = (Math.random() * 10) + "s";
-            s.style.opacity = Math.random() * 0.6 + 0.25; 
-            s.style.animationDuration = (Math.random() * 10 + 6) + "s"; 
+        for (let i = 0; i < 40; i++) {
+            const s = document.createElement("div");
+            s.style.cssText = `
+                position: fixed;
+                z-index: -1;
+                border: 2px solid rgba(255,255,255,.2);
+                background: rgba(255,255,255,.08);
+                width: ${Math.random() * 30 + 10}px;
+                height: ${Math.random() * 30 + 10}px;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: floatSquare ${Math.random() * 15 + 10}s infinite linear;
+                pointer-events: none;
+            `;
             bg.appendChild(s);
         }
     }
-    window.addEventListener("DOMContentLoaded", createSquares);
+
+    if (!document.getElementById("floatKeyframes")) {
+        const styleSheet = document.createElement("style");
+        styleSheet.id = "floatKeyframes";
+        styleSheet.textContent = `
+            @keyframes floatSquare {
+                0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.3; }
+                50% { transform: translateY(-40px) rotate(180deg) scale(1.2); opacity: 0.7; }
+                100% { transform: translateY(0) rotate(360deg) scale(1); opacity: 0.3; }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    }
 </script>
 </body>
 </html>
