@@ -240,7 +240,7 @@ body{
 }
 
 /* =========================
-   TRADE PANEL MAIN WORKSPACE (RESTYLED LIKE STATS CARD)
+   TRADE PANEL MAIN WORKSPACE
 ========================= */
 .trade-wrapper {
     flex: 1;
@@ -313,7 +313,7 @@ body{
     font-weight: 900;
 }
 
-/* REFRESHED SUB TAB CONTROLS (RESTYLED LIKE FRIENDS TABS) */
+/* REFRESHED SUB TAB CONTROLS */
 .trade-nav-bar {
     display: flex;
     background: rgba(0,0,0,0.3);
@@ -360,10 +360,10 @@ body{
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 18px;
-    padding: 40px 24px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    min-height: 280px;
+    min-height: 320px;
 }
 
 .shelf-panel {
@@ -371,6 +371,7 @@ body{
     flex-direction: column;
     width: 100%;
     height: 100%;
+    gap: 15px;
 }
 
 .shelf-panel.active {
@@ -381,6 +382,69 @@ body{
 @keyframes shelfFade {
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ROW DESIGN FOR TRADES */
+.trade-row {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.trade-row-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+}
+
+.trade-user-name {
+    font-weight: 800;
+    color: white;
+    font-size: 1.05rem;
+}
+
+.trade-items-exchange {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.exchange-side {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.blook-trade-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.trade-row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
 }
 
 /* EMPTY GENERIC PANEL VIEW */
@@ -419,7 +483,7 @@ body{
     display:inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 22px;
+    padding: 10px 18px;
     border-radius: 12px;
     position: relative;
     text-align: center;
@@ -439,16 +503,132 @@ body{
     filter: brightness(0.95);
 }
 
-.action-orange-btn {
-    background: #ff7f11;
+.action-orange-btn { background: #ff7f11; color: white; box-shadow: 0 4px 0 #b35300; }
+.action-orange-btn:hover { box-shadow: 0 6px 0 #b35300; }
+.action-orange-btn:active { box-shadow: 0 1px 0 #b35300; }
+
+.success-btn { background: #4caf50; color: white; box-shadow: 0 4px 0 #2e6930; }
+.success-btn:hover { box-shadow: 0 6px 0 #2e6930; }
+.success-btn:active { box-shadow: 0 1px 0 #2e6930; }
+
+.danger-btn { background: #ff5252; color: white; box-shadow: 0 4px 0 #b33939; }
+.danger-btn:hover { box-shadow: 0 6px 0 #b33939; }
+.danger-btn:active { box-shadow: 0 1px 0 #b33939; }
+
+.secondary-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+
+/* MODALS */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-card {
+    background: linear-gradient(135deg, #2a1702 0%, #110800 100%);
+    border: 4px solid #ff9b2f;
+    border-radius: 32px;
+    padding: 24px;
+    width: 680px; 
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+    gap: 16px;
+}
+
+.modal-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title-row h2 {
+    font-family: 'Titan One', cursive;
     color: white;
-    box-shadow: 0 4px 0 #b35300;
 }
-.action-orange-btn:hover {
-    box-shadow: 0 6px 0 #b35300;
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
 }
-.action-orange-btn:active {
-    box-shadow: 0 1px 0 #b35300;
+
+.modal-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.modal-search-wrapper .material-icons {
+    position: absolute;
+    left: 14px;
+    color: rgba(255,255,255,0.4);
+}
+.modal-search-input {
+    width: 100%;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 12px 16px 12px 44px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    outline: none;
+}
+
+.inventory-selector-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.inventory-box {
+    background: rgba(0,0,0,0.3);
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inventory-box-title {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #ff9b2f;
+    text-transform: uppercase;
+}
+
+.items-scroller {
+    height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.select-item-row {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.select-item-row:hover {
+    background: rgba(255,255,255,0.1);
+}
+.select-item-row.selected {
+    background: rgba(255,155,47,0.2);
+    border: 1px solid #ff9b2f;
 }
 
 /* RESPONSIVE DESIGN INTERFACE SPECIFICATIONS */
@@ -489,6 +669,12 @@ body{
     .trade-nav-bar {
         flex-direction: column;
         border-radius: 18px;
+    }
+    .trade-items-exchange {
+        grid-template-columns: 1fr;
+    }
+    .inventory-selector-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -532,7 +718,7 @@ body{
         
         <div class="trade-header-row">
             <div class="trade-title-group">
-                <span class="material-icons">mail</span>
+                <span class="material-icons">swap_horiz</span>
                 <h1 class="trade-main-title">Trade Center</h1>
             </div>
             <div class="trade-meta-actions">
@@ -546,15 +732,15 @@ body{
 
         <div class="trade-nav-bar">
             <button class="trade-nav-item active" data-target="received-panel">
-                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">mail_outline</span>
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">mail_outline</span>
                 <span>Received Offers</span>
             </button>
             <button class="trade-nav-item" data-target="sent-panel">
-                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">outbound</span>
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">outbound</span>
                 <span>Sent Offers</span>
             </button>
             <button class="trade-nav-item" data-target="history-panel">
-                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle; margin-right:4px;">history</span>
+                <span class="material-icons" style="font-size:1.1rem; vertical-align:middle;">history</span>
                 <span>History Log</span>
             </button>
         </div>
@@ -587,6 +773,38 @@ body{
     </section>
 </main>
 
+<div class="modal-overlay" id="create-trade-modal">
+    <div class="modal-card">
+        <div class="modal-title-row">
+            <h2>Propose Trade</h2>
+            <button class="modal-close-btn" id="close-trade-modal"><span class="material-icons" style="font-size: 2rem;">close</span></button>
+        </div>
+        
+        <div class="modal-search-wrapper">
+            <span class="material-icons">search</span>
+            <input type="text" class="modal-search-input" id="target-username-input" placeholder="Type exact recipient username...">
+        </div>
+
+        <div class="inventory-selector-grid">
+            <div class="inventory-box">
+                <div class="inventory-box-title">Your Offer (Select Blook)</div>
+                <div class="items-scroller" id="my-inventory-scroller"></div>
+            </div>
+            <div class="inventory-box">
+                <div class="inventory-box-title">Their Request (Select Blook)</div>
+                <div class="items-scroller" id="their-inventory-scroller">
+                    <div style="text-align:center; padding:20px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Enter exact username above to scan inventory...</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+            <button class="btn secondary-btn" id="cancel-proposal-btn">Cancel</button>
+            <button class="btn action-orange-btn" id="submit-trade-btn">Send Proposal</button>
+        </div>
+    </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -594,7 +812,13 @@ import {
     getFirestore, 
     doc, 
     onSnapshot,
-    updateDoc
+    updateDoc,
+    getDoc,
+    collection,
+    addDoc,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -616,26 +840,285 @@ const tokenCounterValue = document.getElementById('token-counter-value');
 const identityPlaceholder = document.getElementById('identity-placeholder');
 const tradeNavItems = document.querySelectorAll('.trade-nav-item');
 const shelfPanels = document.querySelectorAll('.shelf-panel');
+
 const createTradeBtn = document.getElementById('create-trade-btn');
+const createTradeModal = document.getElementById('create-trade-modal');
+const closeTradeModal = document.getElementById('close-trade-modal');
+const cancelProposalBtn = document.getElementById('cancel-proposal-btn');
+const submitTradeBtn = document.getElementById('submit-trade-btn');
+
+const targetUsernameInput = document.getElementById('target-username-input');
+const myInventoryScroller = document.getElementById('my-inventory-scroller');
+const theirInventoryScroller = document.getElementById('their-inventory-scroller');
 
 let currentUserUid = null;
+let currentUsername = "";
+let myBlooks = {};
+let targetUserUid = null;
 
-// Handle Sub-Tab Switching Logic
+let selectedMyBlook = null;
+let selectedTheirBlook = null;
+
+// Tab Switcher Setup
 tradeNavItems.forEach(tab => {
     tab.addEventListener('click', () => {
         tradeNavItems.forEach(t => t.classList.remove('active'));
         shelfPanels.forEach(p => p.classList.remove('active'));
-
         tab.classList.add('active');
-        const targetId = tab.getAttribute('data-target');
-        document.getElementById(targetId).classList.add('active');
+        document.getElementById(tab.getAttribute('data-target')).classList.add('active');
     });
 });
 
-// Setup Request Handler Flow Anchor
+// Modal Dialog Toggles
 createTradeBtn.addEventListener('click', () => {
-    alert("Trade request initialization screen template connected!");
+    createTradeModal.style.display = 'flex';
+    populateMyInventory();
 });
+const closeModal = () => {
+    createTradeModal.style.display = 'none';
+    targetUsernameInput.value = "";
+    theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:20px; color:rgba(255,255,255,0.4); font-size:0.85rem;">Enter exact username above to scan inventory...</div>`;
+    selectedMyBlook = null;
+    selectedTheirBlook = null;
+    targetUserUid = null;
+};
+closeTradeModal.addEventListener('click', closeModal);
+cancelProposalBtn.addEventListener('click', closeModal);
+
+function populateMyInventory() {
+    myInventoryScroller.innerHTML = "";
+    if (!myBlooks || Object.keys(myBlooks).length === 0) {
+        myInventoryScroller.innerHTML = `<div style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.85rem; padding:10px;">Your inventory is empty</div>`;
+        return;
+    }
+    Object.keys(myBlooks).forEach(blookName => {
+        if (myBlooks[blookName] > 0) {
+            const row = document.createElement('div');
+            row.className = "select-item-row";
+            row.innerHTML = `<span>${blookName}</span><span style="opacity:0.6">x${myBlooks[blookName]}</span>`;
+            row.addEventListener('click', () => {
+                document.querySelectorAll('#my-inventory-scroller .select-item-row').forEach(el => el.classList.remove('selected'));
+                row.classList.add('selected');
+                selectedMyBlook = blookName;
+            });
+            myInventoryScroller.appendChild(row);
+        }
+    });
+}
+
+// Search Recipient Input Checker
+let typingTimer;
+targetUsernameInput.addEventListener('input', () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(async () => {
+        const value = targetUsernameInput.value.trim();
+        if (!value) return;
+        
+        theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:rgba(255,255,255,0.5); font-size:0.85rem;">Searching player...</div>`;
+        
+        const q = query(collection(db, "users"), where("username_lowercase", "==", value.toLowerCase()));
+        const snap = await getDocs(q);
+        
+        if (snap.empty) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:#ff5252; font-size:0.85rem;">Player not found. Use exact username!</div>`;
+            targetUserUid = null;
+            return;
+        }
+        
+        const targetDoc = snap.docs[0];
+        if (targetDoc.id === currentUserUid) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; padding:10px; color:#ff5252; font-size:0.85rem;">You cannot trade with yourself!</div>`;
+            targetUserUid = null;
+            return;
+        }
+        
+        targetUserUid = targetDoc.id;
+        const targetData = targetDoc.data();
+        const targetBlocks = targetData.blooks || {};
+        
+        theirInventoryScroller.innerHTML = "";
+        const validBlooks = Object.keys(targetBlocks).filter(name => targetBlocks[name] > 0);
+        
+        if (validBlocks.length === 0) {
+            theirInventoryScroller.innerHTML = `<div style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.85rem; padding:10px;">Player has no available items</div>`;
+            return;
+        }
+        
+        validBlocks.forEach(blookName => {
+            const row = document.createElement('div');
+            row.className = "select-item-row";
+            row.innerHTML = `<span>${blookName}</span><span style="opacity:0.6">x${targetBlocks[blookName]}</span>`;
+            row.addEventListener('click', () => {
+                document.querySelectorAll('#their-inventory-scroller .select-item-row').forEach(el => el.classList.remove('selected'));
+                row.classList.add('selected');
+                selectedTheirBlook = blookName;
+            });
+            theirInventoryScroller.appendChild(row);
+        });
+        
+    }, 400);
+});
+
+// Submit proposal handler
+submitTradeBtn.addEventListener('click', async () => {
+    if (!targetUserUid || !selectedMyBlook || !selectedTheirBlook) {
+        alert("Please specify a valid destination player and select items for exchange on both sides!");
+        return;
+    }
+    
+    try {
+        await addDoc(collection(db, "trades"), {
+            senderUid: currentUserUid,
+            senderName: currentUsername,
+            receiverUid: targetUserUid,
+            receiverName: targetUsernameInput.value.trim(),
+            senderOffer: [selectedMyBlook],
+            receiverOffer: [selectedTheirBlook],
+            status: "pending",
+            timestamp: Date.now()
+        });
+        alert("Trade proposal successfully submitted!");
+        closeModal();
+    } catch(e) {
+        console.error(e);
+        alert("Failed to create offer.");
+    }
+});
+
+// Sync real-time trade documents feeds
+function startTradesListener() {
+    const q = query(collection(db, "trades"));
+    onSnapshot(q, (snapshot) => {
+        const recPanel = document.getElementById('received-panel');
+        const sentPanel = document.getElementById('sent-panel');
+        const histPanel = document.getElementById('history-panel');
+        
+        let recCount = 0, sentCount = 0, histCount = 0;
+        
+        let recHTML = "", sentHTML = "", histHTML = "";
+        
+        snapshot.forEach(docSnap => {
+            const trade = docSnap.data();
+            const id = docSnap.id;
+            
+            const itemHTML = `
+                <div class="trade-row">
+                    <div class="trade-row-meta">
+                        <span>ID: ${id.substring(0,6)}...</span>
+                        <span>Status: <strong style="color:${trade.status === 'accepted' ? '#4caf50' : trade.status === 'declined' ? '#ff5252' : '#ff9b2f'}">${trade.status.toUpperCase()}</strong></span>
+                    </div>
+                    <div class="trade-items-exchange">
+                        <div class="exchange-side">
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); width:100%; font-weight:800; margin-bottom:4px;">${trade.senderName} OFFERS:</div>
+                            ${trade.senderOffer.map(b => `<div class="blook-trade-badge"><span class="material-icons" style="font-size:0.9rem; color:#ffcc00">category</span>${b}</div>`).join('')}
+                        </div>
+                        <div style="display:flex; align-items:center; justify-content:center;"><span class="material-icons" style="color:rgba(255,255,255,0.4)">swap_horiz</span></div>
+                        <div class="exchange-side">
+                            <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); width:100%; font-weight:800; margin-bottom:4px;">${trade.receiverName} REQUESTS:</div>
+                            ${trade.receiverOffer.map(b => `<div class="blook-trade-badge"><span class="material-icons" style="font-size:0.9rem; color:#ffcc00">category</span>${b}</div>`).join('')}
+                        </div>
+                    </div>
+            `;
+            
+            if (trade.status === 'pending') {
+                if (trade.receiverUid === currentUserUid) {
+                    recCount++;
+                    recHTML += itemHTML + `
+                        <div class="trade-row-actions">
+                            <button class="btn danger-btn data-action-decline" data-id="${id}">Decline</button>
+                            <button class="btn success-btn data-action-accept" data-id="${id}">Accept Offer</button>
+                        </div></div>`;
+                } else if (trade.senderUid === currentUserUid) {
+                    sentCount++;
+                    sentHTML += itemHTML + `
+                        <div class="trade-row-actions">
+                            <button class="btn secondary-btn data-action-cancel" data-id="${id}">Cancel Request</button>
+                        </div></div>`;
+                }
+            } else {
+                // Completed historical logs
+                if (trade.senderUid === currentUserUid || trade.receiverUid === currentUserUid) {
+                    histCount++;
+                    histHTML += itemHTML + `</div>`;
+                }
+            }
+        });
+        
+        if (recCount > 0) recPanel.innerHTML = recHTML;
+        else recPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">mail_outline</span><div class="shelf-empty-text">No active offers inside this section.</div></div>`;
+        
+        if (sentCount > 0) sentPanel.innerHTML = sentHTML;
+        else sentPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">outbound</span><div class="shelf-empty-text">You haven't dispatched any trade proposals yet.</div></div>`;
+        
+        if (histCount > 0) histPanel.innerHTML = histHTML;
+        else histPanel.innerHTML = `<div class="shelf-empty-state"><span class="material-icons">history</span><div class="shelf-empty-text">Your finalized transaction transcripts appear blank.</div></div>`;
+        
+        attachTradeActionListeners();
+    });
+}
+
+function attachTradeActionListeners() {
+    document.querySelectorAll('.data-action-decline').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            await updateDoc(doc(db, "trades", id), { status: "declined" });
+        });
+    });
+    document.querySelectorAll('.data-action-cancel').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            await updateDoc(doc(db, "trades", id), { status: "cancelled" });
+        });
+    });
+    document.querySelectorAll('.data-action-accept').forEach(b => {
+        b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            try {
+                const tradeRef = doc(db, "trades", id);
+                const tradeSnap = await getDoc(tradeRef);
+                if (!tradeSnap.exists()) return;
+                const trade = tradeSnap.data();
+                
+                // Fetch dynamic atomic balances check
+                const senderDocRef = doc(db, "users", trade.senderUid);
+                const receiverDocRef = doc(db, "users", trade.receiverUid);
+                
+                const sSnap = await getDoc(senderDocRef);
+                const rSnap = await getDoc(receiverDocRef);
+                
+                if (!sSnap.exists() || !rSnap.exists()) return;
+                
+                const sBlooks = sSnap.data().blooks || {};
+                const rBlooks = rSnap.data().blooks || {};
+                
+                const itemOffered = trade.senderOffer[0];
+                const itemRequested = trade.receiverOffer[0];
+                
+                if ((sBlooks[itemOffered] || 0) < 1 || (rBlooks[itemRequested] || 0) < 1) {
+                    alert("Transaction error: One of the players no longer holds the items involved in this request!");
+                    await updateDoc(tradeRef, { status: "expired" });
+                    return;
+                }
+                
+                // Process cross transfer mutations
+                sBlooks[itemOffered] = (sBlooks[itemOffered] || 0) - 1;
+                sBlooks[itemRequested] = (sBlooks[itemRequested] || 0) + 1;
+                
+                rBlooks[itemRequested] = (rBlooks[itemRequested] || 0) - 1;
+                rBlooks[itemOffered] = (rBlooks[itemOffered] || 0) + 1;
+                
+                await updateDoc(senderDocRef, { blooks: sBlooks });
+                await updateDoc(receiverDocRef, { blooks: rBlooks });
+                await updateDoc(tradeRef, { status: "accepted" });
+                
+                alert("Trade accepted and items successfully transferred!");
+            } catch(e) {
+                console.error(e);
+                alert("Failed processing item settlement exchange rules.");
+            }
+        });
+    });
+}
 
 // Authentication Handling State
 onAuthStateChanged(auth, async (user) => {
@@ -646,8 +1129,10 @@ onAuthStateChanged(auth, async (user) => {
         onSnapshot(userDocRef, (snap) => {
             if (snap.exists()) {
                 const localUserData = snap.data();
+                myBlooks = localUserData.blooks || {};
+                currentUsername = localUserData.username || "Player";
                 tokenCounterValue.textContent = (localUserData.tokens || 0).toLocaleString();
-                identityPlaceholder.textContent = String(localUserData.username || "Player").toUpperCase();
+                identityPlaceholder.textContent = String(currentUsername).toUpperCase();
             }
         });
 
@@ -656,6 +1141,8 @@ onAuthStateChanged(auth, async (user) => {
             online: true,
             lastActive: Date.now()
         });
+
+        startTradesListener();
 
         document.getElementById('logout-hud-btn').addEventListener('click', async () => {
             await updateDoc(userDocRef, { online: false });
