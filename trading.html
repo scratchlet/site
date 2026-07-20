@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scratchlet - Trading</title>
+    <title>Scratchlet | Trading</title>
     <link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -16,13 +16,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Nunito", sans-serif;
+            font-family: \"Nunito\", sans-serif;
         }
         
         body {
             color: white;
             min-height: 100vh;
-            background: #ff9b2f;
+            background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
             overflow-x: hidden;
         }
         
@@ -65,7 +65,6 @@
             -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
             mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
             -webkit-mask-size: 126px 126px;
-            mask-size: 126px 126px;
             transform: rotate(15deg);
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
         }
@@ -112,7 +111,7 @@
         }
 
         .logo {
-            font-family: "Titan One", cursive;
+            font-family: \"Titan One\", cursive;
             font-size: 2.5rem;
             color: white;
         }
@@ -202,7 +201,7 @@
             transform: translateX(-50%) translateY(-6px);
             background: rgba(0, 0, 0, 0.9);
             color: white;
-            font-family: "Nunito", sans-serif;
+            font-family: \"Nunito\", sans-serif;
             font-weight: 800;
             font-size: 0.8rem;
             padding: 5px 10px;
@@ -263,26 +262,22 @@
             border-radius: 8px;
         }
 
-        /* CONTAINER GENERAL (CHAT INSPIRED STYLE REMIXED) */
+        /* CONTAINER GENERAL */
         .container {
-            max-width: 1400px;
-            width: 100%;
-            margin: 30px auto;
-            padding: 0 24px;
+            max-width: 95%;
+            margin: auto;
+            padding: 25px;
             position: relative;
             z-index: 5;
         }
         
         .big-trading-card {
-            background: rgba(0, 0, 0, 0.28);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            min-height: 550px;
-            position: relative;
+            background: rgba(255, 255, 255, 0.08);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             width: 100%;
         }
         
@@ -292,60 +287,51 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 20px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 20px;
         }
         
         .trading-title {
-            font-family: "Titan One", cursive;
+            font-family: \"Titan One\", cursive;
             font-size: 2rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        /* CHAT STYLE TABS / INBOX NAVIGATION */
+        /* INBOX TABS NAVIGATION */
         .mailbox-tabs {
             display: flex;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 14px;
-            padding: 4px;
-            gap: 4px;
-            margin-bottom: 15px;
-            border-bottom: none;
+            gap: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
         }
         
         .tab-link {
-            flex: 1;
             background: transparent;
             border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 12px 10px;
             color: rgba(255, 255, 255, 0.6);
-            font-family: "Nunito", sans-serif;
-            font-weight: 800;
-            font-size: 0.95rem;
-            border-radius: 10px;
-            transition: background 0.15s, color 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-family: \"Titan One\", cursive;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
         }
         
-        .tab-link:hover { 
-            color: white; 
-            background: rgba(255, 255, 255, 0.05);
+        .tab-link:hover { color: white; }
+        .tab-link.active { color: #fff1d0; }
+        .tab-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ff7f11;
+            border-radius: 4px;
         }
-        
-        .tab-link.active { 
-            background: #ff9b2f;
-            color: white;
-            box-shadow: 0 4px 10px rgba(255, 155, 47, 0.3);
-        }
-        .tab-link.active::after { display: none; }
 
         .main-workspace {
             display: grid;
@@ -354,8 +340,8 @@
         }
 
         .pane-card {
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
             padding: 20px;
             display: flex;
@@ -484,7 +470,7 @@
         .inventory-scroll-box::-webkit-scrollbar { width: 6px; }
         .inventory-scroll-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
-        /* BLOOK CHIPS */
+        /* BLOOK CHIPS WITH STACKING BADGE AND DYNAMIC RARITY BORDER */
         .blook-item-node {
             width: 60px;
             height: 60px;
@@ -508,51 +494,68 @@
             top: -4px;
             right: -4px;
             background: #ff7f11;
-            font-family: "Titan One", cursive;
+            font-family: \"Titan One\", cursive;
             font-size: 0.7rem;
             padding: 1px 5px;
             border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 2;
         }
 
-        /* MAILBOX RECTANGLE LEDGER STYLE CARDS (CHAT STYLE COMPATIBLE) */
-        .mail-list-container {
+        /* TRADE MAILBOX ELEMENT CARDS */
+        .mailbox-scroll-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            max-height: 640px;
+            overflow-y: auto;
+            padding-right: 8px;
         }
         
+        .mailbox-scroll-container::-webkit-scrollbar { 
+            width: 10px; 
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-track { 
+            background: rgba(143, 50, 0, 0.3); 
+            border-radius: 10px;
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.25); 
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .mailbox-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
         .mail-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            padding: 16px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.15s, border-color 0.15s;
+            gap: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
-        .mail-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
         .mail-header {
             display: flex;
             justify-content: space-between;
-            font-weight: 800;
-            color: #ffeed1;
-            font-size: 1.05rem;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
-            padding-bottom: 6px;
+            align-items: center;
+            font-family: \"Titan One\", cursive;
+            font-size: 1.15rem;
+            color: #fff1d0;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
-        
         .mail-exchange-view {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        
         .exchange-box {
             background: rgba(0, 0, 0, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -560,22 +563,19 @@
             padding: 12px;
             min-height: 110px;
         }
-        
         .exchange-title {
-            font-family: "Titan One", cursive;
+            font-family: \"Titan One\", cursive;
             font-size: 0.9rem;
             color: #fff4d6;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
         .exchange-column {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
         .token-badge-display {
             background: rgba(255, 199, 106, 0.2);
             border: 1px solid #ffc76a;
@@ -590,7 +590,6 @@
             margin-bottom: 8px;
             width: fit-content;
         }
-        
         .mail-actions {
             display: flex;
             gap: 12px;
@@ -598,622 +597,715 @@
         }
         .mail-actions .action-btn { flex: 1; }
 
-        /* EMPTY STATES */
-        .empty-mailbox {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.6;
-            font-weight: 700;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        /* HISTORY LEDGER OVERRIDES */
+        .history-tag {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 900;
+        }
+        .tag-accepted { background: #2ecc71; color: white; }
+        .tag-declined { background: #e74c3c; color: white; }
+        .tag-canceled { background: #7f8c8d; color: white; }
+        
+        .modal-columns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-columns-grid { grid-template-columns: 1fr; }
+        }
+
+        @media(max-width:980px) {
+            .navbar {
+                padding: 12px 20px;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-left-group {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .logo-link {
+                width: auto;
+                text-align: center;
+            }
+            .logo {
+                font-size: 2.2rem;
+            }
+            .nav-right-group {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .hud-badge-bar {
+                max-width: 100%;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px 8px;
+                gap: 4px;
+                border-radius: 25px;
+            }
+            .hud-item {
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+            }
+            .hud-item::after {
+                top: auto;
+                bottom: 46px;
+                transform: translateX(-50%) translateY(6px);
+            }
+            .hud-item:hover::after {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media(max-width:700px) {
+            .container { padding: 15px; }
+            .big-trading-card { padding: 15px; }
+            .trading-title { font-size: 1.5rem; }
+            .mail-exchange-view { grid-template-columns: 1fr; }
+            .mail-header { font-size: 1rem; flex-wrap: wrap; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-base-gradient"></div>
-    <div class="bg-moving-grid"></div>
-    <div class="bg-static-squares"></div>
-    <div class="bg-stroke-overlay"></div>
+<div class="bg-base-gradient"></div>
+<div class="bg-moving-grid"></div>
+<div class="bg-static-squares"></div>
+<div class="bg-stroke-overlay"></div>
 
-    <nav class="navbar">
-        <div class="nav-left-group">
-            <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
+<nav class="navbar">
+    <div class="nav-left-group">
+        <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
+    </div>
+    
+    <div class="nav-right-group">
+        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
+            <span id="token-counter-value" class="coin-amount">0</span>
         </div>
-        <div class="nav-right-group">
-            <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
-                <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
-                <span id="token-counter-value" class="coin-amount">0</span>
-            </div>
-            <div class="hud-badge-bar">
-                <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
-                <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
-                <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
-                <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
-                <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
-                <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
-                <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
-                <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
-                <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-                <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="big-trading-card">
-            
-            <div class="trading-header">
-                <div class="trading-title">
-                    <span class="material-icons" style="font-size: 2.2rem;">mail</span> Trade Center
-                </div>
-                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                    <div style="font-weight: 800; opacity: 0.8;" id="myUsernameDisplay">Your Username: Loading...</div>
-                    <button class="action-btn btn-orange btn-sm" id="openTradeModalBtn">
-                        <span class="material-icons">add_box</span> Create Trade Request
-                    </button>
-                </div>
-            </div>
-
-            <div class="mailbox-tabs">
-                <button class="tab-link active" id="tabReceivedBtn">
-                    <span class="material-icons" style="font-size: 1.1rem; margin-right: 4px;">call_received</span>Received Offers
-                </button>
-                <button class="tab-link" id="tabSentBtn">
-                    <span class="material-icons" style="font-size: 1.1rem; margin-right: 4px;">call_made</span>Sent Offers
-                </button>
-                <button class="tab-link" id="tabHistoryBtn">
-                    <span class="material-icons" style="font-size: 1.1rem; margin-right: 4px;">history</span>History Log
-                </button>
-            </div>
-
-            <div class="main-workspace">
-                <div class="mail-list-container" id="mailboxListing">
-                    <div class="empty-mailbox">
-                        <span class="material-icons" style="font-size: 3rem;">sync</span>
-                        <div>Establishing contact with trade ledger systems...</div>
-                    </div>
-                </div>
-            </div>
-
+        
+        <div class="hud-badge-bar">
+            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
+            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
+            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
+            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
+            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
+            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
+            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
+            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
+            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
+            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
         </div>
     </div>
+</nav>
 
-    <div class="modal-overlay" id="tradeModalOverlay">
-        <div class="modal-card">
-            <button class="modal-close-btn" id="closeTradeModalBtn"><span class="material-icons" style="font-size: 2rem;">close</span></button>
-            <h2 style="font-family: 'Titan One', cursive; font-size: 1.6rem; display: flex; align-items: center; gap: 8px;">
-                <span class="material-icons">swap_horizontal_circle</span> Draft New Trade Ledger Proposal
-            </h2>
-            
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-                <label style="font-weight: 800; font-size: 0.9rem; opacity: 0.9;">Recipient Player Username</label>
+<div class="container">
+    <div class="big-trading-card">
+        <div class="trading-header">
+            <div class="trading-title">
+                <span class="material-icons" style="font-size: 2.2rem;">mail</span> Trade Center
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                <div style="font-weight: 800; opacity: 0.8;" id="myUsernameDisplay">Your Username: Loading...</div>
+                <button class="action-btn btn-orange btn-sm" id="openTradeModalBtn">
+                    <span class="material-icons">add_box</span> Create Trade Request
+                </button>
+            </div>
+        </div>
+
+        <div class="mailbox-tabs">
+            <button class="tab-link active" id="tabReceivedBtn">Received Offers</button>
+            <button class="tab-link" id="tabSentBtn">Sent Offers</button>
+            <button class="tab-link" id="tabHistoryBtn">History Log</button>
+        </div>
+
+        <div class="main-workspace">
+            <div class="pane-card">
+                <div class="mailbox-scroll-container" id="mailboxContainer">
+                    <div style="opacity: 0.5; padding: 30px; text-align: center; font-weight: 700;">Loading trade mail records...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="tradeModalOverlay">
+    <div class="modal-card">
+        <button class="modal-close-btn" id="closeTradeModalBtn">
+            <span class="material-icons" style="font-size: 28px;">close</span>
+        </button>
+        
+        <div style="font-family:'Titan One'; font-size: 1.5rem; color:#fff1d0; display:flex; align-items:center; gap:8px;">
+            <span class="material-icons" style="font-size: 1.8rem;">rate_review</span> Create Trade Request
+        </div>
+        
+        <div class="input-group" style="max-width: 600px;">
+            <input type="text" class="trade-input" id="recipientInput" placeholder="Recipient username...">
+            <button class="action-btn btn-orange btn-sm" id="verifyUserBtn">Check User</button>
+            <div class="recipient-status-box">
+                <div class="partner-avatar-frame" id="partnerAvatarFrame">
+                    <img id="partnerAvatarImg" src="">
+                </div>
+                <span class="recipient-status" id="recipientStatus"></span>
+            </div>
+        </div>
+        
+        <div class="modal-columns-grid">
+            <div style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 16px;">
+                <div style="font-size: 1.1rem; font-family: 'Titan One', cursive; color:#fff1d0;">You Give</div>
                 <div class="input-group">
-                    <input type="text" class="trade-input" id="recipientInput" placeholder="Enter precise username..." autocomplete="off">
-                    <button class="action-btn btn-orange" id="verifyUserBtn">Verify Player</button>
+                    <input type="number" class="trade-input" id="giveTokensInput" min="0" value="0" placeholder="Tokens to add to offer...">
                 </div>
-                <div class="recipient-status-box" style="margin-top: 4px;">
-                    <div class="partner-avatar-frame" id="partnerAvatarFrame">
-                        <img id="partnerAvatarImg" src="" alt="pfp">
-                    </div>
-                    <span class="recipient-status" id="recipientStatus"></span>
+                <div class="basket-zone" id="givingBasket"></div>
+                <div class="inventory-scroll-box" id="givingInventoryPool"></div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 16px;">
+                <div style="font-size: 1.1rem; font-family: 'Titan One', cursive; color:#fff1d0;">You Receive</div>
+                <div class="input-group">
+                    <input type="number" class="trade-input" id="receiveTokensInput" min="0" value="0" placeholder="Tokens to request...">
+                </div>
+                <div class="basket-zone" id="receivingBasket"></div>
+                <div style="font-size: 0.9rem; font-weight: 800; color:#fff4d6; margin-top: 5px;">Recipient's Inventory Available to Request:</div>
+                <div class="inventory-scroll-box" id="receivingInventoryPool">
+                    <div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">Verify a recipient username to view their collection...</div>
                 </div>
             </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 5px;">
-                
-                <div class="pane-card">
-                    <h3 style="font-family: 'Titan One', cursive; font-size: 1rem; color: #2ecc71;">Your Offer (Items to Give)</h3>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-size: 0.8rem; font-weight: 800; opacity: 0.8;">Included Tokens</label>
-                        <input type="number" class="trade-input" id="giveTokensInput" placeholder="0" min="0" value="0">
-                    </div>
-                    <div style="font-weight: 800; font-size: 0.85rem; opacity: 0.9;">Selected Blooks:</div>
-                    <div class="basket-zone" id="givingBasketZone"></div>
-                    <div style="font-weight: 800; font-size: 0.85rem; opacity: 0.7; margin-top: 5px;">Your Available Inventory (Click to Add):</div>
-                    <div class="inventory-scroll-box" id="givingInventoryPool"></div>
-                </div>
-
-                <div class="pane-card">
-                    <h3 style="font-family: 'Titan One', cursive; font-size: 1rem; color: #ff7f11;">Your Request (Items to Get)</h3>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-size: 0.8rem; font-weight: 800; opacity: 0.8;">Requested Tokens</label>
-                        <input type="number" class="trade-input" id="receiveTokensInput" placeholder="0" min="0" value="0">
-                    </div>
-                    <div style="font-weight: 800; font-size: 0.85rem; opacity: 0.9;">Requested Blooks:</div>
-                    <div class="basket-zone" id="receivingBasketZone"></div>
-                    <div style="font-weight: 800; font-size: 0.85rem; opacity: 0.7; margin-top: 5px;">Target Player's Inventory (Click to Request):</div>
-                    <div class="inventory-scroll-box" id="receivingInventoryPool"></div>
-                </div>
-
-            </div>
-
-            <button class="action-btn btn-green" id="sendMailOfferBtn" style="margin-top: 10px; width: 100%; font-size: 1.1rem; padding: 14px;" disabled>
-                <span class="material-icons">send</span> Dispatch Formal Proposal
-            </button>
         </div>
+        
+        <button class="action-btn btn-orange" id="sendMailOfferBtn" style="width:100%; margin-top:5px; font-size: 1.1rem; padding: 14px;">
+            <span class="material-icons">send</span> Send Trade Offer
+        </button>
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, getDocs, addDoc, updateDoc, onSnapshot, query, collection, where, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore as initializeFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
-            authDomain: "scratchlet-194bc.firebaseapp.com",
-            projectId: "scratchlet-194bc",
-            storageBucket: "scratchlet-194bc.firebasestorage.app",
-            messagingSenderId: "480952290764",
-            appId: "1:480952290764:web:0be65205e0b3ff2db16169",
-            measurementId: "G-2T6GS8Y9VN"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
+    authDomain: "scratchlet-194bc.firebaseapp.com",
+    projectId: "scratchlet-194bc",
+    storageBucket: "scratchlet-194bc.firebasestorage.app",
+    messagingSenderId: "480952290764",
+    appId: "1:480952290764:web:0be65205e0b3ff2db16169",
+    measurementId: "G-2T6GS8Y9VN"
+};
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = initializeFirestore(app);
 
-        let tokens = 0;
-        let inventory = [];
-        let myUsername = "";
-        let currentUser = null;
+let tokens = 0;
+let inventory = [];
+let myUsername = "";
+let currentUser = null;
+let itemsToGive = [];
+let itemsToRequest = [];
+let currentTab = "received";
+let verifiedPartnerUid = null;
+let partnerLiveTokens = 0;
+let partnerLiveInventory = [];
 
-        let itemsToGive = [];
-        let itemsToRequest = [];
-        let currentTab = "received";
+const blookRegistry = {
+    "Toast": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Qdw9WbN1/Toast.webp" },
+    "Cereal": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/KzD5x4SH/Cereal.webp" },
+    "Tomato Soup": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp" },
+    "Yogurt": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/mD8zYpX6/Yogurt.webp" }
+};
 
-        let verifiedPartnerUid = null;
-        let partnerLiveTokens = 0;
-        let partnerLiveInventory = [];
+// UI DOM references
+const openTradeModalBtn = document.getElementById("openTradeModalBtn");
+const closeTradeModalBtn = document.getElementById("closeTradeModalBtn");
+const tradeModalOverlay = document.getElementById("tradeModalOverlay");
+const verifyUserBtn = document.getElementById("verifyUserBtn");
+const recipientInput = document.getElementById("recipientInput");
+const recipientStatus = document.getElementById("recipientStatus");
+const partnerAvatarFrame = document.getElementById("partnerAvatarFrame");
+const partnerAvatarImg = document.getElementById("partnerAvatarImg");
+const sendMailOfferBtn = document.getElementById("sendMailOfferBtn");
 
-        const blookRegistry = {
-            "Toast": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/Qdw9WbN1/Toast.webp" },
-            "Cereal": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/KzD5x4SH/Cereal.webp" },
-            "Tomato Soup": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/9QKRqpX9/Tomato-Soup.webp" },
-            "Yogurt": { rarity: "Uncommon", color: "limegreen", image: "https://i.postimg.cc/mD8zYpX6/Yogurt.webp" }
-        };
+const tabReceivedBtn = document.getElementById("tabReceivedBtn");
+const tabSentBtn = document.getElementById("tabSentBtn");
+const tabHistoryBtn = document.getElementById("tabHistoryBtn");
+const mailboxContainer = document.getElementById("mailboxContainer");
 
-        // UI DOM references
-        const openTradeModalBtn = document.getElementById("openTradeModalBtn");
-        const closeTradeModalBtn = document.getElementById("closeTradeModalBtn");
-        const tradeModalOverlay = document.getElementById("tradeModalOverlay");
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        const userDocRef = doc(db, "users", user.uid);
         
-        const verifyUserBtn = document.getElementById("verifyUserBtn");
-        const recipientInput = document.getElementById("recipientInput");
-        const recipientStatus = document.getElementById("recipientStatus");
-        const partnerAvatarFrame = document.getElementById("partnerAvatarFrame");
-        const partnerAvatarImg = document.getElementById("partnerAvatarImg");
-
-        const giveTokensInput = document.getElementById("giveTokensInput");
-        const receiveTokensInput = document.getElementById("receiveTokensInput");
-        const sendMailOfferBtn = document.getElementById("sendMailOfferBtn");
-
-        const tabReceivedBtn = document.getElementById("tabReceivedBtn");
-        const tabSentBtn = document.getElementById("tabSentBtn");
-        const tabHistoryBtn = document.getElementById("tabHistoryBtn");
-        const mailboxListing = document.getElementById("mailboxListing");
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const userDocRef = doc(db, "users", user.uid);
+        onSnapshot(userDocRef, (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                tokens = data.tokens || 0;
                 
-                onSnapshot(userDocRef, (snap) => {
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        tokens = data.tokens || 0;
-                        inventory = data.inventory || [];
-                        myUsername = data.username || "Unknown";
-                        
-                        document.getElementById("token-counter-value").textContent = tokens.toLocaleString();
-                        document.getElementById("myUsernameDisplay").textContent = `Your Username: ${myUsername}`;
-                        
-                        if (tradeModalOverlay.classList.contains("active")) {
-                            renderGivingPool();
-                        }
-                    }
-                });
-
-                await updateDoc(userDocRef, { online: true, lastActive: Date.now() });
-                listenToMailbox();
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-
-        // Open Modal Reset parameters
-        openTradeModalBtn.addEventListener("click", () => {
-            verifiedPartnerUid = null;
-            itemsToGive = [];
-            itemsToRequest = [];
-            recipientInput.value = "";
-            giveTokensInput.value = 0;
-            receiveTokensInput.value = 0;
-            sendMailOfferBtn.disabled = true;
-            recipientStatus.style.display = "none";
-            partnerAvatarFrame.style.display = "none";
-            
-            renderGivingPool();
-            document.getElementById("givingBasketZone").innerHTML = "";
-            document.getElementById("receivingBasketZone").innerHTML = "";
-            document.getElementById("receivingInventoryPool").innerHTML = "";
-            
-            tradeModalOverlay.classList.add("active");
-        });
-
-        closeTradeModalBtn.addEventListener("click", () => {
-            tradeModalOverlay.classList.remove("active");
-        });
-
-        // Recipient lookup pipeline verification routine
-        verifyUserBtn.addEventListener("click", async () => {
-            const targetName = recipientInput.value.trim();
-            if (!targetName) return;
-            if (targetName.toLowerCase() === myUsername.toLowerCase()) {
-                showVerificationStatus("Cannot trade with yourself!", false);
-                return;
-            }
-            
-            verifyUserBtn.disabled = true;
-            showVerificationStatus("Searching player space...", true);
-            
-            try {
-                const q = query(collection(db, "users"), where("username", "==", targetName), limit(1));
-                const snap = await getDocs(q);
-                
-                if (snap.empty) {
-                    showVerificationStatus("Player not found in database registry.", false);
-                    verifiedPartnerUid = null;
-                    sendMailOfferBtn.disabled = true;
-                    partnerAvatarFrame.style.display = "none";
-                    document.getElementById("receivingInventoryPool").innerHTML = "";
+                // Normalizing inventory to flat array for UI rendering pool context handles
+                const rawInv = data.inventory || [];
+                if (Array.isArray(rawInv)) {
+                    inventory = [...rawInv];
                 } else {
-                    const pDoc = snap.docs[0];
-                    if (pDoc.id === currentUser.uid) {
-                        showVerificationStatus("Cannot trade with yourself!", false);
-                        return;
-                    }
-                    verifiedPartnerUid = pDoc.id;
-                    sendMailOfferBtn.disabled = false;
-                    
-                    const pData = pDoc.data();
-                    partnerLiveTokens = pData.tokens || 0;
-                    partnerLiveInventory = pData.inventory || [];
-                    
-                    showVerificationStatus("User verified!", true);
-                    partnerAvatarImg.src = pData.pfp || "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp";
-                    partnerAvatarFrame.style.display = "flex";
-                    renderReceivingPool();
-                }
-            } catch(e) {
-                console.error(e);
-                showVerificationStatus("Error connecting...", false);
-            } finally {
-                verifyUserBtn.disabled = false;
-            }
-        });
-
-        function showVerificationStatus(msg, success) {
-            recipientStatus.textContent = msg;
-            recipientStatus.className = `recipient-status ${success ? 'status-success' : 'status-error'}`;
-            recipientStatus.style.display = "inline-block";
-        }
-
-        // Basket Render Functions
-        function renderGivingPool() {
-            const pool = document.getElementById("givingInventoryPool");
-            pool.innerHTML = "";
-            const counts = {};
-            inventory.forEach(i => counts[i] = (counts[i] || 0) + 1);
-            itemsToGive.forEach(i => { if (counts[i]) counts[i]--; });
-
-            Object.keys(counts).forEach(name => {
-                if (counts[name] <= 0) return;
-                const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                const node = document.createElement("div");
-                node.className = "blook-item-node";
-                node.style.setProperty('--rarity-shadow', item.color);
-                node.innerHTML = `<img src="${item.image}"><div class="blook-item-badge">x${counts[name]}</div>`;
-                node.addEventListener("click", () => {
-                    itemsToGive.push(name);
-                    renderGivingPool();
-                    renderGivingBasket();
-                });
-                pool.appendChild(node);
-            });
-        }
-
-        function renderGivingBasket() {
-            const zone = document.getElementById("givingBasketZone");
-            zone.innerHTML = "";
-            itemsToGive.forEach((name, idx) => {
-                const item = blookRegistry[name] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                const node = document.createElement("div");
-                node.className = "blook-item-node";
-                node.innerHTML = `<img src="${item.image}">`;
-                node.addEventListener("click", () => {
-                    itemsToGive.splice(idx, 1);
-                    renderGivingPool();
-                    renderGivingBasket();
-                });
-                zone.appendChild(node);
-            });
-        }
-
-        function renderReceivingPool() {
-            const pool = document.getElementById("receivingInventoryPool");
-            pool.innerHTML = "";
-            const counts = {};
-            partnerLiveInventory.forEach(i => counts[i] = (counts[i] || 0) + 1);
-            itemsToRequest.forEach(i => { if (counts[i]) counts[i]--; });
-
-            Object.keys(counts).forEach(name => {
-                if (counts[name] <= 0) return;
-                const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                const node = document.createElement("div");
-                node.className = "blook-item-node";
-                node.style.setProperty('--rarity-shadow', item.color);
-                node.innerHTML = `<img src="${item.image}"><div class="blook-item-badge">x${counts[name]}</div>`;
-                node.addEventListener("click", () => {
-                    itemsToRequest.push(name);
-                    renderReceivingPool();
-                    renderReceivingBasket();
-                });
-                pool.appendChild(node);
-            });
-        }
-
-        function renderReceivingBasket() {
-            const zone = document.getElementById("receivingBasketZone");
-            zone.innerHTML = "";
-            itemsToRequest.forEach((name, idx) => {
-                const item = blookRegistry[name] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                const node = document.createElement("div");
-                node.className = "blook-item-node";
-                node.innerHTML = `<img src="${item.image}">`;
-                node.addEventListener("click", () => {
-                    itemsToRequest.splice(idx, 1);
-                    renderReceivingPool();
-                    renderReceivingBasket();
-                });
-                zone.appendChild(node);
-            });
-        }
-
-        // Save Offer Validation Submission Processing Loop
-        sendMailOfferBtn.addEventListener("click", async () => {
-            if (!verifiedPartnerUid) return;
-            const giveTokens = parseInt(giveTokensInput.value) || 0;
-            const receiveTokens = parseInt(receiveTokensInput.value) || 0;
-
-            if (giveTokens < 0 || receiveTokens < 0) {
-                alert("Tokens quantity parameters cannot fall below baseline bounds!");
-                return;
-            }
-            if (giveTokens > tokens) {
-                alert("You do not hold sufficient token funds for this offer context parameters!");
-                return;
-            }
-            
-            sendMailOfferBtn.disabled = true;
-            try {
-                await addDoc(collection(db, "mailbox_trades"), {
-                    senderUid: currentUser.uid,
-                    senderName: myUsername,
-                    receiverUid: verifiedPartnerUid,
-                    receiverName: recipientInput.value.trim(),
-                    senderTokens: giveTokens,
-                    receiverTokens: receiveTokens,
-                    senderBlooks: itemsToGive,
-                    receiverBlooks: itemsToRequest,
-                    status: "pending",
-                    timestamp: Date.now()
-                });
-                alert("Trade request dispatched successfully inside the mailbox ledger system!");
-                tradeModalOverlay.classList.remove("active");
-            } catch(e) {
-                console.error(e);
-                alert("An error occurred while saving the trade records.");
-            } refinement: {
-                sendMailOfferBtn.disabled = false;
-            }
-        });
-
-        // Tab Switch Operations
-        function switchTab(target) {
-            currentTab = target;
-            [tabReceivedBtn, tabSentBtn, tabHistoryBtn].forEach(b => b.classList.remove("active"));
-            
-            if (target === "received") tabReceivedBtn.classList.add("active");
-            if (target === "sent") tabSentBtn.classList.add("active");
-            if (target === "history") tabHistoryBtn.classList.add("active");
-            
-            listenToMailbox();
-        }
-
-        tabReceivedBtn.addEventListener("click", () => switchTab("received"));
-        tabSentBtn.addEventListener("click", () => switchTab("sent"));
-        tabHistoryBtn.addEventListener("click", () => switchTab("history"));
-
-        let currentUnsub = null;
-        
-        function listenToMailbox() {
-            if (currentUnsub) currentUnsub();
-            if (!currentUser) return;
-
-            let q;
-            if (currentTab === "received") {
-                q = query(collection(db, "mailbox_trades"), where("receiverUid", "==", currentUser.uid), where("status", "==", "pending"));
-            } else if (currentTab === "sent") {
-                q = query(collection(db, "mailbox_trades"), where("senderUid", "==", currentUser.uid), where("status", "==", "pending"));
-            } else {
-                q = query(collection(db, "mailbox_trades"), where("status", "in", ["accepted", "declined", "cancelled"]));
-            }
-
-            currentUnsub = onSnapshot(q, (snapshot) => {
-                mailboxListing.innerHTML = "";
-                
-                let validDocs = snapshot.docs;
-                if (currentTab === "history") {
-                    validDocs = validDocs.filter(d => {
-                        const data = d.data();
-                        return data.senderUid === currentUser.uid || data.receiverUid === currentUser.uid;
+                    inventory = [];
+                    Object.keys(rawInv).forEach(b => {
+                        for (let i = 0; i < rawInv[b]; i++) inventory.push(b);
                     });
                 }
-
-                if (validDocs.length === 0) {
-                    mailboxListing.innerHTML = `
-                        <div class="empty-mailbox">
-                            <span class="material-icons" style="font-size: 3rem;">mail_outline</span>
-                            <div>No matching trades inside this ledger sector.</div>
-                        </div>`;
-                    return;
+                
+                myUsername = data.username || "Unknown";
+                
+                document.getElementById("token-counter-value").textContent = tokens.toLocaleString();
+                document.getElementById("myUsernameDisplay").textContent = `Your Username: ${myUsername}`;
+                
+                if (tradeModalOverlay.classList.contains("active")) {
+                    renderGivingPool();
                 }
+            }
+        });
 
-                validDocs.forEach(docSnap => {
-                    const data = docSnap.data();
-                    const card = document.createElement("div");
-                    card.className = "mail-card";
+        listenToMailbox();
+    } else {
+        window.location.href = "login.html";
+    }
+});
 
-                    let headerTitle = "";
-                    if (currentTab === "received") headerTitle = `Offer From: ${data.senderName || 'Unknown'}`;
-                    else if (currentTab === "sent") headerTitle = `Offer Sent To: ${data.receiverName || 'Unknown'}`;
-                    else headerTitle = `Trade Variant Log [${data.status.toUpperCase()}]`;
+// Modal Setup
+openTradeModalBtn.addEventListener("click", () => {
+    tradeModalOverlay.classList.contains("active") ? null : tradeModalOverlay.classList.add("active");
+    itemsToGive = [];
+    itemsToRequest = [];
+    verifiedPartnerUid = null;
+    recipientInput.value = "";
+    document.getElementById("giveTokensInput").value = 0;
+    document.getElementById("receiveTokensInput").value = 0;
+    recipientStatus.style.display = "none";
+    partnerAvatarFrame.style.display = "none";
+    renderGivingPool();
+    renderGivingBasket();
+    renderReceivingBasket();
+    document.getElementById("receivingInventoryPool").innerHTML = `<div style="opacity: 0.5; font-size: 0.85rem; padding: 10px; font-weight: 700;">Verify a recipient username to view their collection...</div>`;
+});
 
-                    let senderBlooksHTML = (data.senderBlooks || []).map(b => {
-                        const item = blookRegistry[b] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                        return `<div class="blook-item-node" title="${b}"><img src="${item.image}"></div>`;
-                    }).join("");
+closeTradeModalBtn.addEventListener("click", () => {
+    tradeModalOverlay.classList.remove("active");
+});
 
-                    let receiverBlooksHTML = (data.receiverBlooks || []).map(b => {
-                        const item = blookRegistry[b] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
-                        return `<div class="blook-item-node" title="${b}"><img src="${item.image}"></div>`;
-                    }).join("");
+// Recipient Verification Logic
+verifyUserBtn.addEventListener("click", async () => {
+    const term = recipientInput.value.trim();
+    if (!term) return;
+    if (term.toLowerCase() === myUsername.toLowerCase()) {
+        showVerificationStatus("You cannot trade with yourself!", false);
+        return;
+    }
 
-                    card.innerHTML = `
-                        <div class="mail-header">
-                            <span>${headerTitle}</span>
-                            <span style="font-size: 0.8rem; opacity: 0.6;">${new Date(data.timestamp || Date.now()).toLocaleDateString()}</span>
-                        </div>
-                        <div class="mail-exchange-view">
-                            <div class="exchange-box">
-                                <div class="exchange-title">They Give / You Give</div>
-                                <div class="token-badge-display">
-                                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" style="width:16px; height:16px; object-fit:contain;">
-                                    <span>${data.senderTokens || 0} Tokens</span>
-                                </div>
-                                <div class="exchange-column">${senderBlooksHTML || '<span style="font-size:0.8rem; opacity:0.5;">No Blooks</span>'}</div>
-                            </div>
-                            <div class="exchange-box">
-                                <div class="exchange-title">They Get / You Get</div>
-                                <div class="token-badge-display">
-                                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" style="width:16px; height:16px; object-fit:contain;">
-                                    <span>${data.receiverTokens || 0} Tokens</span>
-                                </div>
-                                <div class="exchange-column">${receiverBlooksHTML || '<span style="font-size:0.8rem; opacity:0.5;">No Blooks</span>'}</div>
-                            </div>
-                        </div>
-                        <div class="mail-actions" id="actions-${docSnap.id}"></div>
-                    `;
-
-                    mailboxListing.appendChild(card);
-                    const containerActions = document.getElementById(`actions-${docSnap.id}`);
-
-                    if (currentTab === "received") {
-                        const acc = document.createElement("button");
-                        acc.className = "action-btn btn-green btn-sm";
-                        acc.innerHTML = `<span class="material-icons">check</span> Accept`;
-                        acc.addEventListener("click", () => executeTransactionPipeline(docSnap.id, data));
-
-                        const dec = document.createElement("button");
-                        dec.className = "action-btn btn-red btn-sm";
-                        dec.innerHTML = `<span class="material-icons">close</span> Decline`;
-                        dec.addEventListener("click", async () => {
-                            if (confirm("Decline this offer?")) {
-                                await updateDoc(doc(db, "mailbox_trades", docSnap.id), { status: "declined" });
-                            }
-                        });
-                        containerActions.appendChild(acc);
-                        containerActions.appendChild(dec);
-                    } else if (currentTab === "sent") {
-                        const can = document.createElement("button");
-                        can.className = "action-btn btn-red btn-sm";
-                        can.innerHTML = `<span class="material-icons">delete_forever</span> Cancel Offer`;
-                        can.addEventListener("click", async () => {
-                            if (confirm("Revoke this proposal offer?")) {
-                                await updateDoc(doc(db, "mailbox_trades", docSnap.id), { status: "cancelled" });
-                            }
-                        });
-                        containerActions.appendChild(can);
-                    } else {
-                        containerActions.innerHTML = `<span style="font-size:0.85rem; font-weight:800; opacity:0.5;">Archived Pipeline Closed</span>`;
-                    }
+    verifyUserBtn.disabled = true;
+    try {
+        const q = query(collection(db, "users"), where("username", "==", term));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+            showVerificationStatus("User not found!", false);
+            partnerAvatarFrame.style.display = "none";
+            verifiedPartnerUid = null;
+        } else {
+            const pDoc = snap.docs[0];
+            verifiedPartnerUid = pDoc.id;
+            const pData = pDoc.data();
+            partnerLiveTokens = pData.tokens || 0;
+            
+            // Normalize recipient data layout constraints
+            const pInvRaw = pData.inventory || [];
+            if (Array.isArray(pInvRaw)) {
+                partnerLiveInventory = [...pInvRaw];
+            } else {
+                partnerLiveInventory = [];
+                Object.keys(pInvRaw).forEach(b => {
+                    for (let i = 0; i < pInvRaw[b]; i++) partnerLiveInventory.push(b);
                 });
+            }
+            
+            showVerificationStatus("User verified!", true);
+            partnerAvatarImg.src = pData.pfp || "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp";
+            partnerAvatarFrame.style.display = "flex";
+            
+            renderReceivingPool();
+        }
+    } catch(e) {
+        console.error(e);
+        showVerificationStatus("Error connecting...", false);
+    } finally {
+        verifyUserBtn.disabled = false;
+    }
+});
+
+function showVerificationStatus(msg, success) {
+    recipientStatus.textContent = msg;
+    recipientStatus.className = `recipient-status ${success ? 'status-success' : 'status-error'}`;
+    recipientStatus.style.display = "inline-block";
+}
+
+// Basket Render Functions
+function renderGivingPool() {
+    const pool = document.getElementById("givingInventoryPool");
+    pool.innerHTML = "";
+    const counts = {};
+    inventory.forEach(i => counts[i] = (counts[i] || 0) + 1);
+    itemsToGive.forEach(i => { if (counts[i]) counts[i]--; });
+
+    Object.keys(counts).forEach(name => {
+        if (counts[name] <= 0) return;
+        const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+        const node = document.createElement("div");
+        node.className = "blook-item-node";
+        node.style.setProperty('--rarity-shadow', item.color);
+        node.innerHTML = `<img src="${item.image}"><div class="blook-item-badge">x${counts[name]}</div>`;
+        node.addEventListener("click", () => {
+            itemsToGive.push(name);
+            renderGivingPool();
+            renderGivingBasket();
+        });
+        pool.appendChild(node);
+    });
+}
+
+function renderGivingBasket() {
+    const basket = document.getElementById("givingBasket");
+    basket.innerHTML = "";
+    itemsToGive.forEach((name, index) => {
+        const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+        const node = document.createElement("div");
+        node.className = "blook-item-node";
+        node.innerHTML = `<img src="${item.image}">`;
+        node.addEventListener("click", () => {
+            itemsToGive.splice(index, 1);
+            renderGivingPool();
+            renderGivingBasket();
+        });
+        basket.appendChild(node);
+    });
+}
+
+function renderReceivingPool() {
+    const pool = document.getElementById("receivingInventoryPool");
+    pool.innerHTML = "";
+    const counts = {};
+    partnerLiveInventory.forEach(i => counts[i] = (counts[i] || 0) + 1);
+    itemsToRequest.forEach(i => { if (counts[i]) counts[i]--; });
+
+    Object.keys(counts).forEach(name => {
+        if (counts[name] <= 0) return;
+        const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+        const node = document.createElement("div");
+        node.className = "blook-item-node";
+        node.style.setProperty('--rarity-shadow', item.color);
+        node.innerHTML = `<img src="${item.image}"><div class="blook-item-badge">x${counts[name]}</div>`;
+        node.addEventListener("click", () => {
+            itemsToRequest.push(name);
+            renderReceivingPool();
+            renderReceivingBasket();
+        });
+        pool.appendChild(node);
+    });
+}
+
+function renderReceivingBasket() {
+    const basket = document.getElementById("receivingBasket");
+    basket.innerHTML = "";
+    itemsToRequest.forEach((name, index) => {
+        const item = blookRegistry[name] || { rarity: "Common", color: "white", image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+        const node = document.createElement("div");
+        node.className = "blook-item-node";
+        node.innerHTML = `<img src="${item.image}">`;
+        node.addEventListener("click", () => {
+            itemsToRequest.splice(index, 1);
+            renderReceivingPool();
+            renderReceivingBasket();
+        });
+        basket.appendChild(node);
+    });
+}
+
+// Mail Processing Offer Submissions
+sendMailOfferBtn.addEventListener("click", async () => {
+    if (!verifiedPartnerUid) {
+        alert("Please specify and check a valid recipient username first!");
+        return;
+    }
+    const giveTokens = parseInt(document.getElementById("giveTokensInput").value) || 0;
+    const receiveTokens = parseInt(document.getElementById("receiveTokensInput").value) || 0;
+
+    if (giveTokens > tokens) {
+        alert("You do not possess enough tokens for this offer context parameters!");
+        return;
+    }
+
+    sendMailOfferBtn.disabled = true;
+    try {
+        await addDoc(collection(db, "mailbox_trades"), {
+            senderUid: currentUser.uid,
+            senderName: myUsername,
+            receiverUid: verifiedPartnerUid,
+            receiverName: recipientInput.value.trim(),
+            senderTokens: giveTokens,
+            receiverTokens: receiveTokens,
+            senderBlocks: itemsToGive,
+            receiverBlocks: itemsToRequest,
+            status: "pending",
+            timestamp: Date.now()
+        });
+        alert("Trade request dispatched successfully inside the mailbox ledger system!");
+        tradeModalOverlay.classList.remove("active");
+    } catch(e) {
+        console.error(e);
+        alert("An error occurred while saving the trade records.");
+    } finally {
+        sendMailOfferBtn.disabled = false;
+    }
+});
+
+// Tab Switch Operations
+function switchTab(target) {
+    currentTab = target;
+    [tabReceivedBtn, tabSentBtn, tabHistoryBtn].forEach(b => b.classList.remove("active"));
+    if (target === "received") tabReceivedBtn.classList.add("active");
+    if (target === "sent") tabSentBtn.classList.add("active");
+    if (target === "history") tabHistoryBtn.classList.add("active");
+    listenToMailbox();
+}
+
+tabReceivedBtn.addEventListener("click", () => switchTab("received"));
+tabSentBtn.addEventListener("click", () => switchTab("sent"));
+tabHistoryBtn.addEventListener("click", () => switchTab("history"));
+
+let currentUnsub = null;
+function listenToMailbox() {
+    if (currentUnsub) currentUnsub();
+    if (!currentUser) return;
+
+    let q;
+    if (currentTab === "received") {
+        q = query(collection(db, "mailbox_trades"), where("receiverUid", "==", currentUser.uid), where("status", "==", "pending"));
+    } else if (currentTab === "sent") {
+        q = query(collection(db, "mailbox_trades"), where("senderUid", "==", currentUser.uid), where("status", "==", "pending"));
+    } else {
+        q = query(collection(db, "mailbox_trades"), where("status", "in", ["accepted", "declined", "cancelled"]));
+    }
+
+    currentUnsub = onSnapshot(q, (snapshot) => {
+        mailboxContainer.innerHTML = "";
+        
+        let filteredDocs = snapshot.docs;
+        if (currentTab === "history") {
+            filteredDocs = filteredDocs.filter(d => d.data().senderUid === currentUser.uid || d.data().receiverUid === currentUser.uid);
+        }
+
+        if (filteredDocs.length === 0) {
+            mailboxContainer.innerHTML = `<div style="opacity: 0.5; padding: 40px; text-align: center; font-weight: 700;">No trade mail records found for this tab viewport.</div>`;
+            return;
+        }
+
+        filteredDocs.forEach(docSnap => {
+            const data = docSnap.data();
+            const card = document.createElement("div");
+            card.className = "mail-card";
+
+            let headerTitle = `Trade Context Mail`;
+            if (currentTab === "received") headerTitle = `Offer From: ${data.senderName}`;
+            if (currentTab === "sent") headerTitle = `Offer To: ${data.receiverName}`;
+            if (currentTab === "history") {
+                const isMySent = data.senderUid === currentUser.uid;
+                headerTitle = isMySent ? `Sent to ${data.receiverName}` : `Received from ${data.senderName}`;
+            }
+
+            let actionRowHTML = "";
+            if (currentTab === "received") {
+                actionRowHTML = `
+                    <div class="mail-actions">
+                        <button class="action-btn btn-green accept-mail-btn" data-id="${docSnap.id}">Accept</button>
+                        <button class="action-btn btn-red decline-mail-btn" data-id="${docSnap.id}">Decline</button>
+                    </div>`;
+            } else if (currentTab === "sent") {
+                actionRowHTML = `
+                    <div class="mail-actions">
+                        <button class="action-btn btn-red cancel-mail-btn" data-id="${docSnap.id}">Cancel Offer</button>
+                    </div>`;
+            } else {
+                let tagClass = "tag-canceled";
+                if (data.status === "accepted") tagClass = "tag-accepted";
+                if (data.status === "declined") tagClass = "tag-declined";
+                actionRowHTML = `<div style="text-align:right;"><span class="history-tag ${tagClass}">${data.status.toUpperCase()}</span></div>`;
+            }
+
+            let senderBlooksHTML = (data.senderBlooks || []).map(b => {
+                const item = blookRegistry[b] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+                return `<div class="blook-item-node" title="${b}"><img src="${item.image}"></div>`;
+            }).join("");
+
+            let receiverBlooksHTML = (data.receiverBlooks || []).map(b => {
+                const item = blookRegistry[b] || { image: "https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp" };
+                return `<div class="blook-item-node" title="${b}"><img src="${item.image}"></div>`;
+            }).join("");
+
+            card.innerHTML = `
+                <div class="mail-header">
+                    <span>${headerTitle}</span>
+                    <span style="font-size:0.8rem; opacity:0.6;">${new Date(data.timestamp).toLocaleDateString()}</span>
+                </div>
+                <div class="mail-exchange-view">
+                    <div class="exchange-box">
+                        <div class="exchange-title">${data.senderName} Gives</div>
+                        <div class="token-badge-display">
+                            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" style="width:14px;"> ${data.senderTokens.toLocaleString()}
+                        </div>
+                        <div class="exchange-column">${senderBlooksHTML || '<span style="opacity:0.4; font-size:0.8rem;">No items</span>'}</div>
+                    </div>
+                    <div class="exchange-box">
+                        <div class="exchange-title">${data.receiverName} Requesting</div>
+                        <div class="token-badge-display">
+                            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" style="width:14px;"> ${data.receiverTokens.toLocaleString()}
+                        </div>
+                        <div class="exchange-column">${receiverBlooksHTML || '<span style="opacity:0.4; font-size:0.8rem;">No items</span>'}</div>
+                    </div>
+                </div>
+                ${actionRowHTML}
+            `;
+
+            // Setup listeners inside cards
+            const accBtn = card.querySelector(".accept-mail-btn");
+            if (accBtn) accBtn.addEventListener("click", () => handleMailResolution(docSnap.id, "accepted"));
+
+            const decBtn = card.querySelector(".decline-mail-btn");
+            if (decBtn) decBtn.addEventListener("click", () => handleMailResolution(docSnap.id, "declined"));
+
+            const canBtn = card.querySelector(".cancel-mail-btn");
+            if (canBtn) canBtn.addEventListener("click", () => handleMailResolution(docSnap.id, "cancelled"));
+
+            mailboxContainer.appendChild(card);
+        });
+    });
+}
+
+async function handleMailResolution(id, status) {
+    if (!confirm(`Are you sure you want to trigger: ${status}?`)) return;
+    
+    try {
+        const docRef = doc(db, "mailbox_trades", id);
+        if (status !== "accepted") {
+            await updateDoc(docRef, { status: status });
+            alert(`Trade request successfully ${status}!`);
+            return;
+        }
+
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) return;
+        const tradeData = snap.data();
+
+        // Perform balance verification checks
+        const senderUserRef = doc(db, "users", tradeData.senderUid);
+        const receiverUserRef = doc(db, "users", tradeData.receiverUid);
+
+        const sSnap = await getDoc(senderUserRef);
+        const rSnap = await getDoc(receiverUserRef);
+
+        if (!sSnap.exists() || !rSnap.exists()) {
+            alert("One of the transaction user documents missing!");
+            return;
+        }
+
+        const sData = sSnap.data();
+        const rData = rSnap.data();
+
+        // Normalize sender's inventory layout rules dynamically
+        let sInvRaw = sData.inventory || [];
+        let sInv = [];
+        let sInvWasArray = Array.isArray(sInvRaw);
+        if (sInvWasArray) {
+            sInv = [...sInvRaw];
+        } else {
+            Object.keys(sInvRaw).forEach(blook => {
+                for(let i = 0; i < sInvRaw[blook]; i++) sInv.push(blook);
             });
         }
 
-        async refinement executeTransactionPipeline(tradeId, tradeData) {
-            if (!confirm("Are you certain you want to approve and execute this transaction proposal?")) return;
-            
-            const docRef = doc(db, "mailbox_trades", tradeId);
-            const senderUserRef = doc(db, "users", tradeData.senderUid);
-            const receiverUserRef = doc(db, "users", tradeData.receiverUid);
-
-            try {
-                const sSnap = await getDoc(senderUserRef);
-                const rSnap = await getDoc(receiverUserRef);
-
-                if (!sSnap.exists() || !rSnap.exists()) {
-                    alert("One of the transaction user entities no longer rests in active records.");
-                    return;
-                }
-
-                const sData = sSnap.data();
-                const rData = rSnap.data();
-
-                let sInv = [...(sData.inventory || [])];
-                let rInv = [...(rData.inventory || [])];
-                let sTok = sData.tokens || 0;
-                let rTok = rData.tokens || 0;
-
-                if (sTok < tradeData.senderTokens || rTok < tradeData.receiverTokens) {
-                    alert("Insufficient token funds detected during transaction execution pipeline!");
-                    return;
-                }
-
-                for (const b of tradeData.senderBlooks) {
-                    const idx = sInv.indexOf(b);
-                    if (idx === -1) { alert(`Sender no longer holds: ${b}`); return; }
-                    sInv.splice(idx, 1);
-                    rInv.push(b);
-                }
-
-                for (const b of tradeData.receiverBlooks) {
-                    const idx = rInv.indexOf(b);
-                    if (idx === -1) { alert(`Receiver no longer holds: ${b}`); return; }
-                    rInv.splice(idx, 1);
-                    sInv.push(b);
-                }
-
-                sTok = sTok - tradeData.senderTokens + tradeData.receiverTokens;
-                rTok = rTok - tradeData.receiverTokens + tradeData.senderTokens;
-
-                await updateDoc(senderUserRef, { inventory: sInv, tokens: sTok });
-                await updateDoc(receiverUserRef, { inventory: rInv, tokens: rTok });
-                await updateDoc(docRef, { status: "accepted" });
-
-                alert("Trade successfully approved!");
-            } catch (err) {
-                console.error(err);
-                alert("Transaction operation error payload generated.");
-            }
+        // Normalize receiver's inventory layout rules dynamically
+        let rInvRaw = rData.inventory || [];
+        let rInv = [];
+        let rInvWasArray = Array.isArray(rInvRaw);
+        if (rInvWasArray) {
+            rInv = [...rInvRaw];
+        } else {
+            Object.keys(rInvRaw).forEach(blook => {
+                for(let i = 0; i < rInvRaw[blook]; i++) rInv.push(blook);
+            });
         }
 
-        document.getElementById('logout-hud-btn').addEventListener('click', () => {
-            signOut(auth).then(() => { window.location.href = "login.html"; });
-        });
-    </script>
+        let sTok = sData.tokens || 0;
+        let rTok = rData.tokens || 0;
+
+        if (sTok < tradeData.senderTokens || rTok < tradeData.receiverTokens) {
+            alert("Insufficient token funds detected during transaction execution pipeline!");
+            return;
+        }
+
+        // Validate items presence bounds safely via normalized array arrays
+        for (const b of tradeData.senderBlooks) {
+            const idx = sInv.indexOf(b);
+            if (idx === -1) { alert(`Sender no longer holds: ${b}`); return; }
+            sInv.splice(idx, 1);
+            rInv.push(b);
+        }
+
+        for (const b of tradeData.receiverBlooks) {
+            const idx = rInv.indexOf(b);
+            if (idx === -1) { alert(`Receiver no longer holds: ${b}`); return; }
+            rInv.splice(idx, 1);
+            sInv.push(b);
+        }
+
+        sTok = sTok - tradeData.senderTokens + tradeData.receiverTokens;
+        rTok = rTok - tradeData.receiverTokens + tradeData.senderTokens;
+
+        // Reconvert arrays back to object maps if they were saved in map schema initially
+        let finalSInv = sInv;
+        if (!sInvWasArray) {
+            finalSInv = {};
+            sInv.forEach(b => finalSInv[b] = (finalSInv[b] || 0) + 1);
+        }
+
+        let finalRInv = rInv;
+        if (!rInvWasArray) {
+            finalRInv = {};
+            rInv.forEach(b => finalRInv[b] = (finalRInv[b] || 0) + 1);
+        }
+
+        await updateDoc(senderUserRef, { inventory: finalSInv, tokens: sTok });
+        await updateDoc(receiverUserRef, { inventory: finalRInv, tokens: rTok });
+        await updateDoc(docRef, { status: "accepted" });
+
+        alert("Trade successfully approved!");
+    } catch (err) {
+        console.error(err);
+        alert("Transaction operation error payload generated.");
+    }
+}
+
+document.getElementById('logout-hud-btn').addEventListener('click', () => {
+    signOut(auth).then(() => { window.location.href = "login.html"; });
+});
+</script>
 </body>
 </html>
