@@ -3,748 +3,2815 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Scratchlet - Home</title>
-<link rel="icon" type="image/webp" sizes="32x32" href="https://i.postimg.cc/zXFdxKTw/Icon-Tab.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/QMssXmNY/Scratchlet-Logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 <style>
-/* =========================
-   GLOBAL & HIDE SCROLLBAR
-========================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-
-html, body {
-    scrollbar-width: none; 
+html {
+    background: #ff7f11;
+    scrollbar-width: none;
+    min-height: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
-
 ::-webkit-scrollbar {
     display: none;
 }
-
-body{
-    font-family:"Nunito",sans-serif;
-    color:white;
-    overflow-x:hidden;
-    min-height:100vh;
-    background: #ff9b2f;
+body {
+    font-family: 'Fredoka', sans-serif;
+    color: white;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    background: transparent;
     position: relative;
-    
     display: flex;
     flex-direction: column;
+    padding-top: 84px;
+    scrollbar-width: none;
 }
-
-/* =========================
-   BACKGROUND LAYERS
-========================= */
 .bg-base-gradient {
     position: fixed;
     inset: 0;
     z-index: -3;
-    background: linear-gradient(160deg, #fff4d6 0%, #ffc76a 25%, #ff9b2f 50%, #ff7f11 75%, #8f3200 100%);
+    background: linear-gradient(160deg, rgb(143, 50, 0) 0%, rgb(255, 110, 0) 25%, rgb(255, 127, 17) 50%, rgb(255, 199, 106) 75%, rgb(255, 244, 214) 100%);
 }
-
 .bg-moving-grid {
     position: fixed;
-    top: -50vh;
-    left: -50vw;
-    width: 200vw;
-    height: 200vh;
+    top: 50%;
+    left: 50%;
+    width: 260vmax;
+    height: 260vmax;
     z-index: -2;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="rgba(0,0,0,0.18)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='126' height='126' viewBox='0 0 126 126'><rect x='0.5' y='0.5' width='61' height='61' rx='12' fill='rgba(0,0,0,0.18)' stroke='rgba(255,255,255,0.4)' stroke-width='1'/><rect x='63.5' y='63.5' width='61' height='61' rx='12' fill='rgba(0,0,0,0.18)' stroke='rgba(255,255,255,0.4)' stroke-width='1'/></svg>");
     background-size: 126px 126px;
+    background-repeat: repeat;
     background-position: 63px 0px;
     will-change: transform;
     animation: scrollTiltedTopRight 8s linear infinite;
 }
-
 @keyframes scrollTiltedTopRight {
-    from { transform: rotate(15deg) translate3d(0px, 0px, 0px); }
-    to { transform: rotate(15deg) translate3d(126px, -126px, 0px); }
+    0% { transform: translate(-50%, -50%) rotate(15deg) translate3d(0px, 0px, 0px); }
+    100% { transform: translate(-50%, -50%) rotate(15deg) translate3d(126px, -126px, 0px); }
 }
-
 .bg-static-squares {
     position: fixed;
-    top: -50vh;
-    left: -50vw;
-    width: 200vw;
-    height: 200vh;
+    top: 50%;
+    left: 50%;
+    width: 260vmax;
+    height: 260vmax;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(135deg, #ffffff 0%, #ffe3b3 30%, #ffb666 60%, #ff9333 80%, #d65900 100%);
-    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
-    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="black" stroke="black" stroke-width="1"/></svg>');
+    background: linear-gradient(135deg, rgb(214, 89, 0) 0%, rgb(255, 127, 17) 20%, rgb(255, 182, 102) 40%, rgb(255, 227, 179) 70%, rgb(255, 255, 255) 100%);
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='126' height='126' viewBox='0 0 126 126'><rect x='0.5' y='0.5' width='61' height='61' rx='12' fill='black' stroke='black' stroke-width='1'/><rect x='63.5' y='63.5' width='61' height='61' rx='12' fill='black' stroke='black' stroke-width='1'/></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='126' height='126' viewBox='0 0 126 126'><rect x='0.5' y='0.5' width='61' height='61' rx='12' fill='black' stroke='black' stroke-width='1'/><rect x='63.5' y='63.5' width='61' height='61' rx='12' fill='black' stroke='black' stroke-width='1'/></svg>");
     -webkit-mask-size: 126px 126px;
     mask-size: 126px 126px;
-    transform: rotate(15deg);
-    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    transform: translate(-50%, -50%) rotate(15deg);
 }
-
 .bg-stroke-overlay {
     position: fixed;
-    top: -50vh;
-    left: -50vw;
-    width: 200vw;
-    height: 200vh;
+    top: 50%;
+    left: 50%;
+    width: 260vmax;
+    height: 260vmax;
     z-index: -1;
     pointer-events: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126"><rect x="0.5" y="0.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="63.5" y="63.5" width="61" height="61" rx="13.5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='126' height='126' viewBox='0 0 126 126'><rect x='0.5' y='0.5' width='61' height='61' rx='12' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='1'/><rect x='63.5' y='63.5' width='61' height='61' rx='12' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='1'/></svg>");
     background-size: 126px 126px;
-    transform: rotate(15deg);
+    background-repeat: repeat;
+    transform: translate(-50%, -50%) rotate(15deg);
 }
-
-/* =========================
-   STICKY NAVBAR & LEFT/RIGHT GROUPS
-========================= */
-.navbar{
-    position: sticky;
-    top: 0;
-    min-height:70px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 30px;
-    background: rgba(255, 127, 17, 0.94);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 -6px 0 0 #c65b00, 0 8px 24px rgba(0, 0, 0, 0.25);
-    z-index: 100;
-    gap: 15px;
-}
-
-.nav-left-group {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.logo-link {
-    text-decoration: none;
-    display: inline-block;
-}
-
-.logo{
-    font-family:"Titan One",cursive;
-    font-size:2.5rem;
-    color:white;
-}
-
-.nav-right-group {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-/* COIN COUNTER BADGE */
-.coin-counter {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 900;
-    background: rgba(0, 0, 0, 0.35);
-    padding: 6px 14px;
-    border-radius: 99px;
-    border: 2px solid #ffcc00;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.coin-icon {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-}
-
-.coin-amount {
-    color: #ffd700;
-    font-size: 1.05rem;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-}
-
-/* HUD Symbol Bar */
-.hud-badge-bar {
-    display: flex;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 99px;
-    padding: 6px 12px;
-    gap: 8px;
-}
-
-.hud-item {
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    transition: background 0.15s, transform 0.1s;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    position: relative;
-}
-
-.hud-item .material-icons {
-    font-size: 1.4rem;
-}
-
-.hud-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: scale(1.05);
-}
-
-.hud-item.logout-trigger {
-    color: #ff5252;
-}
-
-.hud-item.logout-trigger:hover {
-    background: rgba(255, 82, 82, 0.2);
-}
-
-/* Nametag Tooltip Popups */
-.hud-item::after {
-    content: attr(data-nametag);
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-6px);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    font-family: "Nunito", sans-serif;
-    font-weight: 800;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    border-radius: 8px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
-    z-index: 110;
-}
-
-.hud-item:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.btn{
-    font-family:"Nunito",sans-serif;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-    letter-spacing:.3px;
-    font-size:0.95rem;
-    text-decoration:none;
-    display:inline-block;
-    padding:12px 24px;
-    border-radius:14px;
-    position: relative;
-    text-align: center;
-    
-    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-    transform: translateY(0);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-}
-
-.primary{
-    background: white;
-    color: #ff8c1a;
-}
-
-.secondary {
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    padding: 10px 22px;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
-    filter: brightness(1.05);
-}
-
-.btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-    filter: brightness(0.95);
-    transition: transform 0.04s ease, box-shadow 0.04s ease;
-}
-
-/* =========================
-   DASHBOARD HOUSING
-========================= */
-.dashboard-grid {
-    flex: 1;
-    max-width: 900px;
+.navbar {
+    position: fixed;
+    top: -28px;
+    left: 0;
+    right: 0;
     width: 100%;
-    margin: 40px auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    position: relative;
-    z-index: 5;
-}
-
-.hero-card {
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 45px 35px;
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.hero-card h1 {
-    font-family: "Titan One", cursive;
-    font-size: 3rem;
-    margin-bottom: 25px;
-    text-shadow: 0 4px 0 rgba(0,0,0,.15);
-}
-
-/* =========================
-   SHORTCUT LINKS
-========================= */
-.shortcuts-panel {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.shortcut-card {
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 20px 10px;
-    color: white;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 1.1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-    transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-}
-
-.shortcut-card .material-icons {
-    font-size: 2.2rem;
-    color: #fff4d6;
-}
-
-.shortcut-card:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: white;
-    transform: translateY(-4px);
-    box-shadow: 0 8px 0 rgba(0,0,0,0.15);
-}
-
-.shortcut-card:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.1);
-}
-
-/* =========================
-   CHANGELOG SYSTEM
-========================= */
-.changelog-card {
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    padding: 35px;
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.2);
-    margin-bottom: 40px;
-}
-
-.changelog-header {
+    height: 112px;
+    padding: 28px 36px 0 36px;
+    margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 12px;
+    background: rgba(230, 105, 0, 0.96);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 3px 0 rgba(180, 70, 0, 0.45), rgba(0, 0, 0, 0.22) 0px 8px 32px;
+    z-index: 50;
+    border-radius: 0 0 28px 28px;
+    will-change: transform;
 }
-
-.changelog-header h2 {
-    font-family: "Titan One", cursive;
-    font-size: 1.8rem;
+.logo-link {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.logo {
+    font-family: 'DynaPuff', cursive;
+    font-weight: 700;
+    font-size: 2.3rem;
+    color: #ffffff;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 5px #8f3200;
+    text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    user-select: none;
+    transition: transform 0.15s ease;
+}
+.logo-link:hover .logo {
+    transform: scale(1.03);
+}
+.nav-buttons {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+.nav-token-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px 7px 10px;
+    background: rgba(143, 50, 0, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+    font-family: 'DynaPuff', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffe169;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 0 0 3px rgba(160, 60, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
+.nav-token-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
+@keyframes tokenPillPop {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.09); }
+    100% { transform: scale(1); }
+}
+.nav-token-pill.pulse {
+    animation: tokenPillPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nav-dock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 9px;
+    background: rgba(143, 50, 0, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+}
+.nav-dock-divider {
+    width: 2px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+    margin: 0 2px;
+}
+.nav-btn {
+    width: 45px;
+    height: 45px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    box-shadow: none;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav-btn svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+}
+.nav-btn:active {
+    background: rgba(255, 255, 255, 0.18);
+}
+.nav-btn.active {
+    background: #ffffff;
+    color: #ff7f11;
+    border-color: #ffffff;
+    box-shadow: none;
+}
+.nav-btn.active svg {
+    stroke-width: 2.4;
+}
+.nav-btn.active:hover {
+    background: #fff5eb;
+    color: #e06c00;
+}
+.nav-btn.logout-btn {
+    background: rgba(255, 71, 87, 0.25);
+    border-color: rgba(255, 180, 188, 0.55);
+}
+.nav-btn.logout-btn:hover {
+    background: #ff4757;
+    color: #ffffff;
+    border-color: #ff4757;
+}
+.nav-hover-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(143, 50, 0, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 255, 255, 0.88);
+    color: #ffe169;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px) scale(0.97);
+    transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+}
+.nav-hover-preview.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+.nav-hover-preview-arrow {
+    position: absolute;
+    top: -5px;
+    left: var(--arrow-left, 50%);
+    width: 9px;
+    height: 9px;
+    background: rgba(143, 50, 0, 0.96);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.88);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.88);
+    transform: translateX(-50%) rotate(45deg);
+    pointer-events: none;
+}
+@media (hover: none) {
+    .nav-hover-preview {
+        display: none !important;
+    }
+}
+#main-content {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+}
+.home-dashboard {
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 36px 32px 56px;
+    display: grid;
+    grid-template-columns: 1.25fr 0.95fr;
+    gap: 20px 28px;
+    align-items: stretch;
+}
+.home-greeting {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    padding: 0 4px;
+    min-width: 0;
+}
+.home-greeting-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+.home-greeting-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.daily-reward-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px 11px 14px;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, #ffe97d 0%, #ffc82c 100%);
+    border: 2.5px solid #ffffff;
+    color: #7c2800;
+    font-family: 'DynaPuff', cursive;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(143, 50, 0, 0.42), 0 8px 20px rgba(0, 0, 0, 0.22);
+    transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+.daily-reward-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    filter: brightness(1.04);
+    box-shadow: 0 0 0 4px rgba(143, 50, 0, 0.5), 0 12px 26px rgba(0, 0, 0, 0.26);
+}
+.daily-reward-btn:active {
+    transform: translateY(1px) scale(0.99);
+}
+.daily-reward-btn.claimed {
+    background: rgba(143, 50, 0, 0.62);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: #ffffff;
+}
+.daily-reward-btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(143, 50, 0, 0.16);
+    border: 1.5px solid rgba(143, 50, 0, 0.28);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.daily-reward-btn.claimed .daily-reward-btn-icon {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.45);
+}
+.daily-reward-btn-icon img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+.daily-reward-btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    line-height: 1.15;
+}
+.daily-reward-btn-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+.daily-reward-btn-sub {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    opacity: 0.88;
+}
+.daily-reward-btn.claimed .daily-reward-btn-sub {
+    color: #ffe169;
+    opacity: 1;
+}
+.daily-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(55, 18, 0, 0.62);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+.daily-modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+.daily-modal {
+    width: 100%;
+    max-width: 440px;
+    background: linear-gradient(165deg, rgba(235, 108, 0, 0.98) 0%, rgba(186, 72, 0, 0.98) 100%);
+    border: 2.5px solid rgba(255, 255, 255, 0.92);
+    border-radius: 26px;
+    padding: 22px 22px 24px;
+    box-shadow: 0 0 0 4px rgba(120, 40, 0, 0.45), 0 20px 50px rgba(0, 0, 0, 0.42);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    transform: scale(0.93) translateY(10px);
+    transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.daily-modal-backdrop.open .daily-modal {
+    transform: scale(1) translateY(0);
+}
+.daily-modal-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 10px;
+    margin-bottom: 6px;
 }
-
-.log-content {
+.daily-modal-title {
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #ffe169;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 3px #7a2900;
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+.daily-modal-subtitle {
+    width: 100%;
+    text-align: left;
+    font-size: 0.94rem;
     font-weight: 600;
-    line-height: 1.7;
-    font-size: 1.05rem;
-    color: rgba(255, 255, 255, 0.9);
-    white-space: pre-wrap; 
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 16px;
 }
-
-/* Admin editor field */
-.editor-box {
+.wheel-stage {
+    position: relative;
+    width: min(310px, 74vw);
+    height: min(310px, 74vw);
+    margin: 6px auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+.wheel-pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    width: 34px;
+    height: 38px;
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.35));
+    pointer-events: none;
+}
+.wheel-outer-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 8px;
+    background: linear-gradient(180deg, #fff5d6 0%, #ffc82c 100%);
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 4px rgba(120, 40, 0, 0.5), inset 0 3px 8px rgba(0, 0, 0, 0.22), 0 12px 26px rgba(0, 0, 0, 0.32);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wheel-rotator {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    will-change: transform;
+    transform: rotate(0deg);
+}
+.wheel-rotator svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.wheel-center-hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff7d6 0%, #ffc82c 70%, #e08b00 100%);
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 3px #8f3200, 0 5px 12px rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    pointer-events: none;
+}
+.wheel-center-hub img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    display: block;
+}
+.wheel-result-banner {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    background: rgba(120, 40, 0, 0.52);
+    border: 1.5px solid rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.98rem;
+    color: #ffe169;
+}
+.wheel-result-banner img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.wheel-spin-btn {
+    width: 100%;
+    padding: 13px 22px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    color: #e06c00;
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.08rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(120, 40, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.22);
+    transition: transform 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+}
+.wheel-spin-btn:hover:not(:disabled) {
+    background: #fff5eb;
+    transform: translateY(-2px);
+}
+.wheel-spin-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+.wheel-spin-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+.daily-confetti {
+    position: fixed;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 120;
+    animation: dailyConfettiFly 0.85s ease-out forwards;
+}
+@keyframes dailyConfettiFly {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.35); opacity: 0; }
+}
+.home-welcome-title {
+    font-family: 'DynaPuff', cursive;
+    font-size: clamp(2rem, 3.8vw, 2.85rem);
+    line-height: 1.12;
+    color: #ffffff;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 4.5px #8f3200;
+    text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+    word-break: break-word;
+}
+.home-welcome-title span {
+    color: #ffe169;
+}
+.home-welcome-subtitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.94);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+.home-welcome-subtitle span {
+    color: #ffe169;
+    font-weight: 700;
+}
+.owner-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: #ffe169;
+    color: #8f3200;
+    border: 2px solid #ffffff;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+.home-card {
+    background: rgba(255, 127, 17, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 22px;
+    padding: 24px 26px;
+    box-shadow: 0 0 0 3px rgba(180, 70, 0, 0.3), rgba(0, 0, 0, 0.18) 0px 8px 32px 0px;
+    min-width: 0;
+}
+.changelog-card {
+    display: flex;
+    flex-direction: column;
+}
+@media (min-width: 1025px) {
+    .changelog-card {
+        height: 100%;
+    }
+    .changelog-card #changelog-read-view {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .changelog-card .changelog-body-text {
+        flex: 1;
+    }
+    .changelog-card .changelog-editor.active {
+        flex: 1;
+    }
+}
+.home-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.32);
+}
+.home-card-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.42rem;
+    font-weight: 700;
+    color: #ffe169;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 2.5px rgba(120, 42, 0, 0.8);
+}
+.home-card-title svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 11px;
+}
+.shortcut-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 122px;
+    padding: 12px 10px;
+    border-radius: 18px;
+    background: rgba(143, 50, 0, 0.42);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.shortcut-card:hover {
+    background: rgba(143, 50, 0, 0.65);
+    border-color: #ffffff;
+}
+.shortcut-card:active {
+    background: rgba(143, 50, 0, 0.78);
+}
+.shortcut-icon-wrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #ffe169;
+}
+.shortcut-icon-wrap svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.shortcut-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    min-width: 0;
+}
+.shortcut-name {
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+.shortcut-desc {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.86);
+    line-height: 1.22;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.shortcut-card.shortcut-wide {
+    grid-column: 1 / -1;
+    height: 68px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 14px;
+    padding: 12px 20px;
+}
+.shortcut-card.shortcut-wide .shortcut-info {
+    width: auto;
+    align-items: flex-start;
+    text-align: left;
+}
+.changelog-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.changelog-version-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: rgba(143, 50, 0, 0.82);
+    border: 1.5px solid rgba(255, 255, 255, 0.78);
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #fff5eb;
+}
+.flat-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1.5px solid rgba(255, 255, 255, 0.78);
+    color: #ffffff;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.flat-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
+}
+.flat-pill-btn.primary-flat {
+    background: #ffffff;
+    color: #e06c00;
+    border-color: #ffffff;
+}
+.flat-pill-btn.primary-flat:hover {
+    background: #fff5eb;
+}
+.flat-pill-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.flat-pill-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.changelog-body-text {
+    font-size: 1rem;
+    line-height: 1.65;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.96);
+    white-space: pre-line;
+    word-break: break-word;
+}
+.changelog-meta-text {
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.32);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255, 245, 235, 0.82);
+}
+.changelog-editor {
     display: none;
     flex-direction: column;
     gap: 12px;
-    margin-top: 15px;
 }
-
-.editor-textarea {
-    width: 100%;
-    height: 140px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    border-radius: 14px;
-    padding: 14px;
-    color: white;
-    font-family: "Nunito", sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    outline: none;
-    resize: vertical;
-}
-
-.editor-textarea:focus {
-    border-color: white;
-    background: rgba(255, 255, 255, 0.16);
-}
-
-.editor-actions {
+.changelog-editor.active {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
 }
-
-/* =========================
-   STRICT MOBILE POSITION & TILE COLOR FIXES
-========================= */
-@media(max-width:980px) {
-    .navbar { 
-        padding: 12px 20px; 
+.changelog-meta-text {
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.32);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255, 245, 235, 0.82);
+}
+.changelog-editor {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+}
+.changelog-editor.active {
+    display: flex;
+    flex: 1;
+}
+.changelog-field-label {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #ffe169;
+    margin-bottom: 5px;
+}
+.changelog-input,
+.changelog-textarea {
+    width: 100%;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    background: rgba(143, 50, 0, 0.5);
+    color: #ffffff;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.96rem;
+    font-weight: 600;
+    padding: 10px 14px;
+    outline: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.changelog-textarea {
+    min-height: 145px;
+    resize: vertical;
+    line-height: 1.5;
+}
+.changelog-input:focus,
+.changelog-textarea:focus {
+    background: rgba(143, 50, 0, 0.72);
+    border-color: #ffffff;
+}
+.changelog-input::placeholder,
+.changelog-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+.changelog-editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 2px;
+}
+.changelog-editor-buttons {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.changelog-status-msg {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #ffe169;
+}
+.news-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 20, 0, 0.28);
+    z-index: 55;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+.news-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+.news-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(390px, 88vw);
+    height: 100vh;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    background: rgba(214, 89, 0, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 28px 0 0 28px;
+    box-shadow: -4px 0 0 rgba(160, 60, 0, 0.4), -12px 0 36px rgba(0, 0, 0, 0.28);
+    transform: translateX(105%);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+.news-sidebar.open {
+    transform: translateX(0);
+}
+.news-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px 18px 26px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+.news-sidebar-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #ffffff;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 3.5px #8f3200;
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+.news-sidebar-title svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: #ffe169;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 0 rgba(120, 40, 0, 0.4));
+}
+.news-close-btn {
+    width: 38px;
+    height: 38px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.news-close-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: #ffffff;
+}
+.news-close-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+.news-close-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+}
+.news-sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px 26px 28px 26px;
+    scrollbar-width: none;
+}
+.news-sidebar-body::-webkit-scrollbar {
+    display: none;
+}
+.news-item {
+    padding: 18px 0;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+.news-item:last-child {
+    border-bottom: none;
+}
+.news-banner {
+    position: relative;
+    width: 100%;
+    height: 156px;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: rgba(143, 50, 0, 0.55);
+}
+.news-item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.news-item-meta {
+    display: inline-block;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #fff5eb;
+    background: rgba(143, 50, 0, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.75);
+    border-radius: 9999px;
+    padding: 3px 11px;
+    margin-bottom: 7px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.news-item h3 {
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.24rem;
+    line-height: 1.25;
+    color: #ffe169;
+    margin-bottom: 10px;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 2.5px rgba(95, 30, 0, 0.85);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+.news-item p {
+    font-size: 0.98rem;
+    line-height: 1.55;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    white-space: pre-line;
+}
+@media (max-width: 1024px) {
+    .home-dashboard {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding: 26px 20px 44px;
+        gap: 22px;
+    }
+    .changelog-card {
+        height: auto;
+    }
+}
+@media (max-width: 960px) {
+    body { padding-top: 76px; }
+    .navbar {
+        top: -28px;
+        height: 104px;
+        padding: 28px 20px 0 20px;
+        border-radius: 0 0 24px 24px;
+    }
+    .logo { font-size: 1.95rem; -webkit-text-stroke: 4px #8f3200; }
+    .nav-buttons { gap: 8px; }
+    .nav-token-pill { padding: 6px 12px 6px 8px; font-size: 0.92rem; }
+    .nav-token-icon { width: 22px; height: 22px; }
+    .nav-dock { padding: 5px 7px; gap: 5px; }
+    .nav-btn { width: 37px; height: 37px; border-radius: 50%; }
+    .nav-btn svg { width: 18px; height: 18px; }
+}
+@media (max-width: 600px) {
+    body { padding-top: 150px; }
+    .navbar {
+        top: -28px;
+        height: auto;
+        min-height: 0;
+        padding: 38px 10px 10px 10px;
+        border-radius: 0 0 22px 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    .logo-link {
+        align-self: center;
+        justify-content: center;
+    }
+    .logo {
+        font-size: 1.7rem;
+        -webkit-text-stroke: 3.5px #8f3200;
+        text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.3);
+    }
+    .nav-buttons {
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        gap: 6px;
+    }
+    .nav-token-pill {
+        width: fit-content;
+        min-width: 112px;
+        max-width: 75%;
+        height: 36px;
+        justify-content: center;
+        padding: 0 16px;
+        font-size: 0.88rem;
+        gap: 6px;
+        border-width: 1.5px;
+        border-radius: 9999px;
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    .nav-token-icon {
+        width: 18px;
+        height: 18px;
+    }
+    .nav-dock {
+        width: 100%;
+        max-width: 100%;
+        height: 40px;
+        min-width: 0;
+        justify-content: space-between;
+        padding: 0 5px;
+        border-width: 1.5px;
+        border-radius: 9999px;
+        gap: 2px;
+        flex-wrap: nowrap;
+        overflow: hidden;
+    }
+    .nav-dock-divider {
+        width: 1.5px;
+        height: 18px;
+        flex-shrink: 0;
+        margin: 0 1px;
+    }
+    .nav-btn {
+        width: 31px;
+        height: 31px;
+        border-width: 1.25px;
+        flex-shrink: 0;
+        border-radius: 50%;
+    }
+    .nav-btn svg {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2.2;
+    }
+    .home-dashboard {
+        padding: 14px 14px 36px;
+        gap: 16px;
+    }
+    .home-greeting {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
         gap: 12px;
     }
-
-    .nav-left-group {
+    .home-greeting-left {
+        align-items: center;
+        text-align: center;
         width: 100%;
+    }
+    .home-greeting-row {
         justify-content: center;
-        flex-wrap: wrap;
+        text-align: center;
+    }
+    .home-welcome-title,
+    .home-welcome-subtitle {
+        text-align: center;
+    }
+    .daily-reward-btn {
+        padding: 9px 16px 9px 11px;
         gap: 10px;
+        margin: 0 auto;
     }
-
-    .logo-link { 
-        width: auto; 
-        text-align: center; 
+    .daily-reward-btn-icon {
+        width: 32px;
+        height: 32px;
     }
-    
-    .logo { 
-        font-size: 2.2rem; 
+    .daily-reward-btn-icon img {
+        width: 20px;
+        height: 20px;
     }
-
-    .nav-right-group {
+    .daily-reward-btn-title {
+        font-size: 0.92rem;
+    }
+    .news-sidebar {
         width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
+        max-width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        left: 0;
+        right: 0;
+        border-left: none;
+        border-radius: 0;
+        box-shadow: none;
     }
-
-    .hud-badge-bar {
-        max-width: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 4px 8px;
-        gap: 4px;
-        border-radius: 25px;
+    .news-sidebar-header {
+        padding: 18px 18px 14px 20px;
     }
-
-    .hud-item {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-    }
-
-    .hud-item::after {
-        top: auto;
-        bottom: 46px;
-        transform: translateX(-50%) translateY(6px);
-    }
-    
-    .hud-item:hover::after {
-        transform: translateX(-50%) translateY(0);
+    .news-sidebar-body {
+        padding: 8px 18px 28px 18px;
     }
 }
-
-@media(max-width:700px) {
-    .bg-moving-grid, .bg-static-squares, .bg-stroke-overlay {
-        top: -60vh;
-        left: -60vw;
-        width: 220vw;
-        height: 220vh;
+@media (max-width: 440px) {
+    body { padding-top: 146px; }
+    .navbar {
+        padding-left: 8px;
+        padding-right: 8px;
     }
-
-    .dashboard-grid { 
-        margin: 15px auto; 
-        padding: 0 12px; 
+    .nav-token-pill {
+        height: 34px;
+        min-width: 104px;
+        padding: 0 14px;
     }
-    
-    .hero-card { 
-        padding: 25px 15px; 
-        background: rgba(0, 0, 0, 0.4); 
-        border: 2px solid rgba(255, 255, 255, 0.25);
+    .nav-dock {
+        height: 38px;
+        justify-content: space-between;
+        padding: 0 4px;
+        gap: 1.5px;
     }
-    .hero-card h1 { font-size: 1.8rem; }
-    
-    .shortcuts-panel {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+    .nav-dock-divider {
+        margin: 0;
     }
-    
+    .nav-btn {
+        width: 29px;
+        height: 29px;
+    }
+    .nav-btn svg {
+        width: 15px;
+        height: 15px;
+    }
+    .home-dashboard {
+        padding: 14px 12px 36px;
+    }
+    .home-card {
+        padding: 18px 16px;
+        border-radius: 18px;
+    }
+    .shortcuts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
     .shortcut-card {
-        background: rgba(0, 0, 0, 0.2); 
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        padding: 16px 8px;
+        height: 112px;
     }
-    
-    .changelog-card { 
-        padding: 20px; 
-        background: rgba(0, 0, 0, 0.4);
-        border: 2px solid rgba(255, 255, 255, 0.25);
+    .shortcut-card.shortcut-wide {
+        height: 64px;
+        padding: 10px 16px;
+    }
+}
+@media (max-width: 355px) {
+    .nav-dock {
+        height: 35px;
+        padding: 0 3px;
+        gap: 1px;
+    }
+    .nav-btn {
+        width: 26.5px;
+        height: 26.5px;
+    }
+    .nav-btn svg {
+        width: 13.5px;
+        height: 13.5px;
     }
 }
 </style>
 </head>
-
 <body>
-
 <div class="bg-base-gradient"></div>
 <div class="bg-moving-grid"></div>
 <div class="bg-static-squares"></div>
 <div class="bg-stroke-overlay"></div>
 
-<nav class="navbar">
-    <div class="nav-left-group">
-        <a href="home.html" class="logo-link"><div class="logo">Scratchlet</div></a>
-    </div>
-    
-    <div class="nav-right-group">
-        <div id="coin-counter-wrapper" class="coin-counter" title="Your Token Balance">
-            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="coin-icon">
-            <span id="token-counter-value" class="coin-amount">0</span>
+<header class="navbar" id="top-hud">
+    <a href="https://scratchlet.github.io/site/home.html" class="logo-link" id="logo-home-btn" data-nav="home" aria-label="Scratchlet Home">
+        <span class="logo">Scratchlet</span>
+    </a>
+    <div class="nav-buttons">
+        <div class="nav-token-pill" id="nav-token-pill" data-label="Tokens">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" class="nav-token-icon" onerror="this.style.display='none'">
+            <span id="nav-player-tokens">0</span>
         </div>
-        
-        <div class="hud-badge-bar">
-            <a href="home.html" class="hud-item" data-nametag="Home"><span class="material-icons">home</span></a>
-            <a href="market.html" class="hud-item" data-nametag="Market"><span class="material-icons">storefront</span></a>
-            <a href="inventory.html" class="hud-item" data-nametag="Inventory"><span class="material-icons">inventory_2</span></a>
-            <a href="stats.html" class="hud-item" data-nametag="Stats"><span class="material-icons">leaderboard</span></a>
-            <a href="news.html" class="hud-item" data-nametag="News"><span class="material-icons">newspaper</span></a>
-            <a href="chat.html" class="hud-item" data-nametag="Chat"><span class="material-icons">forum</span></a>
-            <a href="trading.html" class="hud-item" data-nametag="Trading"><span class="material-icons">swap_horiz</span></a>
-            <a href="bazar.html" class="hud-item" data-nametag="Bazar"><span class="material-icons">gavel</span></a>
-            <a href="settings.html" class="hud-item" data-nametag="Settings"><span class="material-icons">settings</span></a>
-            <button id="logout-hud-btn" class="hud-item logout-trigger" data-nametag="Logout"><span class="material-icons">logout</span></button>
-        </div>
+        <nav class="nav-dock" aria-label="Main Navigation">
+            <a href="https://scratchlet.github.io/site/home.html" class="nav-btn active" data-nav="home" data-label="Home" aria-label="Home">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3.5 10.5L12 3.5l8.5 7v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-8.5z" fill="currentColor" fill-opacity="0.24"/>
+                    <path d="M9.5 21v-6a1.5 1.5 0 0 1 1.5-1.5h2a1.5 1.5 0 0 1 1.5 1.5v6"/>
+                </svg>
+            </a>
+            <a href="https://scratchlet.github.io/market.html" class="nav-btn" data-nav="market" data-label="Market" aria-label="Market">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4.5 10.5h15v8.5a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-8.5z" fill="currentColor" fill-opacity="0.24"/>
+                    <path d="M3 8l1.8-4h14.4L21 8a2.3 2.3 0 0 1-4.5 0 2.3 2.3 0 0 1-4.5 0 2.3 2.3 0 0 1-4.5 0A2.3 2.3 0 0 1 3 8z"/>
+                    <path d="M9.5 21v-5h5v5"/>
+                </svg>
+            </a>
+            <a href="https://scratchlet.github.io/site/blooks.html" class="nav-btn" data-nav="blooks" data-label="Blooks" aria-label="Blooks">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="3.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                    <rect x="13.5" y="3.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                    <rect x="3.5" y="13.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                    <rect x="13.5" y="13.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                </svg>
+            </a>
+            <a href="https://scratchlet.github.io/site/stats.html" class="nav-btn" data-nav="stats" data-label="Stats" aria-label="Stats">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="12" width="4" height="8" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                    <rect x="10" y="5" width="4" height="15" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                    <rect x="16" y="9" width="4" height="11" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                </svg>
+            </a>
+            <button type="button" class="nav-btn" data-nav="news" data-label="News" aria-label="News">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 4.5v13l-8-3.5H5.5A1.5 1.5 0 0 1 4 12.5v-3A1.5 1.5 0 0 1 5.5 8H10l8-3.5z" fill="currentColor" fill-opacity="0.24"/>
+                    <path d="M7.5 14l1.2 5a1.2 1.2 0 0 0 2.3-.5l-.7-3.5"/>
+                    <path d="M20.8 9.5a3 3 0 0 1 0 3"/>
+                </svg>
+            </button>
+            <a href="https://scratchlet.github.io/site/chat.html" class="nav-btn" data-nav="chat" data-label="Chat" aria-label="Chat">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 4C6.8 4 3 7.3 3 11.4c0 2.2 1.1 4.1 2.9 5.5L5 20.5l4.1-1.7c.9.2 1.9.3 2.9.3 5.2 0 9-3.3 9-7.7S17.2 4 12 4z" fill="currentColor" fill-opacity="0.24"/>
+                    <circle cx="8.5" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                    <circle cx="12" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                    <circle cx="15.5" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                </svg>
+            </a>
+            <a href="https://scratchlet.github.io/site/auction" class="nav-btn" data-nav="auction" data-label="Auction" aria-label="Auction">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="8.5" y="4" width="8" height="4.5" rx="1.6" transform="rotate(35 12.5 6.25)" fill="currentColor" fill-opacity="0.26"/>
+                    <path d="M11 9.5l-6.5 6.5"/>
+                    <path d="M13 20h7.5"/>
+                </svg>
+            </a>
+            <a href="settings" class="nav-btn" data-nav="settings" data-label="Settings" aria-label="Settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3.5l1.6 1.7 2.3-.3.8 2.2 2.1 1-.4 2.3 1.4 1.8-1.4 1.8.4 2.3-2.1 1-.8 2.2-2.3-.3L12 20.5l-1.6-1.7-2.3.3-.8-2.2-2.1-1 .4-2.3L4.2 12l1.4-1.8-.4-2.3 2.1-1 .8-2.2 2.3.3L12 3.5z" fill="currentColor" fill-opacity="0.24"/>
+                    <circle cx="12" cy="12" r="2.8"/>
+                </svg>
+            </a>
+            <a href="https://scratchlet.github.io/site/store.html" class="nav-btn" data-nav="store" data-label="Store" aria-label="Store">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5.5 8.5h13l1 10.5a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2l1-10.5z" fill="currentColor" fill-opacity="0.24"/>
+                    <path d="M9 8.5V6.5a3 3 0 0 1 6 0v2"/>
+                </svg>
+            </a>
+            <span class="nav-dock-divider" aria-hidden="true"></span>
+            <a href="https://scratchlet.github.io/site/" class="nav-btn logout-btn" id="nav-logout-btn" data-nav="logout" data-label="Logout" aria-label="Logout">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/>
+                    <path d="M15.5 8l4.5 4-4.5 4"/>
+                    <path d="M19.5 12H9.5"/>
+                </svg>
+            </a>
+        </nav>
     </div>
-</nav>
+</header>
 
-<main class="dashboard-grid">
-    <div class="hero-card">
-        <h1 id="welcome-title">Hello!</h1>
-        
-        <div class="shortcuts-panel">
-            <a href="market.html" class="shortcut-card">
-                <span class="material-icons">storefront</span>
-                <span>Market</span>
-            </a>
-            <a href="inventory.html" class="shortcut-card">
-                <span class="material-icons">inventory_2</span>
-                <span>Inventory</span>
-            </a>
-            <a href="news.html" class="shortcut-card">
-                <span class="material-icons">newspaper</span>
-                <span>News</span>
-            </a>
-            <a href="chat.html" class="shortcut-card">
-                <span class="material-icons">forum</span>
-                <span>Chat</span>
-            </a>
-        </div>
-    </div>
+<div class="nav-hover-preview" id="nav-hover-preview" role="tooltip" aria-hidden="true">
+    <span class="nav-hover-preview-arrow" aria-hidden="true"></span>
+    <span id="nav-hover-preview-title">Home</span>
+</div>
 
-    <div class="changelog-card">
-        <div class="changelog-header">
-            <h2><span class="material-icons" style="color:#fff4d6;">history_edu</span> Changelogs</h2>
-            <button id="edit-changelog-btn" class="btn secondary" style="display:none; padding:6px 14px; border-radius:8px; font-size:0.85rem;">Edit</button>
-        </div>
-        
-        <div id="log-display-view" class="log-content">Loading changelogs...</div>
-        
-        <div id="admin-editor-box" class="editor-box">
-            <textarea id="changelog-input-field" class="editor-textarea" placeholder="Update the changelog information text..."></textarea>
-            <div class="editor-actions">
-                <button id="cancel-edit-btn" class="btn secondary" style="padding:8px 16px; border-radius:10px;">Cancel</button>
-                <button id="save-edit-btn" class="btn primary" style="padding:8px 20px; border-radius:10px;">Save Logs</button>
+<main id="main-content" data-active-section="home">
+    <div class="home-dashboard">
+        <div class="home-greeting">
+            <div class="home-greeting-left">
+                <div class="home-greeting-row">
+                    <h1 class="home-welcome-title">Hello, <span id="home-welcome-username">Player</span>!</h1>
+                    <span class="owner-pill" id="home-owner-badge" style="display: none;">Owner</span>
+                </div>
+                <p class="home-welcome-subtitle">Account Age: <span id="home-account-age">0 days</span></p>
             </div>
+            <button type="button" class="daily-reward-btn" id="daily-reward-btn" aria-label="Open Daily Reward Wheel">
+                <span class="daily-reward-btn-icon">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="" onerror="this.style.display='none'">
+                </span>
+                <span class="daily-reward-btn-text">
+                    <span class="daily-reward-btn-title">Daily Reward</span>
+                    <span class="daily-reward-btn-sub" id="daily-reward-btn-sub">Spin for 500–2,500!</span>
+                </span>
+            </button>
         </div>
+
+        <section class="home-card" aria-label="Quick Shortcuts">
+            <div class="home-card-header">
+                <h2 class="home-card-title">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" fill-opacity="0.24"/>
+                    </svg>
+                    <span>Quick Shortcuts</span>
+                </h2>
+            </div>
+            <div class="shortcuts-grid">
+                <a href="https://scratchlet.github.io/site/market.html" class="shortcut-card" data-nav="market">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4.5 10.5h15v8.5a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-8.5z" fill="currentColor" fill-opacity="0.24"/>
+                            <path d="M3 8l1.8-4h14.4L21 8a2.3 2.3 0 0 1-4.5 0 2.3 2.3 0 0 1-4.5 0 2.3 2.3 0 0 1-4.5 0A2.3 2.3 0 0 1 3 8z"/>
+                            <path d="M9.5 21v-5h5v5"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Market</span>
+                        <span class="shortcut-desc">Open packs &amp; unlock Blooks</span>
+                    </span>
+                </a>
+
+                <a href="https://scratchlet.github.io/site/blooks.html" class="shortcut-card" data-nav="blooks">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3.5" y="3.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                            <rect x="13.5" y="3.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                            <rect x="3.5" y="13.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                            <rect x="13.5" y="13.5" width="7" height="7" rx="2.2" fill="currentColor" fill-opacity="0.26"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Blooks</span>
+                        <span class="shortcut-desc">Browse your Blook collection</span>
+                    </span>
+                </a>
+
+                <a href="https://scratchlet.github.io/site/stats.html" class="shortcut-card" data-nav="stats">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4" y="12" width="4" height="8" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                            <rect x="10" y="5" width="4" height="15" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                            <rect x="16" y="9" width="4" height="11" rx="1.6" fill="currentColor" fill-opacity="0.26"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Stats</span>
+                        <span class="shortcut-desc">View your profile &amp; progress</span>
+                    </span>
+                </a>
+
+                <button type="button" class="shortcut-card" id="shortcut-news-btn">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M18 4.5v13l-8-3.5H5.5A1.5 1.5 0 0 1 4 12.5v-3A1.5 1.5 0 0 1 5.5 8H10l8-3.5z" fill="currentColor" fill-opacity="0.24"/>
+                            <path d="M7.5 14l1.2 5a1.2 1.2 0 0 0 2.3-.5l-.7-3.5"/>
+                            <path d="M20.8 9.5a3 3 0 0 1 0 3"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">News</span>
+                        <span class="shortcut-desc">Open the announcements drawer</span>
+                    </span>
+                </button>
+
+                <a href="https://scratchlet.github.io/site/chat.html" class="shortcut-card" data-nav="chat">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 4C6.8 4 3 7.3 3 11.4c0 2.2 1.1 4.1 2.9 5.5L5 20.5l4.1-1.7c.9.2 1.9.3 2.9.3 5.2 0 9-3.3 9-7.7S17.2 4 12 4z" fill="currentColor" fill-opacity="0.24"/>
+                            <circle cx="8.5" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                            <circle cx="12" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                            <circle cx="15.5" cy="11.5" r="1.15" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Chat</span>
+                        <span class="shortcut-desc">Talk with the community</span>
+                    </span>
+                </a>
+
+                <a href="https://scratchlet.github.io/site/auction.html" class="shortcut-card" data-nav="auction">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="8.5" y="4" width="8" height="4.5" rx="1.6" transform="rotate(35 12.5 6.25)" fill="currentColor" fill-opacity="0.26"/>
+                            <path d="M11 9.5l-6.5 6.5"/>
+                            <path d="M13 20h7.5"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Auction</span>
+                        <span class="shortcut-desc">Bid on rare Blooks &amp; items</span>
+                    </span>
+                </a>
+
+                <a href="https://scratchlet.github.io/site/settings.html" class="shortcut-card shortcut-wide" data-nav="settings">
+                    <span class="shortcut-icon-wrap">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3.5l1.6 1.7 2.3-.3.8 2.2 2.1 1-.4 2.3 1.4 1.8-1.4 1.8.4 2.3-2.1 1-.8 2.2-2.3-.3L12 20.5l-1.6-1.7-2.3.3-.8-2.2-2.1-1 .4-2.3L4.2 12l1.4-1.8-.4-2.3 2.1-1 .8-2.2 2.3.3L12 3.5z" fill="currentColor" fill-opacity="0.24"/>
+                            <circle cx="12" cy="12" r="2.8"/>
+                        </svg>
+                    </span>
+                    <span class="shortcut-info">
+                        <span class="shortcut-name">Settings</span>
+                        <span class="shortcut-desc">Customize your account</span>
+                    </span>
+                </a>
+            </div>
+        </section>
+
+        <section class="home-card changelog-card" aria-label="Changelog">
+            <div class="home-card-header">
+                <h2 class="home-card-title">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 3.5h8l4 4v13a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20.5v-15A1.5 1.5 0 0 1 7.5 4z" fill="currentColor" fill-opacity="0.24"/>
+                        <path d="M9.5 11.5h5M9.5 15.5h5"/>
+                    </svg>
+                    <span>Changelogs</span>
+                </h2>
+                <div class="changelog-header-actions">
+                    <span class="changelog-version-pill" id="changelog-version-badge">Version 4</span>
+                    <button type="button" class="flat-pill-btn" id="changelog-edit-btn" style="display: none;">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+                        </svg>
+                        <span>Edit</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="changelog-read-view">
+                <p class="changelog-body-text" id="changelog-body-text">Version 4 is live with smoother animations, a refreshed top navigation dock, and live token syncing across your account.</p>
+                <div class="changelog-meta-text" id="changelog-meta-text">Maintained by the Scratchlet Owners</div>
+            </div>
+
+            <div class="changelog-editor" id="changelog-edit-view">
+                <div>
+                    <label class="changelog-field-label" for="changelog-version-input">Version Tag</label>
+                    <input type="text" id="changelog-version-input" class="changelog-input" placeholder="e.g. Version 4.1" maxlength="40">
+                </div>
+                <div>
+                    <label class="changelog-field-label" for="changelog-text-input">Changelog Notes</label>
+                    <textarea id="changelog-text-input" class="changelog-textarea" placeholder="Write the latest Scratchlet updates here..."></textarea>
+                </div>
+                <div class="changelog-editor-footer">
+                    <span class="changelog-status-msg" id="changelog-status-msg"></span>
+                    <div class="changelog-editor-buttons">
+                        <button type="button" class="flat-pill-btn" id="changelog-cancel-btn">Cancel</button>
+                        <button type="button" class="flat-pill-btn primary-flat" id="changelog-save-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<div class="news-backdrop" id="news-backdrop"></div>
+<aside class="news-sidebar" id="news-sidebar" aria-label="Scratchlet News" aria-hidden="true">
+    <div class="news-sidebar-header">
+        <div class="news-sidebar-title">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 4.5v13l-8-3.5H5.5A1.5 1.5 0 0 1 4 12.5v-3A1.5 1.5 0 0 1 5.5 8H10l8-3.5z" fill="currentColor" fill-opacity="0.24"/>
+                <path d="M7.5 14l1.2 5a1.2 1.2 0 0 0 2.3-.5l-.7-3.5"/>
+                <path d="M20.8 9.5a3 3 0 0 1 0 3"/>
+            </svg>
+            <span>News</span>
+        </div>
+        <button type="button" class="news-close-btn" id="news-close-btn" aria-label="Close News">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+        </button>
+    </div>
+    <div class="news-sidebar-body" id="news-sidebar-body">
+        <article class="news-item">
+            <span class="news-item-meta" id="news-live-version-badge">Version 4</span>
+            <h3>Scratchlet v4 Launch!</h3>
+            <div class="news-banner">
+                <img src="https://placehold.co/640x300/9e3a00/9e3a00?text=+" alt="Scratchlet v4 Launch" class="news-item-image" id="news-live-image" onerror="this.onerror=null;this.src='https://placehold.co/640x300/8f3200/8f3200?text=+';">
+            </div>
+            <p id="news-live-changelog">Version 4 is live with smoother animations, a refreshed top navigation dock, and live token syncing across your account.</p>
+        </article>
+        <article class="news-item">
+            <span class="news-item-meta">Community</span>
+            <h3>Discord &amp; Events</h3>
+            <div class="news-banner">
+                <img src="https://placehold.co/640x300/b44600/b44600?text=+" alt="Discord and Events" class="news-item-image" onerror="this.onerror=null;this.src='https://placehold.co/640x300/8f3200/8f3200?text=+';">
+            </div>
+            <p>Join the official Scratchlet Discord server to stay tuned for upcoming packs, trading updates, and community giveaways.</p>
+        </article>
+        <article class="news-item">
+            <span class="news-item-meta">Dev Team</span>
+            <h3>Built for Scratchers</h3>
+            <div class="news-banner">
+                <img src="https://placehold.co/640x300/8f3200/8f3200?text=+" alt="Built for Scratchers" class="news-item-image" onerror="this.onerror=null;this.src='https://placehold.co/640x300/9e3a00/9e3a00?text=+';">
+            </div>
+            <p>Created by SuperMemes_64, MapperStudios, BlooketWarrior_YT, and the Scratchlet Dev Team. Have fun collecting and trading!</p>
+        </article>
+    </div>
+</aside>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBNZBOY8xzZOlxAD9V_RUqY054-kKod8gE",
-        authDomain: "scratchlet-194bc.firebaseapp.com",
-        projectId: "scratchlet-194bc",
-        storageBucket: "scratchlet-194bc.firebasestorage.app",
-        messagingSenderId: "480952290764",
-        appId: "1:480952290764:web:0be65205e0b3ff2db16169",
-        measurementId: "G-2T6GS8Y9VN"
-    };
+<div class="daily-modal-backdrop" id="daily-reward-modal-backdrop" aria-hidden="true">
+    <div class="daily-modal" role="dialog" aria-modal="true" aria-labelledby="daily-modal-title">
+        <div class="daily-modal-header">
+            <h2 class="daily-modal-title" id="daily-modal-title">Daily Token Wheel</h2>
+            <button type="button" class="news-close-btn" id="daily-modal-close-btn" aria-label="Close Daily Reward">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+        </div>
+        <p class="daily-modal-subtitle">Spin once every 24 hours to win between 500 and 2,500 tokens!</p>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        <div class="wheel-stage">
+            <svg class="wheel-pointer" viewBox="0 0 36 40" aria-hidden="true">
+                <path d="M18 38 L4 10 A14 14 0 0 1 32 10 Z" fill="#ff4757" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="18" cy="13" r="4.5" fill="#ffe169"/>
+            </svg>
+            <div class="wheel-outer-ring">
+                <div class="wheel-rotator" id="daily-wheel-rotator">
+                    <svg id="daily-wheel-svg" viewBox="0 0 300 300" aria-label="Token Prize Wheel"></svg>
+                </div>
+                <div class="wheel-center-hub">
+                    <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="Token" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
 
-    const welcomeTitle = document.getElementById('welcome-title');
-    const tokenCounterValue = document.getElementById('token-counter-value');
-    
-    const editChangelogBtn = document.getElementById('edit-changelog-btn');
-    const adminEditorBox = document.getElementById('admin-editor-box');
-    const logDisplayView = document.getElementById('log-display-view');
-    const changelogInputField = document.getElementById('changelog-input-field');
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
-    const saveEditBtn = document.getElementById('save-edit-btn');
+        <div class="wheel-result-banner" id="daily-wheel-status">
+            <img src="https://i.postimg.cc/vHtTN5Gn/Scratchlet-Token.webp" alt="" onerror="this.style.display='none'">
+            <span id="daily-wheel-status-text">Ready to spin for 500 – 2,500 tokens!</span>
+        </div>
 
-    // 1. Initial cached changelog loading
-    if(localStorage.getItem('scratchlet_changelog_cache')) {
-        logDisplayView.textContent = localStorage.getItem('scratchlet_changelog_cache');
+        <button type="button" class="wheel-spin-btn" id="daily-wheel-spin-btn">Spin Wheel!</button>
+    </div>
+</div>
+
+
+const FRONT_PAGE_URL = "https://scratchlet.github.io/site/";
+
+
+const NAV_LINKS = {
+    home: "https://scratchlet.github.io/site/home.html",
+    market: "https://scratchlet.github.io/site/market.html",
+    blooks: "https://scratchlet.github.io/site/blooks.html",
+    stats: "https://scratchlet.github.io/site/stats.html",
+    chat: "https://scratchlet.github.io/site/chat.html",
+    auction: "https://scratchlet.github.io/site/auction.html",
+    settings: "https://scratchlet.github.io/site/settings.html",
+    store: "https://scratchlet.github.io/site/store.html",
+    logout: FRONT_PAGE_URL
+};
+
+window.FRONT_PAGE_URL = FRONT_PAGE_URL;
+window.NAV_LINKS = NAV_LINKS;
+
+
+window.isPreviewEnvironment = function() {
+    try {
+        if (window.self !== window.top) return true;
+    } catch (e) {
+        return true;
     }
+    const protocol = (window.location && window.location.protocol) || "";
+    const hostname = (window.location && window.location.hostname) || "";
+    if (protocol === "about:" || protocol === "blob:" || protocol === "data:") return true;
+    if (
+        !hostname ||
+        hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        hostname.includes("googleusercontent.com") ||
+        hostname.includes("scf.usercontent.goog") ||
+        hostname.includes("webcontainer") ||
+        hostname.includes("stackblitz") ||
+        hostname.includes("codesandbox") ||
+        hostname.includes("csb.app")
+    ) {
+        return true;
+    }
+    return false;
+};
 
-    // Reference to global changelog in Firestore
-    const changelogDocRef = doc(db, "system", "changelog");
+// Resolve target URL for any navigation button from NAV_LINKS or its href attribute
+window.resolveNavUrl = function(el, navKey) {
+    if (navKey && Object.prototype.hasOwnProperty.call(NAV_LINKS, navKey)) {
+        const mapped = (NAV_LINKS[navKey] || "").trim();
+        if (mapped && mapped !== "#") return mapped;
+    }
+    if (el && el.getAttribute) {
+        const attrHref = (el.getAttribute("href") || "").trim();
+        if (attrHref && attrHref !== "#") return attrHref;
+    }
+    return "";
+};
 
-    // Load global changelog live from Firestore
-    async function fetchGlobalChangelog() {
-        try {
-            const snap = await getDoc(changelogDocRef);
-            if(snap.exists() && snap.data().text) {
-                const globalText = snap.data().text;
-                logDisplayView.textContent = globalText;
-                localStorage.setItem('scratchlet_changelog_cache', globalText);
-            } else {
-                logDisplayView.textContent = "Initial launch setup completed successfully.";
-            }
-        } catch (err) {
-            console.error("Failed to load global changelog: ", err);
+;(function initNavigationAndHUD() {
+    // Sync href attributes on navigation links with NAV_LINKS
+    document.querySelectorAll("[data-nav]").forEach(function(el) {
+        const navKey = el.getAttribute("data-nav");
+        if (navKey === "news") return;
+
+        const targetUrl = window.resolveNavUrl(el, navKey);
+        if (el.tagName === "A") {
+            el.setAttribute("href", targetUrl || "");
         }
-    }
-    fetchGlobalChangelog();
 
-    // 2. Auth State Observer with Document Parsing Fixes
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userRef = doc(db, "users", user.uid);
-            let username = "Player";
-            let currentTokens = 0;
-
-            try {
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
-                    username = userData.username || user.displayName || "Player";
-                    currentTokens = userData.tokens || 0;
-                } else {
-                    // Create basic document if missing
-                    username = user.displayName || "Player";
-                    await setDoc(userRef, {
-                        username: username,
-                        tokens: 0,
-                        createdAt: new Date()
-                    });
+        if (navKey !== "logout") {
+            el.addEventListener("click", function(e) {
+                const url = window.resolveNavUrl(el, navKey);
+                if (!url) {
+                    e.preventDefault();
+                    return;
                 }
-            } catch (err) {
-                console.error("Error fetching user data document: ", err);
-            }
-
-            // Welcome user with their real database username
-            welcomeTitle.textContent = `Hello ${username}!`;
-            tokenCounterValue.textContent = currentTokens.toLocaleString();
-
-            // Admin edit check using real username
-            if (username === "SuperMemes_64") {
-                editChangelogBtn.style.display = "inline-block";
-            } else {
-                editChangelogBtn.style.display = "none";
-            }
-
-        } else {
-            window.location.href = "login.html";
+                if (el.tagName !== "A") {
+                    e.preventDefault();
+                    window.location.href = url;
+                }
+            });
         }
     });
 
-    // 3. Setup click listeners safely (outside auth loop)
-    document.getElementById('logout-hud-btn').addEventListener('click', () => {
-        signOut(auth).then(() => { 
-            window.location.href = "login.html"; 
+    // News right-hand drawer toggle (never redirects)
+    const newsBtn = document.querySelector('[data-nav="news"]');
+    const newsSidebar = document.getElementById("news-sidebar");
+    const newsBackdrop = document.getElementById("news-backdrop");
+    const newsCloseBtn = document.getElementById("news-close-btn");
+
+    function setNewsOpen(isOpen) {
+        if (!newsSidebar || !newsBackdrop) return;
+        if (isOpen) {
+            newsSidebar.classList.add("open");
+            newsBackdrop.classList.add("open");
+            newsSidebar.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            if (newsBtn) newsBtn.classList.add("active");
+        } else {
+            newsSidebar.classList.remove("open");
+            newsBackdrop.classList.remove("open");
+            newsSidebar.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+            if (newsBtn) newsBtn.classList.remove("active");
+        }
+    }
+    window.setNewsOpen = setNewsOpen;
+
+    if (newsBtn) {
+        newsBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const currentlyOpen = newsSidebar && newsSidebar.classList.contains("open");
+            setNewsOpen(!currentlyOpen);
+        });
+    }
+    const shortcutNewsBtn = document.getElementById("shortcut-news-btn");
+    if (shortcutNewsBtn) {
+        shortcutNewsBtn.addEventListener("click", function() {
+            setNewsOpen(true);
+        });
+    }
+    if (newsCloseBtn) {
+        newsCloseBtn.addEventListener("click", function() {
+            setNewsOpen(false);
+        });
+    }
+    if (newsBackdrop) {
+        newsBackdrop.addEventListener("click", function() {
+            setNewsOpen(false);
+        });
+    }
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && newsSidebar && newsSidebar.classList.contains("open")) {
+            setNewsOpen(false);
+        }
+    });
+
+    // Hover-only mini preview label pill beneath top bar items
+    const hoverPreview = document.getElementById("nav-hover-preview");
+    const hoverPreviewTitle = document.getElementById("nav-hover-preview-title");
+    let activeHoverTarget = null;
+
+    function positionHoverPreview(targetEl) {
+        if (!hoverPreview || !targetEl) return;
+        const rect = targetEl.getBoundingClientRect();
+        const previewRect = hoverPreview.getBoundingClientRect();
+        const targetCenterX = rect.left + rect.width / 2;
+        const margin = 10;
+
+        let left = targetCenterX - previewRect.width / 2;
+        left = Math.max(margin, Math.min(window.innerWidth - previewRect.width - margin, left));
+
+        const top = rect.bottom + 10;
+        const arrowOffset = Math.max(12, Math.min(previewRect.width - 12, targetCenterX - left));
+
+        hoverPreview.style.left = Math.round(left) + "px";
+        hoverPreview.style.top = Math.round(top) + "px";
+        hoverPreview.style.setProperty("--arrow-left", Math.round(arrowOffset) + "px");
+    }
+
+    function showHoverPreview(targetEl) {
+        if (!hoverPreview || !hoverPreviewTitle || !targetEl) return;
+        const label = targetEl.getAttribute("data-label");
+        if (!label) return;
+        activeHoverTarget = targetEl;
+        hoverPreviewTitle.textContent = label;
+        hoverPreview.classList.add("visible");
+        hoverPreview.setAttribute("aria-hidden", "false");
+        positionHoverPreview(targetEl);
+    }
+
+    function hideHoverPreview() {
+        if (!hoverPreview) return;
+        activeHoverTarget = null;
+        hoverPreview.classList.remove("visible");
+        hoverPreview.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll("[data-label]").forEach(function(item) {
+        item.addEventListener("mouseenter", function() {
+            showHoverPreview(item);
+        });
+        item.addEventListener("mouseleave", function() {
+            if (activeHoverTarget === item) hideHoverPreview();
+        });
+        item.addEventListener("focusin", function() {
+            showHoverPreview(item);
+        });
+        item.addEventListener("focusout", function() {
+            if (activeHoverTarget === item) hideHoverPreview();
         });
     });
 
-    editChangelogBtn.addEventListener('click', () => {
-        changelogInputField.value = logDisplayView.textContent;
-        logDisplayView.style.display = "none";
-        editChangelogBtn.style.display = "none";
-        adminEditorBox.style.display = "flex";
+    window.addEventListener("resize", function() {
+        if (activeHoverTarget) positionHoverPreview(activeHoverTarget);
     });
+    window.addEventListener("scroll", function() {
+        if (activeHoverTarget) hideHoverPreview();
+    }, { passive: true });
 
-    cancelEditBtn.addEventListener('click', () => {
-        adminEditorBox.style.display = "none";
-        logDisplayView.style.display = "block";
-        editChangelogBtn.style.display = "inline-block";
+    // Subtle spring glide on the top navbar when scrolling
+    const hudEl = document.getElementById("top-hud");
+    let lastScrollY = window.scrollY || 0;
+    let hudCurrentOffset = 0;
+    let hudVelocity = 0;
+
+    function animateHudGlide() {
+        const currentScrollY = window.scrollY || 0;
+        const deltaY = currentScrollY - lastScrollY;
+        lastScrollY = currentScrollY;
+        if (hudEl) {
+            hudVelocity += -deltaY * 0.16;
+            const springForce = -hudCurrentOffset * 0.15;
+            hudVelocity = (hudVelocity + springForce) * 0.78;
+            hudCurrentOffset += hudVelocity;
+            if (hudCurrentOffset > 18) {
+                hudCurrentOffset = 18;
+                hudVelocity = 0;
+            } else if (hudCurrentOffset < -12) {
+                hudCurrentOffset = -12;
+                hudVelocity = 0;
+            }
+            if (Math.abs(hudCurrentOffset) < 0.02 && Math.abs(hudVelocity) < 0.02) {
+                hudCurrentOffset = 0;
+                hudVelocity = 0;
+            }
+            hudEl.style.transform = "translate3d(0, " + hudCurrentOffset.toFixed(2) + "px, 0)";
+        }
+        requestAnimationFrame(animateHudGlide);
+    }
+    requestAnimationFrame(animateHudGlide);
+})();
+
+// ==========================================
+// FIREBASE & DASHBOARD STATE
+// ==========================================
+const firebaseConfig = {
+    apiKey: "AIzaSyCwFOBiGz47E7uuWkhdHagfslTnNCQ85iM",
+    authDomain: "scracthletv4.firebaseapp.com",
+    databaseURL: "https://scracthletv4-default-rtdb.firebaseio.com",
+    projectId: "scracthletv4",
+    storageBucket: "scracthletv4.firebasestorage.app",
+    messagingSenderId: "282103246502",
+    appId: "1:282103246502:web:9361acf79b71face65ce67",
+    measurementId: "G-Y547Z2WH4F"
+};
+
+const ALLOWED_CHANGELOG_OWNERS = [
+    "supermemes_64",
+    "mapperstudios",
+    "blooketwarrioryt",
+    "blooketwarrior_yt"
+];
+
+let app = null;
+let auth = null;
+let db = null;
+let rtdbRef = null;
+let rtdbGet = null;
+let rtdbSet = null;
+let rtdbUpdate = null;
+let rtdbOnValue = null;
+let rtdbRunTransaction = null;
+let authSignOut = null;
+let unsubscribeUserListener = null;
+let unsubscribeTokensListener = null;
+let unsubscribeDailyRewardListener = null;
+let lastDisplayedTokens = null;
+let isLoggingOut = false;
+let currentChangelogVersion = "Version 4";
+let currentChangelogText = "Version 4 is live with smoother animations, a refreshed top navigation dock, and live token syncing across your account.";
+let isAuthorizedOwner = false;
+
+window.currentUser = null;
+window.currentUserProfile = null;
+
+function isOwnerAccount(username) {
+    if (!username || typeof username !== "string") return false;
+    return ALLOWED_CHANGELOG_OWNERS.includes(username.trim().toLowerCase());
+}
+
+function updateGreetingAndOwnerUI(username) {
+    const cleanName = (username && typeof username === "string" && username.trim()) ? username.trim() : "Player";
+    const welcomeNameEl = document.getElementById("home-welcome-username");
+    if (welcomeNameEl) {
+        welcomeNameEl.textContent = cleanName;
+    }
+
+    isAuthorizedOwner = isOwnerAccount(cleanName);
+    const ownerBadgeEl = document.getElementById("home-owner-badge");
+    const editBtnEl = document.getElementById("changelog-edit-btn");
+
+    if (ownerBadgeEl) {
+        ownerBadgeEl.style.display = isAuthorizedOwner ? "inline-flex" : "none";
+    }
+    if (editBtnEl) {
+        editBtnEl.style.display = isAuthorizedOwner ? "inline-flex" : "none";
+    }
+    if (!isAuthorizedOwner) {
+        setChangelogEditMode(false);
+    }
+}
+
+function formatAccountAge(createdAtInput) {
+    let createdMs = null;
+    if (typeof createdAtInput === "number" && !Number.isNaN(createdAtInput)) {
+        createdMs = createdAtInput;
+    } else if (typeof createdAtInput === "string" && createdAtInput.trim()) {
+        const parsed = Number(createdAtInput) || Date.parse(createdAtInput);
+        if (!Number.isNaN(parsed)) createdMs = parsed;
+    }
+
+    if (!createdMs || createdMs <= 0) {
+        return "0 days";
+    }
+
+    const diffMs = Math.max(0, Date.now() - createdMs);
+    const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (totalDays < 30) {
+        return totalDays === 1 ? "1 day" : totalDays + " days";
+    }
+    if (totalDays < 365) {
+        const months = Math.floor(totalDays / 30);
+        const remDays = totalDays % 30;
+        const monthStr = months === 1 ? "1 month" : months + " months";
+        if (remDays === 0) return monthStr;
+        const dayStr = remDays === 1 ? "1 day" : remDays + " days";
+        return monthStr + ", " + dayStr;
+    }
+    const years = Math.floor(totalDays / 365);
+    const months = Math.floor((totalDays % 365) / 30);
+    const yearStr = years === 1 ? "1 year" : years + " years";
+    if (months === 0) return yearStr;
+    const monthStr = months === 1 ? "1 month" : months + " months";
+    return yearStr + ", " + monthStr;
+}
+
+function updateAccountAgeDisplay(createdAtInput) {
+    const ageEl = document.getElementById("home-account-age");
+    if (ageEl) {
+        ageEl.textContent = formatAccountAge(createdAtInput);
+    }
+}
+
+function setChangelogEditMode(isEditing) {
+    const readView = document.getElementById("changelog-read-view");
+    const editView = document.getElementById("changelog-edit-view");
+    const editBtn = document.getElementById("changelog-edit-btn");
+    const versionInput = document.getElementById("changelog-version-input");
+    const textInput = document.getElementById("changelog-text-input");
+    const statusMsg = document.getElementById("changelog-status-msg");
+
+    if (!readView || !editView) return;
+
+    if (isEditing && isAuthorizedOwner) {
+        if (versionInput) versionInput.value = currentChangelogVersion;
+        if (textInput) textInput.value = currentChangelogText;
+        if (statusMsg) statusMsg.textContent = "";
+        readView.style.display = "none";
+        editView.classList.add("active");
+        if (editBtn) editBtn.style.display = "none";
+    } else {
+        editView.classList.remove("active");
+        readView.style.display = "";
+        if (editBtn) {
+            editBtn.style.display = isAuthorizedOwner ? "inline-flex" : "none";
+        }
+    }
+}
+
+function updateTokenDisplay(rawAmount) {
+    const safeAmount = typeof rawAmount === "number" && !Number.isNaN(rawAmount)
+        ? Math.max(0, Math.floor(rawAmount))
+        : 0;
+
+    const tokenTextEl = document.getElementById("nav-player-tokens");
+    const tokenPillEl = document.getElementById("nav-token-pill");
+
+    if (tokenTextEl) {
+        tokenTextEl.textContent = safeAmount.toLocaleString();
+    }
+
+    if (tokenPillEl && lastDisplayedTokens !== null && lastDisplayedTokens !== safeAmount) {
+        tokenPillEl.classList.remove("pulse");
+        void tokenPillEl.offsetWidth;
+        tokenPillEl.classList.add("pulse");
+    }
+    lastDisplayedTokens = safeAmount;
+}
+window.updateTokenDisplay = updateTokenDisplay;
+
+function kickToFrontPage() {
+    window.currentUser = null;
+    window.currentUserProfile = null;
+    try {
+        localStorage.removeItem("scratchlet_user");
+    } catch (storageErr) {}
+    updateTokenDisplay(0);
+    updateGreetingAndOwnerUI("Player");
+    updateAccountAgeDisplay(null);
+    if (!window.isPreviewEnvironment()) {
+        window.location.replace(window.FRONT_PAGE_URL || "https://scratchlet.github.io/site/");
+    }
+}
+
+// Pre-populate greeting and account age from cached session if available while Firebase connects
+try {
+    const cachedRaw = localStorage.getItem("scratchlet_user");
+    if (cachedRaw) {
+        const cachedUser = JSON.parse(cachedRaw);
+        if (cachedUser && cachedUser.username) {
+            updateGreetingAndOwnerUI(cachedUser.username);
+        }
+        if (cachedUser && cachedUser.createdAt) {
+            updateAccountAgeDisplay(cachedUser.createdAt);
+        }
+    }
+} catch (cacheErr) {}
+
+// Owner Changelog edit & save controls (SuperMemes_64, Mapperstudios, BlooketwarriorYT)
+const changelogEditBtn = document.getElementById("changelog-edit-btn");
+const changelogCancelBtn = document.getElementById("changelog-cancel-btn");
+const changelogSaveBtn = document.getElementById("changelog-save-btn");
+
+if (changelogEditBtn) {
+    changelogEditBtn.addEventListener("click", function() {
+        if (!isAuthorizedOwner) return;
+        setChangelogEditMode(true);
+        const textInput = document.getElementById("changelog-text-input");
+        if (textInput) textInput.focus();
     });
+}
 
-    saveEditBtn.addEventListener('click', async () => {
-        const updatedText = changelogInputField.value.trim();
-        if(updatedText) {
-            logDisplayView.textContent = updatedText;
-            localStorage.setItem('scratchlet_changelog_cache', updatedText);
-            
-            // Save globally to Firestore for all players
-            try {
-                await setDoc(changelogDocRef, { text: updatedText }, { merge: true });
-            } catch(e) {
-                console.error("Failed to save changelog globally to Firestore:", e);
+if (changelogCancelBtn) {
+    changelogCancelBtn.addEventListener("click", function() {
+        setChangelogEditMode(false);
+    });
+}
+
+if (changelogSaveBtn) {
+    changelogSaveBtn.addEventListener("click", async function() {
+        if (!isAuthorizedOwner) return;
+        const versionInput = document.getElementById("changelog-version-input");
+        const textInput = document.getElementById("changelog-text-input");
+        const statusMsg = document.getElementById("changelog-status-msg");
+
+        const nextVersion = versionInput && versionInput.value.trim()
+            ? versionInput.value.trim()
+            : (currentChangelogVersion || "Version 4");
+        const nextText = textInput ? textInput.value.trim() : "";
+
+        if (!nextText) {
+            if (statusMsg) statusMsg.textContent = "Please enter changelog notes before saving.";
+            return;
+        }
+
+        changelogSaveBtn.disabled = true;
+        if (statusMsg) statusMsg.textContent = "Saving...";
+
+        const editorName =
+            (window.currentUserProfile && window.currentUserProfile.username) ||
+            (document.getElementById("home-welcome-username") && document.getElementById("home-welcome-username").textContent) ||
+            "Owner";
+
+        try {
+            if (db && rtdbSet && rtdbRef) {
+                await Promise.all([
+                    rtdbSet(rtdbRef(db, "system/version"), nextVersion),
+                    rtdbSet(rtdbRef(db, "system/changelog"), nextText),
+                    rtdbSet(rtdbRef(db, "system/changelogUpdatedBy"), editorName)
+                ]);
+            }
+
+            currentChangelogVersion = nextVersion;
+            currentChangelogText = nextText;
+
+            const homeBadge = document.getElementById("changelog-version-badge");
+            const newsBadge = document.getElementById("news-live-version-badge");
+            const homeBodyEl = document.getElementById("changelog-body-text");
+            const newsBodyEl = document.getElementById("news-live-changelog");
+            const metaEl = document.getElementById("changelog-meta-text");
+
+            if (homeBadge) homeBadge.textContent = nextVersion;
+            if (newsBadge) newsBadge.textContent = nextVersion;
+            if (homeBodyEl) homeBodyEl.textContent = nextText;
+            if (newsBodyEl) newsBodyEl.textContent = nextText;
+            if (metaEl) metaEl.textContent = "Last updated by " + editorName;
+
+            setChangelogEditMode(false);
+        } catch (saveErr) {
+            console.error("Failed to save changelog:", saveErr);
+            if (statusMsg) statusMsg.textContent = "Could not save changes. Check permissions.";
+        } finally {
+            changelogSaveBtn.disabled = false;
+        }
+    });
+}
+
+// Helper methods to set, add, or spend tokens directly in Firebase RTDB
+window.setTokens = async function(amount) {
+    if (!db || !rtdbSet || !rtdbRef || !window.currentUser) return null;
+    const targetAmount = Math.max(0, Math.floor(Number(amount) || 0));
+    await rtdbSet(rtdbRef(db, "users/" + window.currentUser.uid + "/tokens"), targetAmount);
+    return targetAmount;
+};
+
+window.addTokens = async function(delta) {
+    if (!db || !rtdbRunTransaction || !rtdbRef || !window.currentUser) return null;
+    const change = Math.floor(Number(delta) || 0);
+    const result = await rtdbRunTransaction(rtdbRef(db, "users/" + window.currentUser.uid + "/tokens"), function(current) {
+        const base = typeof current === "number" && !Number.isNaN(current) ? current : 0;
+        return Math.max(0, base + change);
+    });
+    return result.snapshot.val();
+};
+
+window.spendTokens = async function(cost) {
+    if (!db || !rtdbRunTransaction || !rtdbRef || !window.currentUser) return { ok: false, tokens: 0 };
+    const spendAmount = Math.max(0, Math.floor(Number(cost) || 0));
+    let canAfford = false;
+    const result = await rtdbRunTransaction(rtdbRef(db, "users/" + window.currentUser.uid + "/tokens"), function(current) {
+        const base = typeof current === "number" && !Number.isNaN(current) ? current : 0;
+        if (base < spendAmount) {
+            canAfford = false;
+            return;
+        }
+        canAfford = true;
+        return base - spendAmount;
+    });
+    return {
+        ok: canAfford && result.committed,
+        tokens: result.snapshot.val() || 0
+    };
+};
+
+// Atomically credits daily reward tokens and records the claim timestamp on Firebase RTDB
+window.claimDailyRewardOnFirebase = async function(rewardAmount) {
+    if (!db || !rtdbRef || !window.currentUser) {
+        return { saved: false, reason: "not_signed_in" };
+    }
+    const uid = window.currentUser.uid;
+    const prize = Math.max(500, Math.min(2500, Math.floor(Number(rewardAmount) || 500)));
+    const claimTime = Date.now();
+    const cooldownMs = 24 * 60 * 60 * 1000;
+    const userRef = rtdbRef(db, "users/" + uid);
+
+    try {
+        if (typeof rtdbRunTransaction === "function") {
+            let blockedLastClaim = 0;
+            const txResult = await rtdbRunTransaction(userRef, function(currentData) {
+                if (!currentData || typeof currentData !== "object") {
+                    return currentData;
+                }
+                const prevClaim = typeof currentData.lastDailyReward === "number" && !Number.isNaN(currentData.lastDailyReward)
+                    ? currentData.lastDailyReward
+                    : 0;
+                if (prevClaim > 0 && (claimTime - prevClaim) < cooldownMs) {
+                    blockedLastClaim = prevClaim;
+                    return;
+                }
+                const currentTokens = typeof currentData.tokens === "number" && !Number.isNaN(currentData.tokens)
+                    ? currentData.tokens
+                    : 0;
+                return {
+                    ...currentData,
+                    tokens: Math.max(0, currentTokens + prize),
+                    lastDailyReward: claimTime,
+                    lastDailyRewardAmount: prize,
+                    totalDailySpins: (typeof currentData.totalDailySpins === "number" ? currentData.totalDailySpins : 0) + 1
+                };
+            });
+
+            if (blockedLastClaim > 0 && !txResult.committed) {
+                return {
+                    saved: false,
+                    reason: "cooldown",
+                    lastDailyReward: blockedLastClaim
+                };
+            }
+
+            if (txResult.committed && txResult.snapshot.exists()) {
+                const updated = txResult.snapshot.val();
+                return {
+                    saved: true,
+                    tokens: updated.tokens,
+                    lastDailyReward: updated.lastDailyReward || claimTime
+                };
             }
         }
-        adminEditorBox.style.display = "none";
-        logDisplayView.style.display = "block";
-        editChangelogBtn.style.display = "inline-block";
-    });
-</script>
 
+        const newTokens = await window.addTokens(prize);
+        if (typeof rtdbUpdate === "function") {
+            await rtdbUpdate(userRef, {
+                lastDailyReward: claimTime,
+                lastDailyRewardAmount: prize
+            });
+        } else if (typeof rtdbSet === "function") {
+            await rtdbSet(rtdbRef(db, "users/" + uid + "/lastDailyReward"), claimTime);
+            await rtdbSet(rtdbRef(db, "users/" + uid + "/lastDailyRewardAmount"), prize);
+        }
+        return {
+            saved: true,
+            tokens: newTokens,
+            lastDailyReward: claimTime
+        };
+    } catch (err) {
+        console.error("Failed to save daily reward to Firebase:", err);
+        return { saved: false, reason: "error", error: err };
+    }
+};
+
+// Logs the user out of Firebase, clears local session data, and sends them to the front page
+async function performLogout(e) {
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    }
+    isLoggingOut = true;
+
+    if (typeof unsubscribeUserListener === "function") {
+        unsubscribeUserListener();
+        unsubscribeUserListener = null;
+    }
+    if (typeof unsubscribeTokensListener === "function") {
+        unsubscribeTokensListener();
+        unsubscribeTokensListener = null;
+    }
+    if (typeof unsubscribeDailyRewardListener === "function") {
+        unsubscribeDailyRewardListener();
+        unsubscribeDailyRewardListener = null;
+    }
+
+    if (auth && typeof authSignOut === "function") {
+        try {
+            await authSignOut(auth);
+        } catch (err) {
+            console.warn("Firebase signOut error:", err);
+        }
+    }
+
+    window.currentUser = null;
+    window.currentUserProfile = null;
+    try {
+        localStorage.removeItem("scratchlet_user");
+    } catch (storageErr) {}
+    updateTokenDisplay(0);
+
+    const logoutBtnEl = document.getElementById("nav-logout-btn");
+    const frontPageUrl =
+        (window.resolveNavUrl && window.resolveNavUrl(logoutBtnEl, "logout")) ||
+        window.FRONT_PAGE_URL ||
+        "https://scratchlet.github.io/site/";
+
+    window.location.href = frontPageUrl;
+}
+window.performLogout = performLogout;
+
+const logoutBtn = document.getElementById("nav-logout-btn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", performLogout);
+}
+
+// ==========================================
+// DAILY REWARD SPINNING WHEEL (500 - 2,500 TOKENS)
+// ==========================================
+;(function initDailyRewardWheel() {
+    const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+    const WHEEL_SLICES = [
+        { amount: 500, label: "500", color: "#ff7f11" },
+        { amount: 1250, label: "1,250", color: "#1e90ff" },
+        { amount: 750, label: "750", color: "#9b59b6" },
+        { amount: 2000, label: "2,000", color: "#2ed573" },
+        { amount: 500, label: "500", color: "#b44600" },
+        { amount: 1500, label: "1,500", color: "#ff4757" },
+        { amount: 1000, label: "1,000", color: "#e67e22" },
+        { amount: 2500, label: "2,500", color: "#f1c40f" }
+    ];
+
+    const openBtn = document.getElementById("daily-reward-btn");
+    const btnSubText = document.getElementById("daily-reward-btn-sub");
+    const backdrop = document.getElementById("daily-reward-modal-backdrop");
+    const closeBtn = document.getElementById("daily-modal-close-btn");
+    const wheelSvg = document.getElementById("daily-wheel-svg");
+    const wheelRotator = document.getElementById("daily-wheel-rotator");
+    const statusText = document.getElementById("daily-wheel-status-text");
+    const spinBtn = document.getElementById("daily-wheel-spin-btn");
+
+    let lastClaimedAt = 0;
+    let isSpinning = false;
+    let currentRotation = 0;
+
+    function buildWheelSVG() {
+        if (!wheelSvg) return;
+        const cx = 150;
+        const cy = 150;
+        const radius = 148;
+        const sliceCount = WHEEL_SLICES.length;
+        const stepDeg = 360 / sliceCount;
+        let svgMarkup = "";
+
+        for (let i = 0; i < sliceCount; i++) {
+            const slice = WHEEL_SLICES[i];
+            const startDeg = i * stepDeg - 90;
+            const endDeg = (i + 1) * stepDeg - 90;
+            const startRad = (startDeg * Math.PI) / 180;
+            const endRad = (endDeg * Math.PI) / 180;
+
+            const x1 = cx + radius * Math.cos(startRad);
+            const y1 = cy + radius * Math.sin(startRad);
+            const x2 = cx + radius * Math.cos(endRad);
+            const y2 = cy + radius * Math.sin(endRad);
+
+            svgMarkup +=
+                '<path d="M ' + cx + " " + cy + " L " + x1.toFixed(2) + " " + y1.toFixed(2) +
+                " A " + radius + " " + radius + " 0 0 1 " + x2.toFixed(2) + " " + y2.toFixed(2) +
+                ' Z" fill="' + slice.color + '" stroke="#ffffff" stroke-width="2.5"/>';
+
+            const midDeg = startDeg + stepDeg / 2;
+            const midRad = (midDeg * Math.PI) / 180;
+            const textDist = 96;
+            const tx = cx + textDist * Math.cos(midRad);
+            const ty = cy + textDist * Math.sin(midRad);
+            const textAngle = midDeg + 90;
+
+            svgMarkup +=
+                '<text x="' + tx.toFixed(2) + '" y="' + ty.toFixed(2) +
+                '" fill="#ffffff" stroke="#6e2400" stroke-width="3.5" paint-order="stroke fill"' +
+                ' font-family="DynaPuff, cursive" font-size="16" font-weight="700"' +
+                ' text-anchor="middle" dominant-baseline="central"' +
+                ' transform="rotate(' + textAngle.toFixed(2) + " " + tx.toFixed(2) + " " + ty.toFixed(2) + ')">' +
+                slice.label +
+                "</text>";
+        }
+
+        wheelSvg.innerHTML = svgMarkup;
+    }
+
+    function formatRemainingTime(ms) {
+        const totalSec = Math.max(0, Math.ceil(ms / 1000));
+        const hours = Math.floor(totalSec / 3600);
+        const minutes = Math.floor((totalSec % 3600) / 60);
+        const seconds = totalSec % 60;
+        const pad = function(n) { return n < 10 ? "0" + n : String(n); };
+        return pad(hours) + "h " + pad(minutes) + "m " + pad(seconds) + "s";
+    }
+
+    function refreshCooldownUI() {
+        const elapsed = Date.now() - lastClaimedAt;
+        const remaining = COOLDOWN_MS - elapsed;
+        const isAvailable = lastClaimedAt <= 0 || remaining <= 0;
+
+        if (openBtn && btnSubText) {
+            if (isAvailable) {
+                openBtn.classList.remove("claimed");
+                btnSubText.textContent = "Spin for 500–2,500!";
+            } else {
+                openBtn.classList.add("claimed");
+                btnSubText.textContent = "Next in " + formatRemainingTime(remaining);
+            }
+        }
+
+        if (!isSpinning && spinBtn && statusText) {
+            if (isAvailable) {
+                spinBtn.disabled = false;
+                spinBtn.textContent = "Spin Wheel!";
+                if (!statusText.dataset.justWon) {
+                    statusText.textContent = "Ready to spin for 500 – 2,500 tokens!";
+                }
+            } else {
+                spinBtn.disabled = true;
+                spinBtn.textContent = "Come Back in " + formatRemainingTime(remaining);
+                if (!statusText.dataset.justWon) {
+                    statusText.textContent = "Next daily spin unlocks in " + formatRemainingTime(remaining);
+                }
+            }
+        }
+    }
+
+    window.syncDailyRewardState = function(timestamp) {
+        const numericTs = typeof timestamp === "number" && !Number.isNaN(timestamp) ? Math.max(0, timestamp) : 0;
+        lastClaimedAt = numericTs;
+        if (numericTs === 0 && statusText) {
+            delete statusText.dataset.justWon;
+        }
+        refreshCooldownUI();
+    };
+
+    function spawnWheelConfetti() {
+        const anchor = wheelRotator || spinBtn;
+        if (!anchor) return;
+        const rect = anchor.getBoundingClientRect();
+        const originX = rect.left + rect.width / 2;
+        const originY = rect.top + rect.height / 2;
+        const colors = ["#ffe169", "#2ed573", "#1e90ff", "#ff4757", "#ffffff"];
+
+        for (let i = 0; i < 34; i++) {
+            const dot = document.createElement("div");
+            dot.className = "daily-confetti";
+            dot.style.left = originX + "px";
+            dot.style.top = originY + "px";
+            dot.style.background = colors[i % colors.length];
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 60 + Math.random() * 135;
+            dot.style.setProperty("--dx", (Math.cos(angle) * speed).toFixed(1) + "px");
+            dot.style.setProperty("--dy", (Math.sin(angle) * speed - 35).toFixed(1) + "px");
+            document.body.appendChild(dot);
+            setTimeout(function() { dot.remove(); }, 860);
+        }
+    }
+
+    function setDailyModalOpen(isOpen) {
+        if (!backdrop) return;
+        if (isOpen) {
+            refreshCooldownUI();
+            backdrop.classList.add("open");
+            backdrop.setAttribute("aria-hidden", "false");
+        } else if (!isSpinning) {
+            backdrop.classList.remove("open");
+            backdrop.setAttribute("aria-hidden", "true");
+        }
+    }
+
+    async function spinDailyWheel() {
+        if (isSpinning) return;
+        const remaining = COOLDOWN_MS - (Date.now() - lastClaimedAt);
+        if (lastClaimedAt > 0 && remaining > 0) {
+            refreshCooldownUI();
+            return;
+        }
+
+        // Verify the latest lastDailyReward timestamp directly from Firebase before spinning
+        if (db && rtdbGet && rtdbRef && window.currentUser) {
+            try {
+                const latestSnap = await rtdbGet(rtdbRef(db, "users/" + window.currentUser.uid + "/lastDailyReward"));
+                const serverLastClaim = latestSnap.exists() ? Number(latestSnap.val()) || 0 : 0;
+                if (serverLastClaim > 0 && (Date.now() - serverLastClaim) < COOLDOWN_MS) {
+                    lastClaimedAt = serverLastClaim;
+                    refreshCooldownUI();
+                    return;
+                }
+            } catch (checkErr) {
+                console.warn("Firebase daily reward check warning:", checkErr);
+            }
+        }
+
+        isSpinning = true;
+        if (statusText) {
+            delete statusText.dataset.justWon;
+            statusText.textContent = "Spinning the wheel...";
+        }
+        if (spinBtn) {
+            spinBtn.disabled = true;
+            spinBtn.textContent = "Spinning...";
+        }
+
+        const sliceCount = WHEEL_SLICES.length;
+        const stepDeg = 360 / sliceCount;
+        const winningIndex = Math.floor(Math.random() * sliceCount);
+        const winningSlice = WHEEL_SLICES[winningIndex];
+
+        const jitterDeg = (Math.random() - 0.5) * (stepDeg * 0.55);
+        const targetNormalized = (360 - ((winningIndex + 0.5) * stepDeg + jitterDeg) + 360) % 360;
+        const currentNormalized = ((currentRotation % 360) + 360) % 360;
+        const deltaToTarget = (targetNormalized - currentNormalized + 360) % 360;
+        const fullSpins = 6 * 360;
+
+        currentRotation += fullSpins + deltaToTarget;
+
+        if (wheelRotator) {
+            wheelRotator.style.transition = "transform 4.2s cubic-bezier(0.14, 0.88, 0.22, 1)";
+            wheelRotator.style.transform = "rotate(" + currentRotation.toFixed(2) + "deg)";
+        }
+
+        setTimeout(async function() {
+            if (db && window.currentUser && typeof window.claimDailyRewardOnFirebase === "function") {
+                if (statusText) {
+                    statusText.textContent = "Saving +" + winningSlice.amount.toLocaleString() + " Tokens to your account...";
+                }
+                const claimResult = await window.claimDailyRewardOnFirebase(winningSlice.amount);
+                isSpinning = false;
+
+                if (claimResult && claimResult.saved) {
+                    lastClaimedAt = claimResult.lastDailyReward || Date.now();
+                    if (typeof claimResult.tokens === "number") {
+                        updateTokenDisplay(claimResult.tokens);
+                    }
+                    if (statusText) {
+                        statusText.dataset.justWon = "true";
+                        statusText.textContent = "You won +" + winningSlice.amount.toLocaleString() + " Tokens!";
+                    }
+                    spawnWheelConfetti();
+                } else if (claimResult && claimResult.reason === "cooldown") {
+                    lastClaimedAt = claimResult.lastDailyReward || Date.now();
+                    if (statusText) {
+                        statusText.textContent = "Daily reward already claimed on your account!";
+                    }
+                } else {
+                    if (statusText) {
+                        statusText.textContent = "Could not save reward to Firebase. Please try again.";
+                    }
+                }
+                refreshCooldownUI();
+            } else {
+                const claimTime = Date.now();
+                lastClaimedAt = claimTime;
+                const currentShown = typeof lastDisplayedTokens === "number" ? lastDisplayedTokens : 0;
+                updateTokenDisplay(currentShown + winningSlice.amount);
+                isSpinning = false;
+                if (statusText) {
+                    statusText.dataset.justWon = "true";
+                    statusText.textContent = "Preview spin: +" + winningSlice.amount.toLocaleString() + " Tokens!";
+                }
+                spawnWheelConfetti();
+                refreshCooldownUI();
+            }
+        }, 4300);
+    }
+
+    buildWheelSVG();
+    refreshCooldownUI();
+    setInterval(refreshCooldownUI, 1000);
+
+    if (openBtn) {
+        openBtn.addEventListener("click", function() {
+            setDailyModalOpen(true);
+        });
+    }
+    if (closeBtn) {
+        closeBtn.addEventListener("click", function() {
+            setDailyModalOpen(false);
+        });
+    }
+    if (backdrop) {
+        backdrop.addEventListener("click", function(e) {
+            if (e.target === backdrop) {
+                setDailyModalOpen(false);
+            }
+        });
+    }
+    if (spinBtn) {
+        spinBtn.addEventListener("click", spinDailyWheel);
+    }
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && backdrop && backdrop.classList.contains("open")) {
+            setDailyModalOpen(false);
+        }
+    });
+})();
+
+// Dynamically load Firebase SDK modules and attach real-time listeners
+;(async function initFirebaseServices() {
+    try {
+        const [firebaseAppMod, firebaseAuthMod, firebaseDbMod] = await Promise.all([
+            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"),
+            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"),
+            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js")
+        ]);
+
+        app = firebaseAppMod.initializeApp(firebaseConfig);
+        auth = firebaseAuthMod.getAuth(app);
+        db = firebaseDbMod.getDatabase(app);
+
+        rtdbRef = firebaseDbMod.ref;
+        rtdbGet = firebaseDbMod.get;
+        rtdbSet = firebaseDbMod.set;
+        rtdbUpdate = firebaseDbMod.update;
+        rtdbOnValue = firebaseDbMod.onValue;
+        rtdbRunTransaction = firebaseDbMod.runTransaction;
+        authSignOut = firebaseAuthMod.signOut;
+
+        // Live system news & changelog updates from Firebase RTDB
+        try {
+            rtdbOnValue(rtdbRef(db, "system/version"), function(snapshot) {
+                const ver = snapshot.val();
+                if (ver) {
+                    currentChangelogVersion = String(ver);
+                    const newsBadge = document.getElementById("news-live-version-badge");
+                    const homeBadge = document.getElementById("changelog-version-badge");
+                    if (newsBadge) newsBadge.textContent = currentChangelogVersion;
+                    if (homeBadge) homeBadge.textContent = currentChangelogVersion;
+                }
+            }, function() {});
+
+            rtdbOnValue(rtdbRef(db, "system/changelog"), function(snapshot) {
+                const logText = snapshot.val();
+                if (logText) {
+                    currentChangelogText = String(logText);
+                    const newsBodyEl = document.getElementById("news-live-changelog");
+                    const homeBodyEl = document.getElementById("changelog-body-text");
+                    if (newsBodyEl) newsBodyEl.textContent = currentChangelogText;
+                    if (homeBodyEl) homeBodyEl.textContent = currentChangelogText;
+                }
+            }, function() {});
+
+            rtdbOnValue(rtdbRef(db, "system/changelogUpdatedBy"), function(snapshot) {
+                const editorName = snapshot.val();
+                const metaEl = document.getElementById("changelog-meta-text");
+                if (editorName && metaEl) {
+                    metaEl.textContent = "Last updated by " + String(editorName);
+                }
+            }, function() {});
+
+            rtdbOnValue(rtdbRef(db, "system/newsImage"), function(snapshot) {
+                const imgUrl = snapshot.val();
+                const imgEl = document.getElementById("news-live-image");
+                if (imgUrl && imgEl && typeof imgUrl === "string") {
+                    imgEl.src = imgUrl;
+                }
+            }, function() {});
+        } catch (sysErr) {}
+
+        async function ensureFirebaseUserAccountAndTokens(uid) {
+            if (!db || !uid) return false;
+            try {
+                const userRef = rtdbRef(db, "users/" + uid);
+                const userSnap = await rtdbGet(userRef);
+                if (!userSnap.exists()) {
+                    return false;
+                }
+                const profile = userSnap.val() || {};
+                const tokensRef = rtdbRef(db, "users/" + uid + "/tokens");
+                if (typeof profile.tokens !== "number" || Number.isNaN(profile.tokens)) {
+                    await rtdbSet(tokensRef, 0);
+                }
+                const dailyRef = rtdbRef(db, "users/" + uid + "/lastDailyReward");
+                if (typeof profile.lastDailyReward !== "number" || Number.isNaN(profile.lastDailyReward)) {
+                    await rtdbSet(dailyRef, 0);
+                }
+                return true;
+            } catch (err) {
+                console.warn("Account verification error:", err);
+                return false;
+            }
+        }
+
+        firebaseAuthMod.onAuthStateChanged(auth, async function(user) {
+            if (typeof unsubscribeUserListener === "function") {
+                unsubscribeUserListener();
+                unsubscribeUserListener = null;
+            }
+            if (typeof unsubscribeTokensListener === "function") {
+                unsubscribeTokensListener();
+                unsubscribeTokensListener = null;
+            }
+            if (typeof unsubscribeDailyRewardListener === "function") {
+                unsubscribeDailyRewardListener();
+                unsubscribeDailyRewardListener = null;
+            }
+
+            if (user) {
+                window.currentUser = user;
+                const fallbackName = user.displayName || (user.email ? user.email.split("@")[0] : "Player");
+                const authCreatedAt = (user.metadata && user.metadata.creationTime)
+                    ? Date.parse(user.metadata.creationTime)
+                    : null;
+                updateGreetingAndOwnerUI(fallbackName);
+                if (authCreatedAt) {
+                    updateAccountAgeDisplay(authCreatedAt);
+                }
+
+                const hasAccount = await ensureFirebaseUserAccountAndTokens(user.uid);
+                if (!hasAccount && !isLoggingOut) {
+                    kickToFrontPage();
+                    return;
+                }
+
+                try {
+                    const userRef = rtdbRef(db, "users/" + user.uid);
+                    unsubscribeUserListener = rtdbOnValue(userRef, function(snapshot) {
+                        if (!snapshot.exists() && !isLoggingOut) {
+                            kickToFrontPage();
+                            return;
+                        }
+                        if (snapshot.exists()) {
+                            const profileData = snapshot.val();
+                            window.currentUserProfile = profileData;
+                            const resolvedName = profileData.username || fallbackName;
+                            updateGreetingAndOwnerUI(resolvedName);
+                            updateAccountAgeDisplay(profileData.createdAt || authCreatedAt);
+                            if (typeof window.syncDailyRewardState === "function") {
+                                window.syncDailyRewardState(profileData.lastDailyReward || 0);
+                            }
+                        }
+                    }, function() {});
+
+                    const tokensRef = rtdbRef(db, "users/" + user.uid + "/tokens");
+                    unsubscribeTokensListener = rtdbOnValue(tokensRef, function(snapshot) {
+                        const val = snapshot.val();
+                        const numericTokens = typeof val === "number" && !Number.isNaN(val) ? val : 0;
+                        if (window.currentUserProfile) {
+                            window.currentUserProfile.tokens = numericTokens;
+                        }
+                        updateTokenDisplay(numericTokens);
+                    }, function() {});
+
+                    const dailyRewardRef = rtdbRef(db, "users/" + user.uid + "/lastDailyReward");
+                    unsubscribeDailyRewardListener = rtdbOnValue(dailyRewardRef, function(snapshot) {
+                        const val = snapshot.val();
+                        const numericTs = typeof val === "number" && !Number.isNaN(val) ? val : 0;
+                        if (window.currentUserProfile) {
+                            window.currentUserProfile.lastDailyReward = numericTs;
+                        }
+                        if (typeof window.syncDailyRewardState === "function") {
+                            window.syncDailyRewardState(numericTs);
+                        }
+                    }, function() {});
+                } catch (dbErr) {
+                    console.warn("Firebase token listener error:", dbErr);
+                }
+            } else if (!isLoggingOut) {
+                if (typeof window.syncDailyRewardState === "function") {
+                    window.syncDailyRewardState(0);
+                }
+                kickToFrontPage();
+            }
+        });
+    } catch (initErr) {
+        console.warn("Firebase initialization warning:", initErr);
+        if (!window.isPreviewEnvironment()) {
+            kickToFrontPage();
+        }
+    }
+})();
+</script>
 </body>
 </html>
