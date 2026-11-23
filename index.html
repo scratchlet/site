@@ -789,7 +789,7 @@ footer {
     <div class="nav-buttons">
         <button type="button" class="btn secondary" id="nav-login-btn">Login</button>
         <button type="button" class="btn primary" id="nav-register-btn">Register</button>
-        <a href="https://www.google.com" class="btn secondary" id="nav-home-btn" style="display: none;">Home</a>
+        <a href="https://scratchlet.github.io/site/home.html" class="btn secondary" id="nav-home-btn" style="display: none;">Home</a>
         <button type="button" class="btn primary" id="nav-logout-btn" style="display: none;">Logout</button>
     </div>
 </header>
@@ -968,16 +968,13 @@ footer {
     © 2026 Scratchlet
 </footer>
 <script>
-// ==========================================
-// SET YOUR REDIRECT LINK HERE (using Google.com as placeholder):
-const REDIRECT_URL = "https://www.google.com";
-// ==========================================
+const REDIRECT_URL = "https://scratchlet.github.io/site/home.html";
 window.REDIRECT_URL = REDIRECT_URL;
 
 window.redirectToNextPage = function(fallbackPrefix) {
-    if (!REDIRECT_URL || REDIRECT_URL === "YOUR_LINK_HERE") {
+    if (!REDIRECT_URL || REDIRECT_URL === "https://scratchlet.github.io/site/home.html") {
         if (typeof window.showFormMessage === "function" && fallbackPrefix) {
-            window.showFormMessage(fallbackPrefix, "success", "Authenticated! Set REDIRECT_URL in the script to jump to your next page.");
+            window.showFormMessage(fallbackPrefix, "success", "Authenticated!");
         }
         return false;
     }
@@ -1006,11 +1003,11 @@ window.redirectToNextPage = function(fallbackPrefix) {
     const toLoginLink = document.getElementById("to-login-link");
     const toRegisterLink = document.getElementById("to-register-link");
     if (navHomeBtn) {
-        if (REDIRECT_URL && REDIRECT_URL !== "YOUR_LINK_HERE") {
+        if (REDIRECT_URL && REDIRECT_URL !== "https://scratchlet.github.io/site/home.html") {
             navHomeBtn.href = REDIRECT_URL;
         }
         navHomeBtn.addEventListener("click", function(e) {
-            if (!REDIRECT_URL || REDIRECT_URL === "YOUR_LINK_HERE") {
+            if (!REDIRECT_URL || REDIRECT_URL === "https://scratchlet.github.io/site/home.html") {
                 e.preventDefault();
                 showView("landing-view");
             }
