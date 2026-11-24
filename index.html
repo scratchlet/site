@@ -974,7 +974,7 @@ window.REDIRECT_URL = REDIRECT_URL;
 window.redirectToNextPage = function(fallbackPrefix) {
     if (!REDIRECT_URL || REDIRECT_URL === "https://scratchlet.github.io/site/home.html") {
         if (typeof window.showFormMessage === "function" && fallbackPrefix) {
-            window.showFormMessage(fallbackPrefix, "success", "Authenticated!");
+            window.showFormMessage(fallbackPrefix, "success", "loading");
         }
         return false;
     }
@@ -1003,11 +1003,11 @@ window.redirectToNextPage = function(fallbackPrefix) {
     const toLoginLink = document.getElementById("to-login-link");
     const toRegisterLink = document.getElementById("to-register-link");
     if (navHomeBtn) {
-        if (REDIRECT_URL && REDIRECT_URL !== "https://scratchlet.github.io/site/home.html") {
+        if (REDIRECT_URL && REDIRECT_URL !== "YOUR_LINK_HERE") {
             navHomeBtn.href = REDIRECT_URL;
         }
         navHomeBtn.addEventListener("click", function(e) {
-            if (!REDIRECT_URL || REDIRECT_URL === "https://scratchlet.github.io/site/home.html") {
+            if (!REDIRECT_URL || REDIRECT_URL === "YOUR_LINK_HERE") {
                 e.preventDefault();
                 showView("landing-view");
             }
